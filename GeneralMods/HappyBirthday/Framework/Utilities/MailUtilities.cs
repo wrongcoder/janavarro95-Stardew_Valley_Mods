@@ -20,7 +20,8 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             data[MailKeys.MomBirthdayMessageKey] = GetMomsMailMessage();
             data[MailKeys.DadBirthdayMessageKey] = GetDadsMailMessage();
 
-            foreach(string MailKey in MailKeys.GetAllNonBelatedMailKeysExcludingParents())
+
+            foreach (string MailKey in MailKeys.GetAllNonBelatedMailKeysExcludingParents())
             {
                 UpdateMailMessage(ref data, MailKey);
             }
@@ -35,7 +36,20 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                 int stackSize = gift.Stack;
                 string formattedMailItemString = GetItemMailStringFormat(itemParentSheetIndex, stackSize, npcName);
 
-                UpdateMailMessage(ref data, mailKey, formattedMailItemString);
+
+                //Add some special handling here to allow for belated birthday wishes from modded npcs that don't have specific dialogue.
+                string mailMessage = GetMailMessage(mailKey);
+                if (string.IsNullOrEmpty(mailMessage))
+                {
+                    mailMessage = GetMailMessage("Omegasis.HappyBirthday_BelatedBirthdayWish_Generic_Fallback_Npc_Message");
+
+                    data[mailKey] = string.Format(mailMessage, formattedMailItemString,npcName);
+                    continue;
+                }
+
+                
+
+                UpdateMailMessage(ref data, mailKey, formattedMailItemString,npcName);
             }
         }
 

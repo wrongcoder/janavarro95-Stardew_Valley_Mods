@@ -178,10 +178,12 @@ namespace Omegasis.HappyBirthday.Framework
             }
             if (potentialStrings.Count == 0)
             {
+
                 if (DefaultToEnglish)
                 {
                     return this.getMailString(Key, LocalizationUtilities.GetEnglishLanguageCode(), false);
                 }
+
                 return "";
             }
             else

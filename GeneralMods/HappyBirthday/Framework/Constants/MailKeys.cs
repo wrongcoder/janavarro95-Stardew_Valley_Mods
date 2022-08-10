@@ -16,6 +16,7 @@ namespace Omegasis.HappyBirthday.Framework.Constants
         public static readonly string DadBirthdayMessageKey = CreateMailKey("Dad");
         public static readonly string JunimosBirthdayMessageKey = CreateMailKey("Junimos");
 
+
         public static readonly string DatingPenny_PartyInvite = CreateDatingPartyInvitationKey("Penny");
         public static readonly string DatingMaru_PartyInvite = CreateDatingPartyInvitationKey("Maru");
         public static readonly string DatingLeah_PartyInvite = CreateDatingPartyInvitationKey("Leah");
@@ -31,7 +32,7 @@ namespace Omegasis.HappyBirthday.Framework.Constants
         public static readonly string DatingShane_PartyInvite = CreateDatingPartyInvitationKey("Shane");
         public static readonly string DatingSebastian_PartyInvite = CreateDatingPartyInvitationKey("Sebastian");
 
-
+        public static readonly string BelatedBirthdayWish_GenericMessage = "Omegasis.HappyBirthday_BelatedBirthdayWish_Generic_Fallback_Npc_Message";
 
 
         public static string CreateMailKey(string MailKeySuffix)
