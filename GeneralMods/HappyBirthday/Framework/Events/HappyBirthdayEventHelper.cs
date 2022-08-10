@@ -13,17 +13,17 @@ namespace Omegasis.HappyBirthday.Framework.Events
     /// <summary>
     /// A custom <see cref="EventHelper"/> written for HappyBirthday to be used to be able to share as much data as possible across all vanilla SDV spouses and modded spouses.
     /// </summary>
-    public class MarriedEventHelper:EventHelper
+    public class HappyBirthdayEventHelper:EventHelper
     {
         public const string SPOUSE_IDENTIFIER_TOKEN= "$Spouse";
 
-        public MarriedEventHelper()
+        public HappyBirthdayEventHelper()
         {
             this.eventData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
         }
 
-        public MarriedEventHelper(string EventName, int ID, int version, GameLocationPrecondition Location, TimeOfDayPrecondition Time, DayOfWeekPrecondition NotTheseDays, EventStartData StartData)
+        public HappyBirthdayEventHelper(string EventName, int ID, int version, GameLocationPrecondition Location, TimeOfDayPrecondition Time, DayOfWeekPrecondition NotTheseDays, EventStartData StartData)
         {
             this.eventStringId = EventName;
             this.eventData = new StringBuilder();
@@ -36,7 +36,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             this.addEventData(StartData.ToString());
         }
 
-        public MarriedEventHelper(string EventName, int ID, int version, List<EventPrecondition> Conditions, EventStartData StartData)
+        public HappyBirthdayEventHelper(string EventName, int ID, int version, List<EventPrecondition> Conditions, EventStartData StartData)
         {
             this.eventStringId = EventName;
             this.stardewEventID = ID;

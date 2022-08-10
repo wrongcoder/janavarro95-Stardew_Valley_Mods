@@ -203,6 +203,14 @@ namespace Omegasis.StardustCore.Events
             }
         }
 
+        public virtual void startEventsAtLocationIfPossible()
+        {
+            foreach(string eventKey in this.events.Keys)
+            {
+                this.startEventAtLocationIfPossible(eventKey);
+            }
+        }
+
         /// <summary>
         /// Clears the event from the farmer.
         /// </summary>

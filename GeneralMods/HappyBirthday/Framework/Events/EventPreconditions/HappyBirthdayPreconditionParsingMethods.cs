@@ -33,6 +33,11 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
             return new IsMarriedToPrecondition(preconditionData[1]);
         }
 
+        public static IsMarriedPrecondition ParseIsMarriedPrecondition(string[] preconditionData)
+        {
+            return new IsMarriedPrecondition();
+        }
+
         public static GameLocationIsHomePrecondition ParseGameLocationIsHomePrecondition(string[] preconditionData)
         {
             return new GameLocationIsHomePrecondition();

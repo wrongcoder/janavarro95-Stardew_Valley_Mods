@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.HappyBirthday.Framework.Events;
 using Omegasis.HappyBirthday.Framework.Gifts;
+using Omegasis.StardustCore.Events;
 using StardewModdingAPI;
 
 namespace Omegasis.HappyBirthday.Framework.ContentPack
@@ -33,6 +35,11 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
         /// Includes translated strings for the various birthday events.
         /// </summary>
         public Dictionary<string, string> eventStrings;
+
+        /// <summary>
+        /// A dictionary of events that have been loaded in for this content pack.
+        /// </summary>
+        public Dictionary<string, EventHelper> events;
 
         /// <summary>
         /// Includes mail strings which are displayed to the player.
@@ -362,6 +369,36 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
                 if (!Path.GetExtension(File).Contains("json")) continue;
                 this.spouseBirthdayGifts.Add(Path.GetFileNameWithoutExtension(File), this.baseContentPack.ReadJsonFile<List<GiftInformation>>(Path.Combine("ModAssets", "Data", "Gifts", "Spouses", Path.GetFileNameWithoutExtension(File) + ".json")));
                 HappyBirthdayModCore.Instance.Monitor.Log("Loaded in spouse gifts for npc for content pack: " + Path.GetFileNameWithoutExtension(File) + " : "+this.UniqueId);
+            }
+        }
+
+        public virtual void loadBirthdayEvents()
+        {
+            string relativePath = Path.Combine("ModAssets", "Data", "Events");
+            string abspath = Path.Combine(this.baseContentPack.DirectoryPath, relativePath);
+            if (!Directory.Exists(abspath))
+                Directory.CreateDirectory(abspath);
+
+            string[] files = Directory.GetFiles(abspath);
+            foreach (string file in files)
+            {
+                string pathToFile = Path.Combine(relativePath, Path.GetFileName(file));
+                //Exclude non json files and directories that may exist here due to Vortex or some sort of mistakes.
+                if (!pathToFile.EndsWith(".json")) continue;
+
+                HappyBirthdayEventHelper eventHelper = this.baseContentPack.ReadJsonFile<HappyBirthdayEventHelper>(pathToFile);
+                eventHelper.parseEventPreconditionsFromPreconditionStrings(BirthdayEventUtilities.BirthdayEventManager);
+
+
+
+                if (eventHelper == null)
+                    continue;
+
+                if (BirthdayEventUtilities.BirthdayEventManager.events.ContainsKey(eventHelper.eventStringId))
+                    continue;
+                else
+                    BirthdayEventUtilities.BirthdayEventManager.addEvent(eventHelper);
+
             }
         }
     }

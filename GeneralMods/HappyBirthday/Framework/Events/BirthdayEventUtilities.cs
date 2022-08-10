@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Omegasis.HappyBirthday.Framework.Constants;
+using Omegasis.HappyBirthday.Framework.ContentPack;
 using Omegasis.HappyBirthday.Framework.Events.EventPreconditions;
 using Omegasis.HappyBirthday.Framework.Menus;
 using Omegasis.StardustCore.Events;
@@ -16,7 +17,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
 {
     public static class BirthdayEventUtilities
     {
-
+        /// <summary>
+        /// A flag used to gate specific dialogue parsing to ensure that the <see cref="HappyBirthdayEventHelper"/> can write the generic spouse data to a json string and parse it properly for when serving it to the game for events.
+        /// </summary>
         public static bool NEED_TO_WRITE_DEFAULT_BIRTHDAY_EVENTS_TO_JSON;
 
         public static EventManager BirthdayEventManager;
@@ -35,61 +38,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         public static void StartEventAtLocationIfPossible(GameLocation location)
         {
-            if (location == Game1.getLocationFromName("CommunityCenter"))
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.JunimoCommunityCenterBirthday);
-            if (location == Game1.getLocationFromName("Trailer"))
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingPennyTrailer);
-            if (location == Game1.getLocationFromName("Trailer_Big"))
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingPennyHouse);
-
-            if (location == Game1.getLocationFromName("ScienceHouse"))
-            {
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingMaru);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingSebastian);
-            }
-            if (location == Game1.getLocationFromName("LeahHouse"))
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingLeah);
-            if (location == Game1.getLocationFromName("SeedShop"))
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingAbigailSeedShop);
-            if (location == Game1.getLocationFromName("Mine"))
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingAbigailMines);
-            if (location == Game1.getLocationFromName("HaleyHouse"))
-            {
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingEmily);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingHaley);
-            }
-            if (location == Game1.getLocationFromName("HarveyRoom"))
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingHarvey);
-            if (location == Game1.getLocationFromName("ElliottHouse"))
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingElliott);
-            if (location == Game1.getLocationFromName("SamHouse"))
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingSam);
-            if (location == Game1.getLocationFromName("JoshHouse"))
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingAlex);
-            if (location == Game1.getLocationFromName("AnimalShop"))
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.BirthdayDatingShane);
-
-            if (location == Game1.getLocationFromName("Farm"))
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForBirthday);
-
-            if (location == Game1.getLocationFromName("JojaMart"))
-            {
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.JojaMartBirthday);
-            }
-
-            if (location == Game1.getLocationFromName("Saloon"))
-            {
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.SaloonBirthdayParty_Year1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.SaloonBirthdayParty_Year2);
-            }
-
-            if (location.NameOrUniqueName.Equals(Game1.player.homeLocation.Value))
-            {
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.AskPlayerForFavoriteGift_Farmhouse_2);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_BirthdayParty_Farmhouse_1);
-                BirthdayEventManager.startEventAtLocationIfPossible(EventIds.Married_BirthdayParty_Farmhouse_2);
-            }
+            BirthdayEventManager.startEventsAtLocationIfPossible();
         }
 
         public static void ClearEventsFromFarmer()
@@ -133,6 +82,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
             BirthdayEventManager.eventPreconditionParsingMethods.Add(HasChosenBirthdayPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseHasChosenBirthdayPrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(HasChosenFavoriteGiftPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseHasChosenFavoriteGiftPrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(IsMarriedToPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseIsMarriedToPrecondition);
+
+            BirthdayEventManager.eventPreconditionParsingMethods.Add(IsMarriedPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseIsMarriedPrecondition);
+
             BirthdayEventManager.eventPreconditionParsingMethods.Add(GameLocationIsHomePrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseGameLocationIsHomePrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(FarmHouseLevelPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseFarmHouseLevelPrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(YearPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseYearGreaterThanOrEqualToPrecondition);
@@ -141,6 +93,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         public static void InitializeBirthdayEvents()
         {
+            /*
             NEED_TO_WRITE_DEFAULT_BIRTHDAY_EVENTS_TO_JSON = true;
 
             List<EventHelper> defaultBirthdayEvents = new List<EventHelper>()
@@ -180,10 +133,11 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 BirthdayEvents.MarriedBirthday_farmhouseLevel2(),
 
         };
+            */
 
 
 
-
+            /*
             string relativePath = Path.Combine("ModAssets", "Data", "Events");
             string abspath = Path.Combine(HappyBirthdayModCore.Instance.Helper.DirectoryPath, relativePath);
             if (!Directory.Exists(abspath))
@@ -195,8 +149,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
                 string pathToFile = Path.Combine(relativePath, Path.GetFileName(file));
                 //Exclude non json files and directories that may exist here due to Vortex or some sort of mistakes.
                 if (!pathToFile.EndsWith(".json")) continue;
-                
-                EventHelper eventHelper = HappyBirthdayModCore.Instance.Helper.Data.ReadJsonFile<EventHelper>(pathToFile);
+
+                HappyBirthdayEventHelper eventHelper = HappyBirthdayModCore.Instance.Helper.Data.ReadJsonFile<HappyBirthdayEventHelper>(pathToFile);
+
                 eventHelper.parseEventPreconditionsFromPreconditionStrings(BirthdayEventManager);
 
 
@@ -212,11 +167,12 @@ namespace Omegasis.HappyBirthday.Framework.Events
             }
 
             foreach (EventHelper eventHelper in defaultBirthdayEvents)
+            {
                 if (BirthdayEventManager.events.ContainsKey(eventHelper.eventStringId))
                 {
 
                     //auto update/replace outdated events.
-                    if(eventHelper.version> BirthdayEventManager.events[eventHelper.eventStringId].version)
+                    if (eventHelper.version > BirthdayEventManager.events[eventHelper.eventStringId].version)
                     {
                         BirthdayEventManager.events[eventHelper.eventStringId] = eventHelper;
                         HappyBirthdayModCore.Instance.Helper.Data.WriteJsonFile(Path.Combine(relativePath, eventHelper.eventStringId + ".json"), eventHelper);
@@ -230,7 +186,13 @@ namespace Omegasis.HappyBirthday.Framework.Events
                     HappyBirthdayModCore.Instance.Helper.Data.WriteJsonFile(Path.Combine(relativePath, eventHelper.eventStringId + ".json"), eventHelper);
 
                 }
+            }
             NEED_TO_WRITE_DEFAULT_BIRTHDAY_EVENTS_TO_JSON = false;
+            */
+            foreach(HappyBirthdayContentPack contentPack in HappyBirthdayModCore.Instance.happyBirthdayContentPackManager.getHappyBirthdayContentPacksForCurrentLanguageCode())
+            {
+                contentPack.loadBirthdayEvents();
+            }
         }
 
         public static void UpdateEventManager()
