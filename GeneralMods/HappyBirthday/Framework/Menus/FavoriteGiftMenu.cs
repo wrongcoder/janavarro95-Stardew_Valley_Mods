@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Omegasis.HappyBirthday.Framework.Gifts;
 using Omegasis.HappyBirthday.Framework.Utilities;
 using StardewValley;
@@ -50,6 +51,9 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         /// </summary>
         public GiftSearchTextBox searchBox;
 
+        public static int menuWidth = 632 + borderWidth * 2;
+        public static int menuHeight = 600 + borderWidth * 2 + Game1.tileSize;
+
         /*********
         ** Public methods
         *********/
@@ -58,7 +62,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         /// <param name="day">The initial birthday day.</param>
         /// <param name="onChanged">The callback to invoke when the birthday value changes.</param>
         public FavoriteGiftMenu()
-            : base(Game1.viewport.Width / 2 - (632 + borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + borderWidth * 2) / 2 - Game1.tileSize, 632 + borderWidth * 2, 600 + borderWidth * 2 + Game1.tileSize)
+            : base((int)getAppropriateMenuPosition().X, (int)getAppropriateMenuPosition().Y, menuWidth, menuHeight)
         {
             this.searchBox = new GiftSearchTextBox(null, null, Game1.dialogueFont, Game1.textColor);
             Game1.keyboardDispatcher.Subscriber = this.searchBox;
@@ -67,6 +71,24 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             this.searchBox.OnBackspacePressed += this.SearchBox_OnBackspacePressed;
 
             this.setUpPositions();
+        }
+
+        public static Vector2 getAppropriateMenuPosition()
+        {
+            Vector2 defaultPosition = new Vector2(Game1.viewport.Width / 2 - menuWidth / 2, (Game1.viewport.Height / 2 - menuHeight / 2));
+
+            //Force the viewport into a position that it should fit into on the screen???
+            if (defaultPosition.X + menuWidth > Game1.viewport.Width)
+            {
+                defaultPosition.X = 0;
+            }
+
+            if (defaultPosition.Y + menuHeight > Game1.viewport.Height)
+            {
+                defaultPosition.Y = 0;
+            }
+            return defaultPosition;
+
         }
 
         private void SearchBox_OnBackspacePressed(TextBox sender)
@@ -344,6 +366,28 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     item.name = HappyBirthdayModCore.Instance.giftManager.registeredGifts.ElementAt(value).Key;
                     this.itemButtons.Add(item);
                 }
+        }
+
+        public override void receiveGamePadButton(Buttons b)
+        {
+            if (b.Equals(Buttons.A))
+            {
+                this.receiveLeftClick(Game1.getMouseX(), Game1.getMouseY(), true);
+            }
+        }
+
+        public override bool areGamePadControlsImplemented()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Make this true if free cursor movement is desired.
+        /// </summary>
+        /// <returns></returns>
+        public override bool overrideSnappyMenuCursorMovementBan()
+        {
+            return true;
         }
 
     }
