@@ -168,6 +168,25 @@ namespace Omegasis.HappyBirthday.Framework.ContentPack
             {
                 return this.eventStrings[Key];
             }
+
+            if(this.eventStrings.ContainsKey(Key)==false && Key.StartsWith("SpouseBirthdayEvent_"))
+            {
+                string fallbackKey = "SpouseBirthdayEvent_" + Key.Split('_').Last();
+                if (this.eventStrings.ContainsKey(fallbackKey) && string.IsNullOrEmpty(this.eventStrings[fallbackKey])==false)
+                {
+                    return this.eventStrings[fallbackKey];
+                }
+            }
+
+            if (this.eventStrings.ContainsKey(Key) == false && Key.StartsWith("SpouseAskPlayerForFavoriteGift_"))
+            {
+                string fallbackKey = "SpouseAskPlayerForFavoriteGift_" + Key.Split('_').Last();
+                if (this.eventStrings.ContainsKey(fallbackKey) && string.IsNullOrEmpty(this.eventStrings[fallbackKey]) == false)
+                {
+                    return this.eventStrings[fallbackKey];
+                }
+            }
+
             if (LogError)
             {
                 HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Error: Attempted to get an event string with key {0} from Happy Birthday content pack, but the given event string key does not exist for the given content pack {1}.", Key, this.UniqueId), LogLevel.Error);

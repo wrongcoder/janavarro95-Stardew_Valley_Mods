@@ -142,8 +142,6 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         public static void OpenGiftSelectionMenu()
         {
-            HappyBirthdayModCore.Instance.Monitor.Log("OpenGiftSelectorMenuIs running!");
-
             if (Game1.activeClickableMenu == null && HappyBirthdayModCore.Instance.birthdayManager.hasChoosenFavoriteGift() == false && BirthdayEventUtilities.ShouldAskPlayerForFavoriteGift)
             {
                 Game1.activeClickableMenu = new FavoriteGiftMenu();

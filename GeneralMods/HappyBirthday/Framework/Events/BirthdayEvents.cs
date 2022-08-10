@@ -1174,9 +1174,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.moveFarmerLeft(2, EventHelper.FacingDirection.Left, false);
             e.npcFaceDirection(spouseName, EventHelper.FacingDirection.Right);
 
-            e.speakWithTranslatedMessage(spouseName, "SpouseAskPlayerForFavoriteGift_0");
+            e.speakWithTranslatedMessage(spouseName, "SpouseAskPlayerForFavoriteGift_" + spouseName + "_0");
             e.addAskForFavoriteGift();
-            e.speakWithTranslatedMessage(spouseName, "SpouseAskPlayerForFavoriteGift_1");
+            e.speakWithTranslatedMessage(spouseName, "SpouseAskPlayerForFavoriteGift_" + spouseName + "_1");
 
             e.globalFadeOut(0.010);
             e.setViewportPosition(-100, -100);

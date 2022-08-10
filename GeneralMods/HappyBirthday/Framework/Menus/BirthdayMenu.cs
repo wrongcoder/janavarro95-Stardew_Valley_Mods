@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -367,6 +368,44 @@ namespace Omegasis.HappyBirthday.Framework.Menus
 
         public override void update(GameTime time)
         {
+        }
+
+
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        //              Gamepad controlls here           //
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+
+        public override void receiveGamePadButton(Buttons b)
+        {
+            if (b.Equals(Buttons.A))
+            {
+                this.receiveLeftClick(Game1.getMouseX(), Game1.getMouseY(), true);
+            }
+        }
+
+        public override bool areGamePadControlsImplemented()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Make this true if free cursor movement is desired.
+        /// </summary>
+        /// <returns></returns>
+        public override bool overrideSnappyMenuCursorMovementBan()
+        {
+            return true;
+        }
+
+        public override void setUpForGamePadMode()
+        {
+            base.setUpForGamePadMode();
+        }
+
+        public override void snapToDefaultClickableComponent()
+        {
+            this.currentlySnappedComponent = this.SeasonButtons[0];
         }
     }
 }
