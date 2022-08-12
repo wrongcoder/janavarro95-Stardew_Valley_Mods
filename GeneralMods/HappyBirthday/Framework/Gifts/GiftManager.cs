@@ -315,7 +315,7 @@ namespace Omegasis.HappyBirthday
         {
             int heartLevel = Game1.player.getFriendshipHeartLevelForNPC(name);
 
-            List<Item> possibleItems = new List<Item>();
+            List<GiftInformation> possibleItems = new List<GiftInformation>();
             if (this.npcBirthdayGifts.ContainsKey(name))
             {
                 List<GiftInformation> npcPossibleGifts = this.npcBirthdayGifts[name];
@@ -330,7 +330,7 @@ namespace Omegasis.HappyBirthday
 
                     if (info.minRequiredHearts <= heartLevel && heartLevel <= info.maxRequiredHearts)
                     {
-                        possibleItems.Add(info.getOne());
+                        possibleItems.Add(info);
                     }
                 }
 
@@ -367,7 +367,7 @@ namespace Omegasis.HappyBirthday
             int heartLevel = Game1.player.getFriendshipHeartLevelForNPC(name);
 
 
-            List<Item> possibleItems = new List<Item>();
+            List<GiftInformation> possibleItems = new List<GiftInformation>();
             if (this.spouseBirthdayGifts.ContainsKey(name))
             {
                 List<GiftInformation> npcPossibleGifts = this.spouseBirthdayGifts[name];
@@ -375,7 +375,7 @@ namespace Omegasis.HappyBirthday
                 {
                     if (info.minRequiredHearts <= heartLevel && heartLevel <= info.maxRequiredHearts)
                     {
-                        possibleItems.Add(info.getOne());
+                        possibleItems.Add(info);
                     }
                 }
 
@@ -399,7 +399,7 @@ namespace Omegasis.HappyBirthday
         {
             int heartLevel = Game1.player.getFriendshipHeartLevelForNPC(name);
 
-            List<Item> possibleItems = new List<Item>();
+            List<GiftInformation> possibleItems = new List<GiftInformation>();
 
             List<GiftInformation> npcPossibleGifts = this.defaultBirthdayGifts;
 
@@ -429,7 +429,7 @@ namespace Omegasis.HappyBirthday
             {
                 if (info.minRequiredHearts <= heartLevel && heartLevel <= info.maxRequiredHearts)
                 {
-                    possibleItems.Add(info.getOne());
+                    possibleItems.Add(info);
                 }
             }
 
