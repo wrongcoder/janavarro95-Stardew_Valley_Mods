@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.HappyBirthday.Framework.Events.Compatibility;
 
 namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
 {
@@ -56,6 +57,11 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
         public static VillagersHaveEnoughFriendshipBirthdayPrecondition ParseVillagersHaveEnoughFriendshipBirthdayPrecondition(string[] preconditionData)
         {
             return new VillagersHaveEnoughFriendshipBirthdayPrecondition();
+        }
+
+        public static IsStardewValleyExpandedInstalledPrecondition ParseIsStardewValleyExpandedInstalledPrecondition(string[] preconditionData)
+        {
+            return new IsStardewValleyExpandedInstalledPrecondition(Convert.ToBoolean(preconditionData[1]));
         }
     }
 }

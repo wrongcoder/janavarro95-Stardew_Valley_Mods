@@ -235,11 +235,11 @@ namespace Omegasis.HappyBirthday
             if (Game1.CurrentEvent != null)
             {
                 BirthdayEventUtilities.UpdateEventManager();
+                return;
             }
 
-            if (!Context.IsWorldReady || Game1.isFestival() || Game1.CurrentEvent==null)
+            if (!Context.IsWorldReady || Game1.isFestival())
             {
-                return;
             }
 
 

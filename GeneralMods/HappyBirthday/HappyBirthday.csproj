@@ -21,6 +21,81 @@
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_AskPlayerForBirthday.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_AskPlayerForFavoriteGift_Farmhouse_1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_AskPlayerForFavoriteGift_Farmhouse_2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Abigail_Mines.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Abigail_Seedshop.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Alex.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Elliott.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Emily.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Haley.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Harvey.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Leah.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Leah_Stardew_Valley_Expanded.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Maru.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Penny.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Penny_House.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Penny_Stardew_Valley_Expanded.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Penny_Trailer.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Sam.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Sebastian.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Shane.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_JojaMartBirthday.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_JunimoCommunityCenterBirthday.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_Married_BirthdayParty_Farmhouse_2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_SaloonBirthdayParty_Year1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_SaloonBirthdayParty_Year2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Gifts\Abigail.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

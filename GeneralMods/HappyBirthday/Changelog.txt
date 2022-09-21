@@ -1,4 +1,12 @@
 Happy Birthday Change Log
+~~~~~~~~~~~~~~~~
+Manifest 3.16.0 Changelog
+~~~~~~~~~~~~~~~~
+Compatibility:
+    Add a new event precondition to choose between vanilla birthday events and Stardew Valley Expanded Birthday Events for NPCs that have broken vanilla events.
+
+Bugfixes:
+    Fixed birthday logic not triggering until a cutscene has occurred.
 
 ~~~~~~~~~~~~~~~~
 Manifest 3.14.0 Changelog

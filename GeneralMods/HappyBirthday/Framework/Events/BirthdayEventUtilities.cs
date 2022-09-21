@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Omegasis.HappyBirthday.Framework.Constants;
 using Omegasis.HappyBirthday.Framework.ContentPack;
+using Omegasis.HappyBirthday.Framework.Events.Compatibility;
 using Omegasis.HappyBirthday.Framework.Events.EventPreconditions;
 using Omegasis.HappyBirthday.Framework.Menus;
 using Omegasis.StardustCore.Events;
@@ -89,6 +90,9 @@ namespace Omegasis.HappyBirthday.Framework.Events
             BirthdayEventManager.eventPreconditionParsingMethods.Add(FarmHouseLevelPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseFarmHouseLevelPrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(YearPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseYearGreaterThanOrEqualToPrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(VillagersHaveEnoughFriendshipBirthdayPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseVillagersHaveEnoughFriendshipBirthdayPrecondition);
+
+            //Compatibility event preconditions
+            BirthdayEventManager.eventPreconditionParsingMethods.Add(IsStardewValleyExpandedInstalledPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseIsStardewValleyExpandedInstalledPrecondition);
         }
 
         public static void InitializeBirthdayEvents()

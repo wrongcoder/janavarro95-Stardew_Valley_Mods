@@ -14,6 +14,7 @@ using Omegasis.HappyBirthday.Framework.Events.EventPreconditions;
 using Omegasis.StardustCore.Events;
 using Omegasis.StardustCore.IlluminateFramework;
 using Omegasis.StardustCore.Utilities;
+using Omegasis.HappyBirthday.Framework.Events.Compatibility;
 
 namespace Omegasis.HappyBirthday.Framework.Events
 {
@@ -127,6 +128,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("Trailer")));
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
             conditions.Add(new DatingNPCEventPrecondition(penny));
+            conditions.Add(new IsStardewValleyExpandedInstalledPrecondition(false));
 
             //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
             HappyBirthdayEventHelper e = new HappyBirthdayEventHelper(EventIds.BirthdayDatingPennyTrailer, 19951, 2, conditions, new EventStartData("playful", 12, 8, new EventStartData.FarmerData(12, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
@@ -303,14 +305,14 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// <returns></returns>
         public static HappyBirthdayEventHelper DatingBirthday_Leah()
         {
+            NPC leah = Game1.getCharacterFromName("Leah");
+
             List<EventPrecondition> conditions = new List<EventPrecondition>();
             conditions.Add(new FarmerBirthdayPrecondition());
             conditions.Add(new GameLocationPrecondition(Game1.getLocationFromName("LeahHouse")));
             conditions.Add(new TimeOfDayPrecondition(600, 2600));
-
-            NPC leah = Game1.getCharacterFromName("Leah");
-
             conditions.Add(new DatingNPCEventPrecondition(leah));
+            conditions.Add(new IsStardewValleyExpandedInstalledPrecondition(false));
 
             HappyBirthdayEventHelper e = new HappyBirthdayEventHelper(EventIds.BirthdayDatingLeah, 19954, 2, conditions, new EventStartData("playful", 12, 7, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(leah,14,11, EventHelper.FacingDirection.Left),
@@ -342,6 +344,8 @@ namespace Omegasis.HappyBirthday.Framework.Events
             e.end();
             return e;
         }
+
+
 
         /// <summary>
         /// Birthday event for when the player is dating Abigail.
