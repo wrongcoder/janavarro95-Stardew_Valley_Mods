@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.World.Objects.Interfaces
+namespace Omegasis.Revitalize.Framework.World.Objects.Interfaces
 {
     public interface ICommonObjectInterface
     {

@@ -1,0 +1,34 @@
+{
+  "craftingTabName": "",
+  "isDefaultTab": false,
+  "craftingTabBoundingBox": {
+    "X": 0,
+    "Y": 0,
+    "Width": 0,
+    "Height": 0
+  },
+  "scale": 1.0,
+  "animationManager": {
+    "modManifestId": "",
+    "textureManagerId": "",
+    "textureId": "",
+    "defaultAnimationKey": "",
+    "startingAnimationKey": "",
+    "animations": {
+      "Template": {
+        "animationFrames": [
+          {
+            "animationSourceRectangle": {
+              "X": 0,
+              "Y": 0,
+              "Width": 0,
+              "Height": 0
+            },
+            "drawForXFrames": 0
+          }
+        ],
+        "shouldAnimationLoopWhenFinished": false
+      }
+    }
+  }
+}

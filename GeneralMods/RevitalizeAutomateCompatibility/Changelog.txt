@@ -1,0 +1,5 @@
+~~~~~~~~~~~~0.0.1 Revitalize Automate Compatibility 5-12-2022 xx.xx P.M~~~~~~~~~~~~~~
++Created the Mod!
++Added in lots of utility support/laid the ground work to be able to quickly add more Automate support.
++Added Automate support for ElectricFurnaces!
+

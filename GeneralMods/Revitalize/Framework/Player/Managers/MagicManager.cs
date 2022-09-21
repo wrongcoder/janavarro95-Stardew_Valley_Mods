@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.Player.Managers
+namespace Omegasis.Revitalize.Framework.Player.Managers
 {
     public class MagicManager
     {

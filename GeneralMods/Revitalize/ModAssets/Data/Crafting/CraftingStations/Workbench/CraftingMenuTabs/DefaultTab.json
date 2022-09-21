@@ -1,0 +1,34 @@
+{
+  "craftingTabName": "Default",
+  "isDefaultTab": true,
+  "craftingTabBoundingBox": {
+    "X": 0,
+    "Y": 0,
+    "Width": 24,
+    "Height": 24
+  },
+  "scale": 2.0,
+  "animationManager": {
+    "modManifestId": "Omegasis.Revitalize",
+    "textureManagerId": "Revitalize.Menus",
+    "textureId": "MenuTabHorizontal",
+    "defaultAnimationKey": "Default",
+    "startingAnimationKey": "Default",
+    "animations": {
+      "Default": {
+        "animationFrames": [
+          {
+            "animationSourceRectangle": {
+              "X": 0,
+              "Y": 0,
+              "Width": 24,
+              "Height": 24
+            },
+            "drawForXFrames": 0
+          }
+        ],
+        "shouldAnimationLoopWhenFinished": false
+      }
+    }
+  }
+}

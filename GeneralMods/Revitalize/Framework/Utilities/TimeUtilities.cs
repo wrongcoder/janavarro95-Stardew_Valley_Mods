@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Revitalize.Framework.Utilities
+namespace Omegasis.Revitalize.Framework.Utilities
 {
     public class TimeUtilities
     {
@@ -34,15 +34,15 @@ namespace Revitalize.Framework.Utilities
             private void parse(int Minutes)
             {
                 this.years = Minutes / 60 / 24 / 7 / 4 / 4;
-                Minutes -= (this.years * 60 * 24 * 7 * 4 * 4);
+                Minutes -= this.years * 60 * 24 * 7 * 4 * 4;
                 this.seasons = Minutes / 60 / 24 / 7 / 4;
-                Minutes -= (this.seasons * 60 * 24 * 7 * 4);
+                Minutes -= this.seasons * 60 * 24 * 7 * 4;
                 this.weeks = Minutes / 60 / 24 / 7;
-                Minutes -= (this.weeks * 60 * 24 * 7);
+                Minutes -= this.weeks * 60 * 24 * 7;
                 this.days = Minutes / 60 / 24;
-                Minutes -= (this.days * 60 * 24);
+                Minutes -= this.days * 60 * 24;
                 this.hours = Minutes / 60;
-                Minutes -= (this.hours * 60);
+                Minutes -= this.hours * 60;
                 this.minutes = Minutes;
             }
 
@@ -56,9 +56,7 @@ namespace Revitalize.Framework.Utilities
                 if (this.hours > 0) b.Append("H: " + this.hours);
                 if (this.minutes > 0) b.Append("M: " + this.minutes);
                 else
-                {
                     b.Append("M: " + 0);
-                }
 
                 return b.ToString();
             }
@@ -73,9 +71,7 @@ namespace Revitalize.Framework.Utilities
                 if (this.hours > 0) b.Append("Hours: " + this.hours);
                 if (this.minutes > 0) b.Append("Minutes: " + this.minutes);
                 else
-                {
                     b.Append("Minutes: " + 0);
-                }
 
                 return b.ToString();
             }
@@ -92,7 +88,7 @@ namespace Revitalize.Framework.Utilities
         /// <returns></returns>
         public static int GetMinutesFromTime(int Days, int Hours, int Minutes)
         {
-            int amount=0;
+            int amount = 0;
             amount += Days * 24 * 60;
             amount += Hours * 60;
             amount += Minutes;

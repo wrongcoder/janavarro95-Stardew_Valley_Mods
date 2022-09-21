@@ -5,9 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardustCore.Animations;
 
-namespace StardustCore.Animations
+namespace Omegasis.StardustCore.Animations
 {
     /// <summary>
     /// Deals with animated sprites.
@@ -67,9 +66,9 @@ namespace StardustCore.Animations
         /// Draws the sprite to the screen.
         /// </summary>
         /// <param name="b"></param>
-        public virtual void draw(SpriteBatch b,float Alpha=1f)
+        public virtual void draw(SpriteBatch b, float Alpha = 1f)
         {
-            this.draw(b, 1f, 0f,Alpha);
+            this.draw(b, 1f, 0f, Alpha);
         }
 
         /// <summary>
@@ -79,12 +78,12 @@ namespace StardustCore.Animations
         /// <param name="Position"></param>
         /// <param name="Scale"></param>
         /// <param name="Alpha"></param>
-        public virtual void draw(SpriteBatch b,Vector2 Position,float Scale ,float Alpha = 1f)
+        public virtual void draw(SpriteBatch b, Vector2 Position, float Scale, float Alpha = 1f)
         {
-            this.draw(b, Position, Scale,0f,Alpha);
+            this.draw(b, Position, Scale, 0f, Alpha);
         }
 
-        public virtual void draw(SpriteBatch b,float Scale ,float Alpha = 1f)
+        public virtual void draw(SpriteBatch b, float Scale, float Alpha = 1f)
         {
             this.draw(b, Scale, 0f, Alpha);
         }
@@ -96,7 +95,7 @@ namespace StardustCore.Animations
         /// <param name="scale"></param>
         /// <param name="depth"></param>
         /// <param name="alpha"></param>
-        public virtual void draw(SpriteBatch b, float scale, float depth,float alpha=1f)
+        public virtual void draw(SpriteBatch b, float scale, float depth, float alpha = 1f)
         {
             this.animation.draw(b, this.position, new Color(this.color.R, this.color.G, this.color.B, alpha), scale, SpriteEffects.None, depth);
         }
@@ -109,7 +108,7 @@ namespace StardustCore.Animations
         /// <param name="scale"></param>
         /// <param name="depth"></param>
         ///         /// <param name="alpha"></param>
-        public virtual void draw(SpriteBatch b,Vector2 position ,float scale, float depth,float alpha=1f)
+        public virtual void draw(SpriteBatch b, Vector2 position, float scale, float depth, float alpha = 1f)
         {
             this.animation.draw(b, position, new Color(this.color.R, this.color.G, this.color.B, alpha), scale, SpriteEffects.None, depth);
         }
@@ -123,9 +122,9 @@ namespace StardustCore.Animations
         /// <param name="rotation">The rotation of the sprite.</param>
         /// <param name="depth">The depth of the sprite.</param>
         /// <param name="alpha">The alpha for the sprite.</param>
-        public virtual void draw(SpriteBatch b, Vector2 position, float scale,float rotation ,float depth,float alpha=1f)
+        public virtual void draw(SpriteBatch b, Vector2 position, float scale, float rotation, float depth, float alpha = 1f)
         {
-            this.animation.draw(b, position, new Color(this.color.R,this.color.G,this.color.B,alpha), scale, rotation,SpriteEffects.None, depth);
+            this.animation.draw(b, position, new Color(this.color.R, this.color.G, this.color.B, alpha), scale, rotation, SpriteEffects.None, depth);
         }
 
         /// <summary>
@@ -136,7 +135,7 @@ namespace StardustCore.Animations
         /// <param name="scale"></param>
         /// <param name="depth"></param>
         /// <param name="alpha"></param>
-        public virtual void draw(SpriteBatch b, Vector2 position, Vector2 scale, float depth,float alpha=1f)
+        public virtual void draw(SpriteBatch b, Vector2 position, Vector2 scale, float depth, float alpha = 1f)
         {
             this.animation.draw(b, position, new Color(this.color.R, this.color.G, this.color.B, alpha), scale, SpriteEffects.None, depth);
         }

@@ -1,0 +1,61 @@
+{
+  "whichTab": "Default",
+  "isUnlocked": false,
+  "recipe": {
+	"craftingRecipeId": "Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 0,
+    "inputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "IronBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 20
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "GoldBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 10
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "IridiumBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 5
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "Hardwood",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 25
+			}
+		},
+	
+	],
+    "outputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem",
+			"amount": 1
+			}
+		},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}

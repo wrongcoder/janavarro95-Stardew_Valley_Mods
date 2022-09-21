@@ -5,14 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Revitalize;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.StardustCore.Animations;
+using Omegasis.StardustCore.UIUtilities;
+using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using StardewValley;
 using StardewValley.Menus;
-using StardustCore.Animations;
-using StardustCore.UIUtilities;
-using StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 
-namespace Revitalize.Framework.Menus
+namespace Omegasis.Revitalize.Framework.Menus
 {
     /// <summary>
     /// Used with transfering items between two inventories.
@@ -37,16 +38,16 @@ namespace Revitalize.Framework.Menus
         }
         private CurrentMode currentMode;
 
-        public InventoryTransferMenu(int x, int y, int width, int height, IList<Item> OtherItems, int OtherCapacity,int OtherRows=6,int OtherCollumns=6) : base(x, y, width, height, true)
+        public InventoryTransferMenu(int x, int y, int width, int height, IList<Item> OtherItems, int OtherCapacity, int OtherRows = 6, int OtherCollumns = 6) : base(x, y, width, height, true)
         {
             this.playerInventory = new InventoryMenu(x, y, width, height, 6, 6, true, Game1.player.Items, Game1.player.MaxItems, Color.SandyBrown);
             this.otherItems = OtherItems;
             this.otherInventory = new InventoryMenu(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 128, y, width, height, OtherRows, OtherCollumns, true, this.otherItems, OtherCapacity, Color.SandyBrown);
             this.isPlayerInventory = true;
             this.currentMode = CurrentMode.TransferItems;
-            this.transferButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Transfer Button", new Vector2(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 64, this.playerInventory.yPositionOnScreen + (this.playerInventory.height * .3f)), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "ItemTransferButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
-            this.trashButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Trash Button", new Vector2(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 64, this.playerInventory.yPositionOnScreen + (this.playerInventory.height * .3f) + 96), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "TrashButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
-            this.trashedItem = new ItemDisplayButton(null, new StardustCore.Animations.AnimatedSprite("ItemBackground", new Vector2(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 64, this.playerInventory.yPositionOnScreen + (this.playerInventory.height * .3f) + 180), new AnimationManager(TextureManager.GetExtendedTexture(ModCore.Manifest, "InventoryMenu", "ItemBackground"), new Animation(0, 0, 32, 32)), Color.White), new Vector2(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 64, this.playerInventory.yPositionOnScreen + (this.playerInventory.height * .3f) + 180), new Rectangle(0, 0, 32, 32), 2f, true, Color.White);
+            this.transferButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Transfer Button", new Vector2(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 64, this.playerInventory.yPositionOnScreen + this.playerInventory.height * .3f), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "InventoryMenu", "ItemTransferButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+            this.trashButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Trash Button", new Vector2(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 64, this.playerInventory.yPositionOnScreen + this.playerInventory.height * .3f + 96), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "InventoryMenu", "TrashButton"), new Animation(0, 0, 32, 32)), Color.White), new Rectangle(0, 0, 32, 32), 2f);
+            this.trashedItem = new ItemDisplayButton(null, new StardustCore.Animations.AnimatedSprite("ItemBackground", new Vector2(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 64, this.playerInventory.yPositionOnScreen + this.playerInventory.height * .3f + 180), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "InventoryMenu", "ItemBackground"), new Animation(0, 0, 32, 32)), Color.White), new Vector2(this.playerInventory.xPositionOnScreen + this.playerInventory.width + 64, this.playerInventory.yPositionOnScreen + this.playerInventory.height * .3f + 180), new Rectangle(0, 0, 32, 32), 2f, true, Color.White);
         }
 
 
@@ -64,17 +65,13 @@ namespace Revitalize.Framework.Menus
                 {
                     this.playerInventory.receiveLeftClick(x, y);
                     if (this.playerInventory.activeItem != null)
-                    {
                         this.transferItem(ref this.playerInventory, ref this.otherInventory);
-                    }
                 }
                 if (this.playerInventory.isFull == false)
                 {
                     this.otherInventory.receiveLeftClick(x, y);
                     if (this.otherInventory.activeItem != null)
-                    {
                         this.transferItem(ref this.otherInventory, ref this.playerInventory);
-                    }
                 }
             }
 
@@ -83,24 +80,20 @@ namespace Revitalize.Framework.Menus
                 this.playerInventory.receiveLeftClick(x, y);
                 this.otherInventory.receiveLeftClick(x, y);
                 if (this.playerInventory.activeItem != null)
-                {
                     this.trashItem(ref this.playerInventory);
-                }
                 if (this.otherInventory.activeItem != null)
-                {
                     this.trashItem(ref this.otherInventory);
-                }
             }
 
             if (this.transferButton.receiveLeftClick(x, y))
             {
                 this.currentMode = CurrentMode.TransferItems;
-                Game1.playSound("shwip");
+                SoundUtilities.PlaySound(Enums.StardewSound.shwip);
             }
             if (this.trashButton.receiveLeftClick(x, y))
             {
                 this.currentMode = CurrentMode.TrashItem;
-                Game1.playSound("shwip");
+                SoundUtilities.PlaySound(Enums.StardewSound.shwip);
             }
             if (this.trashedItem.receiveLeftClick(x, y))
             {
@@ -124,17 +117,13 @@ namespace Revitalize.Framework.Menus
                 {
                     this.playerInventory.receiveLeftClick(x, y);
                     if (this.playerInventory.activeItem != null)
-                    {
                         this.transferOneItem(ref this.playerInventory, ref this.otherInventory);
-                    }
                 }
                 if (this.playerInventory.isFull == false)
                 {
                     this.otherInventory.receiveLeftClick(x, y);
                     if (this.otherInventory.activeItem != null)
-                    {
                         this.transferOneItem(ref this.otherInventory, ref this.playerInventory);
-                    }
                 }
             }
         }
@@ -150,33 +139,19 @@ namespace Revitalize.Framework.Menus
             this.otherInventory.performHoverAction(x, y);
 
             if (this.transferButton.containsPoint(x, y))
-            {
                 this.hoverText = "Transfer Items";
-            }
             else if (this.trashButton.containsPoint(x, y))
-            {
                 this.hoverText = "Trash Items";
-            }
             else
-            {
                 this.hoverText = "";
-            }
 
-            if (this.trashedItem.Contains(x, y))
-            {
+            if (this.trashedItem.ContainsPoint(x, y))
                 if (this.trashedItem.item != null)
-                {
                     this.displayTrashedItem = true;
-                }
                 else
-                {
                     this.displayTrashedItem = false;
-                }
-            }
             else
-            {
                 this.displayTrashedItem = false;
-            }
         }
 
         /// <summary>
@@ -212,19 +187,15 @@ namespace Revitalize.Framework.Menus
             {
                 //
                 bool addedItem = false;
-                for(int i = 0; i < To.items.Count; i++)
-                {
+                for (int i = 0; i < To.items.Count; i++)
                     if (To.items[i] == null)
                     {
                         To.items[i] = From.activeItem;
                         addedItem = true;
                         break;
                     }
-                }
                 if (addedItem == false)
-                {
                     To.items.Add(From.activeItem);
-                }
 
                 From.items.Remove(From.activeItem);
                 From.activeItem = null;
@@ -250,9 +221,7 @@ namespace Revitalize.Framework.Menus
                     I.Stack++;
                     From.activeItem.Stack--;
                     if (From.activeItem.Stack <= 0)
-                    {
                         From.items.Remove(From.activeItem);
-                    }
                     From.activeItem = null;
                     From.populateClickableItems();
                     To.populateClickableItems();
@@ -264,9 +233,7 @@ namespace Revitalize.Framework.Menus
                 To.items.Add(From.activeItem.getOne());
                 From.activeItem.Stack--;
                 if (From.activeItem.Stack <= 0)
-                {
                     From.items.Remove(From.activeItem);
-                }
                 From.activeItem = null;
                 From.populateClickableItems();
                 To.populateClickableItems();
@@ -296,28 +263,22 @@ namespace Revitalize.Framework.Menus
         private void transhOneItem(ref InventoryMenu From)
         {
             if (From.activeItem != null)
-            {
                 if (this.trashedItem.item == null)
                 {
                     this.trashedItem.item = From.activeItem.getOne();
                     From.activeItem.Stack--;
                     if (From.activeItem.Stack == 0)
-                    {
                         From.items.Remove(From.activeItem);
-                    }
                     From.activeItem = null;
                     From.populateClickableItems();
                 }
                 else if (this.trashedItem.item != null)
-                {
                     if (From.activeItem.canStackWith(this.trashedItem.item))
                     {
                         this.trashedItem.item.Stack += 1;
                         From.activeItem.Stack--;
                         if (From.activeItem.Stack == 0)
-                        {
                             From.items.Remove(From.activeItem);
-                        }
                         From.activeItem = null;
                         From.populateClickableItems();
                         return;
@@ -327,15 +288,11 @@ namespace Revitalize.Framework.Menus
                         this.trashedItem.item = From.activeItem.getOne();
                         From.activeItem.Stack--;
                         if (From.activeItem.Stack == 0)
-                        {
                             From.items.Remove(From.activeItem);
-                        }
                         From.activeItem = null;
                         From.populateClickableItems();
                         return;
                     }
-                }
-            }
         }
 
         /// <summary>
@@ -344,7 +301,6 @@ namespace Revitalize.Framework.Menus
         private void recoverTrashedItem()
         {
             if (this.trashedItem.item != null)
-            {
                 if (this.playerInventory.isFull == false)
                 {
                     foreach (Item I in this.playerInventory.items)
@@ -426,7 +382,6 @@ namespace Revitalize.Framework.Menus
                     }
 
                 }
-            }
         }
 
         /// <summary>
@@ -438,18 +393,14 @@ namespace Revitalize.Framework.Menus
             this.playerInventory.draw(b);
             this.otherInventory.draw(b);
 
-            this.transferButton.draw(b, 1f, this.currentMode== CurrentMode.TransferItems? 1f:.4f);
+            this.transferButton.draw(b, 1f, this.currentMode == CurrentMode.TransferItems ? 1f : .4f);
             this.trashButton.draw(b, 1f, this.currentMode == CurrentMode.TrashItem ? 1f : .4f);
-            this.trashedItem.draw(b,0.25f, (this.currentMode == CurrentMode.TrashItem || this.trashedItem.item!=null) ? 1f:.4f, false);
+            this.trashedItem.draw(b, 0.25f, this.currentMode == CurrentMode.TrashItem || this.trashedItem.item != null ? 1f : .4f, false);
             if (this.hoverText != null)
-            {
-                IClickableMenuExtended.drawHoverText(b, this.hoverText, Game1.dialogueFont);
-            }
+                drawHoverText(b, this.hoverText, Game1.dialogueFont);
             //To prevent awkward overlap from the other menu.
             if (this.playerInventory.hoverText != null)
-            {
                 this.playerInventory.drawToolTip(b);
-            }
 
             this.drawToolTip(b);
             this.drawMouse(b);
@@ -457,7 +408,7 @@ namespace Revitalize.Framework.Menus
 
         public void drawToolTip(SpriteBatch b)
         {
-            if (this.displayTrashedItem && this.trashedItem.item!=null) IClickableMenu.drawToolTip(b, this.trashedItem.item.getDescription(), this.trashedItem.item.DisplayName, this.trashedItem.item, false, -1, 0, -1, -1, (CraftingRecipe)null, -1);
+            if (this.displayTrashedItem && this.trashedItem.item != null) drawToolTip(b, this.trashedItem.item.getDescription(), this.trashedItem.item.DisplayName, this.trashedItem.item, false, -1, 0, -1, -1, null, -1);
         }
 
 

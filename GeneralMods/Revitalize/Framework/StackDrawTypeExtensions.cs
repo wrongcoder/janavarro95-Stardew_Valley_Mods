@@ -1,6 +1,6 @@
 using StardewValley;
 
-namespace Revitalize.Framework
+namespace Omegasis.Revitalize.Framework
 {
     /// <summary>Provides extension methods on <see cref="StackDrawType"/>.</summary>
     internal static class StackDrawTypeExtensions

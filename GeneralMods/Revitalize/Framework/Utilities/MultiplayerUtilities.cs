@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Revitalize;
-using Revitalize.Framework.Objects;
 using StardewValley;
 
-namespace Revitalize.Framework.Utilities
+namespace Omegasis.Revitalize.Framework.Utilities
 {
     /// <summary>
     /// Deals with syncing objects in multiplayer.
@@ -32,7 +30,7 @@ namespace Revitalize.Framework.Utilities
         {
             if (GameMultiplayer == null)
             {
-                Multiplayer multiplayer = ModCore.ModHelper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer", true).GetValue();
+                Multiplayer multiplayer = RevitalizeModCore.ModHelper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer", true).GetValue();
                 if (multiplayer == null) return null;
                 else
                 {
