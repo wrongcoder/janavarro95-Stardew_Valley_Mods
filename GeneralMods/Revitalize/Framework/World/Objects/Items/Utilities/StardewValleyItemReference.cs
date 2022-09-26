@@ -10,9 +10,9 @@ using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using StardewValley;
 
-namespace Omegasis.Revitalize.Framework.World.Objects.Items
+namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Items.StardewValleyItemReference")]
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Items.Utilities.StardewValleyItemReference")]
     public class StardewValleyItemReference : ItemReference
     {
 

@@ -8,7 +8,7 @@ using StardewValley;
 using System.Xml.Serialization;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 
-namespace Omegasis.Revitalize.Framework.World.Objects.Items
+namespace Omegasis.Revitalize.Framework.World.Objects.Items.Resources
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.Items.Ore")]
     public class Ore : CustomObject

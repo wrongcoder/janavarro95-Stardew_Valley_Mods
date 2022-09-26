@@ -8,9 +8,9 @@ using System.Xml.Serialization;
 using Netcode;
 using StardewValley;
 
-namespace Omegasis.Revitalize.Framework.World.Objects.Items
+namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Items.ItemReference")]
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Items.Utilities.ItemReference")]
     public class ItemReference
     {
         /// <summary>

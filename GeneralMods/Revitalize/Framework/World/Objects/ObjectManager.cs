@@ -103,6 +103,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.loadInBlueprints();
         }
 
+        /// <summary>
+        /// Used to register items in the object managaer so that they can be used for the ObjectManager and for referencing things such as crafting recipes.
+        /// </summary>
         protected virtual void registerStardewValleyItems()
         {
             this.addItem("StardewValley.Tools.Pickaxe", new StardewValley.Tools.Pickaxe());

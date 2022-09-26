@@ -10,9 +10,9 @@ using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using StardewValley;
 
-namespace Omegasis.Revitalize.Framework.World.Objects.Items
+namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Items.StardewValleyBigCraftableItemReference")]
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Items.Utilities.StardewValleyBigCraftableItemReference")]
     public class StardewValleyBigCraftableItemReference : ItemReference
     {
         public readonly NetEnum<Enums.SDVObject> objectId = new NetEnum<Enums.SDVObject>();

@@ -38,6 +38,10 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             AddWateringCanBlueprintsToShop(Menu);
         }
 
+        /// <summary>
+        /// Adds various tool
+        /// </summary>
+        /// <param name="Menu"></param>
         private static void AddAxeBlueprintsToShop(ShopMenu Menu)
         {
 
@@ -59,7 +63,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             {
                 ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(AnvilBlueprintsIds.CopperAxeBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.copperAxeBlueprintPrice, 1);
             }
-            if (toolLevel >= 0 && !RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.AnvilCraftingRecipes, "StardewValley.Tools.Axe"))
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.AnvilCraftingRecipes, "StardewValley.Tools.Axe"))
             {
                 ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(AnvilBlueprintsIds.AxeBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.axeBlueprintPrice, 1);
             }
@@ -87,7 +91,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             {
                 ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(AnvilBlueprintsIds.CopperHoeBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.copperHoeBlueprintPrice, 1);
             }
-            if (toolLevel >= 0 && !RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.AnvilCraftingRecipes, "StardewValley.Tools.Hoe"))
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.AnvilCraftingRecipes, "StardewValley.Tools.Hoe"))
             {
                 ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(AnvilBlueprintsIds.HoeBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.hoeBlueprintPrice, 1);
             }
@@ -116,7 +120,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             {
                 ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(AnvilBlueprintsIds.CopperPickaxeBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.copperPickaxeBlueprintPrice, 1);
             }
-            if (toolLevel >= 0 && !RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.AnvilCraftingRecipes, "StardewValley.Tools.Pickaxe"))
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.AnvilCraftingRecipes, "StardewValley.Tools.Pickaxe"))
             {
                 ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(AnvilBlueprintsIds.PickaxeBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.pickaxeBlueprintPrice, 1);
             }
@@ -145,7 +149,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             {
                 ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(AnvilBlueprintsIds.CopperWateringCanBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.copperWateringCanBlueprintPrice, 1);
             }
-            if (toolLevel >= 0 && !RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.AnvilCraftingRecipes, "StardewValley.Tools.WateringCan"))
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.AnvilCraftingRecipes, "StardewValley.Tools.WateringCan"))
             {
                 ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(AnvilBlueprintsIds.WateringCanBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.wateringCanBlueprintPrice, 1);
             }

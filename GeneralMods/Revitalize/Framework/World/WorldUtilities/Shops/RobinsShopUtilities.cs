@@ -95,7 +95,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                 )));
             }
 
-            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.IrrigatedWateringPotRecipeId) && Game1.player.FarmingLevel >= 10 && Game1.netWorldState.Value.GoldenWalnutsFound.Value >= 1)
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.IrrigatedWateringPotRecipeId) && Game1.player.FarmingLevel >= 10)
             {
                 shopInventoryProbes.Add(
                   new ShopInventoryProbe(
@@ -109,7 +109,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                 )));
             }
 
-            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutoPlanterIrrigatedWateringPotAttachmentRecipeId) && Game1.player.FarmingLevel >= 10 && Game1.netWorldState.Value.GoldenWalnutsFound.Value >= 1)
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutoPlanterIrrigatedWateringPotAttachmentRecipeId) && Game1.player.FarmingLevel >= 10)
             {
                 shopInventoryProbes.Add(
                   new ShopInventoryProbe(
@@ -123,7 +123,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                 )));
             }
 
-            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutoHarvesterIrrigatedWateringPotAttachmentRecipeId) && Game1.player.FarmingLevel >= 10 && Game1.netWorldState.Value.GoldenWalnutsFound.Value >= 1)
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutoHarvesterIrrigatedWateringPotAttachmentRecipeId) && Game1.player.FarmingLevel >= 10)
             {
 
                 shopInventoryProbes.Add(
@@ -138,7 +138,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                 )));
             }
 
-            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutomatedFarmingSystemRecipeId) && Game1.player.FarmingLevel >= 10 && Game1.netWorldState.Value.GoldenWalnutsFound.Value >= 1)
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutomatedFarmingSystemRecipeId) && Game1.player.FarmingLevel >= 10)
             {
                 shopInventoryProbes.Add(
                   new ShopInventoryProbe(
