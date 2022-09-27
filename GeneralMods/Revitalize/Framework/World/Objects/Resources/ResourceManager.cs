@@ -76,7 +76,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
             //Tin
             List<OreVein> oreVeins = new List<OreVein>();
             OreVein tinOre_0_0 = new OreVein(new BasicItemInformation("Tin Ore Vein", ResourceObjectIds.TinOreVein, "A ore vein that is full of tin.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManagers.Resources_Ore.createAnimationManager("Tin", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null),
-                new OreResourceInformation(new ObjectManagerItemReference(Ores.TinOre), true, true, true, false, new List<IntRange>()
+                new OreResourceInformation(new ItemReference(Ores.TinOre), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(1,20)
             }, new List<IntRange>(),
@@ -106,7 +106,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
 
             //Silver
             OreVein silverOre_0_0 = new OreVein(new BasicItemInformation("Silver Ore Vein", ResourceObjectIds.SilverOreVein, "A ore vein that is full of silver ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManagers.Resources_Ore.createAnimationManager("Silver", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null),
-                new OreResourceInformation(new ObjectManagerItemReference(Ores.SilverOre), true, true, true, false, new List<IntRange>()
+                new OreResourceInformation(new ItemReference(Ores.SilverOre), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(60,100)
             }, new List<IntRange>(), 1, 3, 1, 10, new IntRange(1, 3), new IntRange(1, 3), new IntRange(0, 0), new List<IntRange>()
@@ -119,7 +119,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
 
             //Lead
             OreVein leadOre_0_0 = new OreVein(new BasicItemInformation("Lead Ore Vein", ResourceObjectIds.LeadOreVein, "A ore vein that is full of lead ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManagers.Resources_Ore.createAnimationManager("Lead", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null),
-                new OreResourceInformation(new ObjectManagerItemReference(Ores.LeadOre), true, true, true, false, new List<IntRange>()
+                new OreResourceInformation(new ItemReference(Ores.LeadOre), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(60,70),
                 new IntRange(90,120)
@@ -149,7 +149,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
 
             //Prismatic nugget ore
             OreVein prismaticOre_0_0 = new OreVein(new BasicItemInformation("Prismatic Ore Vein", ResourceObjectIds.PrismaticOreVein, "A ore vein that is full of prismatic ore.", "Revitalize.Ore", Color.Black, -300, -300, 0, false, 350, true, true, TextureManagers.Resources_Ore.createAnimationManager("Prismatic", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null),
-                new OreResourceInformation(new ObjectManagerItemReference(Gems.PrismaticNugget), true, true, true, false, new List<IntRange>()
+                new OreResourceInformation(new ItemReference(Gems.PrismaticNugget), true, true, true, false, new List<IntRange>()
             {
                 new IntRange(110,120)
             }, new List<IntRange>(), 1, 3, 1, 1, new IntRange(1, 1), new IntRange(1, 1), new IntRange(1, 5), new List<IntRange>()

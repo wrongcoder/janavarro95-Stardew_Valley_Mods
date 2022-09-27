@@ -2,15 +2,15 @@
   "itemToDraw": {
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem",
+    "registeredObjectId": "Revitalize.Objects.Machines.MagicalFurnace",
     "amount": 1
   },
   "recipesToUnlock": {
-    "Revitalize.Crafting.CraftingRecipeBooks.Workbench": "Revitalize.Workbench.Farming.Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem"
+    "Revitalize.Crafting.CraftingRecipeBooks.Workbench": "Revitalize.Workbench.Machines.Furnaces.MagicalFurnace"
   },
-  "id": "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem",
-  "name": "Blueprint: Automatic Farming System",
-  "description": "A blueprint used on how to craft an Automatic Farming System at a workbench. Allows for automatically planting or harvesting crops from irrigated garden pots that have the appropriate attachments attached.",
+  "id": "Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.MagicalFurnace",
+  "name": "Blueprint: Nuclear Furnace",
+  "description": "A blueprint used on how to craft a magical furnace at a workbench!",
   "categoryId": "StardewValley.Crafting",
   "healthRestoredOnEating": -300,
   "staminaRestoredOnEating": -300,

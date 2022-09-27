@@ -27,6 +27,7 @@ using Omegasis.Revitalize.Framework.Constants.ItemCategoryInformation;
 using Omegasis.Revitalize.Framework.Constants.PathConstants.Data;
 using System.IO;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json.Crafting;
+using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -349,6 +350,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             return this.GetItem<Item>(Key, Stack);
         }
 
+        /// <summary>
+        /// Gets an item from the list of modded items.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="Key"></param>
+        /// <param name="Stack"></param>
+        /// <returns></returns>
         public virtual T GetItem<T>(string Key, int Stack = 1) where T : Item
         {
 
@@ -359,9 +367,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 return (T)I;
             }
             else
-                return null;
+                throw new InvalidObjectManagerItemException(string.Format("Error: Trying to request an item with id {0} but there is none registered with the object manager!",Key));
 
         }
+
 
         public virtual T getObject<T>(string Key, int Stack = 1) where T : StardewValley.Object
         {

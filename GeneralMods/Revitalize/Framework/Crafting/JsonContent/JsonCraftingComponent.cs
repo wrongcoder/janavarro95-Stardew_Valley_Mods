@@ -86,19 +86,12 @@ namespace Omegasis.Revitalize.Framework.Crafting.JsonContent
         /// <returns></returns>
         public virtual Item getItem()
         {
-            if(this.item.stardewValleyItemId!= Enums.SDVObject.NULL)
+            Item item = this.item.getItem();
+            if (item == null)
             {
-                return RevitalizeModCore.ModContentManager.objectManager.getItem(this.item.stardewValleyItemId, this.item.amount);
+                throw new InvalidJsonCraftingComponentException("A json crafting component must have one one of the following: a stardewValleyItemId, a stardewValleyBigCraftableId or a registeredObjectId set to be valid!");
             }
-            if(this.item.stardewValleyBigCraftableId!= Enums.SDVBigCraftable.NULL)
-            {
-                return RevitalizeModCore.ModContentManager.objectManager.getItem(this.item.stardewValleyBigCraftableId, this.item.amount);
-            }
-            if (!string.IsNullOrEmpty(this.item.registeredObjectId))
-            {
-                return RevitalizeModCore.ModContentManager.objectManager.getItem(this.item.registeredObjectId, this.item.amount);
-            }
-            throw new InvalidJsonCraftingComponentException("A json crafting component must have one one of the following: a stardewValleyItemId, a stardewValleyBigCraftableId or a registeredObjectId set to be valid!");
+            return item;
         }
 
         /// <summary>

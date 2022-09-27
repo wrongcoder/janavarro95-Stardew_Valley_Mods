@@ -13,6 +13,8 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds
     public class WorkbenchRecipeIds
     {
         public static string ElectricFurnaceRecipeId = "Revitalize.Workbench.Machines.Furnaces.ElectricFurnace";
+        public static string NuclearFurnaceRecipeId = "Revitalize.Workbench.Machines.Furnaces.NuclearFurnace";
+        public static string MagicalFurnaceRecipeId = "Revitalize.Workbench.Machines.Furnaces.MagicalFurnace";
 
 
         public static string IrrigatedWateringPotRecipeId = "Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot";

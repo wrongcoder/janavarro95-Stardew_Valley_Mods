@@ -11,7 +11,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json
     /// <summary>
     /// Used to get items from the ObjectManager for json related purposes.
     /// </summary>
-   public  class JsonItemReference
+   public class JsonItemReference
     {
         /// <summary>
         /// The stardew valley item id used. 

@@ -1,3 +1,8 @@
+~~~~~~~~~~~~0.0.1 Revitalize 9-27-2022 xx.xx P.M~~~~~~~~~~~~~~
+~Cleaned up lots of code in Robin's Shop Utils to make it easier to add new items to Robin's shop.
++Added blueprints for Nuclear Furnace.
++Added blueprints for Magical Furnace.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 7-25-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Made blueprints for irrigated garden pot, and it's attachments
 +made blueprints for automatic farming system

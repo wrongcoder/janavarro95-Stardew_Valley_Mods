@@ -172,8 +172,6 @@ namespace Omegasis.Revitalize.Framework.Crafting
             foreach (KeyValuePair<string, UnlockableCraftingRecipe> pair in this.craftingRecipes)
                 if (pair.Value.hasUnlocked)
                     menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(pair.Value.recipe, null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), pair.Value.whichTab);
-                else
-                    RevitalizeModCore.log("Recipe is locked!");
             menu.currentTab = this.defaultTab;
             menu.sortRecipes();
             if (Game1.activeClickableMenu == null) Game1.activeClickableMenu = menu;
@@ -190,8 +188,6 @@ namespace Omegasis.Revitalize.Framework.Crafting
             foreach (KeyValuePair<string, UnlockableCraftingRecipe> pair in this.craftingRecipes)
                 if (pair.Value.hasUnlocked)
                     menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(pair.Value.recipe, null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), pair.Value.whichTab);
-                else
-                    RevitalizeModCore.log("Recipe is locked!");
             menu.currentTab = this.defaultTab;
             menu.sortRecipes();
             return menu;
@@ -208,8 +204,6 @@ namespace Omegasis.Revitalize.Framework.Crafting
             foreach (KeyValuePair<string, UnlockableCraftingRecipe> pair in this.craftingRecipes)
                 if (pair.Value.hasUnlocked)
                     menu.addInCraftingRecipe(new Framework.Menus.MenuComponents.CraftingRecipeButton(pair.Value.recipe, null, new Vector2(), new Rectangle(0, 0, 16, 16), 4f, true, Color.White), pair.Value.whichTab);
-                else
-                    RevitalizeModCore.log("Recipe is locked!");
             menu.currentTab = this.defaultTab;
             menu.sortRecipes();
             if (Game1.activeClickableMenu == null) Game1.activeClickableMenu = menu;

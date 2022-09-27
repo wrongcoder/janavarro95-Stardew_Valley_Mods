@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -12,7 +14,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
     {
 
         /// <summary>
-        /// Delegate method to find if a given item being searched matches a given condiiton.
+        /// Delegate method to find if a given item being searched matches a given condiiton. Also can include additional paramaters to determine if the item should be added or not.
         /// </summary>
         /// <param name="ItemForSale"></param>
         /// <param name="ItemPrice"></param>
@@ -62,7 +64,6 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                         }
                         else if (npcName.Equals("Marnie"))
                         {
-                            RevitalizeModCore.log("Accessing marnies shop!");
                             MarniesShopUtilities.AddStockToMarniesShop(menu);
                         }
                     }
@@ -74,6 +75,62 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
         {
             Menu.forSale.Add(Item);
             Menu.itemPriceAndStock.Add(Item, new int[2] { Price, Stock });
+        }
+
+        /// <summary>
+        /// Helper method for creating <see cref="ShopInventoryProbe"/>s which allow for adding items to a shop in a specific order based on given conditions. If true, then the new item is found after the one matching this param.
+        /// </summary>
+        /// <param name="itemToAdd"></param>
+        /// <param name="SellingPrice"></param>
+        /// <param name="AmountToAdd"></param>
+        /// <returns></returns>
+        public static ShopInventoryProbe CreateInventoryShopProbe(ItemFoundInShopInventory ItemFoundInShopConditional, Enums.SDVObject itemToAdd, int SellingPrice, int AmountToAdd=-1)
+        {
+            return CreateInventoryShopProbe(ItemFoundInShopConditional ,new ItemReference(itemToAdd), SellingPrice, AmountToAdd);
+        }
+
+        /// <summary>
+        /// Helper method for creating <see cref="ShopInventoryProbe"/>s which allow for adding items to a shop in a specific order based on given conditions. If true, then the new item is found after the one matching this param.
+        /// </summary>
+        /// <param name="itemToAdd"></param>
+        /// <param name="SellingPrice"></param>
+        /// <param name="AmountToAdd"></param>
+        /// <returns></returns>
+        public static ShopInventoryProbe CreateInventoryShopProbe(ItemFoundInShopInventory ItemFoundInShopConditional , Enums.SDVBigCraftable itemToAdd, int SellingPrice, int AmountToAdd=-1)
+        {
+            return CreateInventoryShopProbe(ItemFoundInShopConditional, new ItemReference(itemToAdd), SellingPrice, AmountToAdd);
+        }
+
+        /// <summary>
+        /// Helper method for creating <see cref="ShopInventoryProbe"/>s which allow for adding items to a shop in a specific order based on given conditions. If true, then the new item is found after the one matching this param.
+        /// </summary>
+        /// <param name="itemToAdd"></param>
+        /// <param name="SellingPrice"></param>
+        /// <param name="AmountToAdd"></param>
+        /// <returns></returns>
+        public static ShopInventoryProbe CreateInventoryShopProbe(ItemFoundInShopInventory ItemFoundInShopConditional , string itemToAdd, int SellingPrice, int AmountToAdd=-1)
+        {
+            return CreateInventoryShopProbe(ItemFoundInShopConditional, new ItemReference(itemToAdd), SellingPrice, AmountToAdd);
+        }
+
+        /// <summary>
+        /// Helper method for creating <see cref="ShopInventoryProbe"/>s which allow for adding items to a shop in a specific order based on given conditions. If true, then the new item is found after the one matching this param.
+        /// </summary>
+        /// <param name="ItemFoundInShopConditional"></param>
+        /// <param name="itemToAdd"></param>
+        /// <param name="SellingPrice"></param>
+        /// <param name="AmountToAdd"></param>
+        /// <returns></returns>
+        public static ShopInventoryProbe CreateInventoryShopProbe(ItemFoundInShopInventory ItemFoundInShopConditional ,ItemReference itemToAdd, int SellingPrice, int AmountToAdd=-1)
+        {
+            return new ShopInventoryProbe(
+                ItemFoundInShopConditional,
+                new UpdateShopInventory((ShopInventory, ItemForSale, Price, Stock) =>
+                {
+                    ShopInventory.addItemForSale(itemToAdd.getItem(), SellingPrice, AmountToAdd);
+                    return ShopInventory;
+                }
+            ));
         }
 
 
