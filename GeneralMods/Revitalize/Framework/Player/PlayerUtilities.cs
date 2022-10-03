@@ -189,6 +189,38 @@ namespace Omegasis.Revitalize.Framework.Player
         }
 
         /// <summary>
+        /// Reduces a <see cref="IBasicItemInfoProvider"/>'s stack size by a certain amount.
+        /// </summary>
+        /// <param name="Who"></param>
+        /// <param name="BasicItemInfoId"></param>
+        /// <param name="StackSizeToReduce"></param>
+        /// <returns></returns>
+        public static bool ReduceInventoryItemStackSize(this Farmer Who, Item itemToReduce, int StackSizeToReduce = 1)
+        {
+            if (Who != null)
+            {
+                for (int i = 0; i < Who.MaxItems; i++)
+                {
+
+                    //Find the first empty index in the player's inventory.
+                    if (Who.items[i] == null)
+                    {
+                        continue;
+                    }
+                    Item item = Who.items[i];
+                    if (item==itemToReduce)
+                    {
+                        Who.items[i].Stack -= StackSizeToReduce;
+
+                        if (Who.items[i].Stack <= 0) Who.items[i] = null;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Used to determine if a Player's inventory has enough of a given vanilla game item for Stardew Valley.
         /// </summary>
         /// <param name="Who"></param>

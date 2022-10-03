@@ -20,20 +20,6 @@ namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers.Objects.Machi
     public class ElectricFurnaceWrapper : CustomObjectMachineWrapper<ElectricFurnace>
     {
         /// <summary>
-        /// List of items that can be smelted.
-        /// </summary>
-        public static List<Enums.SDVObject> SmeltableItems = new List<Enums.SDVObject>() {
-            Enums.SDVObject.CopperOre,
-            Enums.SDVObject.IronOre,
-            Enums.SDVObject.GoldOre,
-            Enums.SDVObject.IridiumOre,
-            Enums.SDVObject.RadioactiveOre,
-            Enums.SDVObject.Quartz,
-            Enums.SDVObject.FireQuartz,
-            Enums.SDVObject.WiltedBouquet,
-        };
-
-        /// <summary>
         /// Constructor.
         /// </summary>
         public ElectricFurnaceWrapper()
@@ -63,11 +49,21 @@ namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers.Objects.Machi
 
             if (fuelTypeFound)
             {
-                bool smelted;
-                foreach (Enums.SDVObject obj in SmeltableItems)
+                foreach (ITrackedStack obj in input.GetItems())
                 {
-                    smelted = this.TryToSmeltItem(input, obj, fuelType);
-                    if (smelted) return true;
+                    if (this.customObject.chargesRemaining.Value <= 0 && fuelType != null)
+                    {
+                        fuelType.Reduce();
+                        this.customObject.increaseFuelCharges();
+                    }
+                    Item item = obj.Sample;
+                    item.Stack = obj.Count;
+                    CraftingRecipeResult smeltedRecipe=this.customObject.processItemFromRecipe(item, null, false);
+                    if (smeltedRecipe.successful)
+                    {
+                        obj.Take(smeltedRecipe.recipe.ingredients[0].requiredAmount);
+                        return true;
+                    }
                 }
 
             }
@@ -75,43 +71,6 @@ namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers.Objects.Machi
             return false;
 
 
-        }
-
-        /// <summary>
-        /// Tries to smelt a single item 
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="obj"></param>
-        /// <param name="fuelType"></param>
-        /// <returns></returns>
-        public virtual bool TryToSmeltItem(IStorage input, Enums.SDVObject obj, IConsumable fuelType)
-        {
-            if (this.TryGetSmeltingItem(input, obj, out IConsumable? itemToConsume))
-            {
-                if (this.customObject.chargesRemaining.Value <= 0 && fuelType != null)
-                {
-                    fuelType.Reduce();
-                }
-                itemToConsume.Reduce();
-                this.customObject.smeltItem(obj);
-                return true;
-            }
-            return false;
-        }
-
-
-        /// <summary>
-        /// Attempts to get a single item to be smelted item from a chest.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="obj"></param>
-        /// <param name="consumable"></param>
-        /// <returns></returns>
-        public virtual bool TryGetSmeltingItem(IStorage input, Enums.SDVObject obj, out IConsumable? consumable)
-        {
-            bool itemFound = input.TryGetVanillaIngredient(obj, this.customObject.getStackSizeNecessaryForSmelting(obj), out IConsumable? consumableItem);
-            consumable = consumableItem;
-            return itemFound;
         }
 
         /// <summary>

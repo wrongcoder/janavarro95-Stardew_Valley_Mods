@@ -10,6 +10,7 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds
     {
         public const string AnvilCraftingRecipes = "Revitalize.Crafting.CraftingRecipeBooks.Anvil";
         public const string AlloyFurnaceCraftingRecipes = "Revitalize.Crafting.CraftingRecipeBooks.AlloyFurnace";
+        public const string ElectricFurnaceCraftingRecipies = "Revitalize.Crafting.CraftingRecipeBooks.RevitalizeMachines.ElectricFurnace";
         public const string WorkbenchCraftingRecipies = "Revitalize.Crafting.CraftingRecipeBooks.Workbench";
     }
 }

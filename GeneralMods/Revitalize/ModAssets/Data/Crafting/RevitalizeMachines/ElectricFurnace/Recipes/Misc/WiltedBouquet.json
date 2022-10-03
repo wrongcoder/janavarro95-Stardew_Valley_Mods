@@ -1,0 +1,37 @@
+{
+  "whichTab": "",
+  "isUnlocked": true,
+  "recipe": {
+	"craftingRecipeId": "StardewValley.Object.WiltedBouquet",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 10,
+    "inputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "Bouquet",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 1
+			}
+		}
+	
+	],
+    "outputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "WiltedBouquet",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 1
+			}
+		},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}

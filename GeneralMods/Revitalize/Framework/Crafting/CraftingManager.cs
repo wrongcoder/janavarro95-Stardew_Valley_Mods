@@ -61,6 +61,28 @@ namespace Omegasis.Revitalize.Framework.Crafting
             return null;
         }
 
+
+        /// <summary>
+        /// Gets all crafting recipes that have been unlocked for a given crafting book.
+        /// </summary>
+        /// <param name="CraftingBookName"></param>
+        /// <returns></returns>
+        public virtual List<Recipe> getUnlockedCraftingRecipes(string CraftingBookName)
+        {
+            List<Recipe> unlockedRecipes = new List<Recipe>();
+            CraftingRecipeBook book = this.getCraftingRecipeBook(CraftingBookName);
+            if (book == null) return unlockedRecipes;
+            foreach (UnlockableCraftingRecipe recipe in book.craftingRecipes.Values)
+            {
+                if (recipe.hasUnlocked)
+                {
+                    unlockedRecipes.Add(recipe.recipe);
+                }
+            }
+            return unlockedRecipes;
+
+        }
+
         /// <summary>
         /// Learns all of the passed in recipies.
         /// </summary>
@@ -177,10 +199,11 @@ namespace Omegasis.Revitalize.Framework.Crafting
         {
 
             this.addInCraftingRecipesForCraftingStationsFromJsonFiles();
+            this.addInCraftingRecipesForRevitalizeMachinesFromJsonFiles();
 
-           // this.addAlloyFurnaceRecipes();
-           // this.addAnvilRecipies();
-           // this.addWorkbenchRecipes();
+            // this.addAlloyFurnaceRecipes();
+            // this.addAnvilRecipies();
+            // this.addWorkbenchRecipes();
         }
 
         protected virtual void addAlloyFurnaceRecipes()
@@ -228,12 +251,12 @@ namespace Omegasis.Revitalize.Framework.Crafting
         }
 
         /// <summary>
-        /// Adds in crafting recipes from json files.
+        /// Adds in crafting recipes from json files for all crafting stations.
         /// </summary>
         protected virtual void addInCraftingRecipesForCraftingStationsFromJsonFiles()
         {
 
-            string craftingDirectoryPath =Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath,Constants.PathConstants.Data.CraftingDataPaths.CraftingStationsPath);
+            string craftingDirectoryPath = Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, Constants.PathConstants.Data.CraftingDataPaths.CraftingStationsPath);
             string relativeCraftingDirectoryPath = Constants.PathConstants.Data.CraftingDataPaths.CraftingStationsPath;
             foreach (string craftingStationPath in Directory.GetDirectories(craftingDirectoryPath))
             {
@@ -244,11 +267,11 @@ namespace Omegasis.Revitalize.Framework.Crafting
                 }
 
 
-                string relativeCraftingStationPath = Path.Combine(relativeCraftingDirectoryPath,Path.GetFileName(craftingStationPath));
+                string relativeCraftingStationPath = Path.Combine(relativeCraftingDirectoryPath, Path.GetFileName(craftingStationPath));
                 JsonCraftingRecipeBookDefinition recipeBookDefinition = JsonUtilities.ReadJsonFile<JsonCraftingRecipeBookDefinition>(relativeCraftingStationPath, "RecipeBookDefinition.json");
 
                 string CraftingTabsPath = Path.Combine(craftingStationPath, "CraftingMenuTabs");
-                string relativeCratingTabsPath= Path.Combine(relativeCraftingStationPath, "CraftingMenuTabs");
+                string relativeCratingTabsPath = Path.Combine(relativeCraftingStationPath, "CraftingMenuTabs");
 
                 /*
                 List<JsonCraftingMenuTab> craftingMenuTabs = new List<JsonCraftingMenuTab>();
@@ -276,7 +299,7 @@ namespace Omegasis.Revitalize.Framework.Crafting
                 */
 
 
-                RevitalizeModCore.logWarning("Attempting to load recipes from "+ relativeCraftingRecipesPath);
+                RevitalizeModCore.logWarning("Attempting to load recipes from " + relativeCraftingRecipesPath);
                 CraftingRecipeBook craftingRecipeBook = new CraftingRecipeBook(recipeBookDefinition, JsonUtilities.LoadJsonFilesFromDirectories<JsonCraftingMenuTab>(relativeCratingTabsPath), JsonUtilities.LoadJsonFilesFromDirectories<UnlockableJsonCraftingRecipe>(relativeCraftingRecipesPath));
 
                 //Add validation + add in recipies that may or may not be added specifically from json to the already existing data.
@@ -296,6 +319,54 @@ namespace Omegasis.Revitalize.Framework.Crafting
                         }
                         else
                             this.modCraftingRecipesByGroup[craftingRecipeBook.craftingRecipeBookId].craftingRecipes.Add(recipe.Key, recipe.Value); //Add in new recipes automatically without having to delete the old crafting recipe book.
+                }
+                else
+                    this.modCraftingRecipesByGroup.Add(craftingRecipeBook.craftingRecipeBookId, craftingRecipeBook);
+
+            }
+
+        }
+
+
+        /// <summary>
+        /// Adds in crafting recipes from json files for all crafting stations.
+        /// </summary>
+        protected virtual void addInCraftingRecipesForRevitalizeMachinesFromJsonFiles()
+        {
+
+            string craftingDirectoryPath = Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, Constants.PathConstants.Data.CraftingDataPaths.RevitalizeMachinesPath);
+            string relativeCraftingDirectoryPath = Constants.PathConstants.Data.CraftingDataPaths.RevitalizeMachinesPath;
+            foreach (string craftingStationPath in Directory.GetDirectories(craftingDirectoryPath))
+            {
+                if (Path.GetFileName(craftingStationPath).Equals("_Templates") || Path.GetFileName(craftingStationPath).Equals("Templates"))
+                {
+                    //Ignore templates folder.
+                    continue;
+                }
+
+
+                string relativeCraftingStationPath = Path.Combine(relativeCraftingDirectoryPath, Path.GetFileName(craftingStationPath));
+                JsonCraftingRecipeBookDefinition recipeBookDefinition = JsonUtilities.ReadJsonFile<JsonCraftingRecipeBookDefinition>(relativeCraftingStationPath, "RecipeBookDefinition.json");
+
+                string craftingRecipesPath = Path.Combine(craftingStationPath, "Recipes");
+                string relativeCraftingRecipesPath = Path.Combine(relativeCraftingStationPath, "Recipes");
+
+                if (!Directory.Exists(craftingRecipesPath))
+                {
+                    continue;
+                }
+
+                RevitalizeModCore.logWarning("Attempting to load recipes from " + relativeCraftingRecipesPath);
+                CraftingRecipeBook craftingRecipeBook = new CraftingRecipeBook(recipeBookDefinition, new List<JsonCraftingMenuTab>(), JsonUtilities.LoadJsonFilesFromDirectories<UnlockableJsonCraftingRecipe>(relativeCraftingRecipesPath));
+
+                //Add validation + add in recipies that may or may not be added specifically from json to the already existing data.
+                if (this.modCraftingRecipesByGroup.ContainsKey(recipeBookDefinition.craftingRecipeBookId))
+                {
+                    foreach (KeyValuePair<string, UnlockableCraftingRecipe> recipe in craftingRecipeBook.craftingRecipes)
+                        if (!this.modCraftingRecipesByGroup[craftingRecipeBook.craftingRecipeBookId].craftingRecipes.ContainsKey(recipe.Key))
+                        {
+                            this.modCraftingRecipesByGroup[craftingRecipeBook.craftingRecipeBookId].craftingRecipes.Add(recipe.Key, recipe.Value);
+                        }
                 }
                 else
                     this.modCraftingRecipesByGroup.Add(craftingRecipeBook.craftingRecipeBookId, craftingRecipeBook);

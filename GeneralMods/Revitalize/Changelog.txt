@@ -1,4 +1,9 @@
 ~~~~~~~~~~~~0.0.1 Revitalize 9-27-2022 xx.xx P.M~~~~~~~~~~~~~~
+~Rewrote a lot of the ElectricFurnace code when it comes to processing items.
++Electric, Nuclear, and Magical furnaces now load their recipes from .json files. Only allow for a single input and output item, but allows flexibility for new recipes or modifying them.
+~Cleaned up code related to ElectricFurnace Automate compatibility mod!
+
+~~~~~~~~~~~~0.0.1 Revitalize 9-27-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Cleaned up lots of code in Robin's Shop Utils to make it easier to add new items to Robin's shop.
 +Added blueprints for Nuclear Furnace.
 +Added blueprints for Magical Furnace.

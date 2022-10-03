@@ -9,9 +9,12 @@ using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
+using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
+using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
+using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewValley;
 
@@ -37,10 +40,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         }
 
         public readonly NetInt chargesRemaining = new NetInt();
-        public readonly NetEnum<Enums.SDVObject> smeltingItem = new NetEnum<Enums.SDVObject>(Enums.SDVObject.NULL);
+        public readonly NetRef<ItemReference> smeltingItem = new NetRef<ItemReference>(new ItemReference());
         public readonly NetEnum<FurnaceType> furnaceType = new NetEnum<FurnaceType>(FurnaceType.Electric);
-
-
 
         public ElectricFurnace()
         {
@@ -70,41 +71,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         {
             base.minutesElapsed(minutes, environment);
 
-            if (this.MinutesUntilReady == 0 && this.smeltingItem.Value != Enums.SDVObject.NULL && this.heldObject.Value == null)
+            if (this.MinutesUntilReady == 0 && this.smeltingItem.Value.isNotNull())
             {
-                if (this.smeltingItem.Value == Enums.SDVObject.CopperOre)
-                {
-                    this.heldObject.Value = new StardewValley.Object((int)Enums.SDVObject.CopperBar, 1);
-                }
-                if (this.smeltingItem.Value == Enums.SDVObject.IronOre)
-                {
-                    this.heldObject.Value = new StardewValley.Object((int)Enums.SDVObject.IronBar, 1);
-                }
-                if (this.smeltingItem.Value == Enums.SDVObject.GoldOre)
-                {
-                    this.heldObject.Value = new StardewValley.Object((int)Enums.SDVObject.GoldBar, 1);
-                }
-                if (this.smeltingItem.Value == Enums.SDVObject.IridiumOre)
-                {
-                    this.heldObject.Value = new StardewValley.Object((int)Enums.SDVObject.IridiumBar, 1);
-                }
-                if (this.smeltingItem.Value == Enums.SDVObject.RadioactiveOre)
-                {
-                    this.heldObject.Value = new StardewValley.Object((int)Enums.SDVObject.RadioactiveBar, 1);
-                }
-                if (this.smeltingItem.Value == Enums.SDVObject.Quartz)
-                {
-                    this.heldObject.Value = new StardewValley.Object((int)Enums.SDVObject.RefinedQuartz, 1);
-                }
-                if (this.smeltingItem.Value == Enums.SDVObject.FireQuartz)
-                {
-                    this.heldObject.Value = new StardewValley.Object((int)Enums.SDVObject.RefinedQuartz, 3);
-                }
-                if (this.smeltingItem.Value == Enums.SDVObject.Bouquet)
-                {
-                    this.heldObject.Value = new StardewValley.Object((int)Enums.SDVObject.WiltedBouquet, 1);
-                }
-                this.consumeFuelCharge();
                 this.updateAnimation();
             }
 
@@ -114,9 +82,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         public override bool rightClicked(Farmer who)
         {
 
-            if (this.heldObject.Value != null)
-                if (who.IsLocalPlayer)
-                    this.cleanOutFurnace(true);
+            if (this.heldObject.Value != null && who.IsLocalPlayer && this.finishedProduction())
+            {
+                this.cleanOutFurnace(who != null);
+            }
 
             return base.rightClicked(who);
         }
@@ -135,8 +104,87 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             }
             this.heldObject.Value = null;
             this.updateAnimation();
-            this.smeltingItem.Value = Enums.SDVObject.NULL;
+            this.smeltingItem.Value.clearItemReference();
 
+        }
+
+        public virtual CraftingRecipeResult processItemFromRecipe(Item dropInItem, Farmer who, bool ShowRedMessage=true)
+        {
+            foreach(var craftingRecipe in Revitalize.RevitalizeModCore.ModContentManager.craftingManager.getUnlockedCraftingRecipes(this.getCraftingBookName()))
+            {
+                Item neededDropInItem = craftingRecipe.ingredients[0].item;
+                int amountRequired = craftingRecipe.ingredients[0].requiredAmount;
+
+                ItemReference itemRef = new ItemReference(neededDropInItem);
+
+                if (neededDropInItem.canStackWith(dropInItem) || itemRef.itemEquals(dropInItem))
+                {
+                    //Check to make sure the player has enough, otherwise display an error!
+                    if (amountRequired > dropInItem.Stack)
+                    {
+                        if (ShowRedMessage)
+                        {
+                            Game1.showRedMessage(string.Format("Requires {0} {1}!", amountRequired, neededDropInItem.DisplayName));
+                        }
+                        return new CraftingRecipeResult(craftingRecipe,false);
+                    }
+                    this.smeltingItem.Value.setItemReference(neededDropInItem);
+                    Item outputItem = craftingRecipe.outputs[0].item.getOne();
+                    outputItem.Stack = craftingRecipe.outputs[0].requiredAmount;
+                    this.heldObject.Value = (StardewValley.Object)outputItem;
+
+                    float multiplier = 1f;
+                    if (this.furnaceType.Value == FurnaceType.Electric)
+                    {
+                        multiplier = .75f;
+                    }
+                    if (this.furnaceType.Value == FurnaceType.Nuclear)
+                    {
+                        multiplier = .5f;
+                    }
+                    if (this.furnaceType.Value == FurnaceType.Magical)
+                    {
+                        multiplier = .25f;
+                    }
+
+                    //Make sure enough fue is present for the furnace to operate (if necessary!)
+                    bool success = this.chargesRemaining.Value <= 0 ? this.consumeFuelItemFromFarmersInventory(who) : true;
+
+                    if (success == false && ShowRedMessage)
+                    {
+                        this.showRedMessageForMissingFuel();
+                        return new CraftingRecipeResult(craftingRecipe, false);
+                    }
+
+                    if (this.chargesRemaining.Value <= 0)
+                    {
+                        this.increaseFuelCharges();
+                    }
+
+                    this.MinutesUntilReady = (int)(craftingRecipe.timeToCraft * multiplier);
+                    this.MinutesUntilReady -= this.MinutesUntilReady % 10; //Want to make sure the time remaining is divisible by 10, so we will just round down.
+                    if (this.MinutesUntilReady < 10)
+                    {
+                        this.MinutesUntilReady = 10; //Make sure there is at least 10 minues to craft something.
+                    }
+
+                    if (who != null)
+                    {
+                        SoundUtilities.PlaySound(Enums.StardewSound.furnace);
+                    }
+                    this.consumeFuelCharge();
+                    PlayerUtilities.ReduceInventoryItemStackSize(who, dropInItem, amountRequired);
+                    this.updateAnimation();
+
+                    return new CraftingRecipeResult(craftingRecipe, true); //Found a sucessful recipe.
+                }
+            }
+            return new CraftingRecipeResult(null,false);
+        }
+
+        public virtual string getCraftingBookName()
+        {
+            return Constants.CraftingIds.CraftingRecipeBooks.ElectricFurnaceCraftingRecipies;
         }
 
         public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
@@ -148,209 +196,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             {
                 this.cleanOutFurnace(who != null);
             }
-
-            //Smelting times are about 25% faster than normal.
-            if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.CopperOre)
-            {
-                if (dropInItem.Stack >= 5)
-                {
-                    return this.smeltItem(who, Enums.SDVObject.CopperOre);
-                }
-                else
-                {
-                    Game1.showRedMessage("Requires 5 ore!");
-                }
-            }
-
-            if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.IronOre)
-            {
-                if (dropInItem.Stack >= 5)
-                {
-                    return this.smeltItem(who, Enums.SDVObject.IronOre);
-                }
-                else
-                {
-                    Game1.showRedMessage("Requires 5 ore!");
-                }
-            }
-
-            if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.GoldOre)
-            {
-                if (dropInItem.Stack >= 5)
-                {
-                    return this.smeltItem(who, Enums.SDVObject.GoldOre);
-                }
-                else
-                {
-                    Game1.showRedMessage("Requires 5 ore!");
-                }
-            }
-
-            if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.IridiumOre)
-            {
-                if (dropInItem.Stack >= 5)
-                {
-                    return this.smeltItem(who, Enums.SDVObject.IridiumOre);
-                }
-                else
-                {
-                    Game1.showRedMessage("Requires 5 ore!");
-                }
-            }
-
-            if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.RadioactiveOre)
-            {
-                if (dropInItem.Stack >= 5)
-                {
-                    return this.smeltItem(who, Enums.SDVObject.RadioactiveOre);
-                }
-                else
-                {
-                    Game1.showRedMessage("Requires 5 ore!");
-                }
-            }
-
-            if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.Quartz)
-            {
-                return this.smeltItem(who, Enums.SDVObject.Quartz);
-
-            }
-
-
-            if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.FireQuartz)
-            {
-                return this.smeltItem(who, Enums.SDVObject.FireQuartz);
-            }
-
-            if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.Bouquet)
-            {
-                return this.smeltItem(who, Enums.SDVObject.Bouquet);
-            }
-            this.updateAnimation();
+            this.processItemFromRecipe(dropInItem, who,true);
 
             //return base.performObjectDropInAction(dropInItem, probe, who);
-            return false;
-        }
-
-        /// <summary>
-        /// Gets the time it takes for a given object to be smelted in this furnace.
-        /// </summary>
-        /// <param name="dropInObject"></param>
-        /// <returns></returns>
-        public virtual int getTimeToSmelt(Enums.SDVObject dropInObject)
-        {
-
-            float multiplier = 1f;
-            int minutesToCraft = 0;
-
-            if (this.furnaceType.Value == FurnaceType.Electric)
-            {
-                multiplier = .75f;
-            }
-            if (this.furnaceType.Value == FurnaceType.Nuclear)
-            {
-                multiplier = .5f;
-            }
-            if (this.furnaceType.Value == FurnaceType.Magical)
-            {
-                multiplier = .25f;
-            }
-
-            if (dropInObject == Enums.SDVObject.CopperOre)
-            {
-                minutesToCraft = TimeUtilities.GetMinutesFromTime(0, 0, 30);
-            }
-            if (dropInObject == Enums.SDVObject.IronOre)
-            {
-                minutesToCraft = TimeUtilities.GetMinutesFromTime(0, 2, 0);
-            }
-            if (dropInObject == Enums.SDVObject.GoldOre)
-            {
-                minutesToCraft = TimeUtilities.GetMinutesFromTime(0, 5, 0);
-            }
-            if (dropInObject == Enums.SDVObject.IridiumOre)
-            {
-                minutesToCraft = TimeUtilities.GetMinutesFromTime(0, 8, 0);
-            }
-            if (dropInObject == Enums.SDVObject.RadioactiveOre)
-            {
-                minutesToCraft = TimeUtilities.GetMinutesFromTime(0, 10, 0);
-            }
-
-            if (dropInObject == Enums.SDVObject.Quartz)
-            {
-                minutesToCraft = TimeUtilities.GetMinutesFromTime(0, 1, 30);
-            }
-
-            if (dropInObject == Enums.SDVObject.FireQuartz)
-            {
-                minutesToCraft = TimeUtilities.GetMinutesFromTime(0, 1, 30);
-            }
-
-            if (dropInObject == Enums.SDVObject.Bouquet)
-            {
-                minutesToCraft = TimeUtilities.GetMinutesFromTime(0, 0, 10);
-            }
-
-
-            minutesToCraft = (int)(minutesToCraft * multiplier);
-
-            minutesToCraft -= minutesToCraft % 10; //Round down to nearest 10 minute mark.
-
-            if (minutesToCraft < 10) minutesToCraft = 10; //Make sure there is still a valid time to craft the object.
-
-            return minutesToCraft;
-
-        }
-
-        public virtual int getStackSizeNecessaryForSmelting(Enums.SDVObject obj)
-        {
-            if(obj== Enums.SDVObject.CopperOre || obj== Enums.SDVObject.IronOre || obj== Enums.SDVObject.GoldOre || obj== Enums.SDVObject.IridiumOre || obj== Enums.SDVObject.RadioactiveOre)
-            {
-                return 5;
-            }
-            if(obj== Enums.SDVObject.Quartz || obj== Enums.SDVObject.FireQuartz || obj== Enums.SDVObject.WiltedBouquet)
-            {
-                return 1;
-            }
-            return 0;
-        }
-
-        public virtual bool smeltItem(Farmer who, Enums.SDVObject sdvObjectToSmelt, bool showRedMessage = true)
-        {
-
-            bool success = this.chargesRemaining.Value <= 0 ? this.consumeFuelItemFromFarmersInventory(who) : true;
-
-            if (success == false && showRedMessage)
-            {
-                this.showRedMessageForMissingFuel();
-                return false;
-            }
-
-            this.smeltItem(sdvObjectToSmelt);
-
-            if (who != null)
-            {
-                SoundUtilities.PlaySound(Enums.StardewSound.furnace);
-                PlayerUtilities.ReduceInventoryItemIfEnoughFound(who, sdvObjectToSmelt, this.getStackSizeNecessaryForSmelting(sdvObjectToSmelt));
-            }
-
-            return false;
-
-        }
-
-        public virtual bool smeltItem(Enums.SDVObject sdvObjectToSmelt)
-        {
-
-            if (this.chargesRemaining.Value <= 0)
-            {
-                this.increaseFuelCharges();
-            }
-
-            this.smeltingItem.Value = sdvObjectToSmelt;
-            this.MinutesUntilReady = this.getTimeToSmelt(sdvObjectToSmelt);
-            this.updateAnimation();
-
             return false;
         }
 
@@ -363,12 +211,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             {
                 if (this.MinutesUntilReady > 0)
                 {
-                    this.AnimationManager.playAnimation(ELECTRIC_WORKING_ANIMATION_KEY, true);
+                    this.AnimationManager.playAnimation(ELECTRIC_WORKING_ANIMATION_KEY);
                     return;
                 }
                 else
                 {
-                    this.AnimationManager.playAnimation(ELECTRIC_IDLE_ANIMATION_KEY, true);
+                    this.AnimationManager.playAnimation(ELECTRIC_IDLE_ANIMATION_KEY);
                     return;
                 }
 
@@ -377,12 +225,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             {
                 if (this.MinutesUntilReady > 0)
                 {
-                    this.AnimationManager.playAnimation(NUCLEAR_WORKING_ANIMATION_KEY, true);
+                    this.AnimationManager.playAnimation(NUCLEAR_WORKING_ANIMATION_KEY);
                     return;
                 }
                 else
                 {
-                    this.AnimationManager.playAnimation(NUCLEAR_IDLE_ANIMATION_KEY, true);
+                    this.AnimationManager.playAnimation(NUCLEAR_IDLE_ANIMATION_KEY);
                     return;
                 }
             }
@@ -390,12 +238,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             {
                 if (this.MinutesUntilReady > 0)
                 {
-                    this.AnimationManager.playAnimation(MAGICAL_WORKING_ANIMATION_KEY, true);
+                    this.AnimationManager.playAnimation(MAGICAL_WORKING_ANIMATION_KEY);
                     return;
                 }
                 else
                 {
-                    this.AnimationManager.playAnimation(MAGICAL_IDLE_ANIMATION_KEY, true);
+                    this.AnimationManager.playAnimation(MAGICAL_IDLE_ANIMATION_KEY);
                     return;
                 }
             }
@@ -408,6 +256,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         /// <returns></returns>
         protected virtual bool consumeFuelItemFromFarmersInventory(Farmer who)
         {
+            if (who == null) return true; //Used for automate compatibility
             if (this.furnaceType.Value == FurnaceType.Magical)
             {
                 return true;
@@ -438,7 +287,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         /// <summary>
         /// Increases the fuel type for the furnace.
         /// </summary>
-        protected virtual void increaseFuelCharges()
+        public virtual void increaseFuelCharges()
         {
             if (this.furnaceType.Value == FurnaceType.Electric)
             {

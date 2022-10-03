@@ -228,7 +228,7 @@ namespace Omegasis.Revitalize
             ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
             ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
 
-            ModHelper.Events.Player.Warped +=ModContentManager.objectManager.resources.OnPlayerLocationChanged;
+            ModHelper.Events.Player.Warped += ModContentManager.objectManager.resources.OnPlayerLocationChanged;
             ModHelper.Events.GameLoop.DayStarted += this.GameLoop_DayStarted;
             ModHelper.Events.GameLoop.DayEnding += this.GameLoop_DayEnding;
 
@@ -238,7 +238,7 @@ namespace Omegasis.Revitalize
             //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
             ModHelper.Events.Display.MenuChanged += ShopUtilities.OnNewMenuOpened;
 
-            ModHelper.Events.Display.MenuChanged += ModContentManager.mailManager.onNewMenuOpened ;
+            ModHelper.Events.Display.MenuChanged += ModContentManager.mailManager.onNewMenuOpened;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.ResetNormalToolsColorOnLeftClick;
 
@@ -298,28 +298,27 @@ namespace Omegasis.Revitalize
 
 
 
-            /*
+
             //HACKS
             //Game1.player.Money = 100_000;
 
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-
-
-                            ObjectManager.getItem(Machines.ElectricFurnace),
-                            ObjectManager.getItem(Machines.NuclearFurnace),
-                            ObjectManager.getItem(Machines.MagicalFurnace),
-                            ObjectManager.getItem(Enums.SDVObject.CopperOre,999),
-                            ObjectManager.getItem(Enums.SDVObject.BatteryPack,999),
-                            ObjectManager.getItem(MiscItemIds.RadioactiveFuel,999),
-                            ObjectManager.getItem(Enums.SDVBigCraftable.Chest,1),
+                            ModContentManager.objectManager.getItem(MachineIds.ElectricFurnace),
+                            //ModContentManager.objectManager.getItem(Enums.SDVObject.FireQuartz,1),
+                            //ModContentManager.objectManager.getItem(Enums.SDVObject.CopperOre,2),
+                            ModContentManager.objectManager.getItem(Enums.SDVObject.IronOre,999),
+                            ModContentManager.objectManager.getItem(Enums.SDVObject.BatteryPack,999),
+                            ModContentManager.objectManager.getItem(Enums.SDVBigCraftable.Chest,1),
 
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
-            }) ;
-            */
-            Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(CraftingStations.WorkStation_Id));
-            Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AnvilCraftingRecipeBlueprint));
-            Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(Enums.SDVObject.IronBar, 20));
+            });
+
+            //Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(CraftingStations.WorkStation_Id));
+            //Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AnvilCraftingRecipeBlueprint));
+            //Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(Enums.SDVObject.IronBar, 20));
+
+
 
             Framework.World.WorldUtilities.WorldUtility.InitializeGameWorld();
 
@@ -368,14 +367,14 @@ namespace Omegasis.Revitalize
 
         public static void log(object message, bool StackTrace, params string[] strs)
         {
-            message = string.Format(message.ToString(),strs);
+            message = string.Format(message.ToString(), strs);
             if (StackTrace)
                 ModMonitor.Log(message.ToString() + " " + getFileDebugInfo());
             else
                 ModMonitor.Log(message.ToString());
         }
 
-        public static string getFileDebugInfo(bool fullStackTrace=false)
+        public static string getFileDebugInfo(bool fullStackTrace = false)
         {
             if (fullStackTrace)
             {

@@ -1,0 +1,37 @@
+{
+  "whichTab": "",
+  "isUnlocked": true,
+  "recipe": {
+	"craftingRecipeId": "StardewValley.Object.QuartzToRefinedQuartz",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 90,
+    "inputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "Quartz",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 1
+			}
+		}
+	
+	],
+    "outputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "RefinedQuartz",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 1
+			}
+		},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}

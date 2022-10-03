@@ -8,6 +8,9 @@ using Netcode;
 
 namespace Omegasis.StardustCore.Networking
 {
+    /// <summary>
+    /// Class used to make other classes be able to be serialized over the net.
+    /// </summary>
     public class NetObject : INetObject<NetFields>
     {
         [XmlIgnore]
