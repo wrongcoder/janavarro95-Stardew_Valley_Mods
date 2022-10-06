@@ -155,7 +155,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
         {
             if (RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipes(this.craftingRecipesToUnlock))
             {
-                return "(Learned) \n" + this.basicItemInformation.description.Value;
+                return "(Learned) \n" + base.getDescription();
             }
             return base.getDescription();
         }

@@ -13,6 +13,8 @@ namespace Omegasis.Revitalize.Framework.Constants.PathConstants
         public static string Objects = Path.Combine(RelativePaths.Content_Strings_Folder, "Objects");
         public static string ShopDialogue = Path.Combine(RelativePaths.Content_Strings_Folder, "ShopDialogue");
 
+        public static string DisplayStrings = Path.Combine(Objects, "DisplayStrings");
+
 
     }
 }

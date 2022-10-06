@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.Utilities.Extensions;
+using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.StardustCore.Animations;
@@ -80,17 +81,28 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
 
         }
+        /// <summary>
+        /// The name displayed to the player for the object.
+        /// </summary>
         public override string DisplayName
         {
             get
             {
                 if (this.basicItemInformation == null) return null;
+
+                //Potentially get an overriden display name for certain objects depending on if I ever implement the renaming feature.
+
+                string displayName = JsonContentLoaderUtilities.LoadItemDisplayName(this.Id, false);
+                if (!string.IsNullOrEmpty(displayName)) return displayName;
+
                 return this.basicItemInformation.name.Value;
             }
             set
             {
                 if (this.basicItemInformation != null)
+                {
                     this.basicItemInformation.name.Value = value;
+                }
             }
         }
 
@@ -196,9 +208,18 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             return this.basicItemInformation.categoryName.Value;
         }
 
+        /// <summary>
+        /// Gets the decription to be displayed when hovering over an item.
+        /// </summary>
+        /// <returns></returns>
         public override string getDescription()
         {
-            return this.basicItemInformation.description.Value;
+            string description = JsonContentLoaderUtilities.LoadItemDescription(this.basicItemInformation.id.Value, false);
+            if (string.IsNullOrEmpty(description))
+            {
+                description = this.basicItemInformation.description.Value; //Get default set description.
+            }
+            return Game1.parseText(description, Game1.smallFont, this.getDescriptionWidth());
         }
 
 

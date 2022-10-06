@@ -54,7 +54,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             {
                 shopInventoryProbes.Add(AddItemToStockAfterStone(Enums.SDVObject.Hardwood, RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodSellPrice, RobinsShop_NumberOfHardwoodToSellToday));
             }
-            shopInventoryProbes.Add(AddItemToStockAfterStardewValleyWorkbench(CraftingStations.WorkStation_Id, RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.WorkStationSellPrice));
+            shopInventoryProbes.Add(AddItemToStockAfterStardewValleyWorkbench(CraftingStations.WorkBench_Id, RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.WorkStationSellPrice));
 
             //Adds in blueprints to Robin's Shop.
             shopInventoryProbes.AddRange(AddBlueprintsToShop());

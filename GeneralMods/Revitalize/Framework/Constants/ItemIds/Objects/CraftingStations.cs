@@ -10,7 +10,7 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Objects
     public class CraftingStations
     {
         public const string Anvil_Id = "Revitalize.Objects.Crafting.CraftingStations.Anvil";
-        public const string WorkStation_Id = "Revitalize.Objects.Crafting.CraftingStations.Workbench";
+        public const string WorkBench_Id = "Revitalize.Objects.Crafting.CraftingStations.Workbench";
 
         public static string GetCraftingStationNameFromRecipeBookId(string RecipeBookId)
         {

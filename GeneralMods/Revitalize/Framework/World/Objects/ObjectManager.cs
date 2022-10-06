@@ -28,6 +28,7 @@ using Omegasis.Revitalize.Framework.Constants.PathConstants.Data;
 using System.IO;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json.Crafting;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
+using Omegasis.Revitalize.Framework.Content.JsonContent.Objects;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -53,6 +54,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// The list of registered items for this object manager.
         /// </summary>
         public Dictionary<string, Item> itemsById;
+
+        /// <summary>
+        /// Display strings for all loaded items.
+        /// </summary>
+        public Dictionary<string, IdToDisplayStrings> displayStrings = new Dictionary<string, IdToDisplayStrings>();
 
         /// <summary>
         /// Constructor.
@@ -90,6 +96,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         public void loadItemsFromDisk()
         {
             this.registerStardewValleyItems();
+            this.loadInDisplayStrings();
 
             this.resources.loadInItems(); //Should take priority over other modded content.
 
@@ -102,6 +109,18 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             //Should load blueprints last due to the fact that they can draw references to objects.
             this.loadInBlueprints();
+        }
+
+        protected virtual void loadInDisplayStrings()
+        {
+            List<Dictionary<string, IdToDisplayStrings>> displayStringInfo = JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, IdToDisplayStrings>>(Constants.PathConstants.StringsPaths.DisplayStrings);
+            foreach(Dictionary<string,IdToDisplayStrings> dict in displayStringInfo)
+            {
+                foreach(KeyValuePair<string,IdToDisplayStrings> pair in dict)
+                {
+                    this.displayStrings.Add(pair.Key, pair.Value);
+                }
+            }
         }
 
         /// <summary>
@@ -156,13 +175,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         private void loadInItems()
         {
 
-            AutoPlanterGardenPotAttachment autoPlanterGardenPotAttachment = new AutoPlanterGardenPotAttachment(new BasicItemInformation("Auto Planter Attachment", FarmingItems.AutoPlanterGardenPotAttachment, "An attachment that when used on a Irrigated Garden Pot, will allow a Farming System to plant seeds automatically into the pot!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Farming.createAnimationManager("AutoPlanterGardenPotAttachment", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
+            AutoPlanterGardenPotAttachment autoPlanterGardenPotAttachment = new AutoPlanterGardenPotAttachment(new BasicItemInformation("", FarmingItems.AutoPlanterGardenPotAttachment, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Farming.createAnimationManager("AutoPlanterGardenPotAttachment", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
             this.addItem(FarmingItems.AutoPlanterGardenPotAttachment, autoPlanterGardenPotAttachment);
 
-            AutoHarvesterGardenPotAttachment autoHarvesterGardenPotAttachment = new AutoHarvesterGardenPotAttachment(new BasicItemInformation("Auto Harvester Attachment", FarmingItems.AutoHarvesterGardenPotAttachment, "An attachment that when used on a Irrigated Garden Pot, will allow a Farming System to automatically harvest crops from the pot!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Farming.createAnimationManager("AutoHarvesterGardenPotAttachment", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
+            AutoHarvesterGardenPotAttachment autoHarvesterGardenPotAttachment = new AutoHarvesterGardenPotAttachment(new BasicItemInformation("", FarmingItems.AutoHarvesterGardenPotAttachment, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Farming.createAnimationManager("AutoHarvesterGardenPotAttachment", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
             this.addItem(FarmingItems.AutoHarvesterGardenPotAttachment, autoHarvesterGardenPotAttachment);
 
-            this.addItem(MiscItemIds.RadioactiveFuel, new CustomItem(new BasicItemInformation("Radioactive Fuel", MiscItemIds.RadioactiveFuel, "A radioactive fuel cell used to power various machines!", CategoryNames.Misc, CategoryColors.Misc, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Misc.createAnimationManager("RadioactiveFuel", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
+            this.addItem(MiscItemIds.RadioactiveFuel, new CustomItem(new BasicItemInformation("", MiscItemIds.RadioactiveFuel, "", CategoryNames.Misc, CategoryColors.Misc, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Misc.createAnimationManager("RadioactiveFuel", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
         }
 
         private void loadInBlueprints()
@@ -178,10 +197,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         private void loadInCraftingTables()
         {
-            CraftingTable WorkStationObject = new CraftingTable(new BasicItemInformation("Work Station", CraftingStations.WorkStation_Id, "A workbench that can be used for crafting different objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Crafting.createAnimationManager("Workbench", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), Vector2.Zero, null, null), CraftingRecipeBooks.WorkbenchCraftingRecipies);
-            CraftingTable AnvilObj = new CraftingTable(new BasicItemInformation("Anvil", CraftingStations.Anvil_Id, "An anvil that can be used for crafting different machines and other metalic objects.", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Crafting.createAnimationManager("Anvil", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), Vector2.Zero, null, null), CraftingRecipeBooks.AnvilCraftingRecipes);
+            CraftingTable WorkStationObject = new CraftingTable(new BasicItemInformation("", CraftingStations.WorkBench_Id, "", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Crafting.createAnimationManager("Workbench", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), Vector2.Zero, null, null), CraftingRecipeBooks.WorkbenchCraftingRecipies);
+            CraftingTable AnvilObj = new CraftingTable(new BasicItemInformation("", CraftingStations.Anvil_Id, "", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Crafting.createAnimationManager("Anvil", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), Vector2.Zero, null, null), CraftingRecipeBooks.AnvilCraftingRecipes);
 
-            this.addItem(CraftingStations.WorkStation_Id, WorkStationObject);
+            this.addItem(CraftingStations.WorkBench_Id, WorkStationObject);
             this.addItem(CraftingStations.Anvil_Id, AnvilObj);
         }
 
@@ -189,10 +208,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         {
 
             AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Panel", MachineIds.AdvancedSolarPanelV1, "Generates energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SolarPanelTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
-            AdvancedSolarPanel solarA1V1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Array", MachineIds.SolarArrayV1, "A collection of solar panels that generates even more energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SolarArrayTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
 
             this.addItem(MachineIds.AdvancedSolarPanelV1, solarP1);
-            this.addItem(MachineIds.SolarArrayV1, solarA1V1);
 
             /*
             Machine miningDrillMachine_0_0 = new Machine(new BasicItemInformation("Mining Drill", MachineIds.MiningDrillV1, "Digs up rocks and ores. Requires energy to run.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManagers.Objects_Machines.createAnimationManager("MiningDrillMachine", new SerializableDictionary<string, Animation>() {
@@ -243,7 +260,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             }, "Default", "Default"), Color.White, false, /* Bounding box is the number of pixels taken up */ new Vector2(1, 1),/*Shift by whitespace*/ new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager())));
 
 
-            this.addItem(FarmingObjects.IrrigatedGardenPot, new IrrigatedGardenPot(new BasicItemInformation("Irrigated Garden Pot", FarmingObjects.IrrigatedGardenPot, "A garden pot with an irrigation system attached. Waters your crops for you!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, true, true, TextureManagers.Objects_Farming.createAnimationManager("IrrigatedGardenPot", new SerializableDictionary<string, Animation>()
+            this.addItem(FarmingObjects.IrrigatedGardenPot, new IrrigatedGardenPot(new BasicItemInformation("", FarmingObjects.IrrigatedGardenPot, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, true, true, TextureManagers.Objects_Farming.createAnimationManager("IrrigatedGardenPot", new SerializableDictionary<string, Animation>()
             {
                 {IrrigatedGardenPot.DEFAULT_ANIMATION_KEY,new Animation( new AnimationFrame(0,0,16,32)) },
                 {IrrigatedGardenPot.DRIPPING_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,0,16,32,13, 6)},
@@ -275,10 +292,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             }, IrrigatedGardenPot.DEFAULT_ANIMATION_KEY, IrrigatedGardenPot.DRIPPING_ANIMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager())));
 
 
-            this.addItem(FarmingObjects.AdvancedFarmingSystem, new AdvancedFarmingSystem(new BasicItemInformation("Advanced Farming System", FarmingObjects.AdvancedFarmingSystem, "An advanced farming system that interfaces irrigated gardening pots and does various tasks depending if there are enrichers, auto harvesters, or auto planter attachments on them!", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Farming.createAnimationManager("AdvancedFarmingSystem", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
+            this.addItem(FarmingObjects.AdvancedFarmingSystem, new AdvancedFarmingSystem(new BasicItemInformation("", FarmingObjects.AdvancedFarmingSystem, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Farming.createAnimationManager("AdvancedFarmingSystem", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
 
 
-            this.addItem(MachineIds.ElectricFurnace, new ElectricFurnace(new BasicItemInformation("Electric Furnace", MachineIds.ElectricFurnace, "An advanced furnace that smelts objects 25 percent faster and uses battery packs instead of coal.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2500, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
+            this.addItem(MachineIds.ElectricFurnace, new ElectricFurnace(new BasicItemInformation("", MachineIds.ElectricFurnace, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2500, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
                 new Dictionary<string, Animation>()
                 {
                     {ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
@@ -289,7 +306,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), ElectricFurnace.FurnaceType.Electric));
 
 
-            this.addItem(MachineIds.NuclearFurnace, new ElectricFurnace(new BasicItemInformation("Nuclear Furnace", MachineIds.ElectricFurnace, "An advanced furnace that smelts objects twice as fast as a normal furnace and uses nuclear fuel.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
+            this.addItem(MachineIds.NuclearFurnace, new ElectricFurnace(new BasicItemInformation("", MachineIds.ElectricFurnace, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
                 new Dictionary<string, Animation>()
                 {
                     {ElectricFurnace.NUCLEAR_IDLE_ANIMATION_KEY,  new Animation(new Rectangle(0,32,16,32)) },
@@ -300,7 +317,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), ElectricFurnace.FurnaceType.Nuclear));
 
 
-            this.addItem(MachineIds.MagicalFurnace, new ElectricFurnace(new BasicItemInformation("Magical Furnace", MachineIds.ElectricFurnace, "An advanced furnace that smelts objects 75 percent faster than a normal furnace, and thanks to magical reactor technology, requires no fuel to operate.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 50000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
+            this.addItem(MachineIds.MagicalFurnace, new ElectricFurnace(new BasicItemInformation("", MachineIds.ElectricFurnace, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 50000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
                 new Dictionary<string, Animation>()
                 {
                     {ElectricFurnace.MAGICAL_IDLE_ANIMATION_KEY,  new Animation(new Rectangle(0,64,16,32)) },

@@ -22,6 +22,7 @@ using Omegasis.StardustCore.Animations;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.World.Debris;
 using StardewValley.Menus;
+using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -93,6 +94,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             }
         }
 
+        /// <summary>
+        /// The internal name used to reference this item in code.
+        /// </summary>
         public override string Name
         {
             get
@@ -110,11 +114,21 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
 
         }
+
+        /// <summary>
+        /// The name displayed to the player for the object.
+        /// </summary>
         public override string DisplayName
         {
             get
             {
                 if (this.basicItemInformation == null) return null;
+
+                //Potentially get an overriden display name for certain objects depending on if I ever implement the renaming feature.
+
+               string displayName= JsonContentLoaderUtilities.LoadItemDisplayName(this.Id, false);
+                if (!string.IsNullOrEmpty(displayName)) return displayName;
+
                 return this.basicItemInformation.name.Value;
             }
             set
@@ -126,6 +140,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             }
         }
 
+        /// <summary>
+        /// Since objects are counted as both furniture and objects, 2 day update ticks happen for them, so we need to add a buffer for when the day updates trigger.
+        /// </summary>
         public NetInt dayUpdateCounter = new NetInt();
 
         public CustomObject()
@@ -423,12 +440,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         }
 
         /// <summary>
-        /// Description
+        /// Gets the decription to be displayed when hovering over an item.
         /// </summary>
         /// <returns></returns>
         public override string getDescription()
         {
-            return Game1.parseText(this.basicItemInformation.description, Game1.smallFont, this.getDescriptionWidth());
+            string description = JsonContentLoaderUtilities.LoadItemDescription(this.basicItemInformation.id.Value,false);
+            if (string.IsNullOrEmpty(description))
+            {
+                description = this.basicItemInformation.description.Value; //Get default set description.
+            }
+            return Game1.parseText(description, Game1.smallFont, this.getDescriptionWidth());
         }
 
         public override StardewValley.Object GetDeconstructorOutput(Item item)
