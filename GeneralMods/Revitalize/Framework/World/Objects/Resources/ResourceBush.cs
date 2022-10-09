@@ -106,23 +106,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
         public virtual void harvest(bool AddToPlayersInventory)
         {
 
-            Item item = this.itemToGrow.Value.getOne();
-            int amountToAdd = 0;
-
-            if (this.itemToDraw.Value != null)
-            {
-                amountToAdd++;
-            }
-            if (this.itemToDraw2.Value != null)
-            {
-                amountToAdd++;
-            }
-            if (this.itemToDraw3.Value != null)
-            {
-                amountToAdd++;
-            }
-            item.Stack = amountToAdd;
-            if (item.Stack == 0) return;
+            Item item = this.getItemToHarvest();
 
             if (AddToPlayersInventory)
             {
@@ -142,9 +126,42 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
                 WorldUtility.CreateItemDebrisAtTileLocation(this.getCurrentLocation(), item, this.TileLocation);
             }
 
-            this.itemToDraw.Value = null;
-            this.itemToDraw2.Value = null;
-            this.itemToDraw3.Value = null;
+
+        }
+
+        /// <summary>
+        /// Gets the item to be harvested from this ore resource bush.
+        /// </summary>
+        /// <param name="ActuallyHarvest">If true, clear the item off the bush and reset the bush's state.</param>
+        /// <returns></returns>
+        public virtual Item getItemToHarvest(bool ActuallyHarvest=true)
+        {
+            Item item = this.itemToGrow.Value.getOne();
+            int amountToAdd = 0;
+
+            if (this.itemToDraw.Value != null)
+            {
+                amountToAdd++;
+            }
+            if (this.itemToDraw2.Value != null)
+            {
+                amountToAdd++;
+            }
+            if (this.itemToDraw3.Value != null)
+            {
+                amountToAdd++;
+            }
+            item.Stack = amountToAdd;
+            if (item.Stack == 0) return null;
+
+            if (ActuallyHarvest)
+            {
+                this.itemToDraw.Value = null;
+                this.itemToDraw2.Value = null;
+                this.itemToDraw3.Value = null;
+            }
+
+            return item;
         }
 
         public override Item getOne()
@@ -162,16 +179,31 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
 
             if (this.itemToDraw.Value != null)
             {
+                //For some reason some of the drawing logic is a bit off for displays, so we want to skip drawing items in the incorrect positions.
+                if (drawPosition1.X<0 || drawPosition1.Y<0)
+                {
+                    return;
+                }
                 this.itemToDraw.Value.drawAsHeldObject(spriteBatch,drawPosition1 , alpha, -this.basicItemInformation.drawOffset.Y);
             }
             if (this.itemToDraw2.Value != null)
             {
-                this.itemToDraw2.Value.drawAsHeldObject(spriteBatch,drawPosition2 , alpha, -this.basicItemInformation.drawOffset.Y);
+                if (drawPosition2.X < 0 || drawPosition2.Y < 0)
+                {
+                    return;
+                }
+                //Change the depth value a bit so that it doesn't draw on top of the player as well.
+                this.itemToDraw2.Value.drawAsHeldObject(spriteBatch,drawPosition2 , alpha, -this.basicItemInformation.drawOffset.Y-.75f);
             }
             if (this.itemToDraw3.Value != null)
             {
-                this.itemToDraw3.Value.drawAsHeldObject(spriteBatch,drawPosition3 , alpha, -this.basicItemInformation.drawOffset.Y);
+                if (drawPosition3.X < 0 || drawPosition3.Y < 0)
+                {
+                    return;
+                }
+                this.itemToDraw3.Value.drawAsHeldObject(spriteBatch,drawPosition3 , alpha, -this.basicItemInformation.drawOffset.Y-.75f);
             }
+            
         }
 
         public override void performRemoveAction(Vector2 tileLocation, GameLocation environment)

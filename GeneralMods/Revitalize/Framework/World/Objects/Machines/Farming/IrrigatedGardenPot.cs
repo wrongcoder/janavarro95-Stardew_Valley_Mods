@@ -438,7 +438,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 List<Item> harvestedObjects = new List<Item>();
                 harvestedObjects.Add(harvestedItem);
 
-                ///FIX THIS TO COME BEFORE THE RETURN!!!!
                 if ((int)this.Crop.indexOfHarvest == 421)
                 {
                     this.Crop.indexOfHarvest.Value = 431;

@@ -24,8 +24,6 @@ namespace Omegasis.Revitalize.Framework.SaveData.ShopConditionsSaveData
 
         public ShopSaveDataManager()
         {
-            this.animalShopSaveData = this.loadOrCreate<AnimalShopSaveData>(AnimalShopSaveData.SaveFileName);
-            this.carpenterShopSaveData = this.loadOrCreate<CarpenterShopSaveData>(CarpenterShopSaveData.SaveFileName);
         }
 
         public override void save()
@@ -36,8 +34,8 @@ namespace Omegasis.Revitalize.Framework.SaveData.ShopConditionsSaveData
 
         public override void load()
         {
-            this.animalShopSaveData.load();
-            this.carpenterShopSaveData.load();
+            this.animalShopSaveData = this.loadOrCreate<AnimalShopSaveData>(AnimalShopSaveData.SaveFileName);
+            this.carpenterShopSaveData = this.loadOrCreate<CarpenterShopSaveData>(CarpenterShopSaveData.SaveFileName);
         }
 
 

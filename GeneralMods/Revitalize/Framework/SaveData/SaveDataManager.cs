@@ -33,6 +33,7 @@ namespace Omegasis.Revitalize.Framework.SaveData
         public virtual void loadOrCreateSaveData()
         {
             this.shopSaveData = new ShopSaveDataManager();
+            this.shopSaveData.load();
             this.playerSaveData = PlayerSaveData.LoadOrCreate();
         }
 

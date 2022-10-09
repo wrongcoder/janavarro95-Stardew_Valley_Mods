@@ -1,0 +1,27 @@
+{
+	"Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.Axe":
+	{
+		"displayName":"Blueprint: Axe",
+		"description":"A blueprint used on how to craft an axe at an anvil!"
+	},
+	"Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.CopperAxe":
+	{
+		"displayName":"Blueprint: Copper Axe",
+		"description":"A blueprint used on how to craft a copper axe at an anvil!"
+	},
+	"Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.SteelAxe":
+	{
+		"displayName":"Blueprint: Steel Axe",
+		"description":"A blueprint used on how to craft a steel axe at an anvil!"
+	},
+	"Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.GoldAxe":
+	{
+		"displayName":"Blueprint: Gold Axe",
+		"description":"A blueprint used on how to craft a gold axe at an anvil!"
+	},
+	"Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.IridiumAxe":
+	{
+		"displayName":"Blueprint: Iridium Axe",
+		"description":"A blueprint used on how to craft an iridium axe at an anvil!"
+	},
+}

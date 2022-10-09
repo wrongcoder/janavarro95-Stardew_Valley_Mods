@@ -1,0 +1,7 @@
+{
+	"Revitalize.Objects.Machines.AdvancedSolarPanelV1":
+	{
+		"displayName":"Advanced Solar Panel",
+		"description":"A solar panel with better efficiency for generating battery packs."
+	},
+}

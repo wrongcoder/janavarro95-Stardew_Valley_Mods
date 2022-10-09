@@ -367,11 +367,19 @@ namespace Omegasis.Revitalize.Framework.Player
                 ItemReference itemReference = new ItemReference(addedItem);
                 if (itemReference.SdvObjectId == Enums.SDVObject.BatteryPack)
                 {
-                    Game1.showRedMessage("Player has obtained a battery pack!");
                     RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack = true;
                 }
 
             }
+        }
+
+        /// <summary>
+        /// Gets the number of golden walnuts found by all players.
+        /// </summary>
+        /// <returns></returns>
+        public static int GetNumberOfGoldenWalnutsFound()
+        {
+            return Math.Max(0, Game1.netWorldState.Value.GoldenWalnutsFound.Value - 1);
         }
     }
 }

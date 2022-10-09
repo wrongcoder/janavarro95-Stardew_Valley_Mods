@@ -1,0 +1,27 @@
+{
+	"Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.WateringCan":
+	{
+		"displayName":"Blueprint: Watering Can",
+		"description":"A blueprint used on how to craft a watering can at an anvil!"
+	},
+	"Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.CopperWateringCan":
+	{
+		"displayName":"Blueprint: Copper Watering Can",
+		"description":"A blueprint used on how to craft a copper watering Can at an anvil!"
+	},
+	"Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.SteelWateringCan":
+	{
+		"displayName":"Blueprint: Steel Watering Can",
+		"description":"A blueprint used on how to craft a steel watering can at an anvil!"
+	},
+	"Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.GoldWateringCan":
+	{
+		"displayName":"Blueprint: Gold Watering Can",
+		"description":"A blueprint used on how to craft a gold watering can at an anvil!"
+	},
+	"Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.IridiumWateringCan":
+	{
+		"displayName":"Blueprint: Iridium Watering Can",
+		"description":"A blueprint used on how to craft an iridium watering can at an anvil!"
+	},
+}

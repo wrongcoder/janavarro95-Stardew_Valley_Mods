@@ -1,0 +1,7 @@
+{
+	"Revitalize.Objects.Machines.WindmillV1":
+	{
+		"displayName":"Windmill",
+		"description":"Generates power from the wind. Produces a battery pack every few days depending on the weather."
+	},
+}

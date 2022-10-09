@@ -9,6 +9,7 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Objects
     public class ResourceObjectIds
     {
 
+        public const string CoalBush = "Revitalize.Objects.Resources.CoalBush";
         public const string CopperOreBush = "Revitalize.Objects.Resources.CopperOreBush";
         public const string IronOreBush = "Revitalize.Objects.Resources.IronOreBush";
         public const string GoldOreBush = "Revitalize.Objects.Resources.GoldOreBush";

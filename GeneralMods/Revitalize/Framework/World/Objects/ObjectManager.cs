@@ -111,13 +111,20 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.loadInBlueprints();
         }
 
+        /// <summary>
+        /// Loads in all display strings from a given .json dictionary file.
+        /// </summary>
         protected virtual void loadInDisplayStrings()
         {
             List<Dictionary<string, IdToDisplayStrings>> displayStringInfo = JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, IdToDisplayStrings>>(Constants.PathConstants.StringsPaths.DisplayStrings);
-            foreach(Dictionary<string,IdToDisplayStrings> dict in displayStringInfo)
+            foreach (Dictionary<string, IdToDisplayStrings> dict in displayStringInfo)
             {
-                foreach(KeyValuePair<string,IdToDisplayStrings> pair in dict)
+                foreach (KeyValuePair<string, IdToDisplayStrings> pair in dict)
                 {
+                    if (this.displayStrings.ContainsKey(pair.Key))
+                    {
+                        continue;
+                    }
                     this.displayStrings.Add(pair.Key, pair.Value);
                 }
             }
@@ -132,7 +139,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.addItem("StardewValley.Tools.Axe", new StardewValley.Tools.Axe());
             this.addItem("StardewValley.Tools.WateringCan", new StardewValley.Tools.WateringCan());
             this.addItem("StardewValley.Tools.Hoe", new StardewValley.Tools.Hoe());
-            this.addItem("StardewValley.Tools.CopperPickaxe", new StardewValley.Tools.Pickaxe() {UpgradeLevel=Tool.copper });
+            this.addItem("StardewValley.Tools.CopperPickaxe", new StardewValley.Tools.Pickaxe() { UpgradeLevel = Tool.copper });
             this.addItem("StardewValley.Tools.CopperAxe", new StardewValley.Tools.Axe() { UpgradeLevel = Tool.copper });
             this.addItem("StardewValley.Tools.CopperWateringCan", new StardewValley.Tools.WateringCan() { UpgradeLevel = Tool.copper });
             this.addItem("StardewValley.Tools.CopperHoe", new StardewValley.Tools.Hoe() { UpgradeLevel = Tool.copper });
@@ -156,19 +163,22 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         private void loadInResourcePlants()
         {
-            ResourceBush copperOreBush = new ResourceBush(new BasicItemInformation("Copper Ore Bush", ResourceObjectIds.CopperOreBush, "A magical bush that grows a piece of copper ore every day!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 2000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("CopperOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.CopperOre), 1);
+            ResourceBush coalBush = new ResourceBush(new BasicItemInformation("", ResourceObjectIds.CoalBush, "", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 5000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("CoalBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.Coal), 1);
+            this.addItem(ResourceObjectIds.CoalBush, coalBush);
+
+            ResourceBush copperOreBush = new ResourceBush(new BasicItemInformation("", ResourceObjectIds.CopperOreBush, "", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 2000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("CopperOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.CopperOre), 1);
             this.addItem(ResourceObjectIds.CopperOreBush, copperOreBush);
 
-            ResourceBush ironOreBush = new ResourceBush(new BasicItemInformation("Iron Ore Bush", ResourceObjectIds.IronOreBush, "A magical bush that grows a piece of iron ore every 2 days!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 5000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("IronOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.IronOre), 2);
+            ResourceBush ironOreBush = new ResourceBush(new BasicItemInformation("", ResourceObjectIds.IronOreBush, "", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 5000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("IronOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.IronOre), 2);
             this.addItem(ResourceObjectIds.IronOreBush, ironOreBush);
 
-            ResourceBush goldOreBush = new ResourceBush(new BasicItemInformation("Gold Ore Bush", ResourceObjectIds.GoldOreBush, "A magical bush that grows a piece of gold ore every 3 days!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 7500, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("GoldOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.GoldOre), 3);
+            ResourceBush goldOreBush = new ResourceBush(new BasicItemInformation("", ResourceObjectIds.GoldOreBush, "", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 10000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("GoldOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.GoldOre), 2);
             this.addItem(ResourceObjectIds.GoldOreBush, goldOreBush);
 
-            ResourceBush iridiumResourceBush = new ResourceBush(new BasicItemInformation("Iridium Ore Bush", ResourceObjectIds.IridiumOreBush, "A magical bush that grows a piece of iridium ore every 7 days!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 10000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("IridiumOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.IridiumOre), 7);
+            ResourceBush iridiumResourceBush = new ResourceBush(new BasicItemInformation("", ResourceObjectIds.IridiumOreBush, "", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 25000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("IridiumOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.IridiumOre), 3);
             this.addItem(ResourceObjectIds.IridiumOreBush, iridiumResourceBush);
 
-            ResourceBush radioactiveOreBush = new ResourceBush(new BasicItemInformation("Radioactive Ore Bush", ResourceObjectIds.RadioactiveOreBush, "A magical bush that grows a piece of radioactive ore every 14 days!", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 25000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("RadioactiveOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.RadioactiveOre), 14);
+            ResourceBush radioactiveOreBush = new ResourceBush(new BasicItemInformation("", ResourceObjectIds.RadioactiveOreBush, "", CategoryNames.Resource, CategoryColors.Misc, -300, -300, 0, false, 50000, false, false, TextureManagers.Objects_Resources_ResourcePlants.createAnimationManager("RadioactiveOreBush", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), this.getObject(Enums.SDVObject.RadioactiveOre), 3);
             this.addItem(ResourceObjectIds.RadioactiveOreBush, radioactiveOreBush);
         }
 
@@ -188,7 +198,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         {
 
             //Make sure that all blueprints registered here have a id reference in Blueprints.cs for easier access via code.
-            foreach(JsonCraftingBlueprint jsonBlueprint in JsonUtilities.LoadJsonFilesFromDirectories<JsonCraftingBlueprint>(ObjectsDataPaths.CraftingBlueprintsPath))
+            foreach (JsonCraftingBlueprint jsonBlueprint in JsonUtilities.LoadJsonFilesFromDirectories<JsonCraftingBlueprint>(ObjectsDataPaths.CraftingBlueprintsPath))
             {
                 this.addItem(jsonBlueprint.id, jsonBlueprint.toBlueprint());
             }
@@ -207,7 +217,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         private void loadInMachines()
         {
 
-            AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("Solar Panel", MachineIds.AdvancedSolarPanelV1, "Generates energy while the sun is up.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SolarPanelTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
+            AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("", MachineIds.AdvancedSolarPanelV1, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SolarPanelTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
 
             this.addItem(MachineIds.AdvancedSolarPanelV1, solarP1);
 
@@ -225,7 +235,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.addItem(MachineIds.MiningDrillV1, miningDrillMachine_0_0);
             */
 
-            Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("Windmill", MachineIds.WindmillV1, "Generates power from the wind.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Machines.createAnimationManager("Windmill", new SerializableDictionary<string, Animation>() {
+            Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("", MachineIds.WindmillV1, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Machines.createAnimationManager("Windmill", new SerializableDictionary<string, Animation>() {
 
                 {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
                 {"Working",new Animation(new List<AnimationFrame>(){
@@ -236,7 +246,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             this.addItem(MachineIds.WindmillV1, windMillV1_0_0);
 
-            this.addItem(MachineIds.HayMaker, new HayMaker(new BasicItemInformation("Hay Maker", MachineIds.HayMaker, "Used to turn different grains and grasses into animal feed.", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
+            this.addItem(MachineIds.HayMaker, new HayMaker(new BasicItemInformation("", MachineIds.HayMaker, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
             {
                 {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
                     {HayMaker.HayAnimation,new Animation(new List<AnimationFrame>(){
@@ -384,7 +394,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 return (T)I;
             }
             else
-                throw new InvalidObjectManagerItemException(string.Format("Error: Trying to request an item with id {0} but there is none registered with the object manager!",Key));
+                throw new InvalidObjectManagerItemException(string.Format("Error: Trying to request an item with id {0} but there is none registered with the object manager!", Key));
 
         }
 

@@ -15,6 +15,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
 {
     /// <summary>
     /// Used to reference the many types of items that can be used.
+    ///
+    /// TODO: Add an enum value for vanilla tools?
+    /// TODO: Add an enum value for vanilla furniture?
     /// </summary>
     [XmlType("Mods_Revitalize.Framework.World.Objects.Items.Utilities.ItemReference")]
     public class ItemReference : StardustCore.Networking.NetObject
@@ -109,6 +112,18 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             this.setItemReference(item);
         }
 
+        /// <summary>
+        /// Attempts to convert an item that is being sold into an item reference.
+        /// </summary>
+        /// <param name="salableItem"></param>
+        public ItemReference(ISalable salableItem)
+        {
+            if(salableItem is StardewValley.Item)
+            {
+                this.setItemReference((StardewValley.Item)salableItem);
+            }
+        }
+
         protected override void initializeNetFields()
         {
             base.initializeNetFields();
@@ -135,10 +150,22 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
 
         public virtual void setItemReference(Item item)
         {
+            if (item == null)
+            {
+                this.clearItemReference();
+                return;
+            }
+
             if (item is IBasicItemInfoProvider)
             {
                 string id = (item as IBasicItemInfoProvider).Id;
                 this.objectManagerId.Value = id;
+            }
+
+            else if (item.GetType().Equals(typeof(StardewValley.Objects.Furniture)) || item.GetType().Equals(typeof(StardewValley.Objects.BedFurniture)) || item.GetType().Equals(typeof(StardewValley.Objects.FishTankFurniture)) || item.GetType().Equals(typeof(StardewValley.Objects.StorageFurniture)))
+            {
+                //TODO: Maybe add in references for furniture types?
+                return;
             }
             else if (item is StardewValley.Object)
             {
@@ -150,6 +177,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
                 {
                     this.sdvObjectId.Value = (Enums.SDVObject)item.ParentSheetIndex;
                 }
+            }
+            else if (item is StardewValley.Tool)
+            {
+                //Don't really need item references for tools as far as I'm aware of. Skipping it.
+                return;
             }
             else
             {

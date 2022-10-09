@@ -60,7 +60,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                         }
                         else if (npcName.Equals("Dwarf"))
                         {
-                            DwarfShopUtilities.AddGeodesToDwarfShop(menu);
+                            DwarfShopUtilities.AddStockToDwarfShop(menu);
                         }
                         else if (npcName.Equals("Marnie"))
                         {

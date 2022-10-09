@@ -1,0 +1,32 @@
+{
+	"Revitalize.Objects.Resources.CoalBush":
+	{
+		"displayName":"Coal Ore Bush",
+		"description":"A magical bush that grows a piece of coal every day!"
+	},
+	"Revitalize.Objects.Resources.CopperOreBush":
+	{
+		"displayName":"Copper Ore Bush",
+		"description":"A magical bush that grows a piece of copper ore every day!"
+	},
+	"Revitalize.Objects.Resources.IronOreBush":
+	{
+		"displayName":"Iron Ore Bush",
+		"description":"A magical bush that grows a piece of iron ore every two days!"
+	},
+	"Revitalize.Objects.Resources.GoldOreBush":
+	{
+		"displayName":"Gold Ore Bush",
+		"description":"A magical bush that grows a piece of gold ore every two days!"
+	},
+	"Revitalize.Objects.Resources.IridiumOreBush":
+	{
+		"displayName":"Iridium Ore Bush",
+		"description":"A magical bush that grows a piece of iridium ore every three days!"
+	},
+	"Revitalize.Objects.Resources.RadioactiveOreBush":
+	{
+		"displayName":"Radioactive Ore Bush",
+		"description":"A magical bush that grows a piece of radioactive ore every three days!"
+	},
+}

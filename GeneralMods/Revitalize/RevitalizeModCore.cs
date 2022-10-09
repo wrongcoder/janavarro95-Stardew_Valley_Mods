@@ -316,6 +316,7 @@ namespace Omegasis.Revitalize
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
                             ModContentManager.objectManager.getItem(MachineIds.ElectricFurnace),
+                            ModContentManager.objectManager.getItem(ResourceObjectIds.CoalBush),
                             //ModContentManager.objectManager.getItem(Enums.SDVObject.FireQuartz,1),
                             //ModContentManager.objectManager.getItem(Enums.SDVObject.CopperOre,2),
                             ModContentManager.objectManager.getItem(Enums.SDVObject.IronOre,999),

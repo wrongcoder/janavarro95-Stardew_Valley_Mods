@@ -1,4 +1,17 @@
+Key:
++ Added Content/Feature.
+~ Changed Content/Feature or Bugfix.
+- Removed Content/Feature.
+
+
+
 ~~~~~~~~~~~~0.0.1 Revitalize 10-09-2022 xx.xx P.M~~~~~~~~~~~~~~
++AutomaticFarmingSystems can now harvest from ResourceBushes.
+~Finished migrating all objects to use their display strings in the .json files in the ModAssets/Strings/Objects folder and sub folder.
++Added in Coal Resource Bushes.
++Dwarf now sells all resource bushes. 25% chance for coal and copper, 20% for iron and gold, 15% for Iridium, and 10% for Radioactive.
+
+~~~~~~~~~~~~0.0.1 Revitalize 10-08-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Cleaned up some code regarding save data for shops.
 +Added some documentation for how to add new mail for the mod.
 +Made ELectricFurnace blueprints guarded by when the Player obtains their first battery pack (or any battery pack).
