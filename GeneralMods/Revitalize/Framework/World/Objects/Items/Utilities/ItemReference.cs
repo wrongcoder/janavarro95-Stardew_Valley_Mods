@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Netcode;
+using Newtonsoft.Json;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using StardewValley;
@@ -18,13 +19,66 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
     [XmlType("Mods_Revitalize.Framework.World.Objects.Items.Utilities.ItemReference")]
     public class ItemReference : StardustCore.Networking.NetObject
     {
+        [JsonIgnore]
         /// <summary>
         /// The default stack size for getting the item when using <see cref="getItem()"/>
         /// </summary>
         public readonly NetInt stackSize = new NetInt(1);
+        [JsonIgnore]
         public readonly NetString objectManagerId = new NetString("");
+        [JsonIgnore]
         public readonly NetEnum<Enums.SDVObject> sdvObjectId = new NetEnum<Enums.SDVObject>(Enums.SDVObject.NULL);
+        [JsonIgnore]
         public readonly NetEnum<Enums.SDVBigCraftable> sdvBigCraftableId = new NetEnum<Enums.SDVBigCraftable>(Enums.SDVBigCraftable.NULL);
+
+        public virtual int StackSize
+        {
+            get
+            {
+                return this.stackSize.Value;
+            }
+            set
+            {
+                this.stackSize.Value = value;
+            }
+        }
+
+        public virtual string ObjectManagerId
+        {
+            get
+            {
+                return this.objectManagerId.Value;
+            }
+            set
+            {
+                this.objectManagerId.Value = value;
+            }
+        }
+
+        public virtual Enums.SDVObject SdvObjectId
+        {
+            get
+            {
+                return this.sdvObjectId.Value;
+            }
+            set
+            {
+                this.sdvObjectId.Value = value;
+            }
+        }
+
+        public virtual Enums.SDVBigCraftable SdvBigCraftableIdId
+        {
+            get
+            {
+                return this.sdvBigCraftableId.Value;
+            }
+            set
+            {
+                this.sdvBigCraftableId.Value = value;
+            }
+        }
+
 
         public ItemReference()
         {
@@ -136,12 +190,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             if (!self.GetType().Equals(other.GetType())) return false;
 
             //Custom mod objects should have the same id.
-            if(self is IBasicItemInfoProvider && (other is IBasicItemInfoProvider))
+            if (self is IBasicItemInfoProvider && (other is IBasicItemInfoProvider))
             {
                 return (self as IBasicItemInfoProvider).Id.Equals((other as IBasicItemInfoProvider).Id);
             }
 
-            if(self is StardewValley.Object && other is StardewValley.Object)
+            if (self is StardewValley.Object && other is StardewValley.Object)
             {
                 StardewValley.Object sObj = (self as StardewValley.Object);
                 StardewValley.Object oObj = (other as StardewValley.Object);

@@ -18,7 +18,7 @@ namespace Omegasis.Revitalize.Framework.SaveData
         /// <summary>
         /// Save data persisting to shop conditions.
         /// </summary>
-        public ShopSaveData shopSaveData;
+        public ShopSaveDataManager shopSaveData;
 
         /// <summary>
         /// Save data persistent to the actual player.
@@ -32,7 +32,7 @@ namespace Omegasis.Revitalize.Framework.SaveData
 
         public virtual void loadOrCreateSaveData()
         {
-            this.shopSaveData = new ShopSaveData();
+            this.shopSaveData = new ShopSaveDataManager();
             this.playerSaveData = PlayerSaveData.LoadOrCreate();
         }
 
@@ -62,9 +62,11 @@ namespace Omegasis.Revitalize.Framework.SaveData
         /// </summary>
         public virtual void save()
         {
-                this.shopSaveData.save();
+            this.shopSaveData.save();
             this.playerSaveData.save();
 
         }
+
+
     }
 }

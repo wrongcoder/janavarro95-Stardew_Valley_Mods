@@ -73,7 +73,10 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             List<ShopInventoryProbe> blueprintsToAdd = new List<ShopInventoryProbe>();
             RobinsShopConfig shopConfig = RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig;
 
-            blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricFurnaceRecipeId, WorkbenchBlueprintIds.Workbench_ElectricFurnaceCraftingRecipeBlueprint, shopConfig.ElectricFurnaceBlueprintPrice));
+            if (RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack)
+            {
+                blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricFurnaceRecipeId, WorkbenchBlueprintIds.Workbench_ElectricFurnaceCraftingRecipeBlueprint, shopConfig.ElectricFurnaceBlueprintPrice));
+            }
 
             if (Game1.player.FarmingLevel >= 10)
             {

@@ -1,7 +1,13 @@
+~~~~~~~~~~~~0.0.1 Revitalize 10-09-2022 xx.xx P.M~~~~~~~~~~~~~~
++Cleaned up some code regarding save data for shops.
++Added some documentation for how to add new mail for the mod.
++Made ELectricFurnace blueprints guarded by when the Player obtains their first battery pack (or any battery pack).
++Added in mail for when ElectricFurnace blueprints are available for sale.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 10-06-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Changed from hardcoading strings form display names and item descriptions to loading them all from json files instead. [WIP]
 
-~~~~~~~~~~~~0.0.1 Revitalize 9-27-2022 xx.xx P.M~~~~~~~~~~~~~~
+~~~~~~~~~~~~0.0.1 Revitalize 9-28-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Rewrote a lot of the ElectricFurnace code when it comes to processing items.
 +Electric, Nuclear, and Magical furnaces now load their recipes from .json files. Only allow for a single input and output item, but allows flexibility for new recipes or modifying them.
 ~Cleaned up code related to ElectricFurnace Automate compatibility mod!

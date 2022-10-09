@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Omegasis.Revitalize.Framework.SaveData.Player
 {
-    public class PlayerSaveData:SaveDataBase
+    public class PlayerSaveData:SaveDataInfo
     {
         public Dictionary<string, string> unlockedCraftingRecipes;
 

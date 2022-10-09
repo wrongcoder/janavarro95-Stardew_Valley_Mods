@@ -16,17 +16,23 @@ namespace Omegasis.Revitalize.Framework.World
 {
     /// <summary>
     /// Deals with adding custom mail to the game.
+    ///
+    /// In order to add new mail contents to the game, you must do the following.
+    /// 1. Create a new .json file with the mail contents.
+    /// 2. Add the mail title constant string and the path to the mail file into the <see cref="mailTitles"/> dictionary.
+    /// 3. Update the <see cref="tryToAddMailToMailbox"/> method as that will check for specific conditions 
     /// </summary>
     public class MailManager
     {
 
-        public const string newLineInMessageCharacter= "^";
+        public const string newLineInMessageCharacter = "^";
         public const string newPageForMessage = "\n";
 
         public Dictionary<string, string> mailTitles = new Dictionary<string, string>()
         {
             { MailTitles.HayMakerAvailableForPurchase ,Path.Combine(StringsPaths.Mail, "AnimalShopHayMakerCanBePurchased.json")},
             { MailTitles.AutomaticFarmingSystemAvailableForPurchase ,Path.Combine(StringsPaths.Mail, "AutomaticFarmingSystemCanBePurchased.json")},
+            { MailTitles.ElectricFurnaceCanBePurchased ,Path.Combine(StringsPaths.Mail, "ElectricFurnaceCanBePurchased.json")},
 
         };
 
@@ -34,17 +40,35 @@ namespace Omegasis.Revitalize.Framework.World
         {
         }
 
+        /// <summary>
+        /// Tries to add mail to the Player's mailbox when certain events happen for the mod.
+        /// </summary>
         public virtual void tryToAddMailToMailbox()
         {
-            if(Game1.player.mailReceived.Contains(MailTitles.HayMakerAvailableForPurchase)==false && (RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop()==true  || BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop() == true))
+            if (!this.hasPlayerReceivedThisMail(MailTitles.HayMakerAvailableForPurchase) && (RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop() || BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop()))
             {
                 Game1.mailbox.Add(MailTitles.HayMakerAvailableForPurchase);
             }
 
-            if(Game1.player.mailReceived.Contains(MailTitles.AutomaticFarmingSystemAvailableForPurchase)==false && Game1.player.FarmingLevel >= 10 && Game1.netWorldState.Value.GoldenWalnutsFound.Value >= 1)
+            if (!this.hasPlayerReceivedThisMail(MailTitles.AutomaticFarmingSystemAvailableForPurchase) && Game1.player.FarmingLevel >= 10)
             {
                 Game1.mailbox.Add(MailTitles.AutomaticFarmingSystemAvailableForPurchase);
             }
+
+            if (!this.hasPlayerReceivedThisMail(MailTitles.ElectricFurnaceCanBePurchased) && RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack)
+            {
+                Game1.mailbox.Add(MailTitles.ElectricFurnaceCanBePurchased);
+            }
+        }
+
+        /// <summary>
+        /// Checks to see if the player has received a given peice of mail.
+        /// </summary>
+        /// <param name="MailTitle">The title of the mail to check.</param>
+        /// <returns></returns>
+        public virtual bool hasPlayerReceivedThisMail(string MailTitle)
+        {
+            return Game1.player.mailReceived.Contains(MailTitle);
         }
 
         public virtual bool canEditAsset(IAssetInfo asset)
@@ -57,8 +81,10 @@ namespace Omegasis.Revitalize.Framework.World
             if (asset.NameWithoutLocale.IsEquivalentTo("Data/mail"))
             {
                 IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
-                data[MailTitles.HayMakerAvailableForPurchase] = this.getMailContentsFromTitle(MailTitles.HayMakerAvailableForPurchase);
-                data[MailTitles.AutomaticFarmingSystemAvailableForPurchase] = this.getMailContentsFromTitle(MailTitles.AutomaticFarmingSystemAvailableForPurchase);
+                foreach (string MailTitle in this.mailTitles.Keys)
+                {
+                    data[MailTitle] = this.getMailContentsFromTitle(MailTitle);
+                }
             }
         }
 
@@ -98,7 +124,7 @@ namespace Omegasis.Revitalize.Framework.World
         /// <returns></returns>
         public virtual string parseMailMessage(string MailMessageText)
         {
-           return MailMessageText.Replace("@", Game1.player.name.Value);
+            return MailMessageText.Replace("@", Game1.player.name.Value);
         }
 
         /// <summary>
@@ -108,7 +134,7 @@ namespace Omegasis.Revitalize.Framework.World
         /// <param name="menuEventArgs"></param>
         public virtual void onNewMenuOpened(object sender, StardewModdingAPI.Events.MenuChangedEventArgs menuEventArgs)
         {
-            
+
             if (menuEventArgs.NewMenu != null)
             {
                 if (menuEventArgs.NewMenu is LetterViewerMenu)
@@ -123,7 +149,7 @@ namespace Omegasis.Revitalize.Framework.World
                     }
                 }
             }
-            
+
         }
 
 

@@ -220,29 +220,36 @@ namespace Omegasis.Revitalize
 
             ModContentManager.initializeModContent(this.ModManifest);
 
-            //Adds in event handling for the mod.
+            //Save events.
             ModHelper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
             ModHelper.Events.GameLoop.SaveCreated += this.GameLoop_SaveCreated;
 
-            ModHelper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
-            ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
-            ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
 
+            //Player Events.
             ModHelper.Events.Player.Warped += ModContentManager.objectManager.resources.OnPlayerLocationChanged;
+            ModHelper.Events.Player.InventoryChanged += PlayerUtilities.OnItemAddedToPlayersInventory;
+
+            //Game time change events.
+            ModHelper.Events.GameLoop.TimeChanged += this.GameLoop_TimeChanged;
             ModHelper.Events.GameLoop.DayStarted += this.GameLoop_DayStarted;
             ModHelper.Events.GameLoop.DayEnding += this.GameLoop_DayEnding;
 
+            //Input events.
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.Input_CheckForObjectInteraction;
-
-            ModHelper.Events.Display.RenderedWorld += ObjectInteractionHacks.Render_RenderCustomObjectsHeldInMachines;
-            //ModHelper.Events.Display.Rendered += MenuHacks.EndOfDay_OnMenuChanged;
-            ModHelper.Events.Display.MenuChanged += ShopUtilities.OnNewMenuOpened;
-
-            ModHelper.Events.Display.MenuChanged += ModContentManager.mailManager.onNewMenuOpened;
             //ModHelper.Events.GameLoop.Saved += MenuHacks.EndOfDay_CleanupForNewDay;
             ModHelper.Events.Input.ButtonPressed += ObjectInteractionHacks.ResetNormalToolsColorOnLeftClick;
 
+            //Render events.
+            ModHelper.Events.Display.RenderedWorld += ObjectInteractionHacks.Render_RenderCustomObjectsHeldInMachines;
+
+            //Menu Events.
+            ModHelper.Events.Display.MenuChanged += ShopUtilities.OnNewMenuOpened;
+            ModHelper.Events.Display.MenuChanged += ModContentManager.mailManager.onNewMenuOpened;
+
+            //Game Loop events.
             ModHelper.Events.GameLoop.GameLaunched += this.GameLoop_GameLaunched;
+            ModHelper.Events.GameLoop.ReturnedToTitle += this.GameLoop_ReturnedToTitle;
+            ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
 
 
             SaveDataManager = new SaveDataManager();
@@ -278,6 +285,10 @@ namespace Omegasis.Revitalize
         {
             ModContentManager.objectManager.resources.DailyResourceSpawn(senderm, e);
             ShopUtilities.OnNewDay(senderm, e);
+
+            //Used to also check if a player has items that would do things such as unlocking a crafting recipe when loading a day.
+            PlayerUtilities.CheckForInventoryItem(Game1.player.Items);
+
             ModContentManager.mailManager.tryToAddMailToMailbox();
         }
 

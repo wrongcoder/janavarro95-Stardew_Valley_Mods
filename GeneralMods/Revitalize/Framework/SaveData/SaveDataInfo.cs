@@ -9,15 +9,23 @@ namespace Omegasis.Revitalize.Framework.SaveData
     /// <summary>
     /// Base class for handling persistent save data for the game for individual saves.
     /// </summary>
-    public class SaveDataBase
+    public class SaveDataInfo
     {
 
-        public SaveDataBase()
+        public SaveDataInfo()
         {
 
         }
 
         public virtual void save()
+        {
+
+        }
+        /// <summary>
+        /// Writes this save intormation to a specific file.
+        /// </summary>
+        /// <param name="FileName"></param>
+        public virtual void save(string FileName)
         {
 
         }

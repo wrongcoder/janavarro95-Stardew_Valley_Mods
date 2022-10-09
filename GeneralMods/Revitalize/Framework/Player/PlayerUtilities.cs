@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
+using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.Player
@@ -254,6 +255,12 @@ namespace Omegasis.Revitalize.Framework.Player
             return GetToolsFromInventory<T>(Who).Count > 0;
         }
 
+        /// <summary>
+        /// Gets a list of all tools in the player's inventory that have the same base type.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="Who"></param>
+        /// <returns></returns>
         public static List<T> GetToolsFromInventory<T>(this Farmer Who) where T : StardewValley.Tool
         {
             List<T> validTools = new List<T>();
@@ -299,7 +306,13 @@ namespace Omegasis.Revitalize.Framework.Player
         }
 
 
-
+        /// <summary>
+        /// Check to see if a player's inventory contains enough of a given item.
+        /// </summary>
+        /// <param name="Who"></param>
+        /// <param name="BasicItemInfoId"></param>
+        /// <param name="MinStackSize"></param>
+        /// <returns></returns>
         public static bool InventoryContainsEnoughOfAnItem(this Farmer Who, string BasicItemInfoId, int MinStackSize)
         {
             if (Who != null)
@@ -330,7 +343,35 @@ namespace Omegasis.Revitalize.Framework.Player
             return false;
         }
 
+        /// <summary>
+        /// Checks when items have been added to the player's inventory.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public static void OnItemAddedToPlayersInventory(object sender, StardewModdingAPI.Events.InventoryChangedEventArgs e)
+        {
+            if (!e.Added.Any()) return;
+            CheckForInventoryItem(e.Added);
+        }
+
+        public static void CheckForInventoryItem(IEnumerable<Item> items)
+        {
+            if(RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack == true)
+            {
+                return;
+            }
 
 
+            foreach (Item addedItem in items)
+            {
+                ItemReference itemReference = new ItemReference(addedItem);
+                if (itemReference.SdvObjectId == Enums.SDVObject.BatteryPack)
+                {
+                    Game1.showRedMessage("Player has obtained a battery pack!");
+                    RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack = true;
+                }
+
+            }
+        }
     }
 }

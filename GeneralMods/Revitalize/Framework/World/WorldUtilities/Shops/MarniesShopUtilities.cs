@@ -17,7 +17,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
         /// <param name="shopMenu"></param>
         public static void AddStockToMarniesShop(ShopMenu shopMenu)
         {
-            if (BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop() || RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop())
+            if (RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop() || BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop())
             {
                 HayMaker hayMaker = RevitalizeModCore.ModContentManager.objectManager.GetItem<HayMaker>(MachineIds.HayMaker, 1);
                ShopUtilities.AddItemToShop(shopMenu, hayMaker, RevitalizeModCore.Configs.shopsConfigManager.animalShopStockConfig.HayMakerPrice, -1);
