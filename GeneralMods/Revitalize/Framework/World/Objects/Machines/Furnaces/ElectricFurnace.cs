@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
@@ -110,7 +112,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
 
         public virtual CraftingRecipeResult processItemFromRecipe(Item dropInItem, Farmer who, bool ShowRedMessage=true)
         {
-            foreach(var craftingRecipe in Revitalize.RevitalizeModCore.ModContentManager.craftingManager.getUnlockedCraftingRecipes(this.getCraftingBookName()))
+            foreach(var craftingRecipe in RevitalizeModCore.ModContentManager.craftingManager.getUnlockedCraftingRecipes(this.getCraftingBookName()))
             {
                 Item neededDropInItem = craftingRecipe.ingredients[0].item;
                 int amountRequired = craftingRecipe.ingredients[0].requiredAmount;
@@ -124,14 +126,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                     {
                         if (ShowRedMessage)
                         {
-                            Game1.showRedMessage(string.Format("Requires {0} {1}!", amountRequired, neededDropInItem.DisplayName));
+                            Game1.showRedMessage(JsonContentLoaderUtilities.LoadErrorString(this.getErrorStringFile(), "NeedMoreInputItems", amountRequired, neededDropInItem.DisplayName));
                         }
                         return new CraftingRecipeResult(craftingRecipe,false);
                     }
-                    this.smeltingItem.Value.setItemReference(neededDropInItem);
-                    Item outputItem = craftingRecipe.outputs[0].item.getOne();
-                    outputItem.Stack = craftingRecipe.outputs[0].requiredAmount;
-                    this.heldObject.Value = (StardewValley.Object)outputItem;
 
                     float multiplier = 1f;
                     if (this.furnaceType.Value == FurnaceType.Electric)
@@ -161,6 +159,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                         this.increaseFuelCharges();
                     }
 
+                    this.smeltingItem.Value.setItemReference(neededDropInItem);
+                    Item outputItem = craftingRecipe.outputs[0].item.getOne();
+                    outputItem.Stack = craftingRecipe.outputs[0].requiredAmount;
+                    this.heldObject.Value = (StardewValley.Object)outputItem;
                     this.MinutesUntilReady = (int)(craftingRecipe.timeToCraft * multiplier);
                     this.MinutesUntilReady -= this.MinutesUntilReady % 10; //Want to make sure the time remaining is divisible by 10, so we will just round down.
                     if (this.MinutesUntilReady < 10)
@@ -311,15 +313,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         {
             if (this.furnaceType.Value == FurnaceType.Electric)
             {
-                Game1.showRedMessage("Needs a battery pack to operate!");
+                Game1.showRedMessage(JsonContentLoaderUtilities.LoadErrorString(this.getErrorStringFile(), "NeedBatteryPack"));
                 return;
             }
             if (this.furnaceType.Value == FurnaceType.Nuclear)
             {
-                Game1.showRedMessage("Needs nuclear fuel to operate!");
+                Game1.showRedMessage(JsonContentLoaderUtilities.LoadErrorString(this.getErrorStringFile(), "NeedNuclearFuel"));
                 return;
             }
-            Game1.showRedMessage("Magical furnace failure! Please contact Omegasis to address this issue!");
+            Game1.showRedMessage(JsonContentLoaderUtilities.LoadErrorString(this.getErrorStringFile(), "MagicalFurnaceFuelError"));
             return;
         }
 
@@ -375,7 +377,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             return base.canStackWith(other) && otherFurnace.furnaceType.Value == this.furnaceType.Value;
         }
 
-
+        /// <summary>
+        /// Gets the relative path to the file to load the error strings from the ErrorStrings directory.
+        /// </summary>
+        /// <returns></returns>
+        public virtual string getErrorStringFile()
+        {
+            return Path.Combine("Objects", "Machines", "ElectricFurnace.json");
+        }
 
     }
 }

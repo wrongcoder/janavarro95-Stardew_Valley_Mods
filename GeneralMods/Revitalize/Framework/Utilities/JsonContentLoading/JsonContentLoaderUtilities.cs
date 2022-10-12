@@ -15,7 +15,7 @@ namespace Omegasis.Revitalize.Framework.Utilities.JsonContentLoading
         /// </summary>
         /// <param name="Id">The id for </param>
         /// <returns></returns>
-        public static string LoadItemDescription(string Id,bool ThrowExceptionIfNotFound=true)
+        public static string LoadItemDescription(string Id, bool ThrowExceptionIfNotFound = true)
         {
             if (!RevitalizeModCore.ModContentManager.objectManager.displayStrings.ContainsKey(Id) && ThrowExceptionIfNotFound)
             {
@@ -38,5 +38,16 @@ namespace Omegasis.Revitalize.Framework.Utilities.JsonContentLoading
             return RevitalizeModCore.ModContentManager.objectManager.displayStrings[Id].displayName;
         }
 
+        /// <summary>
+        /// Loads in a specified error string from a given file.
+        /// </summary>
+        /// <param name="RelativePathToFile"></param>
+        /// <param name="Key"></param>
+        /// <param name="StringParamaters"></param>
+        /// <returns></returns>
+        public static string LoadErrorString(string RelativePathToFile, string Key, params object[] StringParamaters)
+        {
+            return string.Format(JsonUtilities.LoadStringFromDictionaryFile(Key, Path.Combine(Constants.PathConstants.StringsPaths.ErrorStrings, RelativePathToFile)), StringParamaters);
+        }
     }
 }
