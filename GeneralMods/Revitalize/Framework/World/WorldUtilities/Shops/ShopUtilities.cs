@@ -67,14 +67,41 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                             MarniesShopUtilities.AddStockToMarniesShop(menu);
                         }
                     }
+                    else if(menu.currency==ShopMenu.currency_qiGems && menu.storeContext.Equals("QiGemShop"))
+                    {
+                        WalnutRoomShopUtilities.AddItemsToShop(menu);
+                    }
                 }
             }
         }
 
+        /// <summary>
+        /// Utility method to add items to a normal shop that uses gold.
+        /// </summary>
+        /// <param name="Menu"></param>
+        /// <param name="Item"></param>
+        /// <param name="Price"></param>
+        /// <param name="Stock"></param>
         public static void AddItemToShop(ShopMenu Menu, ISalable Item, int Price, int Stock)
         {
             Menu.forSale.Add(Item);
             Menu.itemPriceAndStock.Add(Item, new int[2] { Price, Stock });
+        }
+
+        /// <summary>
+        /// Utility method to add items to the shop in the walnut room..
+        /// </summary>
+        /// <param name="Menu"></param>
+        /// <param name="Item"></param>
+        /// <param name="Price"></param>
+        /// <param name="Stock"></param>
+        public static void AddItemToWalnutRoomShop(ShopMenu Menu, ISalable Item, int Price, int Stock= 2147483647)
+        {
+            int huh = 0;
+            int iconMaybe = 858;
+
+            Menu.forSale.Add(Item);
+            Menu.itemPriceAndStock.Add(Item, new int[4] {0 ,Stock, iconMaybe, Price});
         }
 
         /// <summary>

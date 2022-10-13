@@ -381,5 +381,16 @@ namespace Omegasis.Revitalize.Framework.Player
         {
             return Math.Max(0, Game1.netWorldState.Value.GoldenWalnutsFound.Value - 1);
         }
+
+        /// <summary>
+        /// Checks to see if the player knows a given crafting recipe added by the mod.
+        /// </summary>
+        /// <param name="CraftingBookName"></param>
+        /// <param name="CraftingRecipeName"></param>
+        /// <returns></returns>
+        public static bool KnowsCraftingRecipe(string CraftingBookName, string CraftingRecipeName)
+        {
+            return RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingBookName, CraftingRecipeName);
+        }
     }
 }

@@ -3,6 +3,11 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 10-12-2022 xx.xx P.M~~~~~~~~~~~~~~
++Added code to add items to Mr. Qi's walnut room shop.
++Added Nuclear Furnace blueprints to the Walnut room shop.
++Added Magical Furnace blueprints to the Walnut room shop.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 10-11-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~ Moved hard coded strings from ElectricFurnace.cs to separate .json files.
 ~ Fixed a bug where smelting an object with not enough fuel would not consume the input and give the smelted object for free.
