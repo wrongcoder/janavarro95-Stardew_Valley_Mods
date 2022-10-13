@@ -89,19 +89,29 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
         }
 
         /// <summary>
+        /// Adds an item to a shop's stock, but requires another item as the currency to buy that item.
+        /// </summary>
+        /// <param name="Menu"></param>
+        /// <param name="Item"></param>
+        /// <param name="Price"></param>
+        /// <param name="ObjectRequiredAsCurrency">The item required to make the trade.</param>
+        /// <param name="Stock"></param>
+        public static void AddItemToShop(ShopMenu Menu, ISalable Item, int Price, Enums.SDVObject ObjectRequiredAsCurrency, int Stock= int.MaxValue)
+        {
+            Menu.forSale.Add(Item);
+            Menu.itemPriceAndStock.Add(Item, new int[4] { 0, Stock, (int)ObjectRequiredAsCurrency, Price });
+        }
+
+        /// <summary>
         /// Utility method to add items to the shop in the walnut room..
         /// </summary>
         /// <param name="Menu"></param>
         /// <param name="Item"></param>
         /// <param name="Price"></param>
         /// <param name="Stock"></param>
-        public static void AddItemToWalnutRoomShop(ShopMenu Menu, ISalable Item, int Price, int Stock= 2147483647)
+        public static void AddItemToWalnutRoomShop(ShopMenu Menu, ISalable Item, int Price, int Stock= int.MaxValue)
         {
-            int huh = 0;
-            int iconMaybe = 858;
-
-            Menu.forSale.Add(Item);
-            Menu.itemPriceAndStock.Add(Item, new int[4] {0 ,Stock, iconMaybe, Price});
+            AddItemToShop(Menu, Item, Price, Enums.SDVObject.QiGem, Stock);
         }
 
         /// <summary>
