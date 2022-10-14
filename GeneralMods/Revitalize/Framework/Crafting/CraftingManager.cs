@@ -211,7 +211,7 @@ namespace Omegasis.Revitalize.Framework.Crafting
             //~~~~~~~~~~~~~~~~~~~~~~~//
             // Alloy Furnace Recipes //
             //~~~~~~~~~~~~~~~~~~~~~~~//
-            CraftingRecipeBook AlloyFurnaceRecipes = new CraftingRecipeBook(CraftingRecipeBooks.AlloyFurnaceCraftingRecipes);
+            CraftingRecipeBook AlloyFurnaceRecipes = new CraftingRecipeBook(MachineCraftingRecipeBooks.AlloyFurnaceCraftingRecipes);
             AlloyFurnaceRecipes.addInCraftingTab("Default", new AnimatedButton(new StardustCore.Animations.AnimatedSprite("Default Tab", new Vector2(100 + 48, 100 + 24 * 4), new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.Menus", "MenuTabHorizontal"), new Animation(0, 0, 24, 24)), Color.White), new Rectangle(0, 0, 24, 24), 2f), true);
 
 
@@ -247,11 +247,11 @@ namespace Omegasis.Revitalize.Framework.Crafting
                     else
                         this.modCraftingRecipesByGroup[AlloyFurnaceRecipes.craftingRecipeBookId].craftingRecipes.Add(recipe.Key, recipe.Value); //Add in new recipes automatically without having to delete the old crafting recipe book.
             else
-                this.modCraftingRecipesByGroup.Add(CraftingRecipeBooks.AlloyFurnaceCraftingRecipes, AlloyFurnaceRecipes);
+                this.modCraftingRecipesByGroup.Add(MachineCraftingRecipeBooks.AlloyFurnaceCraftingRecipes, AlloyFurnaceRecipes);
         }
 
         /// <summary>
-        /// Adds in crafting recipes from json files for all crafting stations.
+        /// Adds in crafting recipes from json files for all crafting stations. DOES NOT CURRENTLY support deeply nested directories. See the revitalize machines method for that logic.
         /// </summary>
         protected virtual void addInCraftingRecipesForCraftingStationsFromJsonFiles()
         {
@@ -272,15 +272,6 @@ namespace Omegasis.Revitalize.Framework.Crafting
 
                 string CraftingTabsPath = Path.Combine(craftingStationPath, "CraftingMenuTabs");
                 string relativeCratingTabsPath = Path.Combine(relativeCraftingStationPath, "CraftingMenuTabs");
-
-                /*
-                List<JsonCraftingMenuTab> craftingMenuTabs = new List<JsonCraftingMenuTab>();
-                foreach (string craftingTabJsonFile in Directory.GetFiles(CraftingTabsPath))
-                {
-                    craftingMenuTabs.Add(JsonUtilities.ReadJsonFile<JsonCraftingMenuTab>(Path.Combine(relativeCratingTabsPath,Path.GetFileName(craftingTabJsonFile))));
-                }
-                */
-
                 string craftingRecipesPath = Path.Combine(craftingStationPath, "Recipes");
                 string relativeCraftingRecipesPath = Path.Combine(relativeCraftingStationPath, "Recipes");
 
@@ -288,16 +279,6 @@ namespace Omegasis.Revitalize.Framework.Crafting
                 {
                     continue;
                 }
-
-                /*
-                 foreach (string craftingRecipeJsonFile in Directory.GetFiles(craftingRecipesPath))
-                 {
-
-
-                     craftingRecipes.Add(JsonUtilities.ReadJsonFile<UnlockableJsonCraftingRecipe>(Path.Combine(relativeCraftingRecipesPath,Path.GetFileName(craftingRecipeJsonFile))));
-                 }
-                */
-
 
                 RevitalizeModCore.logWarning("Attempting to load recipes from " + relativeCraftingRecipesPath);
                 CraftingRecipeBook craftingRecipeBook = new CraftingRecipeBook(recipeBookDefinition, JsonUtilities.LoadJsonFilesFromDirectories<JsonCraftingMenuTab>(relativeCratingTabsPath), JsonUtilities.LoadJsonFilesFromDirectories<UnlockableJsonCraftingRecipe>(relativeCraftingRecipesPath));
@@ -329,13 +310,13 @@ namespace Omegasis.Revitalize.Framework.Crafting
 
 
         /// <summary>
-        /// Adds in crafting recipes from json files for all crafting stations.
+        /// Adds in crafting recipes from json files for all crafting stations. Also has recurrisve functionality to seach deeply nested directories.
         /// </summary>
-        protected virtual void addInCraftingRecipesForRevitalizeMachinesFromJsonFiles()
+        protected virtual void addInCraftingRecipesForRevitalizeMachinesFromJsonFiles(string SubDirectory="", string RelativeSubDirectory="")
         {
 
-            string craftingDirectoryPath = Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, Constants.PathConstants.Data.CraftingDataPaths.RevitalizeMachinesPath);
-            string relativeCraftingDirectoryPath = Constants.PathConstants.Data.CraftingDataPaths.RevitalizeMachinesPath;
+            string craftingDirectoryPath = string.IsNullOrEmpty(SubDirectory)? Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, Constants.PathConstants.Data.CraftingDataPaths.RevitalizeMachinesPath):SubDirectory;
+            string relativeCraftingDirectoryPath = string.IsNullOrEmpty(RelativeSubDirectory)? Constants.PathConstants.Data.CraftingDataPaths.RevitalizeMachinesPath:RelativeSubDirectory;
             foreach (string craftingStationPath in Directory.GetDirectories(craftingDirectoryPath))
             {
                 if (Path.GetFileName(craftingStationPath).Equals("_Templates") || Path.GetFileName(craftingStationPath).Equals("Templates"))
@@ -344,8 +325,12 @@ namespace Omegasis.Revitalize.Framework.Crafting
                     continue;
                 }
 
-
                 string relativeCraftingStationPath = Path.Combine(relativeCraftingDirectoryPath, Path.GetFileName(craftingStationPath));
+                if (!File.Exists(Path.Combine(craftingStationPath, "RecipeBookDefinition.json"))){
+                    this.addInCraftingRecipesForRevitalizeMachinesFromJsonFiles(craftingStationPath, relativeCraftingStationPath);
+                }
+
+
                 JsonCraftingRecipeBookDefinition recipeBookDefinition = JsonUtilities.ReadJsonFile<JsonCraftingRecipeBookDefinition>(relativeCraftingStationPath, "RecipeBookDefinition.json");
 
                 string craftingRecipesPath = Path.Combine(craftingStationPath, "Recipes");
@@ -372,7 +357,9 @@ namespace Omegasis.Revitalize.Framework.Crafting
                     this.modCraftingRecipesByGroup.Add(craftingRecipeBook.craftingRecipeBookId, craftingRecipeBook);
 
             }
-
         }
+
     }
+
+
 }

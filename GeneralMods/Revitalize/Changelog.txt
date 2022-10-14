@@ -3,6 +3,12 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 10-13-2022 xx.xx P.M~~~~~~~~~~~~~~
+~ Hay maker now uses the common recipe format used for other machines for it's inputs.
+~ Fixed an issue where the hay maker would process items for forever.
+~ Fixed an issues where hay makers would take too many items when inputing for processing.
+~ Fixed an issue where if you right clicked a hay maker with an input item in your hand, and there was still some left after inputting and they were edible, it would always bring up the "Do you want to eat" dialogue.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 10-12-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added code to add items to Mr. Qi's walnut room shop.
 +Added Nuclear Furnace blueprints to the Walnut room shop.

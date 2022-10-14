@@ -320,13 +320,11 @@ namespace Omegasis.Revitalize
 
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-                            ModContentManager.objectManager.getItem(MachineIds.ElectricFurnace),
-                            ModContentManager.objectManager.getItem(ResourceObjectIds.CoalBush),
-                            //ModContentManager.objectManager.getItem(Enums.SDVObject.FireQuartz,1),
-                            //ModContentManager.objectManager.getItem(Enums.SDVObject.CopperOre,2),
-                            ModContentManager.objectManager.getItem(Enums.SDVObject.IronOre,999),
-                            ModContentManager.objectManager.getItem(Enums.SDVObject.BatteryPack,999),
-                            ModContentManager.objectManager.getItem(Enums.SDVBigCraftable.Chest,1),
+                ModContentManager.objectManager.getItem(MachineIds.HayMaker,10),
+                ModContentManager.objectManager.getItem(Enums.SDVObject.Corn,1),
+                ModContentManager.objectManager.getItem(Enums.SDVObject.Wheat,1),
+                ModContentManager.objectManager.getItem(Enums.SDVObject.Amaranth,1),
+                ModContentManager.objectManager.getItem(Enums.SDVObject.Fiber,17),
 
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             });

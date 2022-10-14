@@ -1,0 +1,37 @@
+{
+  "whichTab": "",
+  "isUnlocked": true,
+  "recipe": {
+	"craftingRecipeId": "StardewValley.Object.AmaranthToHay",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 60,
+    "inputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "Amaranth",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 1
+			}
+		}
+	
+	],
+    "outputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "Hay",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 10
+			}
+		},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}

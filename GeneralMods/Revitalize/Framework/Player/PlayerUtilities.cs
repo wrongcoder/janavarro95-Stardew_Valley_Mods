@@ -198,6 +198,7 @@ namespace Omegasis.Revitalize.Framework.Player
         /// <returns></returns>
         public static bool ReduceInventoryItemStackSize(this Farmer Who, Item itemToReduce, int StackSizeToReduce = 1)
         {
+            if (StackSizeToReduce == 0) return false;
             if (Who != null)
             {
                 for (int i = 0; i < Who.MaxItems; i++)

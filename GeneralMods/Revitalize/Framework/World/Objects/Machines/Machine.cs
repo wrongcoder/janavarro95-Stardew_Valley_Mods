@@ -13,6 +13,8 @@ using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.StardustCore.Animations;
 using Omegasis.StardustCore.UIUtilities;
+using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
+using System.IO;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 {
@@ -159,6 +161,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         public virtual bool finishedProduction()
         {
             return this.MinutesUntilReady == 0 && this.heldObject.Value != null;
+        }
+
+        /// <summary>
+        /// Returns a common error string to display to the player that more items are necessary to use a machine for drop in purposes.
+        /// </summary>
+        /// <param name="AmountRequired"></param>
+        /// <param name="NeededDropInItemDisplayName"></param>
+        /// <returns></returns>
+        public virtual string getErrorString_NeedMoreInputItems(int AmountRequired, Item NeededDropInItemDisplayName)
+        {
+            return JsonContentLoaderUtilities.LoadErrorString(Path.Combine("Objects","CommonErrorStrings.json"), "NeedMoreInputItems", AmountRequired, NeededDropInItemDisplayName.DisplayName);
         }
 
     }

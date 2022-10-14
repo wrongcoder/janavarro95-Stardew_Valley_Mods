@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Omegasis.Revitalize.Framework.Constants.CraftingIds
 {
+    /// <summary>
+    /// Crafting recipe books that can be crafted by the player.
+    /// </summary>
     public static class CraftingRecipeBooks
     {
         public const string AnvilCraftingRecipes = "Revitalize.Crafting.CraftingRecipeBooks.Anvil";
-        public const string AlloyFurnaceCraftingRecipes = "Revitalize.Crafting.CraftingRecipeBooks.AlloyFurnace";
-        public const string ElectricFurnaceCraftingRecipies = "Revitalize.Crafting.CraftingRecipeBooks.RevitalizeMachines.ElectricFurnace";
         public const string WorkbenchCraftingRecipies = "Revitalize.Crafting.CraftingRecipeBooks.Workbench";
     }
 }

@@ -110,6 +110,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
 
         }
 
+        /// <summary>
+        /// Processes a player's item that they are holding to set recipe to be processed for the furnace.
+        /// </summary>
+        /// <param name="dropInItem"></param>
+        /// <param name="who"></param>
+        /// <param name="ShowRedMessage"></param>
+        /// <returns></returns>
         public virtual CraftingRecipeResult processItemFromRecipe(Item dropInItem, Farmer who, bool ShowRedMessage=true)
         {
             foreach(var craftingRecipe in RevitalizeModCore.ModContentManager.craftingManager.getUnlockedCraftingRecipes(this.getCraftingBookName()))
@@ -186,7 +193,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
 
         public virtual string getCraftingBookName()
         {
-            return Constants.CraftingIds.CraftingRecipeBooks.ElectricFurnaceCraftingRecipies;
+            return Constants.CraftingIds.MachineCraftingRecipeBooks.ElectricFurnaceCraftingRecipies;
         }
 
         public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
