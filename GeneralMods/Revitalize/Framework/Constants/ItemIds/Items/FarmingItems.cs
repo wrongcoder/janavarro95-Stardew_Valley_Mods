@@ -15,5 +15,7 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Items
             
         public const string AutoHarvesterGardenPotAttachment = "Revitalize.Framework.World.Objects.Items.Farming.AutoHarvesterGardenPotAttachment";
 
+
+        public const string RefillSilosFakeItem = "Revitalize.Framework.World.Objects.Items.Farming.Shops.RefilSilosFakeObject";
     }
 }

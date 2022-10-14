@@ -182,6 +182,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.addItem(ResourceObjectIds.RadioactiveOreBush, radioactiveOreBush);
         }
 
+        /// <summary>
+        /// Loads in the item for the object manager.
+        /// </summary>
         private void loadInItems()
         {
 
@@ -192,6 +195,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.addItem(FarmingItems.AutoHarvesterGardenPotAttachment, autoHarvesterGardenPotAttachment);
 
             this.addItem(MiscItemIds.RadioactiveFuel, new CustomItem(new BasicItemInformation("", MiscItemIds.RadioactiveFuel, "", CategoryNames.Misc, CategoryColors.Misc, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Misc.createAnimationManager("RadioactiveFuel", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
+
+            this.addItem(FarmingItems.RefillSilosFakeItem, new CustomItem(new BasicItemInformation("", FarmingItems.RefillSilosFakeItem, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, StardewValley.Object.fragility_Removable, false, 100, false, false, TextureManagers.Items_Farming.createAnimationManager("HayRefill", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
         }
 
         private void loadInBlueprints()

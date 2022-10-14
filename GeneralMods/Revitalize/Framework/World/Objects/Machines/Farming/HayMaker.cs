@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
 using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Player;
@@ -18,6 +19,7 @@ using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.Machines;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops.RevitalizeShops;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -121,11 +123,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             {
                 if (Game1.activeClickableMenu == null)
                 {
-
-                    ShopMenu shopMenu = new ShopMenu(new Dictionary<ISalable, int[]>()
-                    {
-                        {RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.Hay,-1), new int[]{RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerShopHaySellPrice,-1 } }
-                    });
+                    
+                    ShopMenu shopMenu = new ShopMenu(new Dictionary<ISalable, int[]>());
+                    shopMenu.storeContext = HayMakerShopUtilities.StoreContext;
 
                     //Load the shop tetx file and select a random dialogue text from it.
                     Dictionary<string, string> shopDialogue = JsonUtilities.LoadStringDictionaryFile(Path.Combine(StringsPaths.ShopDialogue, "HayMakerShopDialogue.json"));

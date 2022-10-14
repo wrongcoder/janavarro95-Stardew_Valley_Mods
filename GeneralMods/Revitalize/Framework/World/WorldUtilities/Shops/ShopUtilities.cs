@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops.RevitalizeShops;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -70,6 +71,10 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                     else if(menu.currency==ShopMenu.currency_qiGems && menu.storeContext.Equals("QiGemShop"))
                     {
                         WalnutRoomShopUtilities.AddItemsToShop(menu);
+                    }
+                    if (menu.storeContext.Equals(HayMakerShopUtilities.StoreContext))
+                    {
+                        HayMakerShopUtilities.AddItemsToShop(menu);
                     }
                 }
             }
