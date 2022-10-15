@@ -8,7 +8,8 @@ namespace Omegasis.Revitalize.Framework.Constants.Mail
 {
     public class MailTitles
     {
-        public const string HayMakerAvailableForPurchase = "Revitalize_AnimalShop_HayMakerCanBePurchased";
+        public const string HayMakerAvailableForPurchase = "Revitalize.AnimalShop.HayMakerCanBePurchased";
+        public const string SiloRefillServiceAvailable = "Revitalize.AnimalShop.SiloRefillServiceAvailable";
 
         public const string AutomaticFarmingSystemAvailableForPurchase = "Revitalize.CarpentersShop.AutomaticFarmingSystemAndIrrigatedGardenPotCanBePurchased";
 

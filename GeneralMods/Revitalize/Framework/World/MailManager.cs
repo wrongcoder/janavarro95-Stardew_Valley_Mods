@@ -30,7 +30,8 @@ namespace Omegasis.Revitalize.Framework.World
 
         public Dictionary<string, string> mailTitles = new Dictionary<string, string>()
         {
-            { MailTitles.HayMakerAvailableForPurchase ,Path.Combine(StringsPaths.Mail, "AnimalShopHayMakerCanBePurchased.json")},
+            { MailTitles.HayMakerAvailableForPurchase ,Path.Combine(StringsPaths.Mail,"AnimalShopMail","AnimalShopHayMakerCanBePurchased.json")},
+            { MailTitles.SiloRefillServiceAvailable ,Path.Combine(StringsPaths.Mail,"AnimalShopMail" ,"SiloRefillServiceAvailable.json")},
             { MailTitles.AutomaticFarmingSystemAvailableForPurchase ,Path.Combine(StringsPaths.Mail, "AutomaticFarmingSystemCanBePurchased.json")},
             { MailTitles.ElectricFurnaceCanBePurchased ,Path.Combine(StringsPaths.Mail, "ElectricFurnaceCanBePurchased.json")},
 
@@ -45,17 +46,21 @@ namespace Omegasis.Revitalize.Framework.World
         /// </summary>
         public virtual void tryToAddMailToMailbox()
         {
-            if (!this.hasPlayerReceivedThisMail(MailTitles.HayMakerAvailableForPurchase) && (RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop() || BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop()))
+            if (!this.hasOrWillPlayerReceivedThisMail(MailTitles.HayMakerAvailableForPurchase) && (RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop() || BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop()))
             {
                 Game1.mailbox.Add(MailTitles.HayMakerAvailableForPurchase);
             }
+            if (!this.hasOrWillPlayerReceivedThisMail(MailTitles.SiloRefillServiceAvailable) && Utility.numSilos()>=1)
+            {
+                Game1.mailbox.Add(MailTitles.SiloRefillServiceAvailable);
+            }
 
-            if (!this.hasPlayerReceivedThisMail(MailTitles.AutomaticFarmingSystemAvailableForPurchase) && Game1.player.FarmingLevel >= 10)
+            if (!this.hasOrWillPlayerReceivedThisMail(MailTitles.AutomaticFarmingSystemAvailableForPurchase) && Game1.player.FarmingLevel >= 10)
             {
                 Game1.mailbox.Add(MailTitles.AutomaticFarmingSystemAvailableForPurchase);
             }
 
-            if (!this.hasPlayerReceivedThisMail(MailTitles.ElectricFurnaceCanBePurchased) && RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack)
+            if (!this.hasOrWillPlayerReceivedThisMail(MailTitles.ElectricFurnaceCanBePurchased) && RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack)
             {
                 Game1.mailbox.Add(MailTitles.ElectricFurnaceCanBePurchased);
             }
@@ -66,9 +71,9 @@ namespace Omegasis.Revitalize.Framework.World
         /// </summary>
         /// <param name="MailTitle">The title of the mail to check.</param>
         /// <returns></returns>
-        public virtual bool hasPlayerReceivedThisMail(string MailTitle)
+        public virtual bool hasOrWillPlayerReceivedThisMail(string MailTitle)
         {
-            return Game1.player.mailReceived.Contains(MailTitle);
+            return Game1.player.mailReceived.Contains(MailTitle) || Game1.player.mailbox.Contains(MailTitle) || Game1.player.mailForTomorrow.Contains(MailTitle);
         }
 
         public virtual bool canEditAsset(IAssetInfo asset)

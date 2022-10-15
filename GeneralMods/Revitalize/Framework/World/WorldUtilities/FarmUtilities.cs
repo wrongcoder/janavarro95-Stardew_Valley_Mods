@@ -14,12 +14,30 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
     {
 
         /// <summary>
+        /// Gets the capacity from the silos for how many pieces of hay can be stored on the farm.
+        /// </summary>
+        /// <returns></returns>
+        public static int GetSiloCapacity()
+        {
+            return Utility.numSilos() * 240;
+        }
+
+        /// <summary>
         /// Gets how much more hay the silos on the farm can store.
         /// </summary>
         /// <returns></returns>
         public static int GetNumberOfHayPiecesUntilFullSilos()
         {
-            return Utility.numSilos() * 240 - (int)Game1.getFarm().piecesOfHay.Value;
+            return GetSiloCapacity() - (int)Game1.getFarm().piecesOfHay.Value;
+        }
+
+        /// <summary>
+        /// Returns if the silos are at max capacity.
+        /// </summary>
+        /// <returns></returns>
+        public static bool AreSilosAtMaxCapacity()
+        {
+            return GetNumberOfHayPiecesUntilFullSilos() == 0;
         }
 
         /// <summary>

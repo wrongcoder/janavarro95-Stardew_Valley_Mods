@@ -82,20 +82,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         }
 
         /// <summary>
-        /// The collision box for this machine.
-        /// </summary>
-        /// <param name="tileLocation"></param>
-        /// <returns></returns>
-        public override Rectangle getBoundingBox(Vector2 tileLocation)
-        {
-            Rectangle rect = base.getBoundingBox(tileLocation);
-
-            if (this.isUsedForBuyingHayAtAnyTime && RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopUpAgainstAWall == true)
-                rect.Y += Game1.tileSize;
-            return rect;
-        }
-
-        /// <summary>
         /// Checks to see if this is special handling fopr the machine outside of marnies ranch.
         /// </summary>
         /// <param name="location"></param>
@@ -126,12 +112,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                     
                     ShopMenu shopMenu = new ShopMenu(new Dictionary<ISalable, int[]>());
                     shopMenu.storeContext = HayMakerShopUtilities.StoreContext;
-
-                    //Load the shop tetx file and select a random dialogue text from it.
-                    Dictionary<string, string> shopDialogue = JsonUtilities.LoadStringDictionaryFile(Path.Combine(StringsPaths.ShopDialogue, "HayMakerShopDialogue.json"));
-                    int random = Game1.random.Next(0, shopDialogue.Count);
-                    shopMenu.potraitPersonDialogue = shopDialogue.ElementAt(random).Value;
-
+                    shopMenu.potraitPersonDialogue = JsonUtilities.LoadStringFromDictionaryFile("ShopText_1", Path.Combine(StringsPaths.ShopDialogue, "HayMakerShopDialogue.json"));
                     Game1.activeClickableMenu = shopMenu;
                 }
 
@@ -227,7 +208,24 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
                     this.feedType.Value.setItemReference(neededDropInItem);
                     Item outputItem = craftingRecipe.outputs[0].item.getOne();
-                    outputItem.Stack = craftingRecipe.outputs[0].requiredAmount;
+
+                    //Allow expensive crops such as amaranth and iridium quality corn to get a small bonus, since otherwise wheat would be the best item to process.
+                    int additionalHayPieces = 0;
+                    if(dropInItem is StardewValley.Object)
+                    {
+                        long playerBonusId = -1;
+                        if (who == null)
+                        {
+                            playerBonusId = this.owner.Value;
+                        }
+                        else
+                        {
+                            playerBonusId = who.uniqueMultiplayerID.Value;
+                        }
+                        additionalHayPieces += (dropInItem as StardewValley.Object).sellToStorePrice(playerBonusId) / 100;
+                    }
+
+                    outputItem.Stack = craftingRecipe.outputs[0].requiredAmount + additionalHayPieces;
                     this.heldObject.Value = (StardewValley.Object)outputItem;
                     this.MinutesUntilReady = (int)(craftingRecipe.timeToCraft);
                     if (who != null)

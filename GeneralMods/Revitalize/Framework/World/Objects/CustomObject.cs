@@ -125,9 +125,20 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 if (this.basicItemInformation == null) return null;
 
                 //Potentially get an overriden display name for certain objects depending on if I ever implement the renaming feature.
-
-               string displayName= JsonContentLoaderUtilities.LoadItemDisplayName(this.Id, false);
-                if (!string.IsNullOrEmpty(displayName)) return displayName;
+                string displayName = "";
+                if (string.IsNullOrEmpty(this.basicItemInformation.name.Value))
+                {
+                   displayName = JsonContentLoaderUtilities.LoadItemDisplayName(this.Id, false);
+                }
+                if (!string.IsNullOrEmpty(displayName))
+                {
+                    this.basicItemInformation.name.Value = displayName;
+                    return displayName;
+                }
+                if(string.IsNullOrEmpty(this.basicItemInformation.name.Value) && string.IsNullOrEmpty(displayName))
+                {
+                    throw new JsonContentLoadingException("The given item id {0} does not have a registered value for display strings! A file can be created under the ModAssets/Strings/Objects/DisplayStrings directory with the given info.");
+                }
 
                 return this.basicItemInformation.name.Value;
             }

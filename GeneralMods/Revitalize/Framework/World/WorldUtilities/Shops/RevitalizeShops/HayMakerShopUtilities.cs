@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
+using Omegasis.Revitalize.Framework.Constants.PathConstants;
+using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using StardewValley;
@@ -23,10 +27,10 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops.RevitalizeSho
         {
             Menu.onPurchase = OnPurchaseFromShop;
 
-            ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.Hay, -1), HaySellPrice(), -1);
-            if(Game1.player.Money>= HaySellPrice())
+            ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.Hay), HaySellPrice(), int.MaxValue);
+            if(CanBuySiloRefillItem(HaySellPrice()))
             {
-                ShopUtilities.AddItemToShop(Menu,RevitalizeModCore.ModContentManager.objectManager.getItem(FarmingItems.RefillSilosFakeItem), HaySellPrice() * FarmUtilities.GetNumberOfHayPiecesUntilFullSilosLimitByPlayersMoney(HaySellPrice()), -1);
+                ShopUtilities.AddItemToShop(Menu,RevitalizeModCore.ModContentManager.objectManager.getItem(FarmingItems.RefillSilosFakeItem), GetPriceForSiloRefill(), -1);
             }
         }
 
@@ -37,7 +41,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops.RevitalizeSho
         /// <param name="who"></param>
         /// <param name="AmountPurchased"></param>
         /// <returns>A bool representing if the menu should be closed or not.</returns>
-        private static bool OnPurchaseFromShop(ISalable purchasedItem, Farmer who, int AmountPurchased)
+        public static bool OnPurchaseFromShop(ISalable purchasedItem, Farmer who, int AmountPurchased)
         {
             if (purchasedItem is IBasicItemInfoProvider)
             {
@@ -46,16 +50,51 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops.RevitalizeSho
                     int addedHay = FarmUtilities.GetNumberOfHayPiecesUntilFullSilosLimitByPlayersMoney(HaySellPrice());
                     FarmUtilities.FillSilosFromSiloReillItem(RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerShopHaySellPrice);
                     SoundUtilities.PlaySound(Enums.StardewSound.Ship);
-                    Game1.drawDialogueBox(string.Format("Added: {0} pieces of {1} to the silos on the farm.", addedHay, RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.Hay).DisplayName));
+                    string infoMessage =string.Format(JsonUtilities.LoadStringFromDictionaryFile(FarmUtilities.AreSilosAtMaxCapacity() ? "SiloFullRefill" : "SiloPartialRefill", Path.Combine(StringsPaths.ShopDialogue, "HayMakerShopDialogue.json")), addedHay, RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.Hay).DisplayName, Game1.getFarm().piecesOfHay.Value, FarmUtilities.GetSiloCapacity());
+                    Game1.addHUDMessage(new HUDMessage(infoMessage));
                     return true;
                 }
             }
             return false;
         }
 
-        private static int HaySellPrice()
+        /// <summary>
+        /// Returns the cost for selling hay.
+        /// </summary>
+        /// <returns></returns>
+        public static int HaySellPrice()
         {
             return RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerShopHaySellPrice;
+        }
+
+        /// <summary>
+        /// Gets the price of the silo refil item using the config file price amount.
+        /// </summary>
+        /// <returns></returns>
+        public static int GetPriceForSiloRefill()
+        {
+            return GetPriceForSiloRefill(HaySellPrice());
+        }
+
+
+        /// <summary>
+        /// Gets the price of the silo refil item.
+        /// </summary>
+        /// <param name="HayPrice"></param>
+        /// <returns></returns>
+        public static int GetPriceForSiloRefill(int HayPrice)
+        {
+            return HayPrice * FarmUtilities.GetNumberOfHayPiecesUntilFullSilosLimitByPlayersMoney(HaySellPrice());
+        }
+
+        /// <summary>
+        /// Can the player buy the silo refill item?
+        /// </summary>
+        /// <param name="HayPrice"></param>
+        /// <returns></returns>
+        public static bool CanBuySiloRefillItem(int HayPrice)
+        {
+            return Utility.numSilos() >= 1 && FarmUtilities.GetNumberOfHayPiecesUntilFullSilos() > 0 && Game1.player.Money >= HayPrice;
         }
     }
 }

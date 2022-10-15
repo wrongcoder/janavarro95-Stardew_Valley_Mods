@@ -251,7 +251,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             this.addItem(MachineIds.WindmillV1, windMillV1_0_0);
 
-            this.addItem(MachineIds.HayMaker, new HayMaker(new BasicItemInformation("", MachineIds.HayMaker, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
+            this.addItem(FarmingObjects.HayMaker, new HayMaker(new BasicItemInformation("", FarmingObjects.HayMaker, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
             {
                 {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
                     {HayMaker.HayAnimation,new Animation(new List<AnimationFrame>(){
@@ -273,6 +273,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     ,true)
                     }
             }, "Default", "Default"), Color.White, false, /* Bounding box is the number of pixels taken up */ new Vector2(1, 1),/*Shift by whitespace*/ new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager())));
+
+            this.addItem(FarmingObjects.HayMaker_FeedShop, new HayMaker(new BasicItemInformation("", FarmingObjects.HayMaker_FeedShop, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new Animation(16, 0, 16, 32)), Color.White, false, /* Bounding box is the number of pixels taken up */ new Vector2(1, 1),/*Shift by whitespace*/ new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager()),true));
+
 
 
             this.addItem(FarmingObjects.IrrigatedGardenPot, new IrrigatedGardenPot(new BasicItemInformation("", FarmingObjects.IrrigatedGardenPot, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, true, true, TextureManagers.Objects_Farming.createAnimationManager("IrrigatedGardenPot", new SerializableDictionary<string, Animation>()

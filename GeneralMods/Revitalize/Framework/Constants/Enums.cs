@@ -25,6 +25,25 @@ namespace Omegasis.Revitalize.Framework.Constants
         }
 
         /// <summary>
+        /// Fragility enum for keeping track of how objects can be removed or not.
+        /// </summary>
+        public enum Fragility
+        {
+            /// <summary>
+            /// Normal removability permissions for objects.
+            /// </summary>
+            Removable= StardewValley.Object.fragility_Removable,
+            /// <summary>
+            /// Object is considered delicate and can be destroyed with things like swords.
+            /// </summary>
+            Delicate = StardewValley.Object.fragility_Delicate,
+            /// <summary>
+            /// Objects can't be removed or destroyed through normal means.
+            /// </summary>
+            Indestructable = StardewValley.Object.fragility_Indestructable,
+        }
+
+        /// <summary>
         /// The types of interaction for energy that exists.
         /// </summary>
         public enum EnergyInteractionType

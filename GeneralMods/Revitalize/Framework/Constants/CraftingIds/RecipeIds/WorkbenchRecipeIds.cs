@@ -21,5 +21,6 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds
         public static string AutoPlanterIrrigatedWateringPotAttachmentRecipeId = "Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Items.Farming.AutoPlanterGardenPotAttachment";
         public static string AutoHarvesterIrrigatedWateringPotAttachmentRecipeId = "Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Items.Farming.AutoHarvesterGardenPotAttachment";
         public static string AutomatedFarmingSystemRecipeId = "Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem";
+        public static string HayMakerRecipeId = "Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.HayMaker";
     }
 }

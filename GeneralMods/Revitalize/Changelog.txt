@@ -4,6 +4,13 @@ Key:
 - Removed Content/Feature.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 10-13-2022 xx.xx P.M~~~~~~~~~~~~~~
++Added silo refill item to Hay Maker Shop.
++Added silo refill item to Marnie's shop.
+-Removed selling the HayMaker from Marnie's shop
++Added the Hay Feed Shop item to Marnie's shop when a teir two barn or coop is built.
+
+
+~~~~~~~~~~~~0.0.1 Revitalize 10-13-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~ Hay maker now uses the common recipe format used for other machines for it's inputs.
 ~ Fixed an issue where the hay maker would process items for forever.
 ~ Fixed an issues where hay makers would take too many items when inputing for processing.
