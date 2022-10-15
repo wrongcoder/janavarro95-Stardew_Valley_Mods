@@ -13,11 +13,6 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
     /// </summary>
     public class HayMakerShopConfig
     {
-
-        /// <summary>
-        /// Is the hay maker for buying hay displayed outside of marnies ranch? If false, then the hay maker shop will not appear in the game.
-        /// </summary>
-        public bool IsHayMakerShopSetUpOutsideOfMarniesRanch = true;
         /// <summary>
         /// The tile location where the permanent hay maker shop should be set up in the forest. Used on the off chance another mod maker changes the Forest map.
         /// </summary>
@@ -28,11 +23,6 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         /// The amount of gold it costs to buy a single piece of hay.
         /// </summary>
         public int HayMakerShopHaySellPrice = 60;
-
-        /// <summary>
-        /// This value should be true if the top of the hay maker is up against a wall, such as when it is in teh default position outside of marnie's silo. This bool effectively shortens the bounding box on it to ensure proper collision handling. Disable this to reenable the collision handling.
-        /// </summary>
-        public bool IsHayMakerShopUpAgainstAWall = true;
 
         public HayMakerShopConfig()
         {

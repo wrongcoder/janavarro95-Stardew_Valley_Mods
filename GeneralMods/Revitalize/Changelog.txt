@@ -3,12 +3,15 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
-~~~~~~~~~~~~0.0.1 Revitalize 10-13-2022 xx.xx P.M~~~~~~~~~~~~~~
+~~~~~~~~~~~~0.0.1 Revitalize 10-14-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added silo refill item to Hay Maker Shop.
 +Added silo refill item to Marnie's shop.
+  +Also added in mail to let the player know when this is available.
 -Removed selling the HayMaker from Marnie's shop
 +Added the Hay Feed Shop item to Marnie's shop when a teir two barn or coop is built.
-
+~Added some dialogue letting the player know how much hay is in their silos when the silos are filled.
++Added in Hay Maker Blueprints so that Hay Makers can be crafted.
++Hay Makers now give a bonus for hay depending on how much money would have been made if the input item was sold.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 10-13-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~ Hay maker now uses the common recipe format used for other machines for it's inputs.
