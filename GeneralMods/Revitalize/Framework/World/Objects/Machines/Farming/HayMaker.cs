@@ -46,8 +46,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         public HayMaker(BasicItemInformation info, bool isUsedForBuyingHayAtAnyTime = false) : base(info)
         {
             this.isUsedForBuyingHayAtAnyTime.Value = isUsedForBuyingHayAtAnyTime;
-            if (this.isUsedForBuyingHayAtAnyTime.Value == true && RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.IsHayMakerShopUpAgainstAWall)
-                this.basicItemInformation.boundingBoxTileDimensions.Value = new Vector2(1, 1);
             if (this.isUsedForBuyingHayAtAnyTime.Value == true)
                 this.AnimationManager.playAnimation(HayAnimation);
 

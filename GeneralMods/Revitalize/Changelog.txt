@@ -3,6 +3,11 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 10-17-2022 xx.xx P.M~~~~~~~~~~~~~~
+~ Slightly reduced the default chance of resource bushes being sold by the Dwarf.
++ Added the ability for resource bush chances being sold by the Dwarf to a config file.
+~ Changed it so that the Player must have obtained the Skull Cavern Key before any resource bush will be sold by the Dwarf.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 10-14-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added silo refill item to Hay Maker Shop.
 +Added silo refill item to Marnie's shop.
