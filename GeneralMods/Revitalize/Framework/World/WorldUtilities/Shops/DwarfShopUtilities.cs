@@ -81,45 +81,37 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             if (Game1.player.MiningLevel >= 10 && Game1.player.hasSkullKey)
             {
 
-                double coalChance = (double)Game1.random.Next(101)/100;
-                if (coalChance <=shopConfig.CoalResourceBushSellChance)
+                double coalChance = (double)Game1.random.Next(101) / 100;
+                if (coalChance <= shopConfig.CoalResourceBushSellChance)
                 {
                     CoalBushesForSaleToday = 1;
                 }
 
-                double copperChance = (double)Game1.random.Next(101)/100;
-                if (copperChance<=shopConfig.CoalResourceBushSellChance)
+                double copperChance = (double)Game1.random.Next(101) / 100;
+                if (copperChance <= shopConfig.CoalResourceBushSellChance)
                 {
                     CopperBushesForSaleToday = 1;
                 }
 
-                if (Game1.player.deepestMineLevel >= 40)
+                double ironChance = (double)Game1.random.Next(101) / 100;
+                if (ironChance <= shopConfig.IronResourceBushSellChance)
                 {
-
-                    double ironChance = (double)Game1.random.Next(101) / 100;
-                    if (ironChance <=shopConfig.IronResourceBushSellChance)
-                    {
-                        IronBushesForSaleToday = 1;
-                    }
+                    IronBushesForSaleToday = 1;
                 }
 
-                if (Game1.player.deepestMineLevel >= 80)
+
+                double goldChance = (double)Game1.random.Next(101) / 100;
+                if (goldChance <= shopConfig.GoldResourceBushSellChance)
                 {
-                    double goldChance = (double)Game1.random.Next(101) / 100;
-                    if (goldChance <=shopConfig.GoldResourceBushSellChance)
-                    {
-                        GoldBushesForSaleToday = 1;
-                    }
+                    GoldBushesForSaleToday = 1;
                 }
 
-                if (Game1.player.hasSkullKey)
+                double iridiumChance = (double)Game1.random.Next(101) / 100;
+                if (iridiumChance <= shopConfig.IrridiumResourceBushSellChance)
                 {
-                    double iridiumChance = (double)Game1.random.Next(101) / 100;
-                    if (iridiumChance <=shopConfig.IrridiumResourceBushSellChance)
-                    {
-                        IridiumBushesForSaleToday = 1;
-                    }
+                    IridiumBushesForSaleToday = 1;
                 }
+
 
                 //Only sell the radioactive bush if the player has a chance of getting the 'Danger in the Deep' quest.
                 if (PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100)
@@ -147,7 +139,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 
             if (NormalGeodesRemainingToday > 0)
             {
-               ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.Geode, NormalGeodesRemainingToday), shopConfig.NormalGeodePrice, NormalGeodesRemainingToday);
+                ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.Geode, NormalGeodesRemainingToday), shopConfig.NormalGeodePrice, NormalGeodesRemainingToday);
             }
             if (FrozenGeodesRemainingToday > 0)
             {

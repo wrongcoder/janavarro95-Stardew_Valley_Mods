@@ -27,15 +27,21 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         public DwarfShopConfig dwarfShopConfig;
 
         /// <summary>
+        /// Config file for things sold in robin's shop.
+        /// </summary>
+        public RobinsShopConfig robinsShopConfig;
+
+        /// <summary>
+        /// The config file for Qi's Walnut Room.
+        /// </summary>
+        public WalnutRoomShopConfig walnutRoomShopConfig;
+
+        /// <summary>
         /// Config file for the custom hay maker shop outside of Marnie's ranch.
         /// </summary>
         public HayMakerShopConfig hayMakerShopConfig;
 
 
-        /// <summary>
-        /// Config file for things sold in robin's shop.
-        /// </summary>
-        public RobinsShopConfig robinsShopConfig;
 
         public ShopsConfigManager()
         {
@@ -44,6 +50,8 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
             this.dwarfShopConfig = ConfigManager.initializeConfig<DwarfShopConfig>("Configs", "Shops", "DwarfShopConfig.json");
             this.hayMakerShopConfig = ConfigManager.initializeConfig<HayMakerShopConfig>("Configs", "Shops", "HayMakerShopConfig.json");
             this.robinsShopConfig = ConfigManager.initializeConfig<RobinsShopConfig>("Configs", "Shops", "RobinsShopConfig.json");
+
+            this.walnutRoomShopConfig = ConfigManager.initializeConfig<WalnutRoomShopConfig>("Configs", "Shops", "WalnutRoomShopConfig.json");
         }
 
 
