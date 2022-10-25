@@ -3,6 +3,9 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 10-24-2022 xx.xx P.M~~~~~~~~~~~~~~
++Started work on the Mining Drill.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 10-18-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Cleaned up some code in DwarfShopUtilities to make it more clear on how resource bushes are sold.
 +Added Coal, Copper, Iron, Gold, Iridium, and Radioactive resource bushes to Qi's Walnut room.

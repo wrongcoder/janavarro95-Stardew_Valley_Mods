@@ -34,16 +34,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         public const string MAGICAL_WORKING_ANIMATION_KEY = "Magical_Working";
         public const string MAGICAL_IDLE_ANIMATION_KEY = "Magical_Idle";
 
-        public enum FurnaceType
-        {
-            Electric,
-            Nuclear,
-            Magical
-        }
-
         public readonly NetInt chargesRemaining = new NetInt();
         public readonly NetRef<ItemReference> smeltingItem = new NetRef<ItemReference>(new ItemReference());
-        public readonly NetEnum<FurnaceType> furnaceType = new NetEnum<FurnaceType>(FurnaceType.Electric);
+        public readonly NetEnum<MachineTier> furnaceType = new NetEnum<MachineTier>(MachineTier.Electric);
 
         public ElectricFurnace()
         {
@@ -51,13 +44,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         }
 
 
-        public ElectricFurnace(BasicItemInformation info, FurnaceType furnaceType) : base(info)
+        public ElectricFurnace(BasicItemInformation info, MachineTier furnaceType) : base(info)
         {
             this.createStatusBubble();
             this.furnaceType.Value = furnaceType;
         }
 
-        public ElectricFurnace(BasicItemInformation info, Vector2 TileLocation, FurnaceType furnaceType) : base(info, TileLocation)
+        public ElectricFurnace(BasicItemInformation info, Vector2 TileLocation, MachineTier furnaceType) : base(info, TileLocation)
         {
             this.createStatusBubble();
             this.furnaceType.Value = furnaceType;
@@ -139,15 +132,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                     }
 
                     float multiplier = 1f;
-                    if (this.furnaceType.Value == FurnaceType.Electric)
+                    if (this.furnaceType.Value == MachineTier.Electric)
                     {
                         multiplier = .75f;
                     }
-                    if (this.furnaceType.Value == FurnaceType.Nuclear)
+                    if (this.furnaceType.Value == MachineTier.Nuclear)
                     {
                         multiplier = .5f;
                     }
-                    if (this.furnaceType.Value == FurnaceType.Magical)
+                    if (this.furnaceType.Value == MachineTier.Magical)
                     {
                         multiplier = .25f;
                     }
@@ -216,7 +209,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         /// </summary>
         protected virtual void updateAnimation()
         {
-            if (this.furnaceType.Value == FurnaceType.Electric)
+            if (this.furnaceType.Value == MachineTier.Electric)
             {
                 if (this.MinutesUntilReady > 0)
                 {
@@ -230,7 +223,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                 }
 
             }
-            if (this.furnaceType.Value == FurnaceType.Nuclear)
+            if (this.furnaceType.Value == MachineTier.Nuclear)
             {
                 if (this.MinutesUntilReady > 0)
                 {
@@ -243,7 +236,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                     return;
                 }
             }
-            if (this.furnaceType.Value == FurnaceType.Magical)
+            if (this.furnaceType.Value == MachineTier.Magical)
             {
                 if (this.MinutesUntilReady > 0)
                 {
@@ -266,15 +259,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         protected virtual bool consumeFuelItemFromFarmersInventory(Farmer who)
         {
             if (who == null) return true; //Used for automate compatibility
-            if (this.furnaceType.Value == FurnaceType.Magical)
+            if (this.furnaceType.Value == MachineTier.Magical)
             {
                 return true;
             }
-            if (this.furnaceType.Value == FurnaceType.Electric)
+            if (this.furnaceType.Value == MachineTier.Electric)
             {
                 return PlayerUtilities.ReduceInventoryItemIfEnoughFound(who, Enums.SDVObject.BatteryPack, 1);
             }
-            if (this.furnaceType.Value == FurnaceType.Nuclear)
+            if (this.furnaceType.Value == MachineTier.Nuclear)
             {
                 return PlayerUtilities.ReduceInventoryItemIfEnoughFound(who, MiscItemIds.RadioactiveFuel, 1);
             }
@@ -288,7 +281,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         /// </summary>
         protected virtual void consumeFuelCharge()
         {
-            if (this.furnaceType.Value == FurnaceType.Magical) return;
+            if (this.furnaceType.Value == MachineTier.Magical) return;
             this.chargesRemaining.Value--;
             if (this.chargesRemaining.Value <= 0) this.chargesRemaining.Value = 0;
         }
@@ -298,16 +291,16 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         /// </summary>
         public virtual void increaseFuelCharges()
         {
-            if (this.furnaceType.Value == FurnaceType.Electric)
+            if (this.furnaceType.Value == MachineTier.Electric)
             {
                 this.chargesRemaining.Value = 5;
             }
-            if (this.furnaceType.Value == FurnaceType.Nuclear)
+            if (this.furnaceType.Value == MachineTier.Nuclear)
             {
                 this.chargesRemaining.Value = 25;
             }
 
-            if (this.furnaceType.Value == FurnaceType.Magical)
+            if (this.furnaceType.Value == MachineTier.Magical)
             {
                 this.chargesRemaining.Value = 999;
             }
@@ -318,12 +311,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         /// </summary>
         protected virtual void showRedMessageForMissingFuel()
         {
-            if (this.furnaceType.Value == FurnaceType.Electric)
+            if (this.furnaceType.Value == MachineTier.Electric)
             {
                 Game1.showRedMessage(JsonContentLoaderUtilities.LoadErrorString(this.getErrorStringFile(), "NeedBatteryPack"));
                 return;
             }
-            if (this.furnaceType.Value == FurnaceType.Nuclear)
+            if (this.furnaceType.Value == MachineTier.Nuclear)
             {
                 Game1.showRedMessage(JsonContentLoaderUtilities.LoadErrorString(this.getErrorStringFile(), "NeedNuclearFuel"));
                 return;

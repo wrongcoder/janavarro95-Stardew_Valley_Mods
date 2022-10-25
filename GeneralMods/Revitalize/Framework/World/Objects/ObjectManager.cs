@@ -321,7 +321,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
                 }, ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY, ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY
 
-                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), ElectricFurnace.FurnaceType.Electric));
+                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), Machine.MachineTier.Electric));
 
 
             this.addItem(MachineIds.NuclearFurnace, new ElectricFurnace(new BasicItemInformation("", MachineIds.ElectricFurnace, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
@@ -332,7 +332,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
                 }, ElectricFurnace.NUCLEAR_IDLE_ANIMATION_KEY, ElectricFurnace.NUCLEAR_IDLE_ANIMATION_KEY
 
-                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), ElectricFurnace.FurnaceType.Nuclear));
+                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), Machine.MachineTier.Nuclear));
 
 
             this.addItem(MachineIds.MagicalFurnace, new ElectricFurnace(new BasicItemInformation("", MachineIds.ElectricFurnace, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 50000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
@@ -343,7 +343,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
                 }, ElectricFurnace.MAGICAL_IDLE_ANIMATION_KEY, ElectricFurnace.MAGICAL_IDLE_ANIMATION_KEY
 
-                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), ElectricFurnace.FurnaceType.Magical));
+                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), Machine.MachineTier.Magical));
         }
 
         /// <summary>

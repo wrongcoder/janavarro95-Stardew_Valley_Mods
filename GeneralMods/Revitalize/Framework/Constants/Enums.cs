@@ -1733,6 +1733,8 @@ namespace Omegasis.Revitalize.Framework.Constants
 
             IslandFarmCave,
 
+            VolcanoDungeon,
+
             Caldera,
 
             LeoTreeHouse,

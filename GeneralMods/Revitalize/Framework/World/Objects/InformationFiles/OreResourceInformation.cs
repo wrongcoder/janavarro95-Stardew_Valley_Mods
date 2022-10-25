@@ -408,7 +408,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
         /// <returns></returns>
         public bool canSpawnOnCurrentMineLevel()
         {
-            int level = GameLocationUtilities.CurrentMineLevel();
+            int level = GameLocationUtilities.GetPlayerCurrentMineLevel();
             if (level == -1) return false;
             bool compareFun = this.canSpawnOnThisFloor(level);
             return false;

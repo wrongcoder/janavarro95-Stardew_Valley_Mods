@@ -283,9 +283,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
         /// <param name="playerWarped"></param>
         public void OnPlayerLocationChanged(object o, EventArgs playerWarped)
         {
+            Game1.showRedMessage(Game1.player.currentLocation.Name);
+
+            /*
             this.oreResourceSpawner.spawnOreInMine();
-            if (GameLocationUtilities.IsPlayerInMine() == false && GameLocationUtilities.IsPlayerInSkullCave() == false && GameLocationUtilities.IsPlayerInMineEnterance() == false)
+            if (GameLocationUtilities.IsPlayerInMine() == false && GameLocationUtilities.IsPlayerInSkullCave() == false && GameLocationUtilities.IsPlayerInTheEnteranceToTheMines() == false)
                 this.oreResourceSpawner.visitedFloors.Clear();
+
+            */
         }
 
         /// <summary>

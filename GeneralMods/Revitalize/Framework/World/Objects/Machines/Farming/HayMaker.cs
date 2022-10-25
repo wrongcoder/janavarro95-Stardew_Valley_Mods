@@ -36,7 +36,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         public const string FiberAnimation = "Fiber";
         public const string WheatAnimation = "Wheat";
 
-        public NetBool isUsedForBuyingHayAtAnyTime = new NetBool();
+        public readonly NetBool isUsedForBuyingHayAtAnyTime = new NetBool();
 
         public HayMaker()
         {

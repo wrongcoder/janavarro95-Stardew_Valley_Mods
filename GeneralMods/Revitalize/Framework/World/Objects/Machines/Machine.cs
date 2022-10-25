@@ -21,6 +21,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
     [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Machine")]
     public class Machine : CustomObject, IInventoryManagerProvider
     {
+        public enum MachineTier
+        {
+            Electric,
+            Nuclear,
+            Magical
+        }
 
         public const string MachineStatusBubble_DefaultAnimationKey = "Default";
         public const string MachineStatusBubble_BlankBubbleAnimationKey = "Blank";

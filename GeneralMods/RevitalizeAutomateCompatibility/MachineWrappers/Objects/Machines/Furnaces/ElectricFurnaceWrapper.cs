@@ -11,6 +11,7 @@ using Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces;
 using Omegasis.RevitalizeAutomateCompatibility.Recipes;
 using Pathoschild.Stardew.Automate;
 using StardewValley;
+using static Omegasis.Revitalize.Framework.World.Objects.Machines.Machine;
 
 namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers.Objects.Machines.Furnaces
 {
@@ -81,7 +82,7 @@ namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers.Objects.Machi
         /// <returns></returns>
         public virtual bool TryGetFuelItem(IStorage input, out IConsumable? consumable)
         {
-            if (this.customObject.furnaceType.Value == ElectricFurnace.FurnaceType.Magical)
+            if (this.customObject.furnaceType.Value == MachineTier.Magical)
             {
                 consumable = null;
                 return true;
@@ -93,13 +94,13 @@ namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers.Objects.Machi
                 return true;
             }
 
-            if (this.customObject.furnaceType.Value == ElectricFurnace.FurnaceType.Electric)
+            if (this.customObject.furnaceType.Value == MachineTier.Electric)
             {
                 bool itemFound = input.TryGetVanillaIngredient(Enums.SDVObject.BatteryPack, 1, out IConsumable? batteryPack);
                 consumable = batteryPack;
                 return itemFound;
             }
-            if (this.customObject.furnaceType.Value == ElectricFurnace.FurnaceType.Nuclear)
+            if (this.customObject.furnaceType.Value == MachineTier.Nuclear)
             {
                 bool itemFound = input.TryGetRevitalizeItemIngredient(MiscItemIds.RadioactiveFuel, 1, out IConsumable? fuelCell);
                 consumable = fuelCell;
