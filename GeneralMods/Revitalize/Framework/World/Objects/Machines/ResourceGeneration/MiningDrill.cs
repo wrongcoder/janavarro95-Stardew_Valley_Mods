@@ -98,7 +98,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
 
             if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.BatteryPack && this.miningDrillTier.Value == MachineTier.Electric)
             {
-                this.chargesRemaining.Value = 3;
+                this.increaseFuelCharges();
                 this.chargesRemaining.Value--;
                 this.consumeFuelItemFromFarmersInventory(who);
                 this.generateMiningOutput();
@@ -106,7 +106,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             }
             if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.BatteryPack && this.miningDrillTier.Value == MachineTier.Electric)
             {
-                this.chargesRemaining.Value = 14;
+                this.increaseFuelCharges();
                 this.chargesRemaining.Value--;
                 this.consumeFuelItemFromFarmersInventory(who);
                 this.generateMiningOutput();
@@ -141,6 +141,26 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             return true;
             //Magical does not consume fuel.
 
+        }
+
+        /// <summary>
+        /// Increases the fuel type for the furnace.
+        /// </summary>
+        public virtual void increaseFuelCharges()
+        {
+            if (this.miningDrillTier.Value == MachineTier.Electric)
+            {
+                this.chargesRemaining.Value = 3;
+            }
+            if (this.miningDrillTier.Value == MachineTier.Nuclear)
+            {
+                this.chargesRemaining.Value = 14;
+            }
+
+            if (this.miningDrillTier.Value == MachineTier.Magical)
+            {
+                this.chargesRemaining.Value = 999;
+            }
         }
 
 
@@ -305,7 +325,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             }
         }
 
-        public virtual Item getItemToMine(bool ClearValue = false)
+        public virtual Item getMachineOutputItem(bool ClearValue = false)
         {
             Item item = this.itemToMine.Value;
             if (ClearValue)
@@ -317,7 +337,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
 
         public virtual bool isReadyForHarvest()
         {
-            return this.getItemToMine() != null;
+            return this.getMachineOutputItem() != null;
         }
 
         public override Item getOne()
