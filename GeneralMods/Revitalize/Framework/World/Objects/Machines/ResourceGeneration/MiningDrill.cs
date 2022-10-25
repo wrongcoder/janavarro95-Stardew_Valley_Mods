@@ -98,7 +98,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
 
             if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.BatteryPack && this.miningDrillTier.Value == MachineTier.Electric)
             {
-                this.chargesRemaining.Value = 5;
+                this.chargesRemaining.Value = 3;
                 this.chargesRemaining.Value--;
                 this.consumeFuelItemFromFarmersInventory(who);
                 this.generateMiningOutput();
@@ -106,7 +106,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             }
             if (dropInItem.ParentSheetIndex == (int)Enums.SDVObject.BatteryPack && this.miningDrillTier.Value == MachineTier.Electric)
             {
-                this.chargesRemaining.Value = 25;
+                this.chargesRemaining.Value = 14;
                 this.chargesRemaining.Value--;
                 this.consumeFuelItemFromFarmersInventory(who);
                 this.generateMiningOutput();
