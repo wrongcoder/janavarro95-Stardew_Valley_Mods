@@ -12,6 +12,7 @@ using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
+using Omegasis.Revitalize.Framework.World.WorldUtilities;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 {
@@ -65,7 +66,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
             if (this.daysRemainingToProduceBattery <= 0)
             {
                 this.daysRemainingToProduceBattery.Value = this.maxDaysToProduceBattery;
-                this.heldObject.Value = ObjectUtilities.getStardewObjectFromEnum(Enums.SDVObject.BatteryPack, 1);
+                this.heldObject.Value = (StardewValley.Object)RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.BatteryPack, 1);
             }
         }
     }

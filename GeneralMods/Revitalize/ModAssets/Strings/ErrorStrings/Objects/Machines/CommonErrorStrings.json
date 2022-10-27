@@ -1,4 +1,5 @@
 {
+	"NeedCoal":"Needs coal to operate!",
 	"NeedBatteryPack":"Needs a battery pack to operate!",
 	"NeedNuclearFuel":"Needs nuclear fuel to operate!",
 	"MagicalFurnaceFuelError":"Magical furnace failure! Please contact Omegasis to address this issue!",

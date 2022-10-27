@@ -25,6 +25,72 @@ namespace Omegasis.Revitalize.Framework.Constants
         }
 
         /// <summary>
+        /// The type of footstep that the player should make when walking about.
+        /// </summary>
+        public enum FootStepType
+        {
+            /// <summary>
+            /// Used for dirt and beaches.
+            /// </summary>
+            sandyStep,
+            /// <summary>
+            /// Used for walking on hard stone.
+            /// </summary>
+            stoneStep,
+            /// <summary>
+            /// Used when walking on the snow in the winter time.
+            /// </summary>
+            snowyStep,
+            /// <summary>
+            /// Used for grass.
+            /// </summary>
+            grassyStep,
+            /// <summary>
+            /// Used when walking on wooden floors.
+            /// </summary>
+            woodyStep,
+            /// <summary>
+            /// Default step, used indoors too.
+            /// </summary>
+            thudStep
+        }
+
+        /// <summary>
+        /// The type of footstep that the player should make when walking about.
+        /// </summary>
+        public enum FloorType
+        {
+            /// <summary>
+            /// No floor type could be set.
+            /// </summary>
+            NULL,
+            /// <summary>
+            /// Used for dirt and beaches. Equivalent to <see cref="FootStepType.sandyStep"/>
+            /// </summary>
+            SandOrDirt,
+            /// <summary>
+            /// Used for walking on hard stone. Equivalent to <see cref="FootStepType.snowyStep"/>
+            /// </summary>
+            Stone,
+            /// <summary>
+            /// Used for snow terrain. Equivalent to <see cref="FootStepType.snowyStep"/>
+            /// </summary>
+            Snow,
+            /// <summary>
+            /// Used for grass. Equivalent to <see cref="FootStepType.grassyStep"/>
+            /// </summary>
+            Grass,
+            /// <summary>
+            /// Used for wooden floors. Equivalent to <see cref="FootStepType.woodyStep"/>
+            /// </summary>
+            Wood,
+            /// <summary>
+            /// Default, Equivalent to <see cref="FootStepType.thudStep"/>
+            /// </summary>
+            Default
+        }
+
+        /// <summary>
         /// Fragility enum for keeping track of how objects can be removed or not.
         /// </summary>
         public enum Fragility

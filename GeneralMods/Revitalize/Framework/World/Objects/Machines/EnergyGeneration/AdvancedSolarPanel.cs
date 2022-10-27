@@ -11,6 +11,7 @@ using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
+using Omegasis.Revitalize.Framework.World.WorldUtilities;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
@@ -52,7 +53,7 @@ namespace Omegasis.Revitalize.Framework.Player
                         continue;
                     }
                     //Check to see if the items can stack. If they can simply add them together and then continue on.
-                    if (Who.items[i]!=null && Who.items[i].canStackWith(I))
+                    if (Who.items[i] != null && Who.items[i].canStackWith(I))
                     {
                         Who.items[i].Stack += I.Stack;
                         return true;
@@ -79,9 +80,9 @@ namespace Omegasis.Revitalize.Framework.Player
         {
             return InventoryContainsItem(Who, (int)obj);
         }
-        public static bool InventoryContainsEnoughOfAnItem(this Farmer Who, Enums.SDVObject obj, int MinStackSize=1)
+        public static bool InventoryContainsEnoughOfAnItem(this Farmer Who, Enums.SDVObject obj, int MinStackSize = 1)
         {
-            return InventoryContainsEnoughOfAnItem(Who, (int)obj,MinStackSize);
+            return InventoryContainsEnoughOfAnItem(Who, (int)obj, MinStackSize);
         }
 
         public static bool ReduceInventoryItemIfEnoughFound(this Farmer Who, Enums.SDVObject obj, int MinStackSize)
@@ -109,12 +110,12 @@ namespace Omegasis.Revitalize.Framework.Player
             return false;
         }
 
-        public static bool InventoryContainsItem(this Farmer Who,int ParentSheetIndex)
+        public static bool InventoryContainsItem(this Farmer Who, int ParentSheetIndex)
         {
             return InventoryContainsEnoughOfAnItem(Who, ParentSheetIndex);
         }
 
-        public static bool ReduceInventoryItemStackSize(this Farmer Who, Enums.SDVObject ParentSheetIndex, int StackSize=1)
+        public static bool ReduceInventoryItemStackSize(this Farmer Who, Enums.SDVObject ParentSheetIndex, int StackSize = 1)
         {
             return ReduceInventoryItemStackSize(Who, (int)ParentSheetIndex, StackSize);
         }
@@ -126,10 +127,17 @@ namespace Omegasis.Revitalize.Framework.Player
         /// <param name="ParentSheetIndex"></param>
         /// <param name="StackSizeToReduce"></param>
         /// <returns></returns>
-        public static bool ReduceInventoryItemStackSize(this Farmer Who, int ParentSheetIndex, int StackSizeToReduce=1)
+        public static bool ReduceInventoryItemStackSize(this Farmer Who, int ParentSheetIndex, int StackSizeToReduce = 1)
         {
             if (Who != null)
             {
+
+                if (Who.ActiveObject.ParentSheetIndex == ParentSheetIndex)
+                {
+                    Who.ActiveObject.Stack -= StackSizeToReduce;
+                    if (Who.ActiveObject.Stack <= 0) Who.ActiveObject = null;
+                    return true;
+                }
                 for (int i = 0; i < Who.MaxItems; i++)
                 {
 
@@ -162,9 +170,25 @@ namespace Omegasis.Revitalize.Framework.Player
         {
             if (Who != null)
             {
+                if (Who.ActiveObject != null)
+                {
+                    Item item = Who.CurrentItem;
+
+                    if (item is IBasicItemInfoProvider)
+                    {
+                        IBasicItemInfoProvider infoProvider = (IBasicItemInfoProvider)item;
+                        //Check to see if the items can stack. If they can simply add them together and then continue on.
+                        if (infoProvider.Id.Equals(BasicItemInfoId))
+                        {
+                            item.Stack -= StackSizeToReduce;
+                            if (Who.CurrentItem.Stack <= 0) Who.items[Who.getIndexOfInventoryItem(Who.CurrentItem)] = null;
+                            return true;
+                        }
+                    }
+                }
+
                 for (int i = 0; i < Who.MaxItems; i++)
                 {
-
                     //Find the first empty index in the player's inventory.
                     if (Who.items[i] == null)
                     {
@@ -190,7 +214,7 @@ namespace Omegasis.Revitalize.Framework.Player
         }
 
         /// <summary>
-        /// Reduces a <see cref="IBasicItemInfoProvider"/>'s stack size by a certain amount.
+        /// Reduces a <see cref="Item"/>'s stack size by a certain amount.
         /// </summary>
         /// <param name="Who"></param>
         /// <param name="BasicItemInfoId"></param>
@@ -210,7 +234,7 @@ namespace Omegasis.Revitalize.Framework.Player
                         continue;
                     }
                     Item item = Who.items[i];
-                    if (item==itemToReduce)
+                    if (item == itemToReduce)
                     {
                         Who.items[i].Stack -= StackSizeToReduce;
 
@@ -229,7 +253,7 @@ namespace Omegasis.Revitalize.Framework.Player
         /// <param name="ParentSheetIndex"></param>
         /// <param name="MinStackSize"></param>
         /// <returns></returns>
-        public static bool InventoryContainsEnoughOfAnItem(this Farmer Who, int ParentSheetIndex, int MinStackSize=1)
+        public static bool InventoryContainsEnoughOfAnItem(this Farmer Who, int ParentSheetIndex, int MinStackSize = 1)
         {
             if (Who != null)
             {
@@ -242,7 +266,7 @@ namespace Omegasis.Revitalize.Framework.Player
                         continue;
                     }
                     //Check to see if the items can stack. If they can simply add them together and then continue on.
-                    if (Who.items[i].ParentSheetIndex == ParentSheetIndex && Who.items[i].Stack>=MinStackSize)
+                    if (Who.items[i].ParentSheetIndex == ParentSheetIndex && Who.items[i].Stack >= MinStackSize)
                     {
                         return true;
                     }
@@ -251,7 +275,7 @@ namespace Omegasis.Revitalize.Framework.Player
             return false;
         }
 
-        public static bool InventoryContainsTool<T>(this Farmer Who) where T:StardewValley.Tool
+        public static bool InventoryContainsTool<T>(this Farmer Who) where T : StardewValley.Tool
         {
             return GetToolsFromInventory<T>(Who).Count > 0;
         }
@@ -357,7 +381,7 @@ namespace Omegasis.Revitalize.Framework.Player
 
         public static void CheckForInventoryItem(IEnumerable<Item> items)
         {
-            if(RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack == true)
+            if (RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack == true)
             {
                 return;
             }
@@ -392,6 +416,41 @@ namespace Omegasis.Revitalize.Framework.Player
         public static bool KnowsCraftingRecipe(string CraftingBookName, string CraftingRecipeName)
         {
             return RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingBookName, CraftingRecipeName);
+        }
+
+        /// <summary>
+        /// Gets the type of footstep the player is making.
+        /// </summary>
+        /// <returns></returns>
+        public static Enums.FootStepType GetFootStepType()
+        {
+
+            if (Game1.currentLocation.IsOutdoors || Game1.currentLocation.Name.ToLower().Contains("mine") || Game1.currentLocation.Name.ToLower().Contains("cave") || Game1.currentLocation.IsGreenhouse)
+            {
+                Vector2 tileLocationOfPlayer = Game1.player.getTileLocation();
+                string stepType = Game1.currentLocation.doesTileHaveProperty((int)tileLocationOfPlayer.X, (int)tileLocationOfPlayer.Y, "Type", "Buildings");
+                if (stepType == null || stepType.Length < 1)
+                {
+                    stepType = Game1.currentLocation.doesTileHaveProperty((int)tileLocationOfPlayer.X, (int)tileLocationOfPlayer.Y, "Type", "Back");
+                }
+                switch (stepType)
+                {
+                    case "Dirt":
+                        return Enums.FootStepType.sandyStep;
+                    case "Stone":
+                        return Enums.FootStepType.stoneStep;
+                    case "Grass":
+                        return Enums.FootStepType.grassyStep;
+                    case "Wood":
+                        return Enums.FootStepType.woodyStep;
+                    default: return Enums.FootStepType.thudStep;
+
+                }
+            }
+            else
+            {
+                return Enums.FootStepType.thudStep;
+            }
         }
     }
 }

@@ -14,7 +14,6 @@ using Omegasis.Revitalize.Framework.World.Objects.Machines;
 using Omegasis.StardustCore.UIUtilities;
 using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
-using ObjectUtilities = Omegasis.Revitalize.Framework.Utilities.ObjectUtilities;
 using Omegasis.Revitalize.Framework.Managers;
 using StardewValley.Menus;
 

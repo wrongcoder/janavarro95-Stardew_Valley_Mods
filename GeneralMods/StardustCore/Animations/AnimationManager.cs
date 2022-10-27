@@ -170,11 +170,12 @@ namespace Omegasis.StardustCore.Animations
         /// <returns></returns>
         public bool playAnimation(string AnimationName, bool overrideSameAnimation = false, int StartingFrame = 0)
         {
+            if (overrideSameAnimation == false && AnimationName.Equals(this.currentAnimationName.Value)) return false;
             if (this.animations.ContainsKey(AnimationName))
             {
                 this.getCurrentAnimation().reset();
                 this.currentAnimationName.Value = AnimationName;
-                this.getCurrentAnimation().startAnimation();
+                this.getCurrentAnimation().startAnimation(StartingFrame);
                 return true;
 
             }

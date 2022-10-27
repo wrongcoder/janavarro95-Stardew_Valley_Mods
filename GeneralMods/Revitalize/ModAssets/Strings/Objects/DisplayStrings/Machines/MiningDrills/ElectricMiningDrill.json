@@ -1,0 +1,7 @@
+{
+	"Revitalize.Objects.Machines.ElectricMiningDrill":
+	{
+		"displayName":"Electric Mining Drill",
+		"description":"Digs up different resources depending on where it is placed. Works best when placed in a place with many ores such as the mines. Requires battery packs to run."
+	},
+}

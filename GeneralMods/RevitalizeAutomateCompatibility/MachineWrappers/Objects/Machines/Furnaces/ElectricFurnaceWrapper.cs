@@ -12,6 +12,7 @@ using Omegasis.RevitalizeAutomateCompatibility.Recipes;
 using Pathoschild.Stardew.Automate;
 using StardewValley;
 using static Omegasis.Revitalize.Framework.World.Objects.Machines.Machine;
+using static Omegasis.Revitalize.Framework.World.Objects.Machines.PoweredMachine;
 
 namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers.Objects.Machines.Furnaces
 {
@@ -82,7 +83,7 @@ namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers.Objects.Machi
         /// <returns></returns>
         public virtual bool TryGetFuelItem(IStorage input, out IConsumable? consumable)
         {
-            if (this.customObject.furnaceType.Value == MachineTier.Magical)
+            if (this.customObject.furnaceType.Value == PoweredMachineTier.Magical)
             {
                 consumable = null;
                 return true;
@@ -94,13 +95,13 @@ namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers.Objects.Machi
                 return true;
             }
 
-            if (this.customObject.furnaceType.Value == MachineTier.Electric)
+            if (this.customObject.furnaceType.Value == PoweredMachineTier.Electric)
             {
                 bool itemFound = input.TryGetVanillaIngredient(Enums.SDVObject.BatteryPack, 1, out IConsumable? batteryPack);
                 consumable = batteryPack;
                 return itemFound;
             }
-            if (this.customObject.furnaceType.Value == MachineTier.Nuclear)
+            if (this.customObject.furnaceType.Value == PoweredMachineTier.Nuclear)
             {
                 bool itemFound = input.TryGetRevitalizeItemIngredient(MiscItemIds.RadioactiveFuel, 1, out IConsumable? fuelCell);
                 consumable = fuelCell;
@@ -114,10 +115,7 @@ namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers.Objects.Machi
         public override ITrackedStack GetOutput()
         {
             //Returns a tracked object which is set to modify the machine's held object value to be null when complete.
-            return new TrackedItem(this.customObject.heldObject.Value, onEmpty: item =>
-            {
-                this.customObject.cleanOutFurnace(false);
-            });
+            return new TrackedItem(this.customObject.heldObject.Value);
         }
 
 

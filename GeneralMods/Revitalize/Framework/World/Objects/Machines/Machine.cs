@@ -21,12 +21,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
     [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Machine")]
     public class Machine : CustomObject, IInventoryManagerProvider
     {
-        public enum MachineTier
-        {
-            Electric,
-            Nuclear,
-            Magical
-        }
 
         public const string MachineStatusBubble_DefaultAnimationKey = "Default";
         public const string MachineStatusBubble_BlankBubbleAnimationKey = "Blank";
@@ -134,23 +128,44 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
-            base.draw(spriteBatch, x, y, alpha);
-            this.drawStatusBubble(spriteBatch, x, y, alpha);
+            x = (int)this.TileLocation.X;
+
+            y = (int)this.TileLocation.Y;
+
+            if (this.MinutesUntilReady > 0)
+            {
+                Vector2 origin = new Vector2(this.AnimationManager.getCurrentAnimationFrameRectangle().Width / 2, this.AnimationManager.getCurrentAnimationFrameRectangle().Height);
+
+                this.basicItemInformation.animationManager.draw(spriteBatch, this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((x + this.basicItemInformation.drawOffset.X) * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset() + Game1.tileSize * origin.X / this.AnimationManager.getCurrentAnimationFrameRectangle().Width, (y + this.basicItemInformation.drawOffset.Y) * Game1.tileSize + this.basicItemInformation.shakeTimerOffset() + Game1.tileSize * (origin.Y / this.AnimationManager.getCurrentAnimationFrameRectangle().Height + 1))), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, origin, this.getScaleSizeForWorkingMachine(), this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.TileLocation.Y - this.basicItemInformation.drawOffset.Y) * Game1.tileSize / 10000f) + .00001f);
+            }
+            else
+                this.basicItemInformation.animationManager.draw(spriteBatch, this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((x + this.basicItemInformation.drawOffset.X) * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), (y + this.basicItemInformation.drawOffset.Y) * Game1.tileSize + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, Game1.pixelZoom, this.flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.TileLocation.Y - this.basicItemInformation.drawOffset.Y) * Game1.tileSize / 10000f) + .00001f);
+
+            if (this.finishedProduction())
+                this.drawStatusBubble(spriteBatch, x + (int)this.basicItemInformation.drawOffset.X, y + (int)this.basicItemInformation.drawOffset.Y, alpha);
         }
 
         protected virtual void drawStatusBubble(SpriteBatch b, int x, int y, float Alpha)
         {
             if (this.machineStatusBubbleBox == null || this.machineStatusBubbleBox.Value == null) this.createStatusBubble();
-            if (this.GetInventoryManager() == null) return;
-            if (this.GetInventoryManager().isFull())
+            if (this.finishedProduction())
             {
                 y--;
                 float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.UtcNow.TimeOfDay.TotalMilliseconds / 250.0), 2));
-                this.machineStatusBubbleBox.Value.playAnimation(MachineStatusBubble_InventoryFullAnimationKey);
+                this.machineStatusBubbleBox.Value.playAnimation(MachineStatusBubble_BlankBubbleAnimationKey);
                 this.machineStatusBubbleBox.Value.draw(b, this.machineStatusBubbleBox.Value.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2(x * Game1.tileSize, y * Game1.tileSize + num)), new Rectangle?(this.machineStatusBubbleBox.Value.getCurrentAnimationFrameRectangle()), Color.White, 0f, Vector2.Zero, Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (y + 2) * Game1.tileSize / 10000f) + .00001f);
+
+                this.drawStatusBubbleItemOutput(b, x, y, Alpha);
             }
         }
 
+        protected virtual void drawStatusBubbleItemOutput(SpriteBatch b, int x, int y, float Alpha)
+        {
+            if (this.heldObject == null) return;
+            float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.UtcNow.TimeOfDay.TotalMilliseconds / 250.0), 2));
+            Rectangle itemSourceRectangle = GameLocation.getSourceRectForObject(this.heldObject.Value.ParentSheetIndex);
+            this.machineStatusBubbleBox.Value.draw(b, Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + 8, y * Game1.tileSize + num + 16)), new Rectangle?(itemSourceRectangle), Color.White, 0f, Vector2.Zero, Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (y + 2) * Game1.tileSize / 10000f) + .00002f);
+        }
 
         public virtual InventoryManager GetInventoryManager()
         {

@@ -112,9 +112,9 @@ namespace Omegasis.StardustCore.Animations
         }
 
         /// <summary>This sets the animation frame count to be the max duration. I.E restart the timer.</summary>
-        public void startAnimation()
+        public void startAnimation(int StartingFrameIndex=0)
         {
-            this.currentAnimationFrameIndex = 0;
+            this.currentAnimationFrameIndex = StartingFrameIndex;
         }
 
         /// <summary>

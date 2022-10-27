@@ -91,6 +91,15 @@ namespace Omegasis.Revitalize.Framework.Utilities
             }
         }
 
+        public virtual void draw(SpriteBatch spriteBatch, int x, int y, float depth ,float alpha = 1)
+        {
+            if (this.item.Value != null && this.item.Value is StardewValley.Object)
+            {
+                StardewValley.Object obj = (StardewValley.Object)this.item.Value;
+                obj.draw(spriteBatch, x, y, depth ,alpha);
+            }
+        }
+
         /// <summary>
         /// Draws this give
         /// </summary>

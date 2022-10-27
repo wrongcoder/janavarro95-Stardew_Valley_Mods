@@ -29,6 +29,7 @@ using System.IO;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json.Crafting;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.Content.JsonContent.Objects;
+using Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneration;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -226,19 +227,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             this.addItem(MachineIds.AdvancedSolarPanelV1, solarP1);
 
-            /*
-            Machine miningDrillMachine_0_0 = new Machine(new BasicItemInformation("Mining Drill", MachineIds.MiningDrillV1, "Digs up rocks and ores. Requires energy to run.", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManagers.Objects_Machines.createAnimationManager("MiningDrillMachine", new SerializableDictionary<string, Animation>() {
+            
+            MiningDrill electricMiningDrill = new MiningDrill(new BasicItemInformation("", MachineIds.ElectricMiningDrill, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManagers.Objects_Machines.createAnimationManager("MiningDrillMachine", new SerializableDictionary<string, Animation>() {
                 {"Default",new Animation(new AnimationFrame(0,0,16,16))  },
-                { "Mining",new Animation(new List<AnimationFrame>(){
-                    new AnimationFrame(0,0,16,32,30),
-                    new AnimationFrame(16,0,16,32,30),
-                    new AnimationFrame(32,0,16,32,30),
-                    new AnimationFrame(48,0,16,32,30)},
-                    true) }
-            }, "Default", "Mining"), Color.White, false, new Vector2(1, 2), Vector2.Zero, new InventoryManager(new List<Item>(), 18, 3, 6), null), RevitalizeModCore.ModContentManager.objectManager.resources.miningDrillResources.Values.ToList());
+                { "Working",Animation.CreateAnimationFromTextureSequence(0,0,16,32,10, 6)}
+            }, "Default", "Working"), Color.White, false, new Vector2(1, 2), Vector2.Zero,null,null), PoweredMachine.PoweredMachineTier.Electric);
 
-            this.addItem(MachineIds.MiningDrillV1, miningDrillMachine_0_0);
-            */
+            this.addItem(MachineIds.ElectricMiningDrill, electricMiningDrill);
+            
 
             Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("", MachineIds.WindmillV1, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Machines.createAnimationManager("Windmill", new SerializableDictionary<string, Animation>() {
 
@@ -321,7 +317,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
                 }, ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY, ElectricFurnace.ELECTRIC_IDLE_ANIMATION_KEY
 
-                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), Machine.MachineTier.Electric));
+                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Electric));
 
 
             this.addItem(MachineIds.NuclearFurnace, new ElectricFurnace(new BasicItemInformation("", MachineIds.ElectricFurnace, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
@@ -332,7 +328,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
                 }, ElectricFurnace.NUCLEAR_IDLE_ANIMATION_KEY, ElectricFurnace.NUCLEAR_IDLE_ANIMATION_KEY
 
-                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), Machine.MachineTier.Nuclear));
+                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Nuclear));
 
 
             this.addItem(MachineIds.MagicalFurnace, new ElectricFurnace(new BasicItemInformation("", MachineIds.ElectricFurnace, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 50000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricFurnace",
@@ -343,7 +339,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
                 }, ElectricFurnace.MAGICAL_IDLE_ANIMATION_KEY, ElectricFurnace.MAGICAL_IDLE_ANIMATION_KEY
 
-                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), Machine.MachineTier.Magical));
+                ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Magical));
         }
 
         /// <summary>
