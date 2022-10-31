@@ -52,7 +52,6 @@ namespace Omegasis.Revitalize
                   -burnable
                   -watermill
                   -windmill
-                  -crank (costs stamina)
                   Storage:
                   -Batery Pack
              -Mini-greenhouse
@@ -66,9 +65,6 @@ namespace Omegasis.Revitalize
                    -can be upgraded to grow crops from specific seasons with season stones (spring,summer, fall winter) (configurable if they are required)
                    -Add in season stone recipe
 
-    //      -Furnace
-    //      -Seed Maker
-    //      -Stone Quarry
     //      -Mayo Maker
     //      -Cheese Maker
             -Yogurt Maker
@@ -91,26 +87,6 @@ namespace Omegasis.Revitalize
             -Star Metal
             -Star Steel
             -Cobalt
-        -Liquids
-            -oil
-            -water
-            -coal
-            -juice???
-            -lava?
-
-        -Dyes!
-            -Dye custom objects certain colors!
-            -Rainbow Dye -(set a custom object to any color)
-            -red, green, blue, yellow, pink, etc
-            -Make dye from flowers/coal/algee/minerals/gems (black), etc
-                -soapstone (washes off dye)
-                -Lunarite (white)
-        Dye Machine
-            -takes custom object and dye
-            -dyes the object
-            -can use water to wash off dye.
-            -maybe dye stardew valley items???
-            -Dyed Wool (Artisan good)
 
         Menus:
     //  -Crafting Menu
@@ -167,7 +143,6 @@ namespace Omegasis.Revitalize
     //  
     //  Locations:
             -Make extra bus stop sign that travels between new towns/locations.
-    //      -Small Island Home?
     //      -New town inspired by FOMT;Mineral Town/The Valley HM DS
     //
     //  More crops

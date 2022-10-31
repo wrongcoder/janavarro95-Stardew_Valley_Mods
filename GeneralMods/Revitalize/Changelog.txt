@@ -3,6 +3,11 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 10-30-2022 xx.xx P.M~~~~~~~~~~~~~~
++Verified that minging drills work.
+~Changed Electric Mining Drill graphic
+~Machine Status bubbles now render properly above the machine.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 10-26-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Created PoweredMachine.cs which is the base for all machines that consume fuel as well as consolidate the common logic there so that it's not scattered across all of the classes again.
 +Created new PoweredMachineTier Coal tier which uses coal to operate as an early game solution for some machines.

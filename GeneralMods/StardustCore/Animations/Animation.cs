@@ -81,6 +81,12 @@ namespace Omegasis.StardustCore.Animations
             return this.getCurrentAnimationFrame().sourceRectangle;
         }
 
+        public virtual Animation appendAnimation(Animation other)
+        {
+            this.animationFrames.AddRange(other.animationFrames);
+            return this;
+        }
+
         public virtual void reset()
         {
             //Reset old animation frame.
@@ -192,6 +198,20 @@ namespace Omegasis.StardustCore.Animations
                 frames.Add(frame);
             }
             return new Animation(frames,shouldLoop);
+        }
+
+        public static Animation CreateAnimationFromReverseTextureSequence(int startingPosX, int startingPosY, int FrameWidth, int FrameHeight, int NumberOfFrames, int ExistsForXFrames = -1, bool shouldLoop = true)
+        {
+            List<AnimationFrame> frames = new List<AnimationFrame>();
+
+            for (int i = 0; i < NumberOfFrames; i++)
+            {
+                AnimationFrame frame = new AnimationFrame(startingPosX + (FrameWidth * i), startingPosY, FrameWidth, FrameHeight, ExistsForXFrames);
+
+                frames.Add(frame);
+            }
+            frames.Reverse();
+            return new Animation(frames, shouldLoop);
         }
     }
 }

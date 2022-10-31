@@ -154,6 +154,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         /// <returns></returns>
         public virtual Item getMachineOutputItem(bool ClearValue = false)
         {
+            if (this.heldObject.Value == null) return null;
             Item item = this.heldObject.Value;
             if (ClearValue)
             {
@@ -164,6 +165,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
         public virtual List<Item> getMachineOutputItems(bool ClearValue = false)
         {
+            if (this.heldObject.Value == null) return new List<Item>();
             return new List<Item>() { this.getMachineOutputItem(ClearValue) };
         }
 
@@ -329,7 +331,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             if (dropInItem == null) return false;
             if (this.heldObject.Value != null) return false;
 
-            return false;
+            return true;
         }
 
         /// <summary>

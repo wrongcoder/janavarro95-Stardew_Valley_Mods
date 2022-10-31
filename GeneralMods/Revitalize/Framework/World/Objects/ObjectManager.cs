@@ -228,10 +228,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.addItem(MachineIds.AdvancedSolarPanelV1, solarP1);
 
             
-            MiningDrill electricMiningDrill = new MiningDrill(new BasicItemInformation("", MachineIds.ElectricMiningDrill, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManagers.Objects_Machines.createAnimationManager("MiningDrillMachine", new SerializableDictionary<string, Animation>() {
-                {"Default",new Animation(new AnimationFrame(0,0,16,16))  },
-                { "Working",Animation.CreateAnimationFromTextureSequence(0,0,16,32,10, 6)}
-            }, "Default", "Working"), Color.White, false, new Vector2(1, 2), Vector2.Zero,null,null), PoweredMachine.PoweredMachineTier.Electric);
+            MiningDrill electricMiningDrill = new MiningDrill(new BasicItemInformation("", MachineIds.ElectricMiningDrill, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricMiningDrill", new SerializableDictionary<string, Animation>() {
+                {"Default",new Animation(new AnimationFrame(0,0,16,32))  },
+                { "Working",Animation.CreateAnimationFromTextureSequence(0,0,16,32,10, 6).appendAnimation(Animation.CreateAnimationFromReverseTextureSequence(0,0,16,32,10, 6))}
+            }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0,-1),null,null), PoweredMachine.PoweredMachineTier.Electric);
 
             this.addItem(MachineIds.ElectricMiningDrill, electricMiningDrill);
             

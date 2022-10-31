@@ -401,7 +401,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public virtual bool shouldDoDayUpdate()
         {
-            return this.dayUpdateCounter.Value >= 2;
+            return this.dayUpdateCounter.Value >= 1;
         }
 
         /// <summary>
@@ -1020,6 +1020,23 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             //if (this.basicItemInformation.id.Equals(o.basicItemInformation.id) == true) return true;
 
             return false;
+        }
+
+        public override int addToStack(Item otherStack)
+        {
+            int maxStack = this.maximumStackSize();
+            if (maxStack != 1)
+            {
+                this.stack.Value += otherStack.Stack;
+                if ((int)this.stack > maxStack)
+                {
+                    int result = (int)this.stack - maxStack;
+                    this.stack.Value = maxStack;
+                    return result;
+                }
+                return 0;
+            }
+            return otherStack.Stack;
         }
 
 

@@ -16,6 +16,9 @@
   <ItemGroup>
     <None Include="Content\**\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ModAssets\**\*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\StardustCore\StardustCore.csproj">
