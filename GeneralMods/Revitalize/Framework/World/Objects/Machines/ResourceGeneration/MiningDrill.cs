@@ -32,7 +32,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
 
         }
 
-        public MiningDrill(BasicItemInformation Info, PoweredMachineTier machineTier) : this(Info, Vector2.Zero,machineTier)
+        public MiningDrill(BasicItemInformation Info, PoweredMachineTier machineTier) : this(Info, Vector2.Zero, machineTier)
         {
 
         }
@@ -123,20 +123,37 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
 
             List<StardewValley.Object> potentialItems = new List<StardewValley.Object>();
 
+            int bonusForMiningDrillTier = 0;
+            if (this.machineTier.Value == PoweredMachineTier.Coal)
+            {
+                bonusForMiningDrillTier = 0;
+            }
+            if (this.machineTier.Value == PoweredMachineTier.Electric)
+            {
+                bonusForMiningDrillTier = 1;
+            }
+            if (this.machineTier.Value == PoweredMachineTier.Nuclear)
+            {
+                bonusForMiningDrillTier = 2;
+            }
+            if (this.machineTier.Value == PoweredMachineTier.Magical)
+            {
+                bonusForMiningDrillTier = 3;
+            }
 
-            int stoneGiven = Game1.random.Next(5, 11);
-            int clayGiven = Game1.random.Next(3, 6);
-            int coalGiven = playerHasProspectorProfession ? Game1.random.Next(5, 11) : Game1.random.Next(3, 6);
-            int woodGiven = Game1.random.Next(3, 9);
+            int stoneGiven = Game1.random.Next(5, 11 + bonusForMiningDrillTier * 2);
+            int clayGiven = Game1.random.Next(3, 6 + bonusForMiningDrillTier);
+            int coalGiven = (playerHasProspectorProfession ? Game1.random.Next(5, 11 + Math.Max(0, bonusForMiningDrillTier - 1)) : Game1.random.Next(3, 6 + Math.Max(0, bonusForMiningDrillTier - 1)));
+            int woodGiven = Game1.random.Next(3, 9) + bonusForMiningDrillTier / 2;
 
-            int oreYield = playerHasMinerProfession ? Game1.random.Next(4, 7) : Game1.random.Next(3, 6);
-            int iridiumOreYield = playerHasMinerProfession ? Game1.random.Next(2, 4) : Game1.random.Next(1, 3);
+            int oreYield = playerHasMinerProfession ? Game1.random.Next(4, 7 + bonusForMiningDrillTier / 2) : Game1.random.Next(3, 6 + bonusForMiningDrillTier / 2);
+            int iridiumOreYield = playerHasMinerProfession ? Game1.random.Next(2, 4 + bonusForMiningDrillTier / 2) : Game1.random.Next(1, 3 + bonusForMiningDrillTier / 2);
 
-            int typicalGeodeYield = playerHasExcavatorProfession ? Game1.random.Next(2, 7) : Game1.random.Next(1, 4);
-            int omniGeodeYield = playerHasExcavatorProfession ? Game1.random.Next(1, 6) : Game1.random.Next(1, 4);
+            int typicalGeodeYield = playerHasExcavatorProfession ? Game1.random.Next(2, 7 + bonusForMiningDrillTier / 2) : Game1.random.Next(1, 4 + bonusForMiningDrillTier / 2);
+            int omniGeodeYield = playerHasExcavatorProfession ? Game1.random.Next(1, 6 + bonusForMiningDrillTier / 2) : Game1.random.Next(1, 4 + bonusForMiningDrillTier / 2);
 
-            int mineralYield = Game1.random.Next(1, 3);
-            int gemYield = playerHasGeologistSkill ? Game1.random.Next(1, 3) : 1;
+            int mineralYield = Game1.random.Next(1, 3 + bonusForMiningDrillTier / 2);
+            int gemYield = playerHasGeologistSkill ? Game1.random.Next(1, 3 + bonusForMiningDrillTier / 2) : Game1.random.Next(1, 2 + bonusForMiningDrillTier / 2);
 
             if (GameLocationUtilities.IsLocationTheEntranceToTheMines(objectLocation))
             {
@@ -192,12 +209,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
 
                 if (Game1.player.hasOrWillReceiveMail("reachedBottomOfHardMines"))
                 {
-                    potentialItems.Add(objectManager.getObject(Enums.SDVObject.RadioactiveOre, 1));
+                    potentialItems.Add(objectManager.getObject(Enums.SDVObject.RadioactiveOre, Game1.random.Next(1, 2 + +Math.Min(0, bonusForMiningDrillTier - 2))));
                 }
             }
             else if (GameLocationUtilities.IsLocationInSkullCaves(objectLocation))
             {
-                potentialItems.Add(objectManager.getObject(Enums.SDVObject.Stone, Game1.random.Next(10, 16))); //Buff stone given since the area to place drills is small.
+                potentialItems.Add(objectManager.getObject(Enums.SDVObject.Stone, Game1.random.Next(10, 16 + bonusForMiningDrillTier * 2))); //Buff stone given since the area to place drills is small.
                 potentialItems.Add(objectManager.getObject(Enums.SDVObject.Coal, coalGiven));
 
                 potentialItems.Add(objectManager.getObject(Enums.SDVObject.Amethyst, gemYield));
@@ -217,12 +234,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
 
                 if (Game1.player.hasOrWillReceiveMail("reachedBottomOfHardMines"))
                 {
-                    potentialItems.Add(objectManager.getObject(Enums.SDVObject.RadioactiveOre, 1));
+                    potentialItems.Add(objectManager.getObject(Enums.SDVObject.RadioactiveOre, Game1.random.Next(1, 2 + Math.Min(0, bonusForMiningDrillTier - 2))));
                 }
             }
             else if (GameLocationUtilities.IsLocationTheVolcanoDungeon(objectLocation))
             {
-                potentialItems.Add(objectManager.getObject(Enums.SDVObject.CinderShard, Game1.random.Next(1, 4)));
+                potentialItems.Add(objectManager.getObject(Enums.SDVObject.CinderShard, Game1.random.Next(1, 4 + bonusForMiningDrillTier / 2)));
 
                 potentialItems.Add(objectManager.getObject(Enums.SDVObject.Ruby, gemYield));
 
@@ -239,7 +256,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
                 //Maybe eventually decide to add in resources for the hilltop and maybe the 4 corners farm?
 
                 //Small easter egg. When using a mining drill on wooden floors, the player can get some wood as the output.
-                if(ObjectUtilities.GetFloorType(this)== Enums.FloorType.Wood)
+                if (ObjectUtilities.GetFloorType(this) == Enums.FloorType.Wood)
                 {
                     potentialItems.Add(objectManager.getObject(Enums.SDVObject.Wood, woodGiven));
                 }
@@ -260,7 +277,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
 
         public override Item getOne()
         {
-            return new MiningDrill(this.basicItemInformation.Copy(),this.machineTier.Value);
+            return new MiningDrill(this.basicItemInformation.Copy(), this.machineTier.Value);
         }
     }
 }

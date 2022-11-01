@@ -18,6 +18,7 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Objects
         public const string SolarArrayV1 = PREFIX + "SolarArrayV1";
         public const string WindmillV1 = PREFIX + "WindmillV1";
 
+        public const string CoalMiningDrill = PREFIX + "CoalMiningDrill";
         public const string ElectricMiningDrill = PREFIX + "ElectricMiningDrill";
         public const string NuclearMiningDrill = PREFIX + "NuclearMiningDrill";
         public const string MagicalMiningDrill = PREFIX + "MagicalMiningDrill";

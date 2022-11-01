@@ -1,0 +1,7 @@
+{
+	"Revitalize.Objects.Machines.NuclearMiningDrill":
+	{
+		"displayName":"Nuclear Mining Drill",
+		"description":"Digs up different resources depending on where it is placed. Works best when placed in a place with many ores such as the mines. Requires radioactive fuel cells to run."
+	},
+}
