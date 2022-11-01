@@ -26,5 +26,7 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Items.BlueprintIds
         public const string Workbench_AutomaticFarmingSystemCraftingRecipeBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem";
 
         public const string HayMakerCraftingRecipeBlueprint= "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.HayMaker";
+
+        public const string RadioactiveFuelCellBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Items.Misc.RadioactiveFuel";
     }
 }

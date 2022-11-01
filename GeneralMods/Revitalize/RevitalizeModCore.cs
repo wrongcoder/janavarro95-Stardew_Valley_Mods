@@ -179,8 +179,6 @@ namespace Omegasis.Revitalize
 
         public static SaveDataManager SaveDataManager;
 
-
-
         public static ModContentManager ModContentManager;
 
         public override void Entry(IModHelper helper)
@@ -238,7 +236,6 @@ namespace Omegasis.Revitalize
 
         private void GameLoop_GameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
         {
-            RevitalizeModCore.log("Hello world!");
 
             ModContentManager.loadContentOnGameLaunched();
 
@@ -268,8 +265,8 @@ namespace Omegasis.Revitalize
 
 
             //REMOVE THIS.
-            //Game1.warpFarmer("QiNutRoom", 7, 8, 0);
-            //Game1.player.QiGems = 100;
+            Game1.warpFarmer("QiNutRoom", 7, 8, 0);
+            Game1.player.QiGems = 100;
         }
 
         /// <summary>
@@ -286,9 +283,6 @@ namespace Omegasis.Revitalize
         {
             SaveDataManager.loadOrCreateSaveData();
             //ModContentManager.mailManager.tryToAddMailToMailbox();
-
-
-
 
             //HACKS
             //Game1.player.Money = 100_000;

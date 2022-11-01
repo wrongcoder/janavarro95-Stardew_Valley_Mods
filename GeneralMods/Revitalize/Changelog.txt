@@ -3,6 +3,9 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 10-31-2022 xx.xx P.M~~~~~~~~~~~~~~
++The radioactive fuel cell blueprint can now be bought from Qi's wallnut room shop for 5 qi gems.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 10-30-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Verified that minging drills work.
 ~Changed Electric Mining Drill graphic
