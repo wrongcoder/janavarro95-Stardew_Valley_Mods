@@ -38,6 +38,9 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         /// </summary>
         public int anvilBlueprintsPrice;
 
+        public int coalMiningDrillPrice = 5000;
+        public int electricMiningDrillPrice = 20000;
+
         /// <summary>
         /// How much a regular axe blueprint sells for in clint's shop.
         /// </summary>

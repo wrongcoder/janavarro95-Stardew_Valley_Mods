@@ -46,8 +46,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         public HayMaker(BasicItemInformation info, bool isUsedForBuyingHayAtAnyTime = false) : base(info)
         {
             this.isUsedForBuyingHayAtAnyTime.Value = isUsedForBuyingHayAtAnyTime;
-            if (this.isUsedForBuyingHayAtAnyTime.Value == true)
-                this.AnimationManager.playAnimation(HayAnimation);
 
         }
 

@@ -35,15 +35,24 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 
             if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearFurnaceRecipeId))
             {
-                ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.Workbench_NuclearFurnaceCraftingRecipeBlueprint), shopConfig.NuclearFurnaceBlueprintQiGemPrice, 1);
+                ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.NuclearFurnaceBlueprint), shopConfig.NuclearFurnaceBlueprintQiGemPrice, 1);
             }
             if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.MagicalFurnaceRecipeId))
             {
-                ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.Workbench_MagicalFurnaceCraftingRecipeBlueprint), shopConfig.MagicalFurnaceBlueprintQigemPrice, 1);
+                ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.MagicalFurnaceBlueprint), shopConfig.MagicalFurnaceBlueprintQigemPrice, 1);
             }
             if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.RadioactiveFuelCellRecipeId))
             {
                 ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.RadioactiveFuelCellBlueprint),shopConfig.RadioactiveFuelBlueprintQiGemPrice,1);
+            }
+
+            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearMiningDrillRecipeId) && Game1.player.hasSkullKey)
+            {
+                ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.NuclearMiningDrillBlueprint), shopConfig.NuclearMiningDrillBlueprintPrice, 1);
+            }
+            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.MagicalMiningDrillRecipeId) && Game1.player.hasSkullKey)
+            {
+                ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.MagicalMiningDrillBlueprint), shopConfig.MagicalMiningDrillBlueprintPrice, 1);
             }
 
             if (Game1.player.MiningLevel >= 10 && Game1.player.hasSkullKey)

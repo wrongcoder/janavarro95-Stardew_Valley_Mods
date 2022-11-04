@@ -60,7 +60,7 @@ namespace Omegasis.Revitalize.Framework.World
                 Game1.mailbox.Add(MailTitles.AutomaticFarmingSystemAvailableForPurchase);
             }
 
-            if (!this.hasOrWillPlayerReceivedThisMail(MailTitles.ElectricFurnaceCanBePurchased) && RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack)
+            if (!this.hasOrWillPlayerReceivedThisMail(MailTitles.ElectricFurnaceCanBePurchased) && RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack)
             {
                 Game1.mailbox.Add(MailTitles.ElectricFurnaceCanBePurchased);
             }

@@ -381,7 +381,7 @@ namespace Omegasis.Revitalize.Framework.Player
 
         public static void CheckForInventoryItem(IEnumerable<Item> items)
         {
-            if (RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack == true)
+            if (RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack == true)
             {
                 return;
             }
@@ -392,7 +392,7 @@ namespace Omegasis.Revitalize.Framework.Player
                 ItemReference itemReference = new ItemReference(addedItem);
                 if (itemReference.SdvObjectId == Enums.SDVObject.BatteryPack)
                 {
-                    RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack = true;
+                    RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack = true;
                 }
 
             }

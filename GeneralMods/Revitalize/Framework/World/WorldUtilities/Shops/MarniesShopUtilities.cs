@@ -46,7 +46,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             {
                 if (!PlayerUtilities.KnowsCraftingRecipe(Constants.CraftingIds.CraftingRecipeBooks.WorkbenchCraftingRecipies, Constants.CraftingIds.RecipeIds.WorkbenchRecipeIds.HayMakerRecipeId))
                 {
-                    shopInventoryProbes.Add(AddItemToStockAfterHay(WorkbenchBlueprintIds.HayMakerCraftingRecipeBlueprint, RevitalizeModCore.Configs.shopsConfigManager.animalShopStockConfig.HayMakerBlueprintsPrice));
+                    shopInventoryProbes.Add(AddItemToStockAfterHay(WorkbenchBlueprintIds.HayMakerBlueprint, RevitalizeModCore.Configs.shopsConfigManager.animalShopStockConfig.HayMakerBlueprintsPrice));
                 }
 
                 shopInventoryProbes.Add(AddItemToStockAfterHay(FarmingObjects.HayMaker_FeedShop, RevitalizeModCore.Configs.shopsConfigManager.animalShopStockConfig.HayMakerFeedShopPrice));

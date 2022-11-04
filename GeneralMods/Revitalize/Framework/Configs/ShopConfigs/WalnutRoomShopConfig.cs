@@ -10,10 +10,12 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
     {
         //Blueprints
         public int NuclearFurnaceBlueprintQiGemPrice = 20;
-        public int MagicalFurnaceBlueprintQigemPrice = 40;
+        public int MagicalFurnaceBlueprintQigemPrice = 30;
 
         public int RadioactiveFuelBlueprintQiGemPrice = 5;
 
+        public int NuclearMiningDrillBlueprintPrice = 15;
+        public int MagicalMiningDrillBlueprintPrice = 25;
 
         //Resource bushes.
         public int CoalResourceBushQiGemPrice = 5;

@@ -2,7 +2,7 @@
   "whichTab": "Default",
   "isUnlocked": false,
   "recipe": {
-	"craftingRecipeId": "Revitalize.Workbench.CraftingStations.Anvil",
+	"craftingRecipeId": "Revitalize.Workbench.Machines.MiningDrills.CoalMiningDrill",
     "outputName": "",
     "outputDescription": "",
     "MinutesToCraft": 0,
@@ -12,7 +12,23 @@
 			"stardewValleyItemId": "IronBar",
 			"stardewValleyBigCraftableId": "NULL",
 			"registeredObjectId": "",
+			"amount": 5
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "CopperBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
 			"amount": 10
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "Stone",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 50
 			}
 		}
 	
@@ -22,7 +38,7 @@
 			"item":{
 			"stardewValleyItemId": "NULL",
 			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Objects.Crafting.CraftingStations.Anvil",
+			"registeredObjectId": "Revitalize.Objects.Machines.CoalMiningDrill",
 			"amount": 1
 			}
 		},

@@ -11,9 +11,15 @@ namespace Omegasis.Revitalize.Framework.SaveData.Player
     {
         public Dictionary<string, string> unlockedCraftingRecipes;
 
+        /// <summary>
+        /// Used to determine if the player has obtained the battery pack necessaery to unlock electric furnace recipes.
+        /// </summary>
+        public bool hasObtainedBatteryPack;
+
         public PlayerSaveData()
         {
             this.unlockedCraftingRecipes = new Dictionary<string, string>();
+            this.hasObtainedBatteryPack = false;
         }
 
         public virtual void addUnlockedCraftingRecipe(string RecipeBookId, string RecipeId)
@@ -27,7 +33,7 @@ namespace Omegasis.Revitalize.Framework.SaveData.Player
             RevitalizeModCore.ModHelper.Data.WriteJsonFile(Path.Combine(RevitalizeModCore.SaveDataManager.getRelativeSaveDataPath(), "PlayerSaveData.json"), this);
         }
 
-        public virtual void load()
+        public override void load()
         {
             foreach(KeyValuePair<string,string> recipe in this.unlockedCraftingRecipes)
             {

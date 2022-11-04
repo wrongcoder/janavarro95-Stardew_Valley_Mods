@@ -12,10 +12,16 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds
     /// </summary>
     public class WorkbenchRecipeIds
     {
+        public static string AnvilRecipeId = "Revitalize.Workbench.CraftingStations.Anvil";
+
         public static string ElectricFurnaceRecipeId = "Revitalize.Workbench.Machines.Furnaces.ElectricFurnace";
         public static string NuclearFurnaceRecipeId = "Revitalize.Workbench.Machines.Furnaces.NuclearFurnace";
         public static string MagicalFurnaceRecipeId = "Revitalize.Workbench.Machines.Furnaces.MagicalFurnace";
 
+        public static string CoalMiningDrillRecipeId = "Revitalize.Workbench.Machines.MiningDrills.CoalMiningDrill";
+        public static string ElectricMiningDrillRecipeId = "Revitalize.Workbench.Machines.MiningDrills.ElectricMiningDrill";
+        public static string NuclearMiningDrillRecipeId = "Revitalize.Workbench.Machines.MiningDrills.NuclearMiningDrill";
+        public static string MagicalMiningDrillRecipeId = "Revitalize.Workbench.Machines.MiningDrills.MagicalMiningDrill";
 
         public static string IrrigatedWateringPotRecipeId = "Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot";
         public static string AutoPlanterIrrigatedWateringPotAttachmentRecipeId = "Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Items.Farming.AutoPlanterGardenPotAttachment";

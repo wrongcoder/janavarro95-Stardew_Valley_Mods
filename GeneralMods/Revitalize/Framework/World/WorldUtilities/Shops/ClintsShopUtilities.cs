@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Omegasis.Revitalize.Framework.Constants.CraftingIds;
+using Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Items.BlueprintIds;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
 using Omegasis.Revitalize.Framework.Player;
@@ -21,15 +22,24 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
         /// </summary>
         public static void AddStockToClintsShop(ShopMenu Menu)
         {
-            ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Ores.TinOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.tinOrePrice, -1);
+            //ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Ores.TinOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.tinOrePrice, -1);
             //ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Ores.BauxiteOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.bauxiteOreSellPrice, -1);
-            ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Ores.LeadOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.leadOrePrice, -1);
-            ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Ores.SilverOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.silverOrePrice, -1);
+            //ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Ores.LeadOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.leadOrePrice, -1);
+            //ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Ores.SilverOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.silverOrePrice, -1);
             //ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(Ores.TitaniumOre, 1), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.titaniumOreSellPrice, -1);
 
-            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, "Revitalize.Anvil"))
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AnvilRecipeId))
             {
-                ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AnvilCraftingRecipeBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.anvilBlueprintsPrice, 1);
+                ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.AnvilBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.anvilBlueprintsPrice, 1);
+            }
+
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.CoalMiningDrillRecipeId) && Game1.player.hasSkullKey)
+            {
+                ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.CoalMiningDrillBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.coalMiningDrillPrice, 1);
+            }
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricMiningDrillRecipeId) && RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack && Game1.player.hasSkullKey)
+            {
+                ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.ElectricMiningDrillBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.electricMiningDrillPrice,1);
             }
 
             AddAxeBlueprintsToShop(Menu);

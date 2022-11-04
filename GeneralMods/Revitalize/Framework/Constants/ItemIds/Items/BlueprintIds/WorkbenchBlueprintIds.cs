@@ -12,21 +12,29 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Items.BlueprintIds
     public class WorkbenchBlueprintIds
     {
 
-        public const string Workbench_AnvilCraftingRecipeBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Anvil";
+        public const string AnvilBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Anvil";
+
+        //Furnaces
+        public const string ElectricFurnaceBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.ElectricFurnace";
+        public const string NuclearFurnaceBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.NuclearFurnace";
+        public const string MagicalFurnaceBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.MagicalFurnace";
+
+        //Mining Drills
+        public const string CoalMiningDrillBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.MiningDrills.CoalMiningDrill";
+        public const string ElectricMiningDrillBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.MiningDrills.ElectricMiningDrill";
+        public const string NuclearMiningDrillBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.MiningDrills.NuclearMiningDrill";
+        public const string MagicalMiningDrillBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.MiningDrills.MagicalMiningDrill";
 
 
-        public const string Workbench_ElectricFurnaceCraftingRecipeBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.ElectricFurnace";
-        public const string Workbench_NuclearFurnaceCraftingRecipeBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.NuclearFurnace";
-        public const string Workbench_MagicalFurnaceCraftingRecipeBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.MagicalFurnace";
+        //Auto farming system.
+        public const string IrrigatedGardenPotBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot";
+        public const string AutoHarvesterGardenPotAttachmentBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Items.Farming.AutoHarvesterGardenPotAttachment";
+        public const string AutoPlanterGardenPotBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Items.Farming.AutoPlanterGardenPotAttachment";
+        public const string AutomaticFarmingSystemBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem";
 
+        public const string HayMakerBlueprint= "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.HayMaker";
 
-        public const string Workbench_IrrigatedGardenPotCraftingRecipeBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot";
-        public const string Workbench_AutoHarvesterGardenPotAttachmentCraftingRecipeBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Items.Farming.AutoHarvesterGardenPotAttachment";
-        public const string Workbench_AutoPlanterGardenPotCraftingRecipeBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Items.Farming.AutoPlanterGardenPotAttachment";
-        public const string Workbench_AutomaticFarmingSystemCraftingRecipeBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem";
-
-        public const string HayMakerCraftingRecipeBlueprint= "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.HayMaker";
-
+        //Misc Items
         public const string RadioactiveFuelCellBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Items.Misc.RadioactiveFuel";
     }
 }

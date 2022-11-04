@@ -73,17 +73,17 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             List<ShopInventoryProbe> blueprintsToAdd = new List<ShopInventoryProbe>();
             RobinsShopConfig shopConfig = RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig;
 
-            if (RevitalizeModCore.SaveDataManager.shopSaveData.carpenterShopSaveData.hasObtainedBatteryPack)
+            if (RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack)
             {
-                blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricFurnaceRecipeId, WorkbenchBlueprintIds.Workbench_ElectricFurnaceCraftingRecipeBlueprint, shopConfig.ElectricFurnaceBlueprintPrice));
+                blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricFurnaceRecipeId, WorkbenchBlueprintIds.ElectricFurnaceBlueprint, shopConfig.ElectricFurnaceBlueprintPrice));
             }
 
             if (Game1.player.FarmingLevel >= 10)
             {
-                blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.IrrigatedWateringPotRecipeId, WorkbenchBlueprintIds.Workbench_IrrigatedGardenPotCraftingRecipeBlueprint, shopConfig.IrrigatedWateringPotBlueprintPrice));
-                blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutomatedFarmingSystemRecipeId, WorkbenchBlueprintIds.Workbench_AutomaticFarmingSystemCraftingRecipeBlueprint, shopConfig.AutomaticFarmingSystemBlueprintPrice));
-                blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutoHarvesterIrrigatedWateringPotAttachmentRecipeId, WorkbenchBlueprintIds.Workbench_AutoHarvesterGardenPotAttachmentCraftingRecipeBlueprint, shopConfig.AutoHarvesterIrrigatedGardenPotAttachmentBlueprintPrice));
-                blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutoPlanterIrrigatedWateringPotAttachmentRecipeId, WorkbenchBlueprintIds.Workbench_AutoPlanterGardenPotCraftingRecipeBlueprint, shopConfig.AutoPlanterIrrigatedWateringPotAttachmentBlueprintPrice));
+                blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.IrrigatedWateringPotRecipeId, WorkbenchBlueprintIds.IrrigatedGardenPotBlueprint, shopConfig.IrrigatedWateringPotBlueprintPrice));
+                blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutomatedFarmingSystemRecipeId, WorkbenchBlueprintIds.AutomaticFarmingSystemBlueprint, shopConfig.AutomaticFarmingSystemBlueprintPrice));
+                blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutoHarvesterIrrigatedWateringPotAttachmentRecipeId, WorkbenchBlueprintIds.AutoHarvesterGardenPotAttachmentBlueprint, shopConfig.AutoHarvesterIrrigatedGardenPotAttachmentBlueprintPrice));
+                blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutoPlanterIrrigatedWateringPotAttachmentRecipeId, WorkbenchBlueprintIds.AutoPlanterGardenPotBlueprint, shopConfig.AutoPlanterIrrigatedWateringPotAttachmentBlueprintPrice));
             }
 
             //Filter out all blueprints that would already be known.
