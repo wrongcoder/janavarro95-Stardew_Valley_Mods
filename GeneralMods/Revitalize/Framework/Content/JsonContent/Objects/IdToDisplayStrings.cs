@@ -13,6 +13,7 @@ namespace Omegasis.Revitalize.Framework.Content.JsonContent.Objects
     {
         public string displayName;
         public string description;
+        public string category;
 
         public IdToDisplayStrings()
         {

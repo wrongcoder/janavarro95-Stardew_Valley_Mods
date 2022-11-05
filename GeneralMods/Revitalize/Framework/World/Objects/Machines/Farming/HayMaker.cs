@@ -108,7 +108,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                     
                     ShopMenu shopMenu = new ShopMenu(new Dictionary<ISalable, int[]>());
                     shopMenu.storeContext = HayMakerShopUtilities.StoreContext;
-                    shopMenu.potraitPersonDialogue = JsonUtilities.LoadStringFromDictionaryFile("ShopText_1", Path.Combine(StringsPaths.ShopDialogue, "HayMakerShopDialogue.json"));
+                    shopMenu.potraitPersonDialogue = JsonContentLoaderUtilities.LoadShopDialogue("ShopText_1", "HayMakerShopDialogue.json");
                     Game1.activeClickableMenu = shopMenu;
                 }
 

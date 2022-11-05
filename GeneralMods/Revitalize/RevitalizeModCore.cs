@@ -282,6 +282,7 @@ namespace Omegasis.Revitalize
         private void GameLoop_SaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
         {
             SaveDataManager.loadOrCreateSaveData();
+
             //ModContentManager.mailManager.tryToAddMailToMailbox();
 
             //HACKS

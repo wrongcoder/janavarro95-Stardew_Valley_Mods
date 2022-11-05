@@ -3,6 +3,10 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 11-5-2022 xx.xx P.M~~~~~~~~~~~~~~
+-Removed Strings in base mod folder
++Added Revitalize Content Packs which are currently used for loading strings based on the game's current locale. Allows for translations of the mod's content.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 11-3-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added Burner Mining Drill Blueprints sold by Clint when the bottom of the mines are reached.
 +Added Electric Mining Drill Blueprints sold by Clint when the bottom of the mines are reached and a battery pack has been obtaied.

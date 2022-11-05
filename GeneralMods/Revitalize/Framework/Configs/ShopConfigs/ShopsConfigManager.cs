@@ -45,13 +45,13 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
 
         public ShopsConfigManager()
         {
-            this.animalShopStockConfig = ConfigManager.initializeConfig<AnimalShopStockConfig>("Configs", "Shops", "AnimalShopConfig.json");
-            this.blacksmithShopsConfig = ConfigManager.initializeConfig<BlacksmithShopConfig>("Configs", "Shops", "BlacksmithShopConfig.json");
-            this.dwarfShopConfig = ConfigManager.initializeConfig<DwarfShopConfig>("Configs", "Shops", "DwarfShopConfig.json");
-            this.hayMakerShopConfig = ConfigManager.initializeConfig<HayMakerShopConfig>("Configs", "Shops", "HayMakerShopConfig.json");
-            this.robinsShopConfig = ConfigManager.initializeConfig<RobinsShopConfig>("Configs", "Shops", "RobinsShopConfig.json");
+            this.animalShopStockConfig = ConfigManager.InitializeConfig<AnimalShopStockConfig>("Configs", "Shops", "AnimalShopConfig.json");
+            this.blacksmithShopsConfig = ConfigManager.InitializeConfig<BlacksmithShopConfig>("Configs", "Shops", "BlacksmithShopConfig.json");
+            this.dwarfShopConfig = ConfigManager.InitializeConfig<DwarfShopConfig>("Configs", "Shops", "DwarfShopConfig.json");
+            this.hayMakerShopConfig = ConfigManager.InitializeConfig<HayMakerShopConfig>("Configs", "Shops", "HayMakerShopConfig.json");
+            this.robinsShopConfig = ConfigManager.InitializeConfig<RobinsShopConfig>("Configs", "Shops", "RobinsShopConfig.json");
 
-            this.walnutRoomShopConfig = ConfigManager.initializeConfig<WalnutRoomShopConfig>("Configs", "Shops", "WalnutRoomShopConfig.json");
+            this.walnutRoomShopConfig = ConfigManager.InitializeConfig<WalnutRoomShopConfig>("Configs", "Shops", "WalnutRoomShopConfig.json");
         }
 
 

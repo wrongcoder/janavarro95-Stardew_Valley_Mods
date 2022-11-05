@@ -97,7 +97,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         public void loadItemsFromDisk()
         {
             this.registerStardewValleyItems();
-            this.loadInDisplayStrings();
 
             this.resources.loadInItems(); //Should take priority over other modded content.
 
@@ -110,25 +109,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             //Should load blueprints last due to the fact that they can draw references to objects.
             this.loadInBlueprints();
-        }
-
-        /// <summary>
-        /// Loads in all display strings from a given .json dictionary file.
-        /// </summary>
-        protected virtual void loadInDisplayStrings()
-        {
-            List<Dictionary<string, IdToDisplayStrings>> displayStringInfo = JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, IdToDisplayStrings>>(Constants.PathConstants.StringsPaths.DisplayStrings);
-            foreach (Dictionary<string, IdToDisplayStrings> dict in displayStringInfo)
-            {
-                foreach (KeyValuePair<string, IdToDisplayStrings> pair in dict)
-                {
-                    if (this.displayStrings.ContainsKey(pair.Key))
-                    {
-                        continue;
-                    }
-                    this.displayStrings.Add(pair.Key, pair.Value);
-                }
-            }
         }
 
         /// <summary>

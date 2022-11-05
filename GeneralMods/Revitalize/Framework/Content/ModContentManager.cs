@@ -12,7 +12,7 @@ using Omegasis.Revitalize.Framework.Constants.PathConstants.Graphics;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Managers;
 using Omegasis.Revitalize.Framework.Utilities;
-using Omegasis.Revitalize.Framework.World;
+using Omegasis.Revitalize.Framework.World.Mail;
 using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json;
@@ -24,6 +24,8 @@ namespace Omegasis.Revitalize.Framework.Content
 {
     public class ModContentManager
     {
+        public Revitalize.Framework.ContentPacks.RevitalizeContentPackManager revitalizeContentPackManager;
+
         public CraftingManager craftingManager;
         /// <summary>
         /// Keeps track of custom objects.
@@ -49,6 +51,8 @@ namespace Omegasis.Revitalize.Framework.Content
             //Loads in textures to be used by the mod.
             TextureManagers.loadInTextures();
 
+            this.revitalizeContentPackManager = new ContentPacks.RevitalizeContentPackManager();
+
             //Loads in objects to be use by the mod.
             this.objectManager = new ObjectManager(modManifest);
 
@@ -59,11 +63,13 @@ namespace Omegasis.Revitalize.Framework.Content
 
             this.buildingAssetLoader = new BuildingAssetLoader();
             this.buildingAssetLoader.registerEvents();
-
         }
 
         public virtual void loadContentOnGameLaunched()
         {
+            //Content packs hold display strings so they should be loaded first.
+            this.revitalizeContentPackManager.initializeContentPacks();
+
             //Load in all objects from disk.
             this.objectManager.loadItemsFromDisk();
 

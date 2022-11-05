@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
+using static StardewValley.LocalizedContentManager;
 
 namespace Omegasis.Revitalize.Framework.Utilities
 {
@@ -31,6 +32,32 @@ namespace Omegasis.Revitalize.Framework.Utilities
 
             string combinedPath = Path.Combine(directory, fileName +"."+ languageCodeString + fileExtention);
             return combinedPath;
+        }
+
+        /// <summary>
+        /// Gets a string representing a given language code.
+        /// </summary>
+        /// <param name="languageCode"></param>
+        /// <returns></returns>
+        public static string GetLanguageCodeString(LanguageCode languageCode)
+        {
+            if (languageCode == LanguageCode.en)
+                return GetEnglishLanguageCode();
+            return Game1.content.LanguageCodeString(languageCode);
+        }
+        /// <summary>
+        /// Gets the language code string for the current <see cref="LanguageCode"/> the player is using. 
+        /// </summary>
+        /// <param name="languageCode"></param>
+        /// <returns></returns>
+        public static string GetCurrentLanguageCodeString()
+        {
+            return GetLanguageCodeString(CurrentLanguageCode);
+        }
+
+        public static string GetEnglishLanguageCode()
+        {
+            return "en-US";
         }
 
     }
