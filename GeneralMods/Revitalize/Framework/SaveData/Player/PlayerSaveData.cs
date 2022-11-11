@@ -16,10 +16,16 @@ namespace Omegasis.Revitalize.Framework.SaveData.Player
         /// </summary>
         public bool hasObtainedBatteryPack;
 
+        /// <summary>
+        /// Checks to see if the player has bought the subscription to receive free movie tickets in the mail on the first of every season.
+        /// </summary>
+        public bool hasMovieTheaterTicketSubscription;
+
         public PlayerSaveData()
         {
             this.unlockedCraftingRecipes = new Dictionary<string, string>();
             this.hasObtainedBatteryPack = false;
+            this.hasMovieTheaterTicketSubscription = false;
         }
 
         public virtual void addUnlockedCraftingRecipe(string RecipeBookId, string RecipeId)

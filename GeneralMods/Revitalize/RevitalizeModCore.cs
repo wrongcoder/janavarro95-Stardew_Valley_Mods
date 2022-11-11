@@ -246,6 +246,8 @@ namespace Omegasis.Revitalize
         {
         }
 
+        
+
 
 
         /// <summary>
@@ -261,7 +263,7 @@ namespace Omegasis.Revitalize
             //Used to also check if a player has items that would do things such as unlocking a crafting recipe when loading a day.
             PlayerUtilities.CheckForInventoryItem(Game1.player.Items);
 
-            ModContentManager.mailManager.tryToAddMailToMailbox();
+            ModContentManager.mailManager.tryToAddAllMailToMailbox();
 
 
             //REMOVE THIS.
@@ -311,7 +313,7 @@ namespace Omegasis.Revitalize
         private void GameLoop_SaveCreated(object sender, StardewModdingAPI.Events.SaveCreatedEventArgs e)
         {
             SaveDataManager.loadOrCreateSaveData();
-            ModContentManager.mailManager.tryToAddMailToMailbox();
+            ModContentManager.mailManager.tryToAddAllMailToMailbox();
             Framework.World.WorldUtilities.WorldUtility.InitializeGameWorld();
         }
 

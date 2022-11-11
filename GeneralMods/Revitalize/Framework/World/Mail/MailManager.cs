@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Constants.Mail;
 using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.ContentPacks;
@@ -13,6 +15,7 @@ using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
+using StardewValley.Objects;
 
 namespace Omegasis.Revitalize.Framework.World.Mail
 {
@@ -22,7 +25,7 @@ namespace Omegasis.Revitalize.Framework.World.Mail
     /// In order to add new mail contents to the game, you must do the following.
     /// 1. Create a new .json file with the mail contents.
     /// 2. Add the mail title constant string and the path to the mail file into the <see cref="mailTitles"/> dictionary.
-    /// 3. Update the <see cref="tryToAddMailToMailbox"/> method as that will check for specific conditions 
+    /// 3. Update the <see cref="tryToAddAllMailToMailbox"/> method as that will check for specific conditions 
     /// </summary>
     public class MailManager
     {
@@ -40,18 +43,32 @@ namespace Omegasis.Revitalize.Framework.World.Mail
         /// <summary>
         /// Tries to add mail to the Player's mailbox when certain events happen for the mod.
         /// </summary>
-        public virtual void tryToAddMailToMailbox()
+        public virtual void tryToAddAllMailToMailbox()
         {
-            if (!this.hasOrWillPlayerReceivedThisMail(MailTitles.HayMakerAvailableForPurchase) && (RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop() || BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop()))
-                Game1.mailbox.Add(MailTitles.HayMakerAvailableForPurchase);
-            if (!this.hasOrWillPlayerReceivedThisMail(MailTitles.SiloRefillServiceAvailable) && Utility.numSilos() >= 1)
-                Game1.mailbox.Add(MailTitles.SiloRefillServiceAvailable);
+            this.addMailIfNotReceived(MailTitles.HayMakerAvailableForPurchase, RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop() || BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop());
+            this.addMailIfNotReceived(MailTitles.SiloRefillServiceAvailable, Utility.numSilos() >= 1);
+            this.addMailIfNotReceived(MailTitles.AutomaticFarmingSystemAvailableForPurchase, Game1.player.FarmingLevel >= 10);
+            this.addMailIfNotReceived(MailTitles.ElectricFurnaceCanBePurchased, RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack);
+            this.addMailIfNotReceived(MailTitles.MiningDrillsAvailableInClintsShop, Game1.player.hasSkullKey);
 
-            if (!this.hasOrWillPlayerReceivedThisMail(MailTitles.AutomaticFarmingSystemAvailableForPurchase) && Game1.player.FarmingLevel >= 10)
-                Game1.mailbox.Add(MailTitles.AutomaticFarmingSystemAvailableForPurchase);
+            if (!Game1.player.mailbox.Contains(MailTitles.MovieTheaterTicketSubscriptionTickets) && Game1.dayOfMonth==1 && RevitalizeModCore.SaveDataManager.playerSaveData.hasMovieTheaterTicketSubscription)
+            {
+                Game1.mailbox.Add(MailTitles.MovieTheaterTicketSubscriptionTickets);
+            }
 
-            if (!this.hasOrWillPlayerReceivedThisMail(MailTitles.ElectricFurnaceCanBePurchased) && RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack)
-                Game1.mailbox.Add(MailTitles.ElectricFurnaceCanBePurchased);
+        }
+
+        /// <summary>
+        /// Trys to add the mail to the player's mailbox if they have not already received it, as well as some additional conditions that need to be met to send the mail.
+        /// </summary>
+        /// <param name="MailTitle"></param>
+        /// <param name="AdditionalConditions"></param>
+        public virtual void addMailIfNotReceived(string MailTitle, bool AdditionalConditions)
+        {
+            if (!this.hasOrWillPlayerReceivedThisMail(MailTitle) && AdditionalConditions)
+            {
+                Game1.mailbox.Add(MailTitle);
+            }
         }
 
         /// <summary>
@@ -75,7 +92,7 @@ namespace Omegasis.Revitalize.Framework.World.Mail
             {
                 IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
                 foreach (MailInfo mail in this.getMailInfo().Values)
-                    data[mail.mailTitle] = mail.message;
+                    data[mail.mailTitle] = Game1.parseText(mail.message);
             }
         }
 
@@ -83,7 +100,7 @@ namespace Omegasis.Revitalize.Framework.World.Mail
         /// Gets all possible mail added in by content packs.
         /// </summary>
         /// <returns></returns>
-        public virtual Dictionary<string,MailInfo> getMailInfo()
+        public virtual Dictionary<string, MailInfo> getMailInfo()
         {
             List<RevitalizeContentPack> contentPacks = RevitalizeModCore.ModContentManager.revitalizeContentPackManager.getContentPacksForCurrentLanguageCode();
 
@@ -91,7 +108,7 @@ namespace Omegasis.Revitalize.Framework.World.Mail
 
             foreach (RevitalizeContentPack contentPack in contentPacks)
             {
-                foreach(KeyValuePair<string,MailInfo> letter in contentPack.mail)
+                foreach (KeyValuePair<string, MailInfo> letter in contentPack.mail)
                 {
                     if (!mails.ContainsKey(letter.Key))
                     {
@@ -107,8 +124,87 @@ namespace Omegasis.Revitalize.Framework.World.Mail
         /// </summary>
         /// <param name="MailMessageText"></param>
         /// <returns></returns>
-        public virtual string parseMailMessage(string MailMessageText)
+        public virtual string parseMailMessage(MailInfo mailInfo)
         {
+            string MailMessageText = mailInfo.message;
+            LetterViewerMenu letterViewerMenu = Game1.activeClickableMenu as LetterViewerMenu;
+
+            //Parse vanilla logic for adding items, objects, furniture, and money to letters.
+            if (MailMessageText.Contains("%item"))
+            {
+                string itemDescription = MailMessageText.Substring(MailMessageText.IndexOf("%item"), MailMessageText.IndexOf("%%") + 2 - MailMessageText.IndexOf("%item"));
+                string[] split = itemDescription.Split(' ');
+                MailMessageText = MailMessageText.Replace(itemDescription, "");
+                Rectangle itemToGetPosition = new Rectangle(letterViewerMenu.xPositionOnScreen + letterViewerMenu.width / 2 - 48, letterViewerMenu.yPositionOnScreen + letterViewerMenu.height - 32 - 96, 96, 96);
+                if (!letterViewerMenu.isFromCollection)
+                {
+                    if (split[1].Equals("object"))
+                    {
+                        int maxNum3 = split.Length - 1;
+                        int which3 = Game1.random.Next(2, maxNum3);
+                        which3 -= which3 % 2;
+                        StardewValley.Object o3 = new StardewValley.Object(Vector2.Zero, Convert.ToInt32(split[which3]), Convert.ToInt32(split[which3 + 1]));
+                        letterViewerMenu.itemsToGrab.Add(new ClickableComponent(itemToGetPosition, o3)
+                        {
+                            myID = 104,
+                            leftNeighborID = 101,
+                            rightNeighborID = 102
+                        });
+                        letterViewerMenu.backButton.rightNeighborID = 104;
+                        letterViewerMenu.forwardButton.leftNeighborID = 104;
+                    }
+                    else if (split[1].Equals("bigobject"))
+                    {
+                        int maxNum2 = split.Length - 1;
+                        int which2 = Game1.random.Next(2, maxNum2);
+                        StardewValley.Object o2 = new StardewValley.Object(Vector2.Zero, Convert.ToInt32(split[which2]));
+                        letterViewerMenu.itemsToGrab.Add(new ClickableComponent(itemToGetPosition, o2)
+                        {
+                            myID = 104,
+                            leftNeighborID = 101,
+                            rightNeighborID = 102
+                        });
+                        letterViewerMenu.backButton.rightNeighborID = 104;
+                        letterViewerMenu.forwardButton.leftNeighborID = 104;
+                    }
+                    else if (split[1].Equals("furniture"))
+                    {
+                        int maxNum = split.Length - 1;
+                        int which = Game1.random.Next(2, maxNum);
+                        Item o = Furniture.GetFurnitureInstance(Convert.ToInt32(split[which]));
+                        letterViewerMenu.itemsToGrab.Add(new ClickableComponent(itemToGetPosition, o)
+                        {
+                            myID = 104,
+                            leftNeighborID = 101,
+                            rightNeighborID = 102
+                        });
+                        letterViewerMenu.backButton.rightNeighborID = 104;
+                        letterViewerMenu.forwardButton.leftNeighborID = 104;
+                    }
+                    else if (split[1].Equals("money"))
+                    {
+                        int moneyToAdd = ((split.Length > 4) ? Game1.random.Next(Convert.ToInt32(split[2]), Convert.ToInt32(split[3])) : Convert.ToInt32(split[2]));
+                        moneyToAdd -= moneyToAdd % 10;
+                        Game1.player.Money += moneyToAdd;
+                        letterViewerMenu.moneyIncluded = moneyToAdd;
+                    }
+                }
+            }
+
+            //Add mail item references to the letter.
+            if (mailInfo.itemReference.isNotNull())
+            {
+                StardewValley.Item obj = mailInfo.itemReference.getItem();
+                Rectangle itemToGetPosition = new Rectangle(letterViewerMenu.xPositionOnScreen + letterViewerMenu.width / 2 - 48, letterViewerMenu.yPositionOnScreen + letterViewerMenu.height - 32 - 96, 96, 96);
+                letterViewerMenu.itemsToGrab.Add(new ClickableComponent(itemToGetPosition, obj)
+                {
+                    myID = 104,
+                    leftNeighborID = 101,
+                    rightNeighborID = 102
+                });
+            }
+
+
             return MailMessageText.Replace("@", Game1.player.name.Value);
         }
 
@@ -126,9 +222,20 @@ namespace Omegasis.Revitalize.Framework.World.Mail
 
                 if (letterViewerMenu.isMail && mail.ContainsKey(letterViewerMenu.mailTitle))
                 {
-                    letterViewerMenu.mailMessage = this.parseMailMessage(mail[letterViewerMenu.mailTitle].message).Split("\n").ToList();
+                    letterViewerMenu.mailMessage = this.parseMailMessage(mail[letterViewerMenu.mailTitle]).Split("\n").ToList();
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the proper mail string for getting items in the mail.
+        /// </summary>
+        /// <param name="ParentSheetIndex"></param>
+        /// <param name="StackSize"></param>
+        /// <returns></returns>
+        public static string GetItemMailStringFormat(Enums.SDVObject ParentSheetIndex, int StackSize)
+        {
+            return string.Format("%item object {0} {1} %%", (int)ParentSheetIndex, StackSize);
         }
     }
 }

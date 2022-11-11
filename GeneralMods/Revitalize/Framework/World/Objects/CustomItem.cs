@@ -103,7 +103,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 }
                 if (string.IsNullOrEmpty(this.basicItemInformation.name.Value) && string.IsNullOrEmpty(displayName))
                 {
-                    throw new JsonContentLoadingException("The given item id {0} does not have a registered value for display strings! A file can be created under the ModAssets/Strings/Objects/DisplayStrings directory with the given info.");
+                    throw new JsonContentLoadingException(string.Format("The given item id {0} does not have a registered value for display strings! A file can be created under the ModAssets/Strings/Objects/DisplayStrings directory with the given info.",this.Id));
                 }
 
                 return this.basicItemInformation.name.Value;

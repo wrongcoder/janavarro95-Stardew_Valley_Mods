@@ -14,5 +14,10 @@ namespace Omegasis.Revitalize.Framework.Constants.Mail
         public const string AutomaticFarmingSystemAvailableForPurchase = "Revitalize.CarpentersShop.AutomaticFarmingSystemAndIrrigatedGardenPotCanBePurchased";
 
         public const string ElectricFurnaceCanBePurchased= "Revitalize.CarpentersShop.ElectricFurnaceCanBePurchased";
+
+        public const string MiningDrillsAvailableInClintsShop = "Revitalize.Blacksmith.MiningDrillsAvailableForPurchase";
+
+
+        public const string MovieTheaterTicketSubscriptionTickets = "Revitalize.MovieTheater.SeasonalTicketsFromSubscription";
     }
 }

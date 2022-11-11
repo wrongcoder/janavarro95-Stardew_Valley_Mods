@@ -37,7 +37,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             {
                 ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.CoalMiningDrillBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.coalMiningDrillPrice, 1);
             }
-            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricMiningDrillRecipeId) && RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack && Game1.player.hasSkullKey)
+            if (!RevitalizeModCore.ModContentManager.craftingManager.knowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricMiningDrillRecipeId) && Game1.player.hasSkullKey)
             {
                 ShopUtilities.AddItemToShop(Menu, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.ElectricMiningDrillBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.electricMiningDrillPrice,1);
             }

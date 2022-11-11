@@ -41,7 +41,10 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         /// </summary>
         public HayMakerShopConfig hayMakerShopConfig;
 
-
+        /// <summary>
+        /// Config file for handling movie theater sell prices.
+        /// </summary>
+        public MovieTheaterShopConfig movieTheaterShopConfig;
 
         public ShopsConfigManager()
         {
@@ -50,6 +53,8 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
             this.dwarfShopConfig = ConfigManager.InitializeConfig<DwarfShopConfig>("Configs", "Shops", "DwarfShopConfig.json");
             this.hayMakerShopConfig = ConfigManager.InitializeConfig<HayMakerShopConfig>("Configs", "Shops", "HayMakerShopConfig.json");
             this.robinsShopConfig = ConfigManager.InitializeConfig<RobinsShopConfig>("Configs", "Shops", "RobinsShopConfig.json");
+
+            this.movieTheaterShopConfig = ConfigManager.InitializeConfig<MovieTheaterShopConfig>("Configs", "Shops", "MovieTheaterConfig.json");
 
             this.walnutRoomShopConfig = ConfigManager.InitializeConfig<WalnutRoomShopConfig>("Configs", "Shops", "WalnutRoomShopConfig.json");
         }

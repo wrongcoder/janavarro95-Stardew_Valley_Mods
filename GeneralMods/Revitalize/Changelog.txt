@@ -3,6 +3,13 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 11-10-2022 xx.xx P.M~~~~~~~~~~~~~~
++Added mail that Clint sends out to start selling mining drills.
++Upgraded MailManager.cs to start being able to attach custom items from item references to mail.
++Added in Movie Theater ticket subscription, which means that you can get free tickets every season!
+~Fixed json propeerties on ItemReference.cs
+
+
 ~~~~~~~~~~~~0.0.1 Revitalize 11-5-2022 xx.xx P.M~~~~~~~~~~~~~~
 -Removed Strings in base mod folder
 +Added Revitalize Content Packs which are currently used for loading strings based on the game's current locale. Allows for translations of the mod's content.

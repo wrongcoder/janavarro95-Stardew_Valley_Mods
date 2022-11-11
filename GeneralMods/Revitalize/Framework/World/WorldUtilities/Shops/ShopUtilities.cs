@@ -14,6 +14,8 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
     public class ShopUtilities
     {
 
+        public static string MovieTheaterTicketWindowShopContext = "";
+
         /// <summary>
         /// Delegate method to find if a given item being searched matches a given condiiton. Also can include additional paramaters to determine if the item should be added or not.
         /// </summary>
@@ -72,6 +74,13 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                     {
                         WalnutRoomShopUtilities.AddItemsToShop(menu);
                     }
+
+                    //Only way to validate the movie theater currently.
+                    if (menu.potraitPersonDialogue.Equals(Game1.parseText(Game1.content.LoadString("Strings\\StringsFromCSFiles:MovieTheaterBoxOffice"), Game1.dialogueFont, 304)))
+                    {
+                        MovieTheaterShopUtilities.AddStockToShop(menu);
+                    }
+
                     if (menu.storeContext.Equals(HayMakerShopUtilities.StoreContext))
                     {
                         HayMakerShopUtilities.AddItemsToShop(menu);

@@ -13,5 +13,10 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Items
     {
         public const string RadioactiveFuel = "Revitalize.Framework.World.Objects.Items.Misc.RadioactiveFuel";
 
+
+        /// <summary>
+        /// Item id for the movie theater ticket subscription.
+        /// </summary>
+        public const string MovieTheaterTicketSubscription = "Revitalize.Framework.World.Objects.Items.Misc.MovieTheaterTicketSubscription";
     }
 }

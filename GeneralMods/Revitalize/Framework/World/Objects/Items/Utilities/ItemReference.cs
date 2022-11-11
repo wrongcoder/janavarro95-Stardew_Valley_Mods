@@ -34,6 +34,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         [JsonIgnore]
         public readonly NetEnum<Enums.SDVBigCraftable> sdvBigCraftableId = new NetEnum<Enums.SDVBigCraftable>(Enums.SDVBigCraftable.NULL);
 
+        [JsonProperty("amount")]
         public virtual int StackSize
         {
             get
@@ -46,6 +47,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             }
         }
 
+        [JsonProperty("registeredObjectId")]
         public virtual string ObjectManagerId
         {
             get
@@ -58,6 +60,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             }
         }
 
+        [JsonProperty("stardewValleyItemId")]
         public virtual Enums.SDVObject SdvObjectId
         {
             get
@@ -70,6 +73,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             }
         }
 
+        [JsonProperty("stardewValleyBigCraftableId")]
         public virtual Enums.SDVBigCraftable SdvBigCraftableIdId
         {
             get
