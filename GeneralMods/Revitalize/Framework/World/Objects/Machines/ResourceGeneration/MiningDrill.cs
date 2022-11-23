@@ -65,8 +65,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
         /// </summary>
         public virtual void tryToRunMiningDrill()
         {
-            this.consumeFuelCharge();
-            this.generateMiningOutput();
+            if (this.fuelChargesRemaining.Value > 0)
+            {
+                this.consumeFuelCharge();
+                this.generateMiningOutput();
+            }
             this.updateAnimation();
         }
 
@@ -139,6 +142,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             if (this.machineTier.Value == PoweredMachineTier.Magical)
             {
                 bonusForMiningDrillTier = 3;
+            }
+            if (this.machineTier.Value == PoweredMachineTier.Galaxy)
+            {
+                bonusForMiningDrillTier = 4;
             }
 
             int stoneGiven = Game1.random.Next(5, 11 + bonusForMiningDrillTier * 2);

@@ -22,6 +22,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
     public class Machine : CustomObject, IInventoryManagerProvider
     {
 
+        public const string DEFAULT_ANINMATION_KEY = "Default";
+        public const string WORKING_ANIMATION_KEY = "Working";
+
         public const string MachineStatusBubble_DefaultAnimationKey = "Default";
         public const string MachineStatusBubble_BlankBubbleAnimationKey = "Blank";
         public const string MachineStatusBubble_InventoryFullAnimationKey = "InventoryFull";

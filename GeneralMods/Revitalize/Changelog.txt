@@ -3,11 +3,15 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 11-22-2022 xx.xx P.M~~~~~~~~~~~~~~
+~Fixed crash on displaying strings for Mining Drill Blueprints
++Added in more advanced Geode Crushers! Blueprints can be unlocked by cracking 200, 500, 750, and 1000 geodes respectively via the mail! More advanced versions can also crack artifact troves and golden coconuts!
+
 ~~~~~~~~~~~~0.0.1 Revitalize 11-10-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added mail that Clint sends out to start selling mining drills.
 +Upgraded MailManager.cs to start being able to attach custom items from item references to mail.
 +Added in Movie Theater ticket subscription, which means that you can get free tickets every season!
-~Fixed json propeerties on ItemReference.cs
+~Fixed json properties on ItemReference.cs
 
 
 ~~~~~~~~~~~~0.0.1 Revitalize 11-5-2022 xx.xx P.M~~~~~~~~~~~~~~

@@ -25,6 +25,11 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Items.BlueprintIds
         public const string NuclearMiningDrillBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.MiningDrills.NuclearMiningDrill";
         public const string MagicalMiningDrillBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.MiningDrills.MagicalMiningDrill";
 
+        //Geode Crushers
+        public const string CoalAdvancedGeodeCrusherBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.GeodeCrushers.CoalAdvancedGeodeCrusher";
+        public const string ElectricAdvancedGeodeCrusherBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.GeodeCrushers.ElectricAdvancedGeodeCrusher";
+        public const string NuclearAdvancedGeodeCrusherBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.GeodeCrushers.NuclearAdvancedGeodeCrusher";
+        public const string MagicalAdvancedGeodeCrusherBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher";
 
         //Auto farming system.
         public const string IrrigatedGardenPotBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot";

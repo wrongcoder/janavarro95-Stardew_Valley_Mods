@@ -210,50 +210,50 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             this.addItem(MachineIds.AdvancedSolarPanelV1, solarP1);
 
-            
+
             MiningDrill electricMiningDrill = new MiningDrill(new BasicItemInformation("", MachineIds.ElectricMiningDrill, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricMiningDrill", new SerializableDictionary<string, Animation>() {
-                {"Default",new Animation(new AnimationFrame(0,0,16,32))  },
-                { "Working",Animation.CreateAnimationFromTextureSequence(0,0,16,32,10, 6).appendAnimation(Animation.CreateAnimationFromReverseTextureSequence(0,0,16,32,10, 6))}
-            }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0,-1),null,null), PoweredMachine.PoweredMachineTier.Electric);
+                {Machine.DEFAULT_ANINMATION_KEY,new Animation(new AnimationFrame(0,0,16,32))  },
+                { Machine.WORKING_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,0,16,32,10, 6).appendAnimation(Animation.CreateAnimationFromReverseTextureSequence(0,0,16,32,10, 6))}
+            }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Electric);
 
             this.addItem(MachineIds.ElectricMiningDrill, electricMiningDrill);
 
             MiningDrill coalMiningDrill = new MiningDrill(new BasicItemInformation("", MachineIds.CoalMiningDrill, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManagers.Objects_Machines.createAnimationManager("CoalMiningDrill", new SerializableDictionary<string, Animation>() {
-                {"Default",new Animation(new AnimationFrame(0,0,16,32))  },
-                { "Working",Animation.CreateAnimationFromTextureSequence(0,0,16,32,10, 6).appendAnimation(Animation.CreateAnimationFromReverseTextureSequence(0,0,16,32,10, 6))}
-            }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Coal);
+                {Machine.DEFAULT_ANINMATION_KEY,new Animation(new AnimationFrame(0,0,16,32))  },
+                { Machine.WORKING_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,0,16,32,10, 6).appendAnimation(Animation.CreateAnimationFromReverseTextureSequence(0,0,16,32,10, 6))}
+            }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Coal);
 
             this.addItem(MachineIds.CoalMiningDrill, coalMiningDrill);
 
             MiningDrill nuclearMiningDrill = new MiningDrill(new BasicItemInformation("", MachineIds.NuclearMiningDrill, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManagers.Objects_Machines.createAnimationManager("NuclearMiningDrill", new SerializableDictionary<string, Animation>() {
-                {"Default",new Animation(new AnimationFrame(0,0,16,32))  },
-                { "Working",Animation.CreateAnimationFromTextureSequence(0,0,16,32,10, 6).appendAnimation(Animation.CreateAnimationFromReverseTextureSequence(0,0,16,32,10, 6))}
-            }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Nuclear);
+                {Machine.DEFAULT_ANINMATION_KEY,new Animation(new AnimationFrame(0,0,16,32))  },
+                { Machine.WORKING_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,0,16,32,10, 6).appendAnimation(Animation.CreateAnimationFromReverseTextureSequence(0,0,16,32,10, 6))}
+            }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Nuclear);
 
             this.addItem(MachineIds.NuclearMiningDrill, nuclearMiningDrill);
 
             MiningDrill magicalMiningDrill = new MiningDrill(new BasicItemInformation("", MachineIds.MagicalMiningDrill, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 4000, true, true, TextureManagers.Objects_Machines.createAnimationManager("MagicalMiningDrill", new SerializableDictionary<string, Animation>() {
-                {"Default",new Animation(new AnimationFrame(0,0,16,32))  },
-                { "Working",Animation.CreateAnimationFromTextureSequence(0,0,16,32,10, 6).appendAnimation(Animation.CreateAnimationFromReverseTextureSequence(0,0,16,32,10, 6))}
-            }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Magical);
+                {Machine.DEFAULT_ANINMATION_KEY,new Animation(new AnimationFrame(0,0,16,32))  },
+                { Machine.WORKING_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,0,16,32,10, 6).appendAnimation(Animation.CreateAnimationFromReverseTextureSequence(0,0,16,32,10, 6))}
+            }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Magical);
 
             this.addItem(MachineIds.MagicalMiningDrill, magicalMiningDrill);
 
 
             Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("", MachineIds.WindmillV1, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Machines.createAnimationManager("Windmill", new SerializableDictionary<string, Animation>() {
 
-                {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
-                {"Working",new Animation(new List<AnimationFrame>(){
+                {Machine.DEFAULT_ANINMATION_KEY,new Animation( new AnimationFrame(0,0,16,32)) },
+                {Machine.WORKING_ANIMATION_KEY,new Animation(new List<AnimationFrame>(){
                     new AnimationFrame(0,0,16,32,20),
                     new AnimationFrame(16,0,16,32,20) },true)
                 }
-            }, "Default", "Working"), Color.White, false, new Vector2(1, 2), Vector2.Zero, null, null, false, null), Vector2.Zero);
+            }, Machine.DEFAULT_ANINMATION_KEY, Machine.WORKING_ANIMATION_KEY), Color.White, false, new Vector2(1, 2), Vector2.Zero, null, null, false, null), Vector2.Zero);
 
             this.addItem(MachineIds.WindmillV1, windMillV1_0_0);
 
             this.addItem(FarmingObjects.HayMaker, new HayMaker(new BasicItemInformation("", FarmingObjects.HayMaker, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
             {
-                {"Default",new Animation( new AnimationFrame(0,0,16,32)) },
+                {Machine.DEFAULT_ANINMATION_KEY,new Animation( new AnimationFrame(0,0,16,32)) },
                     {HayMaker.HayAnimation,new Animation(new List<AnimationFrame>(){
                        new AnimationFrame(16,0,16,32,20)}
                     ,true)},
@@ -272,9 +272,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                        new AnimationFrame(64,0,16,32,20)}
                     ,true)
                     }
-            }, "Default", "Default"), Color.White, false, /* Bounding box is the number of pixels taken up */ new Vector2(1, 1),/*Shift by whitespace*/ new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager())));
+            }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, /* Bounding box is the number of pixels taken up */ new Vector2(1, 1),/*Shift by whitespace*/ new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager())));
 
-            this.addItem(FarmingObjects.HayMaker_FeedShop, new HayMaker(new BasicItemInformation("", FarmingObjects.HayMaker_FeedShop, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new Animation(16, 0, 16, 32)), Color.White, false, /* Bounding box is the number of pixels taken up */ new Vector2(1, 1),/*Shift by whitespace*/ new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager()),true));
+            this.addItem(FarmingObjects.HayMaker_FeedShop, new HayMaker(new BasicItemInformation("", FarmingObjects.HayMaker_FeedShop, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new Animation(16, 0, 16, 32)), Color.White, false, /* Bounding box is the number of pixels taken up */ new Vector2(1, 1),/*Shift by whitespace*/ new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager()), true));
 
 
 
@@ -344,6 +344,27 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 }, ElectricFurnace.MAGICAL_IDLE_ANIMATION_KEY, ElectricFurnace.MAGICAL_IDLE_ANIMATION_KEY
 
                 ), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Magical));
+
+            this.addItem(MachineIds.CoalAdvancedGeodeCrusher, new AdvancedGeodeCrusher(new BasicItemInformation("", MachineIds.CoalAdvancedGeodeCrusher, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Machines.createAnimationManager("CoalAdvancedGeodeCrusher", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Coal));
+            this.addItem(MachineIds.ElectricAdvancedGeodeCrusher, new AdvancedGeodeCrusher(new BasicItemInformation("", MachineIds.ElectricAdvancedGeodeCrusher, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Machines.createAnimationManager("ElectricAdvancedGeodeCrusher", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Electric));
+            this.addItem(MachineIds.NuclearAdvancedGeodeCrusher, new AdvancedGeodeCrusher(new BasicItemInformation("", MachineIds.NuclearAdvancedGeodeCrusher, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Machines.createAnimationManager("NuclearAdvancedGeodeCrusher", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Nuclear));
+            this.addItem(MachineIds.MagicalAdvancedGeodeCrusher, new AdvancedGeodeCrusher(new BasicItemInformation("", MachineIds.MagicalAdvancedGeodeCrusher, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Machines.createAnimationManager("MagicalAdvancedGeodeCrusher", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Magical));
         }
 
         /// <summary>

@@ -31,6 +31,12 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
             Game1.playSound(soundName);
         }
 
+        public static void PlaySoundWithDelay(StardewSound stardewSound, int delayTime)
+        {
+            string soundName = GetSoundNameFromStardewSound(stardewSound);
+            DelayedAction.playSoundAfterDelay(soundName, delayTime);
+        }
+
         public static void PlaySound(this GameLocation GameLocation, StardewSound stardewSound)
         {
             string soundName = GetSoundNameFromStardewSound(stardewSound);

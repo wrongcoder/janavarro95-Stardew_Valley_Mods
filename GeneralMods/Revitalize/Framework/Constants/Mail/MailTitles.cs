@@ -17,7 +17,11 @@ namespace Omegasis.Revitalize.Framework.Constants.Mail
 
         public const string MiningDrillsAvailableInClintsShop = "Revitalize.Blacksmith.MiningDrillsAvailableForPurchase";
 
-
         public const string MovieTheaterTicketSubscriptionTickets = "Revitalize.MovieTheater.SeasonalTicketsFromSubscription";
+
+        public const string AdvancedGeodeCrusherUnlock = "Revitalize.UnlockNewStuffWithoutNPCMail.AdvancedGeodeCrusherUnlock";
+        public const string ElectricGeodeCrusherUnlock = "Revitalize.UnlockNewStuffWithoutNPCMail.ElectricGeodeCrusherUnlock";
+        public const string NuclearGeodeCrusherUnlock = "Revitalize.UnlockNewStuffWithoutNPCMail.NuclearGeodeCrusherUnlock";
+        public const string MagicalGeodeCrusherUnlock = "Revitalize.UnlockNewStuffWithoutNPCMail.MagicalGeodeCrusherUnlock";
     }
 }

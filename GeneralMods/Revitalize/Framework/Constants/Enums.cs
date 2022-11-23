@@ -507,6 +507,8 @@ namespace Omegasis.Revitalize.Framework.Constants
 
             Artichoke = 274,
 
+            ArtifactTrove= 275,
+
             Pumpkin = 276,
 
             WiltedBouquet = 277,
@@ -1583,7 +1585,17 @@ namespace Omegasis.Revitalize.Framework.Constants
             /// <summary>
             /// The sound when dropping down a piece of wooded type furniture but it's lighter pitched/normal.
             /// </summary>
-            woodyStep
+            woodyStep,
+
+            /// <summary>
+            /// Drum sound effect. Used with the geode crusher.
+            /// </summary>
+            drumkit4,
+
+            /// <summary>
+            /// Steam sound effect. Used with the geode crusher.
+            /// </summary>
+            steam,
         }
 
         /// <summary>

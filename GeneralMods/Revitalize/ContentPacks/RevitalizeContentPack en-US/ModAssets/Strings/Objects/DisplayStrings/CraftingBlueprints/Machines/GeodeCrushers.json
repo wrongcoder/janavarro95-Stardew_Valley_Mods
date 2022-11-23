@@ -1,0 +1,22 @@
+{
+	"Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.GeodeCrushers.CoalAdvancedGeodeCrusher":
+	{
+		"displayName":"Advanced Burner Geode Crusher",
+		"description":"A blueprint used on how to craft an advanced burner geode crusher at a workbench!"
+	},
+	"Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.GeodeCrushers.ElectricAdvancedGeodeCrusher":
+	{
+		"displayName":"Electric Geode Crusher",
+		"description":"A blueprint used on how to craft an electric geode crusher at a workbench!"
+	},
+	"Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.GeodeCrushers.NuclearAdvancedGeodeCrusher":
+	{
+		"displayName":"Nuclear Geode Crusher",
+		"description":"A blueprint used on how to craft a nuclear geode crusher at a workbench!"
+	},
+	"Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher":
+	{
+		"displayName":"Magical Geode Crusher",
+		"description":"A blueprint used on how to craft a magical geode crusher at a workbench!"
+	},
+}

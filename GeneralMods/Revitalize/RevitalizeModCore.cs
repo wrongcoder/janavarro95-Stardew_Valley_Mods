@@ -292,11 +292,30 @@ namespace Omegasis.Revitalize
 
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-                                 ModContentManager.objectManager.getItem(MachineIds.CoalMiningDrill,10),
-                 ModContentManager.objectManager.getItem(MachineIds.ElectricMiningDrill,10),
-                                  ModContentManager.objectManager.getItem(MachineIds.NuclearMiningDrill,10),
-                                                   ModContentManager.objectManager.getItem(MachineIds.MagicalMiningDrill,10),
-                ModContentManager.objectManager.getItem(Enums.SDVObject.BatteryPack,100),
+              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.CoalAdvancedGeodeCrusherBlueprint,1),
+              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.ElectricAdvancedGeodeCrusherBlueprint,1),
+              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.NuclearAdvancedGeodeCrusherBlueprint,1),
+              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.MagicalAdvancedGeodeCrusherBlueprint,1),
+
+              ModContentManager.objectManager.getItem(MachineIds.CoalAdvancedGeodeCrusher,1),
+              ModContentManager.objectManager.getItem(MachineIds.ElectricAdvancedGeodeCrusher,1),
+              ModContentManager.objectManager.getItem(MachineIds.NuclearAdvancedGeodeCrusher,1),
+              ModContentManager.objectManager.getItem(MachineIds.MagicalAdvancedGeodeCrusher,1),
+
+              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.CoalMiningDrillBlueprint,1),
+              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.ElectricMiningDrillBlueprint,1),
+              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.NuclearMiningDrillBlueprint,1),
+              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.MagicalMiningDrillBlueprint,1),
+
+              ModContentManager.objectManager.getItem(Enums.SDVObject.BatteryPack,100),
+
+              ModContentManager.objectManager.getItem(Enums.SDVObject.Geode,100),
+              ModContentManager.objectManager.getItem(Enums.SDVObject.FrozenGeode,100),
+              ModContentManager.objectManager.getItem(Enums.SDVObject.MagmaGeode,100),
+              ModContentManager.objectManager.getItem(Enums.SDVObject.OmniGeode,100),
+
+              ModContentManager.objectManager.getItem(Enums.SDVObject.ArtifactTrove,100),
+              ModContentManager.objectManager.getItem(Enums.SDVObject.GoldenCoconut,100),
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             });
 

@@ -24,7 +24,10 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Objects
         public const string MagicalMiningDrill = PREFIX + "MagicalMiningDrill";
 
 
-
+        public const string CoalAdvancedGeodeCrusher = PREFIX + "CoalAdvancedGeodeCrusher";
+        public const string ElectricAdvancedGeodeCrusher = PREFIX + "ElectricAdvancedGeodeCrusher";
+        public const string NuclearAdvancedGeodeCrusher = PREFIX + "NuclearAdvancedGeodeCrusher";
+        public const string MagicalAdvancedGeodeCrusher = PREFIX + "MagicalAdvancedGeodeCrusher";
 
 
 

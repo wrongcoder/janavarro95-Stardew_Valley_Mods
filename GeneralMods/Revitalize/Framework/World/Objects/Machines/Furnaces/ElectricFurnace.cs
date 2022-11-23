@@ -102,6 +102,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                     {
                         multiplier = .25f;
                     }
+                    if (this.furnaceType.Value == PoweredMachineTier.Galaxy)
+                    {
+                        multiplier = .1f;
+                    }
 
                     //Make sure enough fue is present for the furnace to operate (if necessary!)
                     bool success = this.useFuelItemToIncreaseCharges(who,false ,ShowRedMessage);

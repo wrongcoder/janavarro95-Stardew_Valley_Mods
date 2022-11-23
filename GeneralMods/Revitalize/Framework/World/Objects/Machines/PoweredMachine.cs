@@ -32,7 +32,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             Coal,
             Electric,
             Nuclear,
-            Magical
+            Magical,
+            /// <summary>
+            /// If ever implemented, this will have machines process instantly.
+            /// </summary>
+            Galaxy
         }
 
         public readonly NetEnum<PoweredMachineTier> machineTier = new NetEnum<PoweredMachineTier>();
@@ -201,6 +205,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             return int.MaxValue;
         }
 
+        public virtual int getGalaxyFuelChargeIncreaseAmount()
+        {
+            return int.MaxValue;
+        }
+
 
         /// <summary>
         /// Increases the fuel type for the furnace. Public for automate compatibility
@@ -222,6 +231,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             if (this.machineTier.Value == PoweredMachineTier.Magical)
             {
                 this.fuelChargesRemaining.Value = this.getMagicalFuelChargeIncreaseAmount();
+            }
+            if (this.machineTier.Value == PoweredMachineTier.Galaxy)
+            {
+                this.fuelChargesRemaining.Value = this.getGalaxyFuelChargeIncreaseAmount();
             }
         }
 
