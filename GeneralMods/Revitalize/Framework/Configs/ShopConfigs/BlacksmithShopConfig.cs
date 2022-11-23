@@ -38,8 +38,13 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         /// </summary>
         public int anvilBlueprintsPrice;
 
-        public int coalMiningDrillPrice = 5000;
-        public int electricMiningDrillPrice = 20000;
+        public int coalMiningDrillBlueprintPrice = 5000;
+        public int electricMiningDrillBlueprintPrice = 20000;
+
+        public int advancedGeodeCrusherBlueprintPrice = 10_000;
+        public int electricGeodeCrusherBlueprintPrice = 25_000;
+        public int nuclearGeodeCrusherBlueprintPrice = 50_000;
+        public int magicalGeodeCrusherBlueprintPrice = 100_000;
 
         /// <summary>
         /// How much a regular axe blueprint sells for in clint's shop.

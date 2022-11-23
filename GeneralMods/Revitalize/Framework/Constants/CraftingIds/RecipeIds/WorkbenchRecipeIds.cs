@@ -23,6 +23,11 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds
         public static string NuclearMiningDrillRecipeId = "Revitalize.Workbench.Machines.MiningDrills.NuclearMiningDrill";
         public static string MagicalMiningDrillRecipeId = "Revitalize.Workbench.Machines.MiningDrills.MagicalMiningDrill";
 
+        public static string AdvancedGeodeCrusher = "Revitalize.Workbench.Machines.GeodeCrushers.AdvancedGeodeCrusher";
+        public static string ElectricGeodeCrusher = "Revitalize.Workbench.Machines.GeodeCrushers.ElectricGeodeCrusher";
+        public static string NuclearGeodeCrusher = "Revitalize.Workbench.Machines.GeodeCrushers.NuclearGeodeCrusher";
+        public static string MagicalGeodeCrusher = "Revitalize.Workbench.Machines.GeodeCrushers.MagicalGeodeCrusher";
+
         public static string IrrigatedWateringPotRecipeId = "Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot";
         public static string AutoPlanterIrrigatedWateringPotAttachmentRecipeId = "Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Items.Farming.AutoPlanterGardenPotAttachment";
         public static string AutoHarvesterIrrigatedWateringPotAttachmentRecipeId = "Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Items.Farming.AutoHarvesterGardenPotAttachment";
