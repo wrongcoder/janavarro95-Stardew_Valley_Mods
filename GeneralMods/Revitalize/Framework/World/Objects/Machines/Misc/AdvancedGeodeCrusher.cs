@@ -295,19 +295,19 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
                 //Coal isn't used but just in case.
                 if (this.machineTier.Value == PoweredMachineTier.Coal)
                 {
-                    this.MinutesUntilReady = 50;
+                    this.MinutesUntilReady = 30;
                 }
                 if (this.machineTier.Value == PoweredMachineTier.Electric)
                 {
-                    this.MinutesUntilReady = 40;
+                    this.MinutesUntilReady = 30;
                 }
                 if (this.machineTier.Value == PoweredMachineTier.Nuclear)
                 {
-                    this.MinutesUntilReady = 30;
+                    this.MinutesUntilReady = 10;
                 }
                 if (this.machineTier.Value == PoweredMachineTier.Magical)
                 {
-                    this.MinutesUntilReady = 20;
+                    this.MinutesUntilReady = 10;
                 }
                 if (this.machineTier.Value == PoweredMachineTier.Galaxy)
                 {
