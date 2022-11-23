@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops.RevitalizeShops;
 using StardewValley;
@@ -86,6 +87,14 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                         HayMakerShopUtilities.AddItemsToShop(menu);
                     }
                 }
+            }
+        }
+
+        public static void AddToShopIfCraftingRecipeNotKnown(ShopMenu Menu, string CraftingBookName, string CraftingRecipe, ISalable Item, int Price, int Stock = 1, bool AdditionalConditions=true)
+        {
+            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingBookName, CraftingRecipe) && AdditionalConditions)
+            {
+                ShopUtilities.AddItemToShop(Menu, Item, Price, Stock);
             }
         }
 

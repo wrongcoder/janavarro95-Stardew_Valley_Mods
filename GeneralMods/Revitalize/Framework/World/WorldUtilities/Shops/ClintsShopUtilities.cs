@@ -31,36 +31,15 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 
             ObjectManager objectManager = RevitalizeModCore.ModContentManager.objectManager;
 
-            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AnvilRecipeId))
-            {
-                ShopUtilities.AddItemToShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.AnvilBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.anvilBlueprintsPrice, 1);
-            }
 
-            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.CoalMiningDrillRecipeId) && Game1.player.hasSkullKey)
-            {
-                ShopUtilities.AddItemToShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.CoalMiningDrillBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.coalMiningDrillBlueprintPrice, 1);
-            }
-            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricMiningDrillRecipeId) && Game1.player.hasSkullKey)
-            {
-                ShopUtilities.AddItemToShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.ElectricMiningDrillBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.electricMiningDrillBlueprintPrice,1);
-            }
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AnvilRecipeId, objectManager.getItem(WorkbenchBlueprintIds.AnvilBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.anvilBlueprintsPrice, 1);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.CoalMiningDrillRecipeId, objectManager.getItem(WorkbenchBlueprintIds.CoalMiningDrillBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.coalMiningDrillBlueprintPrice, 1);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricMiningDrillRecipeId, objectManager.getItem(WorkbenchBlueprintIds.ElectricMiningDrillBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.electricMiningDrillBlueprintPrice, 1);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AdvancedGeodeCrusher, objectManager.getItem(WorkbenchBlueprintIds.CoalAdvancedGeodeCrusherBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.advancedGeodeCrusherBlueprintPrice, 1, Game1.stats.GeodesCracked >= 200);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricGeodeCrusher, objectManager.getItem(WorkbenchBlueprintIds.ElectricAdvancedGeodeCrusherBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.electricGeodeCrusherBlueprintPrice, 1, Game1.stats.GeodesCracked >= 500);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearGeodeCrusher, objectManager.getItem(WorkbenchBlueprintIds.NuclearAdvancedGeodeCrusherBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.nuclearGeodeCrusherBlueprintPrice, 1, Game1.stats.GeodesCracked >= 750 && PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.MagicalGeodeCrusher, objectManager.getItem(WorkbenchBlueprintIds.MagicalAdvancedGeodeCrusherBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.magicalGeodeCrusherBlueprintPrice, 1, Game1.stats.GeodesCracked >= 1000 && PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
 
-            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AdvancedGeodeCrusher) && Game1.stats.GeodesCracked>=200)
-            {
-                ShopUtilities.AddItemToShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.CoalAdvancedGeodeCrusherBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.advancedGeodeCrusherBlueprintPrice, 1);
-            }
-            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricGeodeCrusher) && Game1.stats.GeodesCracked >= 500)
-            {
-                ShopUtilities.AddItemToShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.ElectricAdvancedGeodeCrusherBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.electricGeodeCrusherBlueprintPrice, 1);
-            }
-            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearGeodeCrusher) && Game1.stats.GeodesCracked >= 750 && PlayerUtilities.GetNumberOfGoldenWalnutsFound()>=100)
-            {
-                ShopUtilities.AddItemToShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.NuclearAdvancedGeodeCrusherBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.nuclearGeodeCrusherBlueprintPrice, 1);
-            }
-            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.MagicalGeodeCrusher) && Game1.stats.GeodesCracked >= 1000 && PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100)
-            {
-                ShopUtilities.AddItemToShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.MagicalAdvancedGeodeCrusherBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.magicalGeodeCrusherBlueprintPrice, 1);
-            }
 
             AddAxeBlueprintsToShop(Menu);
             AddHoeBlueprintsToShop(Menu);
