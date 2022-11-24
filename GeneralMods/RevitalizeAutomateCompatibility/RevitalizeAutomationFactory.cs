@@ -9,6 +9,7 @@ using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Misc;
+using Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneration;
 using Omegasis.RevitalizeAutomateCompatibility.Objects;
 using Omegasis.RevitalizeAutomateCompatibility.Objects.Machines;
 using Pathoschild.Stardew.Automate;
@@ -44,6 +45,11 @@ namespace Omegasis.RevitalizeAutomateCompatibility
                 if (modObj.Id.Equals(MachineIds.AdvancedCharcoalKiln) || modObj.Id.Equals(MachineIds.DeluxCharcoalKiln) || modObj.Id.Equals(MachineIds.SuperiorCharcoalKiln))
                 {
                     return new MachineWrapper<AdvancedCharcoalKiln>((AdvancedCharcoalKiln)obj, location, tile);
+                }
+
+                if (modObj.Id.Equals(MachineIds.CoalMiningDrill) || modObj.Id.Equals(MachineIds.ElectricMiningDrill) || modObj.Id.Equals(MachineIds.NuclearMiningDrill) || modObj.Id.Equals(MachineIds.MagicalMiningDrill))
+                {
+                    return new PoweredMachineWrapper<MiningDrill>((MiningDrill)obj, location, tile);
                 }
             }
 

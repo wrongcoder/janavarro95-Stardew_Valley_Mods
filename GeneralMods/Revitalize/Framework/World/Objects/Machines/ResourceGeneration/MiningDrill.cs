@@ -60,6 +60,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             this.tryToRunMiningDrill();
         }
 
+        public override bool minutesElapsed(int minutes, GameLocation environment)
+        {
+            this.updateAnimation();
+            return base.minutesElapsed(minutes, environment);
+        }
+
         /// <summary>
         /// Attempts to run the mining drill again to generate it's outputs for the next day.
         /// </summary>
@@ -285,6 +291,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
         public override Item getOne()
         {
             return new MiningDrill(this.basicItemInformation.Copy(), this.machineTier.Value);
+        }
+
+        public override bool isWorking()
+        {
+            return this.itemToMine.Value != null;
         }
     }
 }
