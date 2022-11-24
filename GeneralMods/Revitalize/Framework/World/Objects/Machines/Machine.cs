@@ -18,6 +18,7 @@ using System.IO;
 using Omegasis.Revitalize.Framework.HUD;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Crafting;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 {
@@ -81,7 +82,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             if (this.Scale.X < Game1.pixelZoom)
                 this.Scale = new Vector2(Game1.pixelZoom, Game1.pixelZoom);
 
-            if (this.MinutesUntilReady > 0)
+            if (this.isWorking())
             {
                 if (this.lerpScaleIncreasing.Value == true)
                 {
@@ -136,6 +137,19 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             if (this.heldObject.Value != null) return false;
 
             return true;
+        }
+
+
+        /// <summary>
+        /// Used to process input for machines as well as providing an accessor to the Automate mod for this mod.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="who"></param>
+        /// <param name="ShowRedMessage"></param>
+        /// <returns></returns>
+        public virtual CraftingResult processInput(Item item, Farmer who, bool ShowRedMessage = true)
+        {
+            return new CraftingResult(false);
         }
 
         /// <summary>
@@ -250,6 +264,25 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         }
 
         /// <summary>
+        /// Checks to see if this machine is currently working.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool isWorking()
+        {
+            return this.MinutesUntilReady > 0;
+        }
+
+        /// <summary>
+        /// Checks to see if the machine is ready to start working.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool isIdle()
+        {
+            return this.MinutesUntilReady == 0 && this.heldObject.Value == null;
+        }
+
+
+        /// <summary>
         /// Returns a common error string to display to the player that more items are necessary to use a machine for drop in purposes.
         /// </summary>
         /// <param name="AmountRequired"></param>
@@ -281,7 +314,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
             y = (int)this.TileLocation.Y;
 
-            if (this.MinutesUntilReady > 0)
+            if (this.isWorking())
             {
                 Vector2 origin = new Vector2(this.AnimationManager.getCurrentAnimationFrameRectangle().Width / 2, this.AnimationManager.getCurrentAnimationFrameRectangle().Height);
 

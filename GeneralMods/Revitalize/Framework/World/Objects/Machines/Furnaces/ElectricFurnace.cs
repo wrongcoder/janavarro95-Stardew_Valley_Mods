@@ -34,9 +34,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         public const string MAGICAL_WORKING_ANIMATION_KEY = "Magical_Working";
         public const string MAGICAL_IDLE_ANIMATION_KEY = "Magical_Idle";
 
-        public readonly NetInt chargesRemaining = new NetInt();
-        public readonly NetEnum<PoweredMachineTier> furnaceType = new NetEnum<PoweredMachineTier>(PoweredMachineTier.Electric);
-
         public ElectricFurnace()
         {
 
@@ -46,19 +43,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         public ElectricFurnace(BasicItemInformation info, PoweredMachineTier furnaceType) : base(info,furnaceType)
         {
             this.createStatusBubble();
-            this.furnaceType.Value = furnaceType;
         }
 
         public ElectricFurnace(BasicItemInformation info, Vector2 TileLocation, PoweredMachineTier furnaceType) : base(info, TileLocation,furnaceType)
         {
             this.createStatusBubble();
-            this.furnaceType.Value = furnaceType;
-        }
-
-        protected override void initializeNetFieldsPostConstructor()
-        {
-            base.initializeNetFieldsPostConstructor();
-            this.NetFields.AddFields(this.chargesRemaining, this.furnaceType);
         }
 
         /// <summary>
@@ -68,8 +57,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         /// <param name="who"></param>
         /// <param name="ShowRedMessage"></param>
         /// <returns></returns>
-        public virtual CraftingRecipeResult processItemFromRecipe(Item dropInItem, Farmer who, bool ShowRedMessage=true)
+        public override CraftingResult processInput(Item dropInItem, Farmer who, bool ShowRedMessage=true)
         {
+            if (this.isWorking() || this.finishedProduction()) return new CraftingResult(false);
+
             foreach(var craftingRecipe in RevitalizeModCore.ModContentManager.craftingManager.getUnlockedCraftingRecipes(this.getCraftingBookName()))
             {
                 Item neededDropInItem = craftingRecipe.ingredients[0].item;
@@ -86,23 +77,23 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                         {
                             Game1.showRedMessage(JsonContentLoaderUtilities.LoadErrorString(this.getErrorStringFile(), "NeedMoreInputItems", amountRequired, neededDropInItem.DisplayName));
                         }
-                        return new CraftingRecipeResult(craftingRecipe,false);
+                        return new CraftingResult(false);
                     }
 
                     float multiplier = 1f;
-                    if (this.furnaceType.Value == PoweredMachineTier.Electric)
+                    if (this.machineTier.Value == PoweredMachineTier.Electric)
                     {
                         multiplier = .75f;
                     }
-                    if (this.furnaceType.Value == PoweredMachineTier.Nuclear)
+                    if (this.machineTier.Value == PoweredMachineTier.Nuclear)
                     {
                         multiplier = .5f;
                     }
-                    if (this.furnaceType.Value == PoweredMachineTier.Magical)
+                    if (this.machineTier.Value == PoweredMachineTier.Magical)
                     {
                         multiplier = .25f;
                     }
-                    if (this.furnaceType.Value == PoweredMachineTier.Galaxy)
+                    if (this.machineTier.Value == PoweredMachineTier.Galaxy)
                     {
                         multiplier = .1f;
                     }
@@ -112,7 +103,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
 
                     if (success == false)
                     {
-                        return new CraftingRecipeResult(craftingRecipe, false);
+                        return new CraftingResult(false);
                     }
 
                     Item outputItem = craftingRecipe.outputs[0].item.getOne();
@@ -133,10 +124,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                     PlayerUtilities.ReduceInventoryItemStackSize(who, dropInItem, amountRequired);
                     this.updateAnimation();
 
-                    return new CraftingRecipeResult(craftingRecipe, true); //Found a sucessful recipe.
+                    return new CraftingResult(new ItemReference(neededDropInItem, amountRequired), true); //Found a sucessful recipe.
                 }
             }
-            return new CraftingRecipeResult(null,false);
+            return new CraftingResult(false);
         }
 
         public virtual string getCraftingBookName()
@@ -153,7 +144,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             {
                 this.getMachineOutputs(true, false, true);
             }
-            this.processItemFromRecipe(dropInItem, who,true);
+            this.processInput(dropInItem, who,true);
 
             //return base.performObjectDropInAction(dropInItem, probe, who);
             return false;
@@ -164,7 +155,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
         /// </summary>
         public override void updateAnimation()
         {
-            if (this.furnaceType.Value == PoweredMachineTier.Electric)
+            if (this.machineTier.Value == PoweredMachineTier.Electric)
             {
                 if (this.MinutesUntilReady > 0)
                 {
@@ -178,7 +169,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                 }
 
             }
-            if (this.furnaceType.Value == PoweredMachineTier.Nuclear)
+            if (this.machineTier.Value == PoweredMachineTier.Nuclear)
             {
                 if (this.MinutesUntilReady > 0)
                 {
@@ -191,7 +182,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                     return;
                 }
             }
-            if (this.furnaceType.Value == PoweredMachineTier.Magical)
+            if (this.machineTier.Value == PoweredMachineTier.Magical)
             {
                 if (this.MinutesUntilReady > 0)
                 {
@@ -219,14 +210,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
 
         public override Item getOne()
         {
-            return new ElectricFurnace(this.basicItemInformation.Copy(), this.furnaceType.Value);
+            return new ElectricFurnace(this.basicItemInformation.Copy(), this.machineTier.Value);
         }
 
         public override bool canStackWith(ISalable other)
         {
             if (!(other is ElectricFurnace)) return false;
             ElectricFurnace otherFurnace = (ElectricFurnace)other;
-            return base.canStackWith(other) && otherFurnace.furnaceType.Value == this.furnaceType.Value;
+            return base.canStackWith(other) && otherFurnace.machineTier.Value == this.machineTier.Value;
         }
 
     }

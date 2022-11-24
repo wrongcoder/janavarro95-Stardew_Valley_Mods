@@ -5,9 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
+using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces;
-using Omegasis.RevitalizeAutomateCompatibility.MachineWrappers.Objects.Machines.Furnaces;
+using Omegasis.Revitalize.Framework.World.Objects.Machines.Misc;
+using Omegasis.RevitalizeAutomateCompatibility.Objects;
+using Omegasis.RevitalizeAutomateCompatibility.Objects.Machines;
 using Pathoschild.Stardew.Automate;
 using StardewValley;
 using StardewValley.Buildings;
@@ -30,7 +33,17 @@ namespace Omegasis.RevitalizeAutomateCompatibility
                 ICustomModObject modObj = (obj as ICustomModObject);
                 if (modObj.Id.Equals(MachineIds.ElectricFurnace) || modObj.Id.Equals(MachineIds.NuclearFurnace) || modObj.Id.Equals(MachineIds.MagicalFurnace))
                 {
-                    return new ElectricFurnaceWrapper((ElectricFurnace)obj, location, tile);
+                    return new PoweredMachineWrapper<ElectricFurnace>((ElectricFurnace)obj, location, tile);
+                }
+
+                if(modObj.Id.Equals(MachineIds.CoalAdvancedGeodeCrusher) || modObj.Id.Equals(MachineIds.ElectricAdvancedGeodeCrusher) || modObj.Id.Equals(MachineIds.NuclearAdvancedGeodeCrusher) || modObj.Id.Equals(MachineIds.MagicalAdvancedGeodeCrusher))
+                {
+                    return new PoweredMachineWrapper<AdvancedGeodeCrusher>((AdvancedGeodeCrusher)obj, location, tile);
+                }
+
+                if (modObj.Id.Equals(MachineIds.AdvancedCharcoalKiln) || modObj.Id.Equals(MachineIds.DeluxCharcoalKiln) || modObj.Id.Equals(MachineIds.SuperiorCharcoalKiln))
+                {
+                    return new MachineWrapper<AdvancedCharcoalKiln>((AdvancedCharcoalKiln)obj, location, tile);
                 }
             }
 

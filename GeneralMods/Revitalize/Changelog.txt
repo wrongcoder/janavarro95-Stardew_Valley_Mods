@@ -5,6 +5,11 @@ Key:
 
 ~~~~~~~~~~~~0.0.1 Revitalize 11-24-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added in Advanced, Delux, and Superior Charcoal kilns that turn wood into coal and better rates. Unlocked with higher forging levels and by collecting golden walnuts. Sold by Clint.
+~Fixed a glitch where Geode crushers were always consuming fuel charges, this consuming more fuel items even when not operating.
++Cleaned up some code related to machines to make it easier to understand the flow as well as to interface for automate compatibility.
++Added automate compatibility for the geode crushers
++Added automate compatibilityb for the charcoal kilns
+~Rewrote much of the logic related to automatce compatibility in the compatibility mod to be able to much easier add compatibility at least for new machines, in the future.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 11-22-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed crash on displaying strings for Mining Drill Blueprints

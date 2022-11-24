@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
+using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.Utilities.Extensions;
@@ -18,7 +19,7 @@ using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewValley;
 using StardewValley.Locations;
 
-namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneration
+namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Misc.AdvancedGeodeCrusher")]
     public class AdvancedGeodeCrusher : PoweredMachine
@@ -51,7 +52,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
         {
             base.minutesElapsed(minutes, environment);
 
-            if (this.MinutesUntilReady == 0 && this.itemToReceive.Value!=null)
+            if (this.MinutesUntilReady == 0 && this.itemToReceive.Value != null)
             {
                 this.heldObject.Value = (StardewValley.Object)this.itemToReceive.Value.getItem();
                 this.itemToReceive.Value = null;
@@ -68,24 +69,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
         /// <returns></returns>
         public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
         {
-            //Prevent overriding and destroying the previous operation.
             if (this.itemToReceive.Value != null) return false;
-            if (this.heldObject.Value != null)
-            {
-                Game1.player.addItemToInventory(this.heldObject.Value);
-                this.heldObject.Value = null;
-            }
-            bool success = base.performObjectDropInAction(dropInItem, probe, who) && this.useFuelItemToIncreaseCharges(who, false, true);
-            bool generatedOutput = false;
-            if (success)
-            {
-                if (this.fuelChargesRemaining.Value > 0)
-                {
-                    this.consumeFuelCharge();
-                    generatedOutput = this.generateOutput(dropInItem);
-                }
-                this.updateAnimation();
-            }
+            return base.performObjectDropInAction(dropInItem, probe, who);
+        }
+
+        public override CraftingResult processInput(Item item, Farmer who, bool ShowRedMessage = true)
+        {
+            if (this.isWorking() || this.finishedProduction()) return new CraftingResult(false);
+            bool generatedOutput = this.generateOutput(item);
+            this.updateAnimation();
             if (generatedOutput)
             {
                 if (who != null)
@@ -99,22 +91,28 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
                     SoundUtilities.PlaySound(Enums.StardewSound.stoneCrack);
                     SoundUtilities.PlaySoundWithDelay(Enums.StardewSound.steam, 200);
                 }
-                PlayerUtilities.ReduceInventoryItemStackSize(who, dropInItem, 1);
-                return false;
+                who.ReduceInventoryItemStackSize(item, 1);
+                return new CraftingResult(new ItemReference(item, 1), generatedOutput);
             }
-            return false;
+            return new CraftingResult(false);
         }
 
         public override void updateAnimation()
         {
             if (this.itemToReceive.Value != null)
-            {
-                this.AnimationManager.playAnimation(Machine.WORKING_ANIMATION_KEY);
-            }
+                this.AnimationManager.playAnimation(WORKING_ANIMATION_KEY);
             else
-            {
                 this.AnimationManager.playDefaultAnimation();
-            }
+        }
+
+        public override int getElectricFuelChargeIncreaseAmount()
+        {
+            return 5;
+        }
+
+        public override int getNuclearFuelChargeIncreaseAmount()
+        {
+            return 25;
         }
 
         /// <summary>
@@ -122,9 +120,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
         /// </summary>
         public virtual bool generateOutput(Item item, Farmer who = null)
         {
-
             GameLocation objectLocation = this.getCurrentLocation();
             if (objectLocation == null) return false;
+            if (!this.hasFuel())
+            {
+                return false;
+            }
 
             ObjectManager objectManager = RevitalizeModCore.ModContentManager.objectManager;
 
@@ -135,13 +136,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
 
             int bonusForMachineTier = 0;
             if (this.machineTier.Value == PoweredMachineTier.Nuclear)
-            {
                 bonusForMachineTier = 1;
-            }
             if (this.machineTier.Value == PoweredMachineTier.Magical)
-            {
                 bonusForMachineTier = 2;
-            }
 
             int stoneBonus = Game1.random.Next(0, bonusForMachineTier * 5 + 1);
             int clayBonus = Game1.random.Next(1, 4 + bonusForMachineTier);
@@ -155,7 +152,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             //Common resources across all geodes.
             if (item.ParentSheetIndex == (int)Enums.SDVObject.Geode || item.ParentSheetIndex == (int)Enums.SDVObject.OmniGeode || item.ParentSheetIndex == (int)Enums.SDVObject.FrozenGeode || item.ParentSheetIndex == (int)Enums.SDVObject.MagmaGeode)
             {
-                potentialItems.Add(objectManager.getObject(Enums.SDVObject.Clay, Game1.random.Next(1,2+clayBonus)));
+                potentialItems.Add(objectManager.getObject(Enums.SDVObject.Clay, Game1.random.Next(1, 2 + clayBonus)));
                 potentialItems.Add(objectManager.getObject(Enums.SDVObject.CopperOre, this.getStackSizeForResource() + bonusOreYield));
                 potentialItems.Add(objectManager.getObject(Enums.SDVObject.Coal, this.getStackSizeForResource() + bonusCoalGiven));
                 potentialItems.Add(objectManager.getObject(Enums.SDVObject.Stone, this.getStackSizeForResource() + stoneBonus));
@@ -234,10 +231,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
                 potentialItems.Add(objectManager.getObject(Enums.SDVObject.IridiumOre, this.getStackSizeForRareResource() + iridiumOreYield));
             }
             if (item.ParentSheetIndex == (int)Enums.SDVObject.OmniGeode)
-            {
                 //Chance to get 2 primsatic shards from advanced geode crackers. Broken, but incentivises upgrading it.
-                potentialItems.Add(objectManager.getObject(Enums.SDVObject.PrismaticShard, Game1.random.Next(1, bonusForMachineTier > 0 ? 2 + (int)Math.Ceiling((float)bonusForMachineTier / 2f) : 2)));
-            }
+                potentialItems.Add(objectManager.getObject(Enums.SDVObject.PrismaticShard, Game1.random.Next(1, bonusForMachineTier > 0 ? 2 + (int)Math.Ceiling(bonusForMachineTier / 2f) : 2)));
             if (item.ParentSheetIndex == (int)Enums.SDVObject.GoldenCoconut && (this.machineTier.Value == PoweredMachineTier.Nuclear || this.machineTier.Value == PoweredMachineTier.Magical))
             {
 
@@ -283,45 +278,33 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             }
 
             if (potentialItems.Count == 0)
-            {
                 return false;
-            }
 
             this.itemToReceive.Value = new ItemReference(potentialItems.GetRandom());
 
             if (this.itemToReceive.Value != null)
             {
-
                 //Coal isn't used but just in case.
                 if (this.machineTier.Value == PoweredMachineTier.Coal)
-                {
                     this.MinutesUntilReady = 30;
-                }
                 if (this.machineTier.Value == PoweredMachineTier.Electric)
-                {
                     this.MinutesUntilReady = 30;
-                }
                 if (this.machineTier.Value == PoweredMachineTier.Nuclear)
-                {
                     this.MinutesUntilReady = 10;
-                }
                 if (this.machineTier.Value == PoweredMachineTier.Magical)
-                {
                     this.MinutesUntilReady = 10;
-                }
                 if (this.machineTier.Value == PoweredMachineTier.Galaxy)
                 {
                     this.MinutesUntilReady = 0;
-                    this.heldObject.Value =(StardewValley.Object)this.itemToReceive.Value.getItem();
+                    this.heldObject.Value = (StardewValley.Object)this.itemToReceive.Value.getItem();
                     this.itemToReceive.Value = null;
                 }
 
+                this.consumeFuelCharge();
                 return true;
             }
             else
-            {
                 return false;
-            }
         }
 
         public virtual int getStackSizeForResource()
@@ -329,25 +312,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             int potentialAmountRNG = Game1.random.Next(1, 101);
             int potentialStackSize = 0;
             if (potentialAmountRNG >= 0 && potentialAmountRNG <= 29)
-            {
                 potentialStackSize = 1;
-            }
             if (potentialAmountRNG >= 30 && potentialAmountRNG <= 59)
-            {
                 potentialStackSize = 3;
-            }
             if (potentialAmountRNG >= 60 && potentialAmountRNG <= 89)
-            {
                 potentialStackSize = 5;
-            }
             if (potentialAmountRNG >= 90 && potentialAmountRNG <= 99)
-            {
                 potentialStackSize = 10;
-            }
             if (potentialAmountRNG == 100)
-            {
                 potentialStackSize = 20;
-            }
             return potentialStackSize;
         }
 
@@ -356,25 +329,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             int potentialAmountRNG = Game1.random.Next(1, 101);
             int potentialStackSize = 0;
             if (potentialAmountRNG >= 0 && potentialAmountRNG <= 29)
-            {
                 potentialStackSize = 1;
-            }
             if (potentialAmountRNG >= 30 && potentialAmountRNG <= 59)
-            {
                 potentialStackSize = 2;
-            }
             if (potentialAmountRNG >= 60 && potentialAmountRNG <= 89)
-            {
                 potentialStackSize = 3;
-            }
             if (potentialAmountRNG >= 90 && potentialAmountRNG <= 99)
-            {
                 potentialStackSize = 6;
-            }
             if (potentialAmountRNG == 100)
-            {
                 potentialStackSize = 11;
-            }
             return potentialStackSize;
         }
 

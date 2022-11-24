@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
@@ -79,35 +80,44 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
                 Game1.player.addItemToInventory(this.heldObject.Value);
                 this.heldObject.Value = null;
             }
-            bool success = base.performObjectDropInAction(dropInItem, probe, who) && dropInItem.parentSheetIndex==(int)Enums.SDVObject.Wood;
-            if (success)
-            {
-                int amountRequired = 0;
-                if(this.kilnTier.Value== KilnTier.Advanced)
-                {
-                    amountRequired = 8;
-                }
-                if (this.kilnTier.Value == KilnTier.Delux)
-                {
-                    amountRequired = 6;
-                }
-                if (this.kilnTier.Value == KilnTier.Superior)
-                {
-                    amountRequired = 4;
-                }
+            bool success = base.performObjectDropInAction(dropInItem, probe, who) && dropInItem.parentSheetIndex == (int)Enums.SDVObject.Wood;
+            if (!success) return false;
 
-                PlayerUtilities.ReduceInventoryItemStackSize(who, dropInItem, amountRequired);
-                if (who != null)
-                {
-                    SoundUtilities.PlaySound(Enums.StardewSound.furnace);
-                }
 
-                this.MinutesUntilReady = TimeUtilities.GetMinutesFromTime(0, 0, 30);
-                this.itemToReceive.Value = new ItemReference(Enums.SDVObject.Coal,1);
 
-                this.updateAnimation();
-            }
             return false;
+        }
+
+        public override CraftingResult processInput(Item item, Farmer who, bool ShowRedMessage = true)
+        {
+            if (this.isWorking() || this.finishedProduction()) return new CraftingResult(false);
+            if (item.parentSheetIndex != (int)Enums.SDVObject.Wood) return new CraftingResult(false);
+
+            int amountRequired = 0;
+            if (this.kilnTier.Value == KilnTier.Advanced)
+            {
+                amountRequired = 8;
+            }
+            if (this.kilnTier.Value == KilnTier.Delux)
+            {
+                amountRequired = 6;
+            }
+            if (this.kilnTier.Value == KilnTier.Superior)
+            {
+                amountRequired = 4;
+            }
+
+            PlayerUtilities.ReduceInventoryItemStackSize(who, item, amountRequired);
+            if (who != null)
+            {
+                SoundUtilities.PlaySound(Enums.StardewSound.furnace);
+            }
+
+            this.MinutesUntilReady = TimeUtilities.GetMinutesFromTime(0, 0, 30);
+            this.itemToReceive.Value = new ItemReference(Enums.SDVObject.Coal, 1);
+
+            this.updateAnimation();
+            return new CraftingResult(new ItemReference(item,amountRequired),true);
         }
 
         public override void updateAnimation()

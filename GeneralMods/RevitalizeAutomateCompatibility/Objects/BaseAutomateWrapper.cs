@@ -7,9 +7,9 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate;
 using StardewValley;
 
-namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers
+namespace Omegasis.RevitalizeAutomateCompatibility.Objects
 {
-    public class BaseMachineWrapper : IMachine
+    public class BaseAutomateWrapper : IMachine
     {
         public virtual string MachineTypeID => throw new NotImplementedException();
 

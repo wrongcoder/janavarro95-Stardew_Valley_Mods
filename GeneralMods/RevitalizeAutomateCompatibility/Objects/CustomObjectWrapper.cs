@@ -8,13 +8,13 @@ using Omegasis.Revitalize.Framework.World.Objects;
 using Pathoschild.Stardew.Automate;
 using StardewValley;
 
-namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers
+namespace Omegasis.RevitalizeAutomateCompatibility.Objects
 {
     /// <summary>
     /// A generic machine class for CustomObjects for revitalize.
     /// </summary>
     /// <typeparam name="T">The type of custom object wrapped by this wrapper.</typeparam>
-    public class CustomObjectMachineWrapper<T> : BaseMachineWrapper where T:CustomObject
+    public class CustomObjectWrapper<T> : BaseAutomateWrapper where T:CustomObject
     {
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers
         /// Empty constructor.
         /// </summary>
 
-        public CustomObjectMachineWrapper()
+        public CustomObjectWrapper()
         {
 
         }
@@ -39,7 +39,7 @@ namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers
         /// Used to automate <see cref="CustomObject"/>s for the mod Revitalize.
         /// </summary>
         /// <param name="CustomObject"></param>
-        public CustomObjectMachineWrapper(T CustomObject, GameLocation location, in Vector2 TileLocation)
+        public CustomObjectWrapper(T CustomObject, GameLocation location, in Vector2 TileLocation)
         {
             this.customObject = CustomObject;
             this.Location = location;
@@ -50,7 +50,11 @@ namespace Omegasis.RevitalizeAutomateCompatibility.MachineWrappers
         public override ITrackedStack GetOutput()
         {
             //Returns a tracked object which is set to modify the machine's held object value to be null when complete.
-            return new TrackedItem(this.customObject.heldObject.Value, onEmpty: item =>
+            return new TrackedItem(this.customObject.heldObject.Value, onReduced:item=>
+            {
+                this.customObject.heldObject.Value.Stack = item.Stack;
+            }
+            ,onEmpty: item =>
             {
                 this.customObject.heldObject.Value = null;
                 this.customObject.readyForHarvest.Value = false;

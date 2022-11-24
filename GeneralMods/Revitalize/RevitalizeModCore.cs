@@ -248,14 +248,15 @@ namespace Omegasis.Revitalize
             {
 
               ModContentManager.objectManager.getItem(MachineIds.AdvancedCharcoalKiln,1),
-              ModContentManager.objectManager.getItem(MachineIds.DeluxCharcoalKiln,1),
-              ModContentManager.objectManager.getItem(MachineIds.SuperiorCharcoalKiln,1),
+              ModContentManager.objectManager.getItem(MachineIds.ElectricAdvancedGeodeCrusher,1),
+              ModContentManager.objectManager.getItem(MachineIds.ElectricFurnace,1),
 
-              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.AdvancedCharcoalKiln,1),
-              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.DeluxCharcoalKiln,1),
-              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.SuperiorCharcoalKiln,1),
-
+              ModContentManager.objectManager.getItem(Enums.SDVObject.Geode,100),
+              ModContentManager.objectManager.getItem(Enums.SDVObject.BatteryPack,100),
               ModContentManager.objectManager.getItem(Enums.SDVObject.Wood,100),
+              ModContentManager.objectManager.getItem(Enums.SDVObject.CopperOre,100),
+
+              ModContentManager.objectManager.getItem(Enums.SDVBigCraftable.Chest,3),
 
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             });

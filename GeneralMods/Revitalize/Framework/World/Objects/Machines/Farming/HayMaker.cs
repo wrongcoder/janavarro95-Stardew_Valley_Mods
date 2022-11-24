@@ -170,7 +170,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             if (this.heldObject.Value != null && this.MinutesUntilReady==0)
                 this.cleanOutHayMaker(true);
 
-            return this.processItemFromRecipe(dropInItem, who).successful;
+            return this.processInput(dropInItem, who).successful;
         }
 
 
@@ -181,7 +181,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         /// <param name="who"></param>
         /// <param name="ShowRedMessage"></param>
         /// <returns></returns>
-        public virtual CraftingRecipeResult processItemFromRecipe(Item dropInItem, Farmer who, bool ShowRedMessage = true)
+        public override CraftingResult processInput(Item dropInItem, Farmer who, bool ShowRedMessage = true)
         {
             foreach (var craftingRecipe in RevitalizeModCore.ModContentManager.craftingManager.getUnlockedCraftingRecipes(this.getCraftingBookName()))
             {
@@ -199,7 +199,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                         {
                             Game1.showRedMessage(this.getErrorString_NeedMoreInputItems(amountRequired, dropInItem));
                         }
-                        return new CraftingRecipeResult(craftingRecipe, false);
+                        return new CraftingResult(false);
                     }
 
                     this.feedType.Value.setItemReference(neededDropInItem);
@@ -232,16 +232,16 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                     PlayerUtilities.ReduceInventoryItemStackSize(who, dropInItem, amountRequired-1);
                     this.updateAnimation();
 
-                    return new CraftingRecipeResult(craftingRecipe, true); //Found a sucessful recipe.
+                    return new CraftingResult(new ItemReference(neededDropInItem,amountRequired), true); //Found a sucessful recipe.
                 }
             }
-            return new CraftingRecipeResult(null, false);
+            return new CraftingResult(false);
         }
 
         /// <summary>
         /// Updates the animation for display for this machine.
         /// </summary>
-        public virtual void updateAnimation()
+        public override void updateAnimation()
         {
             if (this.feedType.Value.SdvObjectId == Enums.SDVObject.Corn)
             {

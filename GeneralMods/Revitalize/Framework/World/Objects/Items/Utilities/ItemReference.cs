@@ -117,6 +117,16 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         }
 
         /// <summary>
+        /// Attempts to convert an item into an item reference!
+        /// </summary>
+        /// <param name="item"></param>
+        public ItemReference(Item item, int StackSize)
+        {
+            this.setItemReference(item);
+            this.StackSize = StackSize;
+        }
+
+        /// <summary>
         /// Attempts to convert an item that is being sold into an item reference.
         /// </summary>
         /// <param name="salableItem"></param>

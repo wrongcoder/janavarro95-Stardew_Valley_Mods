@@ -42,6 +42,31 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         public readonly NetEnum<PoweredMachineTier> machineTier = new NetEnum<PoweredMachineTier>();
         public readonly NetInt fuelChargesRemaining = new NetInt(0);
 
+        [XmlIgnore]
+        public int FuelChargesRemaining
+        {
+            get
+            {
+                return this.fuelChargesRemaining.Value;
+            }
+            set
+            {
+                this.fuelChargesRemaining.Value = value;
+            }
+        }
+
+        [XmlIgnore]
+        public PoweredMachineTier MachineTier
+        {
+            get
+            {
+                return this.machineTier.Value;
+            }
+            set
+            {
+                this.machineTier.Value = value;
+            }
+        }
 
         public PoweredMachine()
         {
@@ -66,6 +91,28 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             this.NetFields.AddFields(this.machineTier, this.fuelChargesRemaining);
         }
 
+        /// <summary>
+        /// Performed when dropping in an object into the mining drill.
+        /// </summary>
+        /// <param name="dropInItem"></param>
+        /// <param name="probe"></param>
+        /// <param name="who"></param>
+        /// <returns></returns>
+        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
+        {
+            //Prevent overriding and destroying the previous operation.
+            if (this.heldObject.Value != null && who!=null)
+            {
+                Game1.player.addItemToInventory(this.heldObject.Value);
+                this.heldObject.Value = null;
+            }
+            bool success = base.performObjectDropInAction(dropInItem, probe, who) && this.useFuelItemToIncreaseCharges(who, false, true);
+            if (!success) return false;
+
+            this.processInput(dropInItem, who, true);
+            return false;
+        }
+
 
         /// <summary>
         /// Consumes a single charge of fuel used on this funace.
@@ -73,14 +120,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         public virtual void consumeFuelCharge()
         {
             if (this.machineTier.Value == PoweredMachineTier.Magical) return;
-            this.fuelChargesRemaining.Value--;
-            if (this.fuelChargesRemaining.Value <= 0) this.fuelChargesRemaining.Value = 0;
+            this.FuelChargesRemaining--;
+            if (this.FuelChargesRemaining <= 0) this.FuelChargesRemaining = 0;
         }
 
 
         public virtual int getCoalFuelChargeIncreaseAmount()
         {
-            return 3;
+            return 1;
         }
 
         public virtual int getElectricFuelChargeIncreaseAmount()
@@ -111,23 +158,23 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         {
             if (this.machineTier.Value == PoweredMachineTier.Coal)
             {
-                this.fuelChargesRemaining.Value = this.getCoalFuelChargeIncreaseAmount();
+                this.FuelChargesRemaining = this.getCoalFuelChargeIncreaseAmount();
             }
             if (this.machineTier.Value == PoweredMachineTier.Electric)
             {
-                this.fuelChargesRemaining.Value = this.getElectricFuelChargeIncreaseAmount();
+                this.FuelChargesRemaining = this.getElectricFuelChargeIncreaseAmount();
             }
             if (this.machineTier.Value == PoweredMachineTier.Nuclear)
             {
-                this.fuelChargesRemaining.Value = this.getNuclearFuelChargeIncreaseAmount();
+                this.FuelChargesRemaining = this.getNuclearFuelChargeIncreaseAmount();
             }
             if (this.machineTier.Value == PoweredMachineTier.Magical)
             {
-                this.fuelChargesRemaining.Value = this.getMagicalFuelChargeIncreaseAmount();
+                this.FuelChargesRemaining = this.getMagicalFuelChargeIncreaseAmount();
             }
             if (this.machineTier.Value == PoweredMachineTier.Galaxy)
             {
-                this.fuelChargesRemaining.Value = this.getGalaxyFuelChargeIncreaseAmount();
+                this.FuelChargesRemaining = this.getGalaxyFuelChargeIncreaseAmount();
             }
         }
 
@@ -200,7 +247,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         /// <returns>True if successful or not necessaryt o consume a fuel charge. False if either the player is null (Automate Compatibility) or the player doesn't have enough fuel in their inventory.</returns>
         public virtual bool useFuelItemToIncreaseCharges(Farmer who, bool RequireFuelToBeActiveObject, bool ShowRedMessage = true)
         {
-            if (this.fuelChargesRemaining > 0)
+            if (this.hasFuel())
             {
                 return true;
             }
@@ -221,6 +268,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 return true;
             }
             return false;
+        }
+
+        public virtual bool hasFuel()
+        {
+            return this.FuelChargesRemaining > 0;
         }
 
 
