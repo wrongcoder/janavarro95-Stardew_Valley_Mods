@@ -32,38 +32,6 @@ namespace Omegasis.Revitalize
     // TODO:
     /*
     // -Make this mod able to load content packs for easier future modding
-    //
-    //  -Multiple Lights On Object
-    //  -Illumination Colors
-    //  Furniture:
-    //      -rugs 
-    //      -tables
-    //      -lamps
-    //      -dressers/other storage containers 
-    //      -fun interactables
-    //          -Arcade machines
-    //      -More crafting tables 
-    //      -Baths (see chairs but swimming)
-    //
-    //  -Machines
-    //      !=Energy
-    //            Generators:
-                  -solar
-                  -burnable
-                  -watermill
-                  -windmill
-                  Storage:
-                  -Batery Pack
-             -Mini-greenhouse
-                   -takes fertilizer which can do things like help crops grow or increase prodcuction yield/quality.
-                   -takes crop/extended crop seeds
-                   -takes sprinklers
-                   -has grid (1x1, 2x2, 3x3, 4x4, 5x5) system for growing crops/placing sprinkers
-                   -sprinkers auto water crops
-                   -can auto harvest
-                   -hover over crop to see it's info
-                   -can be upgraded to grow crops from specific seasons with season stones (spring,summer, fall winter) (configurable if they are required)
-                   -Add in season stone recipe
 
     //      -Mayo Maker
     //      -Cheese Maker
@@ -73,20 +41,6 @@ namespace Omegasis.Revitalize
     //      -Auto Preserves
     //      -Auto Keg
     //      -Auto Cask
-    //      -Calcinator (oil+stone: produces titanum?)
-    //  -Materials
-    //      -Tin/Bronze/Alluminum/Silver?Platinum/Etc (all but platinum: may add in at a later date)
-            -titanium (d0ne)
-            -Alloys!
-                -Brass (done)
-                -Electrum (done)
-                -Steel (done)
-                -Bronze (done)
-            -Mythrill
-            
-            -Star Metal
-            -Star Steel
-            -Cobalt
 
         Menus:
     //  -Crafting Menu
@@ -292,30 +246,17 @@ namespace Omegasis.Revitalize
 
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.CoalAdvancedGeodeCrusherBlueprint,1),
-              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.ElectricAdvancedGeodeCrusherBlueprint,1),
-              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.NuclearAdvancedGeodeCrusherBlueprint,1),
-              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.MagicalAdvancedGeodeCrusherBlueprint,1),
 
-              ModContentManager.objectManager.getItem(MachineIds.CoalAdvancedGeodeCrusher,1),
-              ModContentManager.objectManager.getItem(MachineIds.ElectricAdvancedGeodeCrusher,1),
-              ModContentManager.objectManager.getItem(MachineIds.NuclearAdvancedGeodeCrusher,1),
-              ModContentManager.objectManager.getItem(MachineIds.MagicalAdvancedGeodeCrusher,1),
+              ModContentManager.objectManager.getItem(MachineIds.AdvancedCharcoalKiln,1),
+              ModContentManager.objectManager.getItem(MachineIds.DeluxCharcoalKiln,1),
+              ModContentManager.objectManager.getItem(MachineIds.SuperiorCharcoalKiln,1),
 
-              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.CoalMiningDrillBlueprint,1),
-              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.ElectricMiningDrillBlueprint,1),
-              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.NuclearMiningDrillBlueprint,1),
-              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.MagicalMiningDrillBlueprint,1),
+              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.AdvancedCharcoalKiln,1),
+              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.DeluxCharcoalKiln,1),
+              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.SuperiorCharcoalKiln,1),
 
-              ModContentManager.objectManager.getItem(Enums.SDVObject.BatteryPack,100),
+              ModContentManager.objectManager.getItem(Enums.SDVObject.Wood,100),
 
-              ModContentManager.objectManager.getItem(Enums.SDVObject.Geode,100),
-              ModContentManager.objectManager.getItem(Enums.SDVObject.FrozenGeode,100),
-              ModContentManager.objectManager.getItem(Enums.SDVObject.MagmaGeode,100),
-              ModContentManager.objectManager.getItem(Enums.SDVObject.OmniGeode,100),
-
-              ModContentManager.objectManager.getItem(Enums.SDVObject.ArtifactTrove,100),
-              ModContentManager.objectManager.getItem(Enums.SDVObject.GoldenCoconut,100),
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             });
 

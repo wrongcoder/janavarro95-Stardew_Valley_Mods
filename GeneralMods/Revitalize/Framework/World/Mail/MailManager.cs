@@ -50,12 +50,20 @@ namespace Omegasis.Revitalize.Framework.World.Mail
             this.addMailIfNotReceived(MailTitles.SiloRefillServiceAvailable, Utility.numSilos() >= 1);
             this.addMailIfNotReceived(MailTitles.AutomaticFarmingSystemAvailableForPurchase, Game1.player.FarmingLevel >= 10);
             this.addMailIfNotReceived(MailTitles.ElectricFurnaceCanBePurchased, RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack);
-            this.addMailIfNotReceived(MailTitles.MiningDrillsAvailableInClintsShop, Game1.player.hasSkullKey);
 
+            //Geode crushers available.
             this.addMailIfNotReceived(MailTitles.AdvancedGeodeCrusherUnlock, Game1.stats.GeodesCracked >= 200);
             this.addMailIfNotReceived(MailTitles.ElectricGeodeCrusherUnlock, Game1.stats.GeodesCracked >= 500);
             this.addMailIfNotReceived(MailTitles.NuclearGeodeCrusherUnlock, Game1.stats.GeodesCracked >= 750 && PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
             this.addMailIfNotReceived(MailTitles.MagicalGeodeCrusherUnlock, Game1.stats.GeodesCracked >= 1000 && PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
+
+            //Mail from clint
+            this.addMailIfNotReceived(MailTitles.MiningDrillsAvailableInClintsShop, Game1.player.hasSkullKey);
+
+            //Charcoal kilns available.
+            this.addMailIfNotReceived(MailTitles.AdvancedCharcoalKilnBlueprintUnlock, Game1.player.ForagingLevel>=8);
+            this.addMailIfNotReceived(MailTitles.DeluxCharcoalKilnForSale, Game1.player.ForagingLevel >= 8 && PlayerUtilities.GetNumberOfGoldenWalnutsFound()>=1);
+            this.addMailIfNotReceived(MailTitles.SuperiorCharcoalKilnForSale, Game1.player.ForagingLevel >= 8 && PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
 
             if (!Game1.player.mailbox.Contains(MailTitles.MovieTheaterTicketSubscriptionTickets) && Game1.dayOfMonth == 1 && RevitalizeModCore.SaveDataManager.playerSaveData.hasMovieTheaterTicketSubscription)
             {

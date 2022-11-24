@@ -2,7 +2,7 @@
   "itemToDraw": {
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "Revitalize.Objects.Machines.ElectricAdvancedGeodeCrusher",
+    "registeredObjectId": "Revitalize.Objects.Machines.GeodeCrushers.ElectricAdvancedGeodeCrusher",
     "amount": 1
   },
   "recipesToUnlock": {

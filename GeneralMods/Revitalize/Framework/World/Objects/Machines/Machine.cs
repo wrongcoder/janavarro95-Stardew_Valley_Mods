@@ -15,6 +15,9 @@ using Omegasis.StardustCore.Animations;
 using Omegasis.StardustCore.UIUtilities;
 using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
 using System.IO;
+using Omegasis.Revitalize.Framework.HUD;
+using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.Constants;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 {
@@ -55,13 +58,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             this.NetFields.AddFields(this.machineStatusBubbleBox, this.lerpScaleIncreasing);
         }
 
-
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
             this.MinutesUntilReady -= minutes;
             if (this.MinutesUntilReady < 0) this.MinutesUntilReady = 0;
+
+            if (this.finishedProduction())
+            {
+                this.updateAnimation();
+            }
+
             return true;
-            //return base.minutesElapsed(minutes, environment);
         }
 
         /// <summary>
@@ -114,12 +121,151 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
         }
 
+        /// <summary>
+        /// Performed when dropping in an object into the mining drill.
+        /// </summary>
+        /// <param name="dropInItem"></param>
+        /// <param name="probe"></param>
+        /// <param name="who"></param>
+        /// <returns></returns>
+        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
+        {
+            if (probe == true) return false; //Just checking for action.
+            if (who != null && who.ActiveObject == null) return false;
+            if (dropInItem == null) return false;
+            if (this.heldObject.Value != null) return false;
 
+            return true;
+        }
+
+        /// <summary>
+        /// Gets the output for this machine.
+        /// </summary>
+        /// <param name="AddToPlayersInventory">Attempts to add the items to the player's inventory, or to the ground if they can't pickup any more items.</param>
+        /// <param name="DropAsItemDebris">Just drops the items to the ground as item debris.</param>
+        /// <returns>The items produced by this machine.</returns>
+        public virtual List<Item> getMachineOutputs(bool AddToPlayersInventory, bool DropAsItemDebris, bool ShowInventoryFullError)
+        {
+            List<Item> items = this.getMachineOutputItems(true);
+            bool anyAdded = false;
+            bool shouldShowInventoryFullError = false;
+            foreach (Item item in items)
+            {
+                if (AddToPlayersInventory)
+                {
+
+                    bool added = Game1.player.addItemToInventoryBool(item);
+                    if (added == false && DropAsItemDebris)
+                    {
+                        WorldUtility.CreateItemDebrisAtTileLocation(this.getCurrentLocation(), item, this.TileLocation);
+                    }
+                    else if (added == false && DropAsItemDebris == false)
+                    {
+                        shouldShowInventoryFullError = true;
+                    }
+                    else
+                    {
+                        anyAdded = true;
+                    }
+                    if (anyAdded)
+                    {
+                        SoundUtilities.PlaySound(Enums.StardewSound.coin);
+                    }
+                }
+                if (DropAsItemDebris)
+                {
+                    WorldUtility.CreateItemDebrisAtTileLocation(this.getCurrentLocation(), item, this.TileLocation);
+                }
+            }
+
+            if (shouldShowInventoryFullError && ShowInventoryFullError)
+            {
+                //Show inventory full error.
+                HudUtilities.ShowInventoryFullErrorMessage();
+            }
+
+            return items;
+        }
+
+        /// <summary>
+        /// Used for automate compatibility.
+        /// </summary>
+        /// <param name="ClearValue"></param>
+        /// <returns></returns>
+        public virtual Item getMachineOutputItem(bool ClearValue = false)
+        {
+            if (this.heldObject.Value == null) return null;
+            Item item = this.heldObject.Value;
+            if (ClearValue)
+            {
+                this.heldObject.Value = null;
+            }
+            return item;
+        }
+
+        public virtual List<Item> getMachineOutputItems(bool ClearValue = false)
+        {
+            if (this.heldObject.Value == null) return new List<Item>();
+            return new List<Item>() { this.getMachineOutputItem(ClearValue) };
+        }
+
+        public override void performRemoveAction(Vector2 tileLocation, GameLocation environment)
+        {
+            this.getMachineOutputs(true, true, false);
+            base.performRemoveAction(tileLocation, environment);
+        }
 
         public override bool rightClicked(Farmer who)
         {
             if (Game1.menuUp || Game1.currentMinigame != null) return false;
-            return false;
+            if (this.finishedProduction() && who.IsLocalPlayer)
+            {
+                this.getMachineOutputs(true, false, true);
+            }
+
+            this.updateAnimation();
+            return base.rightClicked(who);
+        }
+
+
+        public virtual InventoryManager GetInventoryManager()
+        {
+            if (this.basicItemInformation == null)
+                return this.basicItemInformation.inventory;
+            return this.basicItemInformation.inventory;
+        }
+
+        public virtual void SetInventoryManager(InventoryManager Manager)
+        {
+            this.basicItemInformation.inventory = Manager;
+        }
+
+        /// <summary>
+        /// Is this machine finished producing it's item.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool finishedProduction()
+        {
+            return this.MinutesUntilReady == 0 && this.heldObject.Value != null;
+        }
+
+        /// <summary>
+        /// Returns a common error string to display to the player that more items are necessary to use a machine for drop in purposes.
+        /// </summary>
+        /// <param name="AmountRequired"></param>
+        /// <param name="NeededDropInItemDisplayName"></param>
+        /// <returns></returns>
+        public virtual string getErrorString_NeedMoreInputItems(int AmountRequired, Item NeededDropInItemDisplayName)
+        {
+            return JsonContentLoaderUtilities.LoadErrorString(Path.Combine("Objects", "CommonErrorStrings.json"), "NeedMoreInputItems", AmountRequired, NeededDropInItemDisplayName.DisplayName);
+        }
+
+        /// <summary>
+        /// Updates the animation manager to play the correct animation.
+        /// </summary>
+        public virtual void updateAnimation()
+        {
+            this.AnimationManager.playDefaultAnimation();
         }
 
         public override Item getOne()
@@ -169,34 +315,5 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             Rectangle itemSourceRectangle = GameLocation.getSourceRectForObject(this.heldObject.Value.ParentSheetIndex);
             this.machineStatusBubbleBox.Value.draw(b, Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + 8, y * Game1.tileSize + num + 16)), new Rectangle?(itemSourceRectangle), Color.White, 0f, Vector2.Zero, Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (y + 3) * Game1.tileSize / 10000f) + .00003f);
         }
-
-        public virtual InventoryManager GetInventoryManager()
-        {
-            if (this.basicItemInformation == null)
-                return this.basicItemInformation.inventory;
-            return this.basicItemInformation.inventory;
-        }
-
-        public virtual void SetInventoryManager(InventoryManager Manager)
-        {
-            this.basicItemInformation.inventory = Manager;
-        }
-
-        public virtual bool finishedProduction()
-        {
-            return this.MinutesUntilReady == 0 && this.heldObject.Value != null;
-        }
-
-        /// <summary>
-        /// Returns a common error string to display to the player that more items are necessary to use a machine for drop in purposes.
-        /// </summary>
-        /// <param name="AmountRequired"></param>
-        /// <param name="NeededDropInItemDisplayName"></param>
-        /// <returns></returns>
-        public virtual string getErrorString_NeedMoreInputItems(int AmountRequired, Item NeededDropInItemDisplayName)
-        {
-            return JsonContentLoaderUtilities.LoadErrorString(Path.Combine("Objects","CommonErrorStrings.json"), "NeedMoreInputItems", AmountRequired, NeededDropInItemDisplayName.DisplayName);
-        }
-
     }
 }

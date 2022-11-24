@@ -46,6 +46,10 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         public int nuclearGeodeCrusherBlueprintPrice = 50_000;
         public int magicalGeodeCrusherBlueprintPrice = 100_000;
 
+        public int advancedCharcoalKilnBlueprintPrice = 5_000;
+        public int deluxCharcoalKilnBlueprintPrice = 10_000;
+        public int superiorCharcoalKilnBlueprintPrice = 25_000;
+
         /// <summary>
         /// How much a regular axe blueprint sells for in clint's shop.
         /// </summary>

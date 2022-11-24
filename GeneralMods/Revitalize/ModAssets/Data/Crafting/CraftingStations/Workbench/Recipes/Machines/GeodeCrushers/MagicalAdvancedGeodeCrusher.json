@@ -43,19 +43,19 @@
 			"item":{
 			"stardewValleyItemId": "NULL",
 			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Objects.Machines.NuclearAdvancedGeodeCrusher",
+			"registeredObjectId": "Revitalize.Objects.Machines.GeodeCrushers.NuclearAdvancedGeodeCrusher",
 			"amount": 1
 			}
 		},
 	],
     "outputs": [
 		{
-			"item":{
-			"stardewValleyItemId": "NULL",
-			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Objects.Machines.MagicalAdvancedGeodeCrusher",
-			"amount": 1
-			}
+      "item": {
+        "stardewValleyItemId": "NULL",
+        "stardewValleyBigCraftableId": "NULL",
+        "registeredObjectId": "Revitalize.Objects.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher",
+        "amount": 1
+      }
 		},
 	],
     "statCost": {

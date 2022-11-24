@@ -18,20 +18,25 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Objects
         public const string SolarArrayV1 = PREFIX + "SolarArrayV1";
         public const string WindmillV1 = PREFIX + "WindmillV1";
 
+        //Mining Drills.
         public const string CoalMiningDrill = PREFIX + "CoalMiningDrill";
         public const string ElectricMiningDrill = PREFIX + "ElectricMiningDrill";
         public const string NuclearMiningDrill = PREFIX + "NuclearMiningDrill";
         public const string MagicalMiningDrill = PREFIX + "MagicalMiningDrill";
 
 
-        public const string CoalAdvancedGeodeCrusher = PREFIX + "CoalAdvancedGeodeCrusher";
-        public const string ElectricAdvancedGeodeCrusher = PREFIX + "ElectricAdvancedGeodeCrusher";
-        public const string NuclearAdvancedGeodeCrusher = PREFIX + "NuclearAdvancedGeodeCrusher";
-        public const string MagicalAdvancedGeodeCrusher = PREFIX + "MagicalAdvancedGeodeCrusher";
+        //Geode Crushers.
+        public const string CoalAdvancedGeodeCrusher = PREFIX + "GeodeCrushers.CoalAdvancedGeodeCrusher";
+        public const string ElectricAdvancedGeodeCrusher = PREFIX + "GeodeCrushers.ElectricAdvancedGeodeCrusher";
+        public const string NuclearAdvancedGeodeCrusher = PREFIX + "GeodeCrushers.NuclearAdvancedGeodeCrusher";
+        public const string MagicalAdvancedGeodeCrusher = PREFIX + "GeodeCrushers.MagicalAdvancedGeodeCrusher";
 
+        //Charcoal Kilns
+        public const string AdvancedCharcoalKiln = PREFIX + "CharcoalKilns.AdvancedCharcoalKiln";
+        public const string DeluxCharcoalKiln = PREFIX + "CharcoalKilns.DeluxCharcoalKiln";
+        public const string SuperiorCharcoalKiln = PREFIX + "CharcoalKilns.SuperiorCharcoalKiln";
 
-
-
+        //Furnaces
         public const string ElectricFurnace = PREFIX + "ElectricFurnace";
         public const string NuclearFurnace = PREFIX + "NuclearFurnace";
         public const string MagicalFurnace = PREFIX + "MagicalFurnace";

@@ -35,12 +35,12 @@
 	],
     "outputs": [
 		{
-			"item":{
-			"stardewValleyItemId": "NULL",
-			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Objects.Machines.CoalAdvancedGeodeCrusher",
-			"amount": 1
-			}
+      "item": {
+        "stardewValleyItemId": "NULL",
+        "stardewValleyBigCraftableId": "NULL",
+        "registeredObjectId": "Revitalize.Objects.Machines.GeodeCrushers.CoalAdvancedGeodeCrusher",
+        "amount": 1
+      }
 		},
 	],
     "statCost": {

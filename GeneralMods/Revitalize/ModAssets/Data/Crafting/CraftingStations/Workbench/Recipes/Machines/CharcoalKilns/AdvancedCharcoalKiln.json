@@ -2,50 +2,43 @@
   "whichTab": "Default",
   "isUnlocked": false,
   "recipe": {
-	"craftingRecipeId": "Revitalize.Workbench.Machines.GeodeCrushers.ElectricAdvancedGeodeCrusher",
+	"craftingRecipeId": "Revitalize.Workbench.Machines.CharcoalKilns.AdvancedCharcoalKiln",
     "outputName": "",
     "outputDescription": "",
     "MinutesToCraft": 0,
     "inputs": [
 		{
 			"item":{
+			"stardewValleyItemId": "IronBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 5
+			}
+		},
+		{
+			"item":{
 			"stardewValleyItemId": "GoldBar",
 			"stardewValleyBigCraftableId": "NULL",
 			"registeredObjectId": "",
-			"amount": 5
-			}
-		},
-		{
-			"item":{
-			"stardewValleyItemId": "CopperBar",
-			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "",
-			"amount": 5
-			}
-		},
-		{
-			"item":{
-			"stardewValleyItemId": "RefinedQuartz",
-			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "",
-			"amount": 10
+			"amount": 1
 			}
 		},
 		{
 			"item":{
 			"stardewValleyItemId": "NULL",
-			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Objects.Machines.GeodeCrushers.CoalAdvancedGeodeCrusher",
+			"stardewValleyBigCraftableId": "CharcoalKiln",
+			"registeredObjectId": "",
 			"amount": 1
 			}
 		},
+	
 	],
     "outputs": [
 		{
       "item": {
         "stardewValleyItemId": "NULL",
         "stardewValleyBigCraftableId": "NULL",
-        "registeredObjectId": "Revitalize.Objects.Machines.GeodeCrushers.ElectricAdvancedGeodeCrusher",
+        "registeredObjectId": "Revitalize.Objects.Machines.CharcoalKilns.AdvancedCharcoalKiln",
         "amount": 1
       }
 		},

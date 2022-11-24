@@ -99,7 +99,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
                     SoundUtilities.PlaySound(Enums.StardewSound.stoneCrack);
                     SoundUtilities.PlaySoundWithDelay(Enums.StardewSound.steam, 200);
                 }
-                Game1.player.reduceActiveItemByOne();
+                PlayerUtilities.ReduceInventoryItemStackSize(who, dropInItem, 1);
                 return false;
             }
             return false;

@@ -2,13 +2,13 @@
   "itemToDraw": {
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "Revitalize.Objects.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher",
+    "registeredObjectId": "Revitalize.Objects.Machines.CharcoalKilns.AdvancedCharcoalKiln",
     "amount": 1
   },
   "recipesToUnlock": {
-    "Revitalize.Crafting.CraftingRecipeBooks.Workbench": "Revitalize.Workbench.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher"
+    "Revitalize.Crafting.CraftingRecipeBooks.Workbench": "Revitalize.Workbench.Machines.CharcoalKilns.AdvancedCharcoalKiln"
   },
-  "id": "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher",
+  "id": "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.AdvancedCharcoalKiln",
   "name": "",
   "description": "",
   "categoryId": "StardewValley.Crafting",

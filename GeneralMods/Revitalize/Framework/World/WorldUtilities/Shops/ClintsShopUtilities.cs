@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.Revitalize.Framework.Configs.ShopConfigs;
 using Omegasis.Revitalize.Framework.Constants.CraftingIds;
 using Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Items.BlueprintIds;
@@ -31,15 +32,19 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 
             ObjectManager objectManager = RevitalizeModCore.ModContentManager.objectManager;
 
+            BlacksmithShopConfig shopConfig = RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig;
 
-            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AnvilRecipeId, objectManager.getItem(WorkbenchBlueprintIds.AnvilBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.anvilBlueprintsPrice, 1);
-            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.CoalMiningDrillRecipeId, objectManager.getItem(WorkbenchBlueprintIds.CoalMiningDrillBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.coalMiningDrillBlueprintPrice, 1);
-            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricMiningDrillRecipeId, objectManager.getItem(WorkbenchBlueprintIds.ElectricMiningDrillBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.electricMiningDrillBlueprintPrice, 1);
-            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AdvancedGeodeCrusher, objectManager.getItem(WorkbenchBlueprintIds.CoalAdvancedGeodeCrusherBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.advancedGeodeCrusherBlueprintPrice, 1, Game1.stats.GeodesCracked >= 200);
-            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricGeodeCrusher, objectManager.getItem(WorkbenchBlueprintIds.ElectricAdvancedGeodeCrusherBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.electricGeodeCrusherBlueprintPrice, 1, Game1.stats.GeodesCracked >= 500);
-            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearGeodeCrusher, objectManager.getItem(WorkbenchBlueprintIds.NuclearAdvancedGeodeCrusherBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.nuclearGeodeCrusherBlueprintPrice, 1, Game1.stats.GeodesCracked >= 750 && PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
-            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.MagicalGeodeCrusher, objectManager.getItem(WorkbenchBlueprintIds.MagicalAdvancedGeodeCrusherBlueprint), RevitalizeModCore.Configs.shopsConfigManager.blacksmithShopsConfig.magicalGeodeCrusherBlueprintPrice, 1, Game1.stats.GeodesCracked >= 1000 && PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AnvilRecipeId, objectManager.getItem(WorkbenchBlueprintIds.AnvilBlueprint), shopConfig.anvilBlueprintsPrice, 1);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.CoalMiningDrillRecipeId, objectManager.getItem(WorkbenchBlueprintIds.CoalMiningDrillBlueprint), shopConfig.coalMiningDrillBlueprintPrice, 1);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricMiningDrillRecipeId, objectManager.getItem(WorkbenchBlueprintIds.ElectricMiningDrillBlueprint), shopConfig.electricMiningDrillBlueprintPrice, 1);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AdvancedGeodeCrusher, objectManager.getItem(WorkbenchBlueprintIds.CoalAdvancedGeodeCrusherBlueprint), shopConfig.advancedGeodeCrusherBlueprintPrice, 1, Game1.stats.GeodesCracked >= 200);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricGeodeCrusher, objectManager.getItem(WorkbenchBlueprintIds.ElectricAdvancedGeodeCrusherBlueprint), shopConfig.electricGeodeCrusherBlueprintPrice, 1, Game1.stats.GeodesCracked >= 500);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearGeodeCrusher, objectManager.getItem(WorkbenchBlueprintIds.NuclearAdvancedGeodeCrusherBlueprint), shopConfig.nuclearGeodeCrusherBlueprintPrice, 1, Game1.stats.GeodesCracked >= 750 && PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.MagicalGeodeCrusher, objectManager.getItem(WorkbenchBlueprintIds.MagicalAdvancedGeodeCrusherBlueprint), shopConfig.magicalGeodeCrusherBlueprintPrice, 1, Game1.stats.GeodesCracked >= 1000 && PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
 
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AdvancedCharcoalKiln, objectManager.getItem(WorkbenchBlueprintIds.AdvancedCharcoalKiln, 1), shopConfig.advancedCharcoalKilnBlueprintPrice, 1, Game1.player.ForagingLevel >= 8);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.DeluxCharcoalKiln, objectManager.getItem(WorkbenchBlueprintIds.DeluxCharcoalKiln, 1), shopConfig.deluxCharcoalKilnBlueprintPrice, 1, Game1.player.ForagingLevel >= 8 && PlayerUtilities.GetNumberOfGoldenWalnutsFound()>=1);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.SuperiorCharcoalKiln, objectManager.getItem(WorkbenchBlueprintIds.SuperiorCharcoalKiln, 1), shopConfig.superiorCharcoalKilnBlueprintPrice, 1, Game1.player.ForagingLevel >= 8 && PlayerUtilities.GetNumberOfGoldenWalnutsFound()>=100);
 
             AddAxeBlueprintsToShop(Menu);
             AddHoeBlueprintsToShop(Menu);
