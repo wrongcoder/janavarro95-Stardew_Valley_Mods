@@ -35,7 +35,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
             TemplateTransformerScript.WriteCraftingBlueprintFile(blueprintOutputPath, blueprintObjectId, recipesToUnlock, itemToDraw);
             TemplateTransformerScript.WriteDisplayStringsFile(displayStringOutputPath, blueprintObjectId, displayName, description, category);
 
-
+            //TODO EXTRA: Need to also update Revitalize .cs files with the new fields for the blueprint items, recipe ids, and display item as well?
         }
 
         //  // Called every frame. 'delta' is the elapsed time since the previous frame.

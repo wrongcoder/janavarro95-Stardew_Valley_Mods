@@ -4,6 +4,14 @@ using System.Collections.Generic;
 
 namespace SdvRevitalizeCreationUtility.Scripts
 {
+
+    /// <summary>
+    /// TODO: Seperate out the different scenes for blueprint object creation into it's own scene that can be instantiated.
+    /// TODO: Create a recipe creation scene where the field is just a TextEdit group.
+    /// TODO: Create a Mail/Letter creation scene.
+    /// TODO: Create a seperate scene for just Display string creation.
+    /// TODO: Potentially add in a way to also autogenerate appropriate CS fields into Revitalize's mod constants files to also save time there.
+    /// </summary>
     public class Game : Control
     {
         // Declare member variables here. Examples:
