@@ -220,5 +220,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             return base.canStackWith(other) && otherFurnace.machineTier.Value == this.machineTier.Value;
         }
 
+        public override bool minutesElapsed(int minutes, GameLocation environment)
+        {
+            return base.minutesElapsed(minutes, environment);
+        }
     }
 }

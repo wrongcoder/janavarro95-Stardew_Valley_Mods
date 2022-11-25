@@ -56,8 +56,7 @@ namespace Omegasis.RevitalizeAutomateCompatibility.Objects
             }
             ,onEmpty: item =>
             {
-                this.customObject.heldObject.Value = null;
-                this.customObject.readyForHarvest.Value = false;
+                this.customObject.clearHeldObject();
             });
         }
 

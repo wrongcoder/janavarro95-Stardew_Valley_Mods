@@ -11,6 +11,9 @@ Key:
 +Added automate compatibilityb for the charcoal kilns
 ~Rewrote much of the logic related to automatce compatibility in the compatibility mod to be able to much easier add compatibility at least for new machines, in the future.
 +Added in automate compatibility for the mining drill.
++Added in automate compatibility for ResoruceBushes
+~Rewrote some code on ResourceBushes to support Automate compatibility.
+~Added new draw methods to choose whether or not to draw the held object for an item.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 11-22-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed crash on displaying strings for Mining Drill Blueprints

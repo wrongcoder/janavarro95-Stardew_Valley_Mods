@@ -558,7 +558,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
-            return base.minutesElapsed(minutes, environment);
+            this.MinutesUntilReady -= minutes;
+            if (this.MinutesUntilReady < 0) this.MinutesUntilReady = 0;
+            return false;
         }
 
         public override bool onExplosion(Farmer who, GameLocation location)
@@ -1115,6 +1117,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
             this.DrawICustomModObject(spriteBatch, alpha);
+        }
+
+        public virtual void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f, bool DrawHeldObject=true)
+        {
+            this.DrawICustomModObject(spriteBatch, alpha,DrawHeldObject);
+        }
+
+        public virtual void clearHeldObject()
+        {
+            this.heldObject.Value = null;
+            this.readyForHarvest.Value = false;
         }
 
         public override void drawPlacementBounds(SpriteBatch spriteBatch, GameLocation location)

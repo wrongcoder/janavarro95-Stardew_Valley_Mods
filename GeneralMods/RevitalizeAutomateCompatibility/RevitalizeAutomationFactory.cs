@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
 using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
+using Omegasis.Revitalize.Framework.World.Objects.Machines;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Misc;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneration;
@@ -32,25 +33,27 @@ namespace Omegasis.RevitalizeAutomateCompatibility
             if (obj is ICustomModObject)
             {
                 ICustomModObject modObj = (obj as ICustomModObject);
-                if (modObj.Id.Equals(MachineIds.ElectricFurnace) || modObj.Id.Equals(MachineIds.NuclearFurnace) || modObj.Id.Equals(MachineIds.MagicalFurnace))
+
+                //Can add more specific wrapper types here where we check by modObj.Id, but the below cases should catch the majority of the logic.
+
+                //Add in generic processing wrapper types.
+                if(obj is PoweredMachine)
                 {
-                    return new PoweredMachineWrapper<ElectricFurnace>((ElectricFurnace)obj, location, tile);
+                    return new PoweredMachineWrapper<PoweredMachine>((PoweredMachine)obj, location, tile);
                 }
 
-                if(modObj.Id.Equals(MachineIds.CoalAdvancedGeodeCrusher) || modObj.Id.Equals(MachineIds.ElectricAdvancedGeodeCrusher) || modObj.Id.Equals(MachineIds.NuclearAdvancedGeodeCrusher) || modObj.Id.Equals(MachineIds.MagicalAdvancedGeodeCrusher))
+                //Add in wrapper type for machines if they are not powered machines.
+                if (obj is Machine && !(obj is PoweredMachine))
                 {
-                    return new PoweredMachineWrapper<AdvancedGeodeCrusher>((AdvancedGeodeCrusher)obj, location, tile);
+                    return new MachineWrapper<Machine>((Machine)obj, location, tile);
                 }
 
-                if (modObj.Id.Equals(MachineIds.AdvancedCharcoalKiln) || modObj.Id.Equals(MachineIds.DeluxCharcoalKiln) || modObj.Id.Equals(MachineIds.SuperiorCharcoalKiln))
+                //Add in wrapper for generic custom objects.
+                if(obj is CustomObject && !(obj is PoweredMachine) && !(obj is Machine))
                 {
-                    return new MachineWrapper<AdvancedCharcoalKiln>((AdvancedCharcoalKiln)obj, location, tile);
+                    return new CustomObjectWrapper<CustomObject>((CustomObject)obj, location, tile);
                 }
 
-                if (modObj.Id.Equals(MachineIds.CoalMiningDrill) || modObj.Id.Equals(MachineIds.ElectricMiningDrill) || modObj.Id.Equals(MachineIds.NuclearMiningDrill) || modObj.Id.Equals(MachineIds.MagicalMiningDrill))
-                {
-                    return new PoweredMachineWrapper<MiningDrill>((MiningDrill)obj, location, tile);
-                }
             }
 
             return null;

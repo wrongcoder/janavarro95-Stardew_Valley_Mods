@@ -61,15 +61,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
-            this.MinutesUntilReady -= minutes;
-            if (this.MinutesUntilReady < 0) this.MinutesUntilReady = 0;
+            base.minutesElapsed(minutes, environment);
 
             if (this.finishedProduction())
             {
                 this.updateAnimation();
             }
 
-            return true;
+            return false;
         }
 
         /// <summary>

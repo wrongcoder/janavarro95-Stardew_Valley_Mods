@@ -184,9 +184,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
             foreach(ResourceBush resourceBush in resourceBushes)
             {
-                if (resourceBush.getItemToHarvest(false) != null)
+                if (this.heldObject.Value != null)
                 {
-                    itemsToPutIntoChestsOrDropToGround.Enqueue(resourceBush.getItemToHarvest(true));
+                    itemsToPutIntoChestsOrDropToGround.Enqueue(resourceBush.heldObject.Value);
+                    resourceBush.clearHeldObject();
                 }
             }
 

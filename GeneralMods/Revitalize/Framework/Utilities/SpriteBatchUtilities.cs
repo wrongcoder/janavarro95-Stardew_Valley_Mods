@@ -92,6 +92,11 @@ namespace Omegasis.Revitalize.Framework.Utilities
             obj.DrawICustomModObject(spriteBatch, (int)obj.TileLocation.X + (int)obj.basicItemInformation.drawOffset.X, (int)obj.TileLocation.Y + (int)obj.basicItemInformation.drawOffset.Y, alpha,obj.heldObject, (int)obj.TileLocation.Y - (int)obj.basicItemInformation.drawOffset.Y);
         }
 
+        public static void DrawICustomModObject<T>(this T obj, SpriteBatch spriteBatch, float alpha = 1f, bool DrawHeldObject=true) where T : StardewValley.Object, ICustomModObject
+        {
+            obj.DrawICustomModObject(spriteBatch, (int)obj.TileLocation.X + (int)obj.basicItemInformation.drawOffset.X, (int)obj.TileLocation.Y + (int)obj.basicItemInformation.drawOffset.Y, alpha, DrawHeldObject? obj.heldObject:null, (int)obj.TileLocation.Y - (int)obj.basicItemInformation.drawOffset.Y);
+        }
+
         public static void DrawICustomModObject<T>(this T obj, SpriteBatch spriteBatch, int x, int y, float alpha = 1f, StardewValley.Object heldObject = null, int YTileDepth=0) where T : StardewValley.Object, ICustomModObject
         {
             if (YTileDepth == 0)

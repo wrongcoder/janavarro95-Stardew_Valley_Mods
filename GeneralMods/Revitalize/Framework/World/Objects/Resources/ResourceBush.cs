@@ -67,20 +67,32 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
                 if (this.itemToDraw.Value == null)
                 {
                     this.itemToDraw.Value = new Drawable(this.itemToGrow.Value.getOne());
+                    this.heldObject.Value = (StardewValley.Object) this.itemToGrow.Value.getOne();
                     return;
                 }
                 if (this.itemToDraw2.Value == null)
                 {
                     this.itemToDraw2.Value = new Drawable(this.itemToGrow.Value.getOne());
+                    this.heldObject.Value.Stack++;
                     return;
                 }
                 if (this.itemToDraw3.Value == null)
                 {
                     this.itemToDraw3.Value = new Drawable(this.itemToGrow.Value.getOne());
+                    this.heldObject.Value.Stack++;
                     return;
                 }
             }
 
+        }
+
+        /// <summary>
+        /// Since <see cref="Furniture"/> and <see cref="StardewValley.Object"/> each do a seperate day update tick, we need to actually not do a day update for one of them.
+        /// </summary>
+        /// <returns></returns>
+        public override bool shouldDoDayUpdate()
+        {
+            return this.dayUpdateCounter.Value >= 2;
         }
 
         /// <summary>
@@ -106,18 +118,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
         public virtual void harvest(bool AddToPlayersInventory)
         {
 
-            Item item = this.getItemToHarvest();
+            Item item = this.heldObject.Value;
+            if (this.heldObject.Value == null) return;
 
             if (AddToPlayersInventory)
             {
                 SoundUtilities.PlaySound(Enums.StardewSound.coin);
-                bool added = Game1.player.addItemToInventoryBool(item);
+                bool added = Game1.player.addItemToInventoryBool(this.heldObject.Value);
+                this.heldObject.Value = null;
                 if (added == false)
                 {
                     WorldUtility.CreateItemDebrisAtTileLocation(this.getCurrentLocation(), item, this.TileLocation);
-                    this.itemToDraw.Value = null;
-                    this.itemToDraw2.Value = null;
-                    this.itemToDraw3.Value = null;
                     return;
                 }
             }
@@ -129,39 +140,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
 
         }
 
-        /// <summary>
-        /// Gets the item to be harvested from this ore resource bush.
-        /// </summary>
-        /// <param name="ActuallyHarvest">If true, clear the item off the bush and reset the bush's state.</param>
-        /// <returns></returns>
-        public virtual Item getItemToHarvest(bool ActuallyHarvest=true)
+        public override void clearHeldObject()
         {
-            Item item = this.itemToGrow.Value.getOne();
-            int amountToAdd = 0;
-
-            if (this.itemToDraw.Value != null)
-            {
-                amountToAdd++;
-            }
-            if (this.itemToDraw2.Value != null)
-            {
-                amountToAdd++;
-            }
-            if (this.itemToDraw3.Value != null)
-            {
-                amountToAdd++;
-            }
-            item.Stack = amountToAdd;
-            if (item.Stack == 0) return null;
-
-            if (ActuallyHarvest)
-            {
-                this.itemToDraw.Value = null;
-                this.itemToDraw2.Value = null;
-                this.itemToDraw3.Value = null;
-            }
-
-            return item;
+            base.clearHeldObject();
+            this.itemToDraw.Value = null;
+            this.itemToDraw2.Value = null;
+            this.itemToDraw3.Value = null;
         }
 
         public override Item getOne()
@@ -171,7 +155,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1)
         {
-            base.draw(spriteBatch, x, y, alpha);
+            base.draw(spriteBatch, x, y, alpha,false);
 
             Vector2 drawPosition1 = new Vector2(x  - this.basicItemInformation.drawOffset.X, y + .25f + this.basicItemInformation.drawOffset.Y);
             Vector2 drawPosition2 = new Vector2(x - .25f - this.basicItemInformation.drawOffset.X, y + .75f + this.basicItemInformation.drawOffset.Y);
