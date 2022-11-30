@@ -71,15 +71,12 @@ namespace SdvRevitalizeCreationUtility.Scripts
             strs.RemoveAt(strs.Count - 1);
             //Gross, but strips out the beginning disk drive lettering/name and forces it into a directory.
             string path = "/" + (System.IO.Path.Combine(strs.ToArray()).Replace("\\", "/").Substring(2) + "/");
-            GD.Print("Hello World?");
-            GD.Print(path);
             return path;
         }
 
         public virtual string getRevitalizeEnglishContentPackFolder()
         {
             string contentPackPath = System.IO.Path.Combine(this.getRevitalizeBaseFolder(), "ContentPacks", "RevitalizeContentPack en-US" + "/").Replace("\\", "/");
-            GD.Print("Content pack path: "+contentPackPath);
             return contentPackPath;
         }
 

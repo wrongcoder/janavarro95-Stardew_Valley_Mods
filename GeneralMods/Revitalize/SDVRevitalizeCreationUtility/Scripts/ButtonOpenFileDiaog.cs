@@ -9,14 +9,15 @@ using System.Threading.Tasks;
 
 namespace SdvRevitalizeCreationUtility.Scripts
 {
-    public class ButtonOpenFileDiaog:Button
+    public class ButtonOpenFileDiaog : Button
     {
 
         public enum DirectoryToBeginFrom
         {
             NULL,
             DisplayStrings,
-            BlueprintObjects
+            BlueprintObjects,
+            CraftingPath,
         }
 
         [Export]
@@ -31,26 +32,23 @@ namespace SdvRevitalizeCreationUtility.Scripts
             SelectFileDialog dialog = NodeExtensions.GetChild<SelectFileDialog>(Game.Self, "SelectFileDialog");
             dialog.AddFilter("*.json");
 
-            dialog.CurrentFile="";;
+            dialog.CurrentFile = ""; ;
             dialog.Mode = FileDialog.ModeEnum.SaveFile;
             dialog.Access = FileDialog.AccessEnum.Filesystem;
 
-            dialog.textEdit=NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", this.TextFieldToFind);
-            try
-            {
+            dialog.textEdit = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", this.TextFieldToFind);
 
-                if (this.startingDir == DirectoryToBeginFrom.BlueprintObjects)
-                {
-                    dialog.CurrentDir = System.IO.Path.Combine(Game.Self.getRevitalizeBaseFolder(), ObjectsDataPaths.CraftingBlueprintsPath);
-                }
-                if (this.startingDir == DirectoryToBeginFrom.DisplayStrings)
-                {
-                    dialog.CurrentDir = System.IO.Path.Combine(Game.Self.getRevitalizeEnglishContentPackFolder(), StringsPaths.ObjectDisplayStrings,"CraftingBlueprints");
-                }
-            }
-            catch(Exception err)
+            if (this.startingDir == DirectoryToBeginFrom.BlueprintObjects)
             {
-                GD.Print(err.ToString());
+                dialog.CurrentDir = System.IO.Path.Combine(Game.Self.getRevitalizeBaseFolder(), ObjectsDataPaths.CraftingBlueprintsPath);
+            }
+            if (this.startingDir == DirectoryToBeginFrom.DisplayStrings)
+            {
+                dialog.CurrentDir = System.IO.Path.Combine(Game.Self.getRevitalizeEnglishContentPackFolder(), StringsPaths.ObjectDisplayStrings);
+            }
+            if (this.startingDir == DirectoryToBeginFrom.CraftingPath)
+            {
+                dialog.CurrentDir = System.IO.Path.Combine(Game.Self.getRevitalizeBaseFolder(), CraftingDataPaths.CraftingPath);
             }
 
             dialog.Popup_();

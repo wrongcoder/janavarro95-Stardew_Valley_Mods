@@ -9,18 +9,47 @@ namespace SdvRevitalizeCreationUtility.Scripts
 {
     public static class TemplateTransformerScript
     {
-
+        /// <summary>
+        /// Writes a display strings file to disk.
+        /// </summary>
+        /// <param name="OutputPath"></param>
+        /// <param name="ObjectId"></param>
+        /// <param name="DisplayName"></param>
+        /// <param name="Description"></param>
+        /// <param name="Category"></param>
         public static void WriteDisplayStringsFile(string OutputPath, string ObjectId ,string DisplayName, string Description, string Category)
         {
-            string file = System.IO.File.ReadAllText(System.IO.Path.Combine(@Game.Self.getGameDirectory(), "Templates", "DisplayStringTemplate.json"));
+            string file = System.IO.File.ReadAllText(System.IO.Path.Combine(Game.Self.getGameDirectory(), "Templates", "DisplayStringTemplate.json"));
             file = Format(file, ObjectId, DisplayName, Description, Category);
             System.IO.File.WriteAllText(OutputPath, file);
         }
 
+        /// <summary>
+        /// Writes a crafting blueprint object file to disk.
+        /// </summary>
+        /// <param name="OutputPath"></param>
+        /// <param name="ObjectId"></param>
+        /// <param name="RecipesToLearn"></param>
+        /// <param name="ItemToDraw"></param>
         public static void WriteCraftingBlueprintFile(string OutputPath, string ObjectId, string RecipesToLearn, string ItemToDraw)
         {
             string file = System.IO.File.ReadAllText(System.IO.Path.Combine(Game.Self.getGameDirectory(), "Templates", "CraftingBlueprintTemplate.json"));
             file = Format(file, ItemToDraw, RecipesToLearn, ObjectId);
+            System.IO.File.WriteAllText(OutputPath, file);
+        }
+
+        /// <summary>
+        /// Writes a recipe file to disk.
+        /// </summary>
+        /// <param name="OutputPath"></param>
+        /// <param name="CraftingTabId"></param>
+        /// <param name="CraftingRecipeId"></param>
+        /// <param name="RecipeInputs"></param>
+        /// <param name="RecipeOutputs"></param>
+        public static void WriteRecipeFileForBlueprintObject(string OutputPath, string CraftingTabId, string CraftingRecipeId, string RecipeInputs, string RecipeOutputs)
+        {
+            string file = System.IO.File.ReadAllText(System.IO.Path.Combine(Game.Self.getGameDirectory(), "Templates", "RecipeTemplate.json"));
+            file = Format(file, CraftingTabId, CraftingRecipeId, "0" ,RecipeInputs, RecipeOutputs );
             System.IO.File.WriteAllText(OutputPath, file);
         }
 
