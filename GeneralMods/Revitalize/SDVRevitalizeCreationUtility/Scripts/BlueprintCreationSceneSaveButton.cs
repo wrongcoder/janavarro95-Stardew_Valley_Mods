@@ -19,18 +19,20 @@ namespace SdvRevitalizeCreationUtility.Scripts
             base._Pressed();
 
             //Display strings
-            string displayName = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "DisplayNameText").Text;
-            string description = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "DescriptionText").Text;
-            string category = "StardewValley.Crafting";
+            string blueprintDisplayName = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "DisplayNameText").Text;
+            string blueprintDescription = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "DescriptionText").Text;
+            string blueprintCategory = "StardewValley.Crafting";
+
+            string newItemDisplayName = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "NewItemDisplayNameText").Text;
+            string newItemDescription = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "NewItemDescriptionText").Text;
+            string newItemCategory = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "NewItemCategoryText").Text;
 
             //Blueprint template params.
-            string itemToDraw = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "ItemToDrawIdText").Text;
-            string recipesToUnlock = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "RecipesToUnlockText").Text;
+            string newItemId = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "ItemToDrawIdText").Text;
             string blueprintObjectId = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "BlueprintObjectIdText").Text;
 
-            string blueprintOutputPath = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "BlueprintObjectFilePathText").Text;
-            string displayStringOutputPath = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "BlueprintDisplayStringFilePathText").Text;
-
+            //Recipe related information.
+            string recipesToUnlock = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "RecipesToUnlockText").Text;
             string recipeTabId = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "RecipeTabIdText").Text;
             string[] recipeIdSplitArray = recipesToUnlock.Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
             string recipeId = recipeIdSplitArray[recipeIdSplitArray.Length - 1].Replace("\"", "").Replace(" ", ""); //Get the recipe id and remove all unnecessary whitespace.
@@ -38,21 +40,28 @@ namespace SdvRevitalizeCreationUtility.Scripts
             string recipeOutputs = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "RecipeOutputsText").Text;
             string recipeOutputFilePath= NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "RecipeFilePathText").Text;
 
-            string newItemDisplayName= NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "NewItemDisplayNameText").Text;
-            string newItemDescription = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "NewItemDescriptionText").Text;
-            string newItemCategory = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "NewItemCategoryText").Text;
 
+            //All the other paths for new files go here.
+            string blueprintOutputPath = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "BlueprintObjectFilePathText").Text;
+            string displayStringOutputPath = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "BlueprintDisplayStringFilePathText").Text;
             string newItemDisplayStringsOutputPath = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "NewItemDisplayStringFilePathText").Text;
 
+            string codeGenerationBlueprintRelativePath= NodeExtensions.GetChild<IdFileSelectionButton>(Game.Self, "ScrollContainer", "VBoxContainer", "BlueprintIdGenerationSelectionList").Text;
+            string codeGenerationItemRelativePath = NodeExtensions.GetChild<IdFileSelectionButton>(Game.Self, "ScrollContainer", "VBoxContainer", "ItemIdGenerationSelectionList").Text;
+            string codeGenerationRecipeRelativePath = NodeExtensions.GetChild<IdFileSelectionButton>(Game.Self, "ScrollContainer", "VBoxContainer", "RecipeIdGenerationSelectionList").Text;
+
             //Write them to new json files.
-            TemplateTransformerScript.WriteCraftingBlueprintFile(blueprintOutputPath, blueprintObjectId, recipesToUnlock, itemToDraw);
-            TemplateTransformerScript.WriteDisplayStringsFile(displayStringOutputPath, blueprintObjectId, displayName, description, category);
+            TemplateTransformerScript.WriteCraftingBlueprintFile(blueprintOutputPath, blueprintObjectId, recipesToUnlock, newItemId);
+            TemplateTransformerScript.WriteDisplayStringsFile(displayStringOutputPath, blueprintObjectId, blueprintDisplayName, blueprintDescription, blueprintCategory);
             TemplateTransformerScript.WriteRecipeFileForBlueprintObject(recipeOutputFilePath, recipeTabId, recipeId, recipeInputs, recipeOutputs);
-            TemplateTransformerScript.WriteDisplayStringsFile(newItemDisplayStringsOutputPath, itemToDraw, newItemDisplayName, newItemDescription, newItemCategory);
+            TemplateTransformerScript.WriteDisplayStringsFile(newItemDisplayStringsOutputPath, newItemId, newItemDisplayName, newItemDescription, newItemCategory);
 
-            //Need new item display strings?
+            //Generate new variable names for blueprints and items.
+            string sanitizedBlueprintDisplayName = CodeGeneration.SanitizeDisplayNameForCSharpVariableName(blueprintDisplayName);
 
-            //TODO EXTRA: Need to also update Revitalize .cs files with the new fields for the blueprint items, recipe ids, and display item as well?
+            CodeGeneration.GenerateId(codeGenerationBlueprintRelativePath,sanitizedBlueprintDisplayName, blueprintObjectId);
+            CodeGeneration.GenerateId(codeGenerationItemRelativePath, CodeGeneration.SanitizeDisplayNameForCSharpVariableName(newItemDisplayName), newItemId);
+            CodeGeneration.GenerateId(codeGenerationRecipeRelativePath, sanitizedBlueprintDisplayName, recipeId);
         }
     }
 }

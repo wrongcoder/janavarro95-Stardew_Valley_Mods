@@ -19,7 +19,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
         /// <param name="Category"></param>
         public static void WriteDisplayStringsFile(string OutputPath, string ObjectId ,string DisplayName, string Description, string Category)
         {
-            string file = System.IO.File.ReadAllText(System.IO.Path.Combine(Game.Self.getGameDirectory(), "Templates", "DisplayStringTemplate.json"));
+            string file = System.IO.File.ReadAllText(System.IO.Path.Combine(Game.GetGameDirectory(), "Templates", "DisplayStringTemplate.json"));
             file = Format(file, ObjectId, DisplayName, Description, Category);
             System.IO.File.WriteAllText(OutputPath, file);
         }
@@ -33,7 +33,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
         /// <param name="ItemToDraw"></param>
         public static void WriteCraftingBlueprintFile(string OutputPath, string ObjectId, string RecipesToLearn, string ItemToDraw)
         {
-            string file = System.IO.File.ReadAllText(System.IO.Path.Combine(Game.Self.getGameDirectory(), "Templates", "CraftingBlueprintTemplate.json"));
+            string file = System.IO.File.ReadAllText(System.IO.Path.Combine(Game.GetGameDirectory(), "Templates", "CraftingBlueprintTemplate.json"));
             file = Format(file, ItemToDraw, RecipesToLearn, ObjectId);
             System.IO.File.WriteAllText(OutputPath, file);
         }
@@ -48,7 +48,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
         /// <param name="RecipeOutputs"></param>
         public static void WriteRecipeFileForBlueprintObject(string OutputPath, string CraftingTabId, string CraftingRecipeId, string RecipeInputs, string RecipeOutputs)
         {
-            string file = System.IO.File.ReadAllText(System.IO.Path.Combine(Game.Self.getGameDirectory(), "Templates", "RecipeTemplate.json"));
+            string file = System.IO.File.ReadAllText(System.IO.Path.Combine(Game.GetGameDirectory(), "Templates", "RecipeTemplate.json"));
             file = Format(file, CraftingTabId, CraftingRecipeId, "0" ,RecipeInputs, RecipeOutputs );
             System.IO.File.WriteAllText(OutputPath, file);
         }

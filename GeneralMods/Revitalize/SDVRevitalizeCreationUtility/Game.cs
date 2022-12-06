@@ -10,16 +10,9 @@ namespace SdvRevitalizeCreationUtility.Scripts
     /// TODO: Create a recipe creation scene where the field is just a TextEdit group.
     /// TODO: Create a Mail/Letter creation scene.
     /// TODO: Create a seperate scene for just Display string creation.
-    /// TODO: Potentially add in a way to also autogenerate appropriate CS fields into Revitalize's mod constants files to also save time there.
     /// </summary>
     public class Game : Control
     {
-        // Declare member variables here. Examples:
-        // private int a = 2;
-        // private string b = "text";
-
-        // Called when the node enters the scene tree for the first time.\
-
         public static Game Self;
 
         public override void _Ready()
@@ -31,13 +24,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
             OS.WindowMaximized = true;
         }
 
-        //  // Called every frame. 'delta' is the elapsed time since the previous frame.
-        //  public override void _Process(float delta)
-        //  {
-        //      
-        //  }
-
-        public virtual string GetPathToInputFields()
+        public static string GetPathToInputFields()
         {
             return System.IO.Path.Combine("ScrollContainer", "VBoxContainer");
         }
@@ -46,7 +33,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
         /// Gets the path to the executable binary.
         /// </summary>
         /// <returns></returns>
-        public virtual string getGameDirectory()
+        public static string GetGameDirectory()
         {
             if (Game.IsEditor() == false)
             {
@@ -59,24 +46,35 @@ namespace SdvRevitalizeCreationUtility.Scripts
             //return ProjectSettings.GlobalizePath("res://");
         }
 
-        public virtual string getRevitalizeBaseFolder()
+        /// <summary>
+        /// Gets the base project folder for Revitalize.
+        /// </summary>
+        /// <param name="RemoveDriveLetter">Used to strip out the drive letter from the Path. Set to true to be removed since Godot has a hard time navigating the path for file system dialog.</param>
+        /// <returns></returns>
+        public static string GetRevitalizeBaseFolder(bool RemoveDriveLetter=true)
         {
             List<string> strs = new List<string>();
 
-            string[] splits = this.getGameDirectory().Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] splits = GetGameDirectory().Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string s in splits)
             {
                 strs.Add(s);
             }
             strs.RemoveAt(strs.Count - 1);
-            //Gross, but strips out the beginning disk drive lettering/name and forces it into a directory.
-            string path = "/" + (System.IO.Path.Combine(strs.ToArray()).Replace("\\", "/").Substring(2) + "/");
-            return path;
+            if (RemoveDriveLetter)
+            {
+                //Gross, but strips out the beginning disk drive lettering/name and forces it into a directory.
+                return "/" + (System.IO.Path.Combine(strs.ToArray()).Replace("\\", "/").Substring(2) + "/");
+            }
+            else
+            {
+                return "/" + (System.IO.Path.Combine(strs.ToArray()).Replace("\\", "/") + "/");
+            }
         }
 
-        public virtual string getRevitalizeEnglishContentPackFolder()
+        public static string GetRevitalizeEnglishContentPackFolder()
         {
-            string contentPackPath = System.IO.Path.Combine(this.getRevitalizeBaseFolder(), "ContentPacks", "RevitalizeContentPack en-US" + "/").Replace("\\", "/");
+            string contentPackPath = System.IO.Path.Combine(GetRevitalizeBaseFolder(), "ContentPacks", "RevitalizeContentPack en-US" + "/").Replace("\\", "/");
             return contentPackPath;
         }
 

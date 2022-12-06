@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/BlueprintCreationSceneSaveButton.cs" type="Script" id=1]
 [ext_resource path="res://Game.cs" type="Script" id=2]
 [ext_resource path="res://Scripts/SelectFileDialog.cs" type="Script" id=3]
 [ext_resource path="res://Scripts/ButtonOpenFileDiaog.cs" type="Script" id=4]
+[ext_resource path="res://Scripts/IdFileSelectionButton.cs" type="Script" id=5]
 
 [node name="Game" type="Control"]
 anchor_right = 1.0
@@ -16,7 +17,7 @@ anchor_bottom = 1.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
 margin_right = 1012.0
-margin_bottom = 1578.0
+margin_bottom = 1784.0
 size_flags_horizontal = 3
 custom_constants/separation = 10
 
@@ -49,7 +50,7 @@ text = "<Blueprint Display Name>"
 margin_top = 132.0
 margin_right = 1012.0
 margin_bottom = 146.0
-text = "Blueprint Display Name:"
+text = "Blueprint Description:"
 
 [node name="DescriptionText" type="TextEdit" parent="ScrollContainer/VBoxContainer"]
 margin_top = 156.0
@@ -163,7 +164,7 @@ text = "	{
 margin_top = 878.0
 margin_right = 1012.0
 margin_bottom = 892.0
-text = "Recipe Inputs:"
+text = "Recipe Outputs:"
 
 [node name="RecipeOutputsText" type="TextEdit" parent="ScrollContainer/VBoxContainer"]
 margin_top = 902.0
@@ -260,10 +261,50 @@ script = ExtResource( 4 )
 startingDir = 1
 TextFieldToFind = "NewItemDisplayStringFilePathText"
 
-[node name="SaveButton" type="Button" parent="ScrollContainer/VBoxContainer"]
+[node name="BlueprintIdGenerationLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
 margin_top = 1558.0
 margin_right = 1012.0
-margin_bottom = 1578.0
+margin_bottom = 1572.0
+text = "Blueprint item c# code generation file:"
+
+[node name="BlueprintIdGenerationSelectionList" type="OptionButton" parent="ScrollContainer/VBoxContainer"]
+margin_top = 1582.0
+margin_right = 1012.0
+margin_bottom = 1602.0
+script = ExtResource( 5 )
+relativePathForFileGeneration = "ItemIds\\Items\\BlueprintIds"
+
+[node name="ItemIdGenerationLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+margin_top = 1612.0
+margin_right = 1012.0
+margin_bottom = 1626.0
+text = "New item c# code generation file:"
+
+[node name="ItemIdGenerationSelectionList" type="OptionButton" parent="ScrollContainer/VBoxContainer"]
+margin_top = 1636.0
+margin_right = 1012.0
+margin_bottom = 1656.0
+script = ExtResource( 5 )
+relativePathForFileGeneration = "ItemIds"
+
+[node name="RecipeIdGenerationLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
+margin_top = 1666.0
+margin_right = 1012.0
+margin_bottom = 1680.0
+text = "New recipe c# code generation file:"
+
+[node name="RecipeIdGenerationSelectionList" type="OptionButton" parent="ScrollContainer/VBoxContainer"]
+margin_top = 1690.0
+margin_right = 1012.0
+margin_bottom = 1710.0
+script = ExtResource( 5 )
+relativePathForFileGeneration = "CraftingIds\\RecipeIds"
+
+[node name="SaveButton" type="Button" parent="ScrollContainer/VBoxContainer"]
+margin_top = 1720.0
+margin_right = 1012.0
+margin_bottom = 1784.0
+rect_min_size = Vector2( 0, 64 )
 text = "Save"
 script = ExtResource( 1 )
 

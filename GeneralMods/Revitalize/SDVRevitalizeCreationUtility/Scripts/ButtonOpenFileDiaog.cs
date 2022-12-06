@@ -40,15 +40,15 @@ namespace SdvRevitalizeCreationUtility.Scripts
 
             if (this.startingDir == DirectoryToBeginFrom.BlueprintObjects)
             {
-                dialog.CurrentDir = System.IO.Path.Combine(Game.Self.getRevitalizeBaseFolder(), ObjectsDataPaths.CraftingBlueprintsPath);
+                dialog.CurrentDir = System.IO.Path.Combine(Game.GetRevitalizeBaseFolder(), ObjectsDataPaths.CraftingBlueprintsPath);
             }
             if (this.startingDir == DirectoryToBeginFrom.DisplayStrings)
             {
-                dialog.CurrentDir = System.IO.Path.Combine(Game.Self.getRevitalizeEnglishContentPackFolder(), StringsPaths.ObjectDisplayStrings);
+                dialog.CurrentDir = System.IO.Path.Combine(Game.GetRevitalizeEnglishContentPackFolder(), StringsPaths.ObjectDisplayStrings);
             }
             if (this.startingDir == DirectoryToBeginFrom.CraftingPath)
             {
-                dialog.CurrentDir = System.IO.Path.Combine(Game.Self.getRevitalizeBaseFolder(), CraftingDataPaths.CraftingPath);
+                dialog.CurrentDir = System.IO.Path.Combine(Game.GetRevitalizeBaseFolder(), CraftingDataPaths.CraftingPath);
             }
 
             dialog.Popup_();

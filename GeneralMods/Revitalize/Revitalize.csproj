@@ -37,6 +37,12 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Remove="SDVRevitalizeCreationUtility\**" />
+    <EmbeddedResource Remove="SDVRevitalizeCreationUtility\**" />
+    <None Remove="SDVRevitalizeCreationUtility\**" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <None Remove="ModAssets\Data\Crafting\CraftingStations\Workbench\Recipes\Machines\CharcoalKilns\AdvancedCharcoalKiln.json" />
     <None Remove="ModAssets\Data\Crafting\CraftingStations\Workbench\Recipes\Machines\CharcoalKilns\DeluxCharcoalKiln.json" />
     <None Remove="ModAssets\Data\Crafting\CraftingStations\Workbench\Recipes\Machines\CharcoalKilns\SuperiorCharcoalKiln.json" />
