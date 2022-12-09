@@ -4,6 +4,11 @@ Key:
 - Removed Content/Feature.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 11-24-2022 xx.xx P.M~~~~~~~~~~~~~~
+~Renamed the ItemIds folder to be Ids for future use cases.
+    ~This means the SDV Revitalize tool also had some string values update accordingly as well.
++Added in the BurnerGenerator code and a placeholder graphic in the meantime.
+
+~~~~~~~~~~~~0.0.1 Revitalize 11-24-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added in Advanced, Delux, and Superior Charcoal kilns that turn wood into coal and better rates. Unlocked with higher forging levels and by collecting golden walnuts. Sold by Clint.
 ~Fixed a glitch where Geode crushers were always consuming fuel charges, this consuming more fuel items even when not operating.
 +Cleaned up some code related to machines to make it easier to understand the flow as well as to interface for automate compatibility.
