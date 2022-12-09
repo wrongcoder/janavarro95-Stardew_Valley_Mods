@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Items
+namespace Omegasis.Revitalize.Framework.Constants.Ids.Items
 {
     /// <summary>
     /// Ids for all of the farming items registered by the mod.

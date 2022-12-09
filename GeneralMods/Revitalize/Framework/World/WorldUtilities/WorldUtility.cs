@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Omegasis.Revitalize.Framework.Constants;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
 using Omegasis.Revitalize.Framework.World.Debris;
 using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.Farming;

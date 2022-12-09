@@ -11,7 +11,6 @@ using xTile.Dimensions;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.Managers;
 using Omegasis.Revitalize.Framework.Configs;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Environment;
@@ -20,11 +19,10 @@ using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.SaveData;
 using Omegasis.Revitalize.Framework.World;
 using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
 using Omegasis.Revitalize.Framework.Constants.PathConstants.Graphics;
 using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Content;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Items.BlueprintIds;
+using Omegasis.Revitalize.Framework.Constants.Ids.Objects;
 
 namespace Omegasis.Revitalize
 {
@@ -248,6 +246,7 @@ namespace Omegasis.Revitalize
             {
 
               ModContentManager.objectManager.getItem(ResourceObjectIds.CoalBush,1),
+                            ModContentManager.objectManager.getItem(MachineIds.BurnerGenerator,1),
                             ModContentManager.objectManager.getItem(Enums.SDVObject.Wood,100),
               ModContentManager.objectManager.getItem(Enums.SDVBigCraftable.Chest,3),
                             ModContentManager.objectManager.getItem(Enums.SDVBigCraftable.CharcoalKiln,1),

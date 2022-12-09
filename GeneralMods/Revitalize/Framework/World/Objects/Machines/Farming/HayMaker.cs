@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
 using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Player;

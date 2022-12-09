@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Omegasis.Revitalize.Framework.Constants;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
+using Omegasis.Revitalize.Framework.Constants.Ids.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewValley;

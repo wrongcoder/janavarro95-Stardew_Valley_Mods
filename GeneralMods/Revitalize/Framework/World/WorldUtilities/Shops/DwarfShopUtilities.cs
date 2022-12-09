@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Omegasis.Revitalize.Framework.Configs.ShopConfigs;
 using Omegasis.Revitalize.Framework.Constants;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
+using Omegasis.Revitalize.Framework.Constants.Ids.Objects;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using StardewValley;

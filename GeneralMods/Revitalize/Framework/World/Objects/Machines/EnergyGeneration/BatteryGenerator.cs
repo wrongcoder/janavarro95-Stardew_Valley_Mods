@@ -10,45 +10,48 @@ using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewValley;
 
-namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
+namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Misc.AdvancedCharcoalKiln")]
-    public class AdvancedCharcoalKiln : Machine
+    /// <summary>
+    ///Object type that takes in a fuel type and converts it into battery packs.
+    /// </summary>
+    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.EnergyGeneration.BatteryGenerator")]
+    public class BatteryGenerator : Machine
     {
-        public enum KilnTier
+        public enum GeneratorType
         {
-            Advanced,
-            Delux,
-            Superior
+            Burner,
+            Nuclear
         }
 
-        public NetEnum<KilnTier> kilnTier = new NetEnum<KilnTier>(KilnTier.Advanced);
+        public NetEnum<GeneratorType> generatorType = new NetEnum<GeneratorType>(GeneratorType.Burner);
         public NetRef<ItemReference> itemToReceive = new NetRef<ItemReference>();
 
-        public AdvancedCharcoalKiln()
+        public BatteryGenerator()
         {
 
         }
 
-        public AdvancedCharcoalKiln(BasicItemInformation Info, KilnTier KilnTier) : this(Info, Vector2.Zero, KilnTier)
+        public BatteryGenerator(BasicItemInformation Info, GeneratorType generatorType) : this(Info, Vector2.Zero, generatorType)
         {
 
         }
 
-        public AdvancedCharcoalKiln(BasicItemInformation Info, Vector2 TilePosition, KilnTier KilnTier) : base(Info, TilePosition)
+        public BatteryGenerator(BasicItemInformation Info, Vector2 TilePosition, GeneratorType generatorType) : base(Info, TilePosition)
         {
-            this.kilnTier.Value = KilnTier;
+            this.generatorType.Value = generatorType;
         }
 
         protected override void initializeNetFieldsPostConstructor()
         {
             base.initializeNetFieldsPostConstructor();
-            this.NetFields.AddFields(this.kilnTier);
+            this.NetFields.AddFields(this.generatorType);
         }
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
@@ -80,31 +83,39 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
                 Game1.player.addItemToInventory(this.heldObject.Value);
                 this.heldObject.Value = null;
             }
-            bool success = base.performObjectDropInAction(dropInItem, probe, who) && dropInItem.parentSheetIndex == (int)Enums.SDVObject.Wood;
+
+            bool success = base.performObjectDropInAction(dropInItem, probe, who) && this.hasCorrectDropInItem(dropInItem);
             if (!success) return false;
             this.processInput(dropInItem, who, true);
-
-
             return false;
         }
 
         public override CraftingResult processInput(Item item, Farmer who, bool ShowRedMessage = true)
         {
             if (this.isWorking() || this.finishedProduction()) return new CraftingResult(false);
-            if (item.parentSheetIndex != (int)Enums.SDVObject.Wood) return new CraftingResult(false);
+            if (!this.hasCorrectDropInItem(item))
+            {
+                return new CraftingResult(false);
+            }
 
             int amountRequired = 0;
-            if (this.kilnTier.Value == KilnTier.Advanced)
-            {
-                amountRequired = 8;
-            }
-            if (this.kilnTier.Value == KilnTier.Delux)
-            {
-                amountRequired = 6;
-            }
-            if (this.kilnTier.Value == KilnTier.Superior)
+            if (this.generatorType.Value == GeneratorType.Burner)
             {
                 amountRequired = 4;
+            }
+            if (this.generatorType.Value == GeneratorType.Nuclear)
+            {
+                amountRequired = 1;
+            }
+
+            //Check to make sure the player has enough, otherwise display an error!
+            if (amountRequired > item.Stack)
+            {
+                if (ShowRedMessage)
+                {
+                    Game1.showRedMessage(this.getErrorString_NeedMoreInputItems(amountRequired, item));
+                }
+                return new CraftingResult(false);
             }
 
             PlayerUtilities.ReduceInventoryItemStackSize(who, item, amountRequired);
@@ -113,11 +124,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
                 SoundUtilities.PlaySound(Enums.StardewSound.furnace);
             }
 
-            this.MinutesUntilReady = TimeUtilities.GetMinutesFromTime(0, 0, 30);
-            this.itemToReceive.Value = new ItemReference(Enums.SDVObject.Coal, 1);
+            this.MinutesUntilReady = TimeUtilities.GetMinutesFromTime(0, 1, 0);
+            this.itemToReceive.Value = this.generatorType.Value== GeneratorType.Burner? new ItemReference(Enums.SDVObject.BatteryPack, 1): new ItemReference(Enums.SDVObject.BatteryPack, 5);
 
             this.updateAnimation();
-            return new CraftingResult(new ItemReference(item,amountRequired),true);
+            return new CraftingResult(new ItemReference(item, amountRequired), true);
         }
 
         public override void updateAnimation()
@@ -132,9 +143,31 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             }
         }
 
+        /// <summary>
+        /// Checks to see if the input item is correct or not.
+        /// </summary>
+        /// <param name="dropInItem"></param>
+        /// <returns></returns>
+        public virtual bool hasCorrectDropInItem(Item dropInItem)
+        {
+            bool correctDropInItem = false;
+            if (this.generatorType.Value == GeneratorType.Burner)
+            {
+                correctDropInItem = dropInItem.parentSheetIndex == (int)Enums.SDVObject.Coal;
+            }
+            if (this.generatorType.Value == GeneratorType.Nuclear)
+            {
+                if (dropInItem is IBasicItemInformationProvider)
+                {
+                    correctDropInItem = (dropInItem as IBasicItemInformationProvider).Id == Constants.Ids.Items.MiscItemIds.RadioactiveFuel;
+                }
+            }
+            return correctDropInItem;
+        }
+
         public override Item getOne()
         {
-            return new AdvancedCharcoalKiln(this.basicItemInformation.Copy(), this.kilnTier.Value);
+            return new BatteryGenerator(this.basicItemInformation.Copy(), this.generatorType.Value);
         }
     }
 }

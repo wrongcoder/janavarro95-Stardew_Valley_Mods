@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources
+namespace Omegasis.Revitalize.Framework.Constants.Ids.Resources.EarthenResources
 {
     /// <summary>
     /// Ids for ores that have been grounded up in the grinder and used for extra smelting output.

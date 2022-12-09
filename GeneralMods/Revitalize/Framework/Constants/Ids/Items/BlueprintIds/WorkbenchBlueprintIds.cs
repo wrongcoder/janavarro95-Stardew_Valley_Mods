@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Items.BlueprintIds
+namespace Omegasis.Revitalize.Framework.Constants.Ids.Items.BlueprintIds
 {
     /// <summary>
     /// A class full of ids for the actual <see cref="Revitalize.Framework.World.Objects.Crafting.Blueprint"/> item ids.
@@ -46,5 +46,7 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Items.BlueprintIds
 
         //Misc Items
         public const string RadioactiveFuelCellBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Items.Misc.RadioactiveFuel";
+
+        public const string BurnerGenerator = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.EnergyGeneration.BurnerGenerator";
     }
 }

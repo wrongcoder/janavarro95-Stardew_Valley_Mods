@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Framework\Constants\ItemIds\Objects\Resources\" />
+    <Folder Include="Framework\Constants\Ids\Objects\Resources\" />
   </ItemGroup>
   
   <ItemGroup>

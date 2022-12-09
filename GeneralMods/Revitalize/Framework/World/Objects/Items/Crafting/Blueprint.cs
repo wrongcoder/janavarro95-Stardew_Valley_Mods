@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
+using Omegasis.Revitalize.Framework.Constants.Ids.Objects;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
@@ -19,7 +20,7 @@ using StardewValley.Network;
 namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.Crafting.Blueprint")]
-    public class Blueprint : CustomItem
+    public class Blueprint : IBasicItemInformationProvider
     {
         /// <summary>
         /// A mapping from the name of the crafting book to the name of the crafting recipe to unlock.
@@ -97,7 +98,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
             foreach(var bookRecipePairToLearnedValues in recipesLearned) {
 
                 string itemToCraftOutputName = RevitalizeModCore.ModContentManager.craftingManager.getCraftingRecipeBook(bookRecipePairToLearnedValues.Key.Key).getCraftingRecipe(bookRecipePairToLearnedValues.Key.Value).recipe.outputName;
-                string craftingStationName = Constants.ItemIds.Objects.CraftingStations.GetCraftingStationNameFromRecipeBookId(bookRecipePairToLearnedValues.Key.Key);
+                string craftingStationName = CraftingStations.GetCraftingStationNameFromRecipeBookId(bookRecipePairToLearnedValues.Key.Key);
 
                 bool isPlural = itemToCraftOutputName.ToLowerInvariant().StartsWith("a") || itemToCraftOutputName.ToLowerInvariant().StartsWith("e") || itemToCraftOutputName.ToLowerInvariant().StartsWith("i") || itemToCraftOutputName.ToLowerInvariant().StartsWith("o") || itemToCraftOutputName.ToLowerInvariant().StartsWith("u");
 

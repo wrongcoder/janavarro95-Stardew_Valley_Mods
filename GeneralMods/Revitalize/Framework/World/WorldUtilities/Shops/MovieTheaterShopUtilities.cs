@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
+using Omegasis.Revitalize.Framework.Constants.Ids.Items;
 using Omegasis.Revitalize.Framework.World.Objects;
 using StardewValley;
 using StardewValley.Menus;
@@ -33,9 +33,9 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 
         public static bool OnItemBought(ISalable purchasedItem, Farmer who, int AmountPurchased)
         {
-            if(purchasedItem is CustomItem)
+            if(purchasedItem is IBasicItemInformationProvider)
             {
-                CustomItem item = (purchasedItem as CustomItem);
+                IBasicItemInformationProvider item = (purchasedItem as IBasicItemInformationProvider);
                 if (item.Id.Equals(MiscItemIds.MovieTheaterTicketSubscription))
                 {
                     RevitalizeModCore.SaveDataManager.playerSaveData.hasMovieTheaterTicketSubscription = true;

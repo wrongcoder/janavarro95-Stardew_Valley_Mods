@@ -272,7 +272,7 @@ margin_top = 1582.0
 margin_right = 1012.0
 margin_bottom = 1602.0
 script = ExtResource( 5 )
-relativePathForFileGeneration = "ItemIds\\Items\\BlueprintIds"
+relativePathForFileGeneration = "Ids\\Items\\BlueprintIds"
 
 [node name="ItemIdGenerationLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
 margin_top = 1612.0
@@ -285,7 +285,7 @@ margin_top = 1636.0
 margin_right = 1012.0
 margin_bottom = 1656.0
 script = ExtResource( 5 )
-relativePathForFileGeneration = "ItemIds"
+relativePathForFileGeneration = "Ids"
 
 [node name="RecipeIdGenerationLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
 margin_top = 1666.0

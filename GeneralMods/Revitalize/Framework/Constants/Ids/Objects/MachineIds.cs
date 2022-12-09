@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Objects
+namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
 {
     public static class MachineIds
     {
@@ -41,5 +41,6 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Objects
         public const string NuclearFurnace = PREFIX + "NuclearFurnace";
         public const string MagicalFurnace = PREFIX + "MagicalFurnace";
 
+        public const string BurnerGenerator = PREFIX + "EnergyGeneration.BurnerGenerator";
     }
 }

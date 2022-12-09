@@ -2,13 +2,13 @@
   "itemToDraw": {
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "Revitalize.Objects.<ItemIdHere>",
+    "registeredObjectId": "Revitalize.Objects.Machines.EnergyGeneration.BurnerGenerator",
     "amount": 1
   },
   "recipesToUnlock": {
-	  "Revitalize.Crafting.CraftingRecipeBooks.Workbench": "<CraftingRecipeToUnlockHere>"
+	  "Revitalize.Crafting.CraftingRecipeBooks.Workbench": "Revitalize.Workbench.Machines.EnergyGeneration.BurnerGenerator"
   },
-  "id": "Revitalize.Objects.Crafting.Blueprint.<BlueprintIdHere>",
+  "id": "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.EnergyGeneration.BurnerGenerator",
   "name": "",
   "description": "",
   "categoryId": "StardewValley.Crafting",

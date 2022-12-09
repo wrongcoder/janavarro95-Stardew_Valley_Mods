@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Omegasis.Revitalize.Framework.Constants;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
+using Omegasis.Revitalize.Framework.Constants.Ids.Items;
 using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;

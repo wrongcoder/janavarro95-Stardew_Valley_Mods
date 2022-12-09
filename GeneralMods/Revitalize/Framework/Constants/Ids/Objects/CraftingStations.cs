@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Omegasis.Revitalize.Framework.Constants.CraftingIds;
 
-namespace Omegasis.Revitalize.Framework.Constants.ItemIds.Objects
+namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
 {
     public class CraftingStations
     {

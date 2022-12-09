@@ -41,5 +41,7 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds
         public static string HayMakerRecipeId = "Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.HayMaker";
 
         public static string RadioactiveFuelCellRecipeId = "Revitalize.Workbench.Items.Misc.RadioactiveFuel";
+
+        public static string BurnerGenerator = "Revitalize.Workbench.Machines.EnergyGeneration.BurnerGenerator";
     }
 }

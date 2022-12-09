@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
@@ -75,7 +74,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                     {
                         if (ShowRedMessage)
                         {
-                            Game1.showRedMessage(JsonContentLoaderUtilities.LoadErrorString(this.getErrorStringFile(), "NeedMoreInputItems", amountRequired, neededDropInItem.DisplayName));
+                            Game1.showRedMessage(this.getErrorString_NeedMoreInputItems(amountRequired, neededDropInItem));
                         }
                         return new CraftingResult(false);
                     }

@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
+using Omegasis.Revitalize.Framework.Constants.Ids.Items;
 using Omegasis.Revitalize.Framework.HUD;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;

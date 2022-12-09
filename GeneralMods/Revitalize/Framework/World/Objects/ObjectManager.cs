@@ -8,9 +8,7 @@ using StardewModdingAPI;
 using StardewValley;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.World.Objects.Crafting;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Items;
 using Omegasis.Revitalize.Framework.Constants.CraftingIds;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration;
 using Omegasis.Revitalize.Framework.World.Objects.Machines;
@@ -31,6 +29,8 @@ using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.Content.JsonContent.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneration;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Misc;
+using Omegasis.Revitalize.Framework.Constants.Ids.Objects;
+using Omegasis.Revitalize.Framework.Constants.Ids.Items;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -176,12 +176,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             AutoHarvesterGardenPotAttachment autoHarvesterGardenPotAttachment = new AutoHarvesterGardenPotAttachment(new BasicItemInformation("", FarmingItems.AutoHarvesterGardenPotAttachment, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Farming.createAnimationManager("AutoHarvesterGardenPotAttachment", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
             this.addItem(FarmingItems.AutoHarvesterGardenPotAttachment, autoHarvesterGardenPotAttachment);
 
-            this.addItem(MiscItemIds.RadioactiveFuel, new CustomItem(new BasicItemInformation("", MiscItemIds.RadioactiveFuel, "", CategoryNames.Misc, CategoryColors.Misc, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Misc.createAnimationManager("RadioactiveFuel", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
+            this.addItem(MiscItemIds.RadioactiveFuel, new IBasicItemInformationProvider(new BasicItemInformation("", MiscItemIds.RadioactiveFuel, "", CategoryNames.Misc, CategoryColors.Misc, -300, -300, 0, false, 5000, false, false, TextureManagers.Items_Misc.createAnimationManager("RadioactiveFuel", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
 
             //Placeholder item for refilling the silos on the player's farm.
-            this.addItem(FarmingItems.RefillSilosFakeItem, new CustomItem(new BasicItemInformation("", FarmingItems.RefillSilosFakeItem, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, StardewValley.Object.fragility_Removable, false, 100, false, false, TextureManagers.Items_Farming.createAnimationManager("HayRefill", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
+            this.addItem(FarmingItems.RefillSilosFakeItem, new IBasicItemInformationProvider(new BasicItemInformation("", FarmingItems.RefillSilosFakeItem, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, StardewValley.Object.fragility_Removable, false, 100, false, false, TextureManagers.Items_Farming.createAnimationManager("HayRefill", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
 
-            this.addItem(MiscItemIds.MovieTheaterTicketSubscription, new CustomItem(new BasicItemInformation("", MiscItemIds.MovieTheaterTicketSubscription, "", CategoryNames.Misc, CategoryColors.Misc, -300, -300, StardewValley.Object.fragility_Removable, false, 100, false, false, TextureManagers.Items_Misc.createAnimationManager("MovieTicketSubscription", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
+            this.addItem(MiscItemIds.MovieTheaterTicketSubscription, new IBasicItemInformationProvider(new BasicItemInformation("", MiscItemIds.MovieTheaterTicketSubscription, "", CategoryNames.Misc, CategoryColors.Misc, -300, -300, StardewValley.Object.fragility_Removable, false, 100, false, false, TextureManagers.Items_Misc.createAnimationManager("MovieTicketSubscription", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
         }
 
         private void loadInBlueprints()
@@ -287,6 +287,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.addInGeodeCrushers();
             this.addInMiningDrills();
             this.addInCharcoalKilns();
+
+            this.addItem(MachineIds.BurnerGenerator,new BatteryGenerator(new BasicItemInformation("", MachineIds.BurnerGenerator, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Machines.createAnimationManager("BurnerGenerator", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), BatteryGenerator.GeneratorType.Burner));
         }
 
 

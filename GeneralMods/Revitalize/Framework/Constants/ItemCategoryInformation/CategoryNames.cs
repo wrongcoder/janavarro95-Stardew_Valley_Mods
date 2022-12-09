@@ -81,8 +81,8 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemCategoryInformation
         /// <summary>
         /// Gets a category name from a .json file.
         /// </summary>
-        /// <param name="Key"></param>
-        /// <param name="DefaultName"></param>
+        /// <param name="Key">The id for the category to load the actual translated string from the file.</param>
+        /// <param name="DefaultName">The default name to use if none is found.</param>
         /// <returns></returns>
         public static string GetCategoryName(string Key, string DefaultName)
         {

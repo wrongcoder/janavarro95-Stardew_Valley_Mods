@@ -7,8 +7,6 @@ using Microsoft.Xna.Framework;
 using Netcode;
 using StardewValley.Network;
 using Omegasis.Revitalize.Framework.Constants.CraftingIds;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Objects;
-using Omegasis.Revitalize.Framework.Constants.ItemIds.Resources.EarthenResources;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
@@ -17,6 +15,7 @@ using Omegasis.StardustCore.UIUtilities;
 using Omegasis.Revitalize.Framework.Managers;
 using Omegasis.Revitalize.Framework.Crafting.JsonContent;
 using System.IO;
+using Omegasis.Revitalize.Framework.Constants.Ids.Resources.EarthenResources;
 
 namespace Omegasis.Revitalize.Framework.Crafting
 {
