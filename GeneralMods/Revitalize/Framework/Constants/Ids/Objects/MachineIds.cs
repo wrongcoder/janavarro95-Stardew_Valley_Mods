@@ -41,6 +41,8 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
         public const string NuclearFurnace = PREFIX + "NuclearFurnace";
         public const string MagicalFurnace = PREFIX + "MagicalFurnace";
 
+        //Generated code below this point.
         public const string BurnerGenerator = PREFIX + "EnergyGeneration.BurnerGenerator";
+		public const string NuclearGenerator = "Revitalize.Objects.Machines.EnergyGeneration.NuclearGenerator";
     }
 }

@@ -288,7 +288,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.addInMiningDrills();
             this.addInCharcoalKilns();
 
-            this.addItem(MachineIds.BurnerGenerator,new BatteryGenerator(new BasicItemInformation("", MachineIds.BurnerGenerator, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Machines.createAnimationManager("BurnerGenerator", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), BatteryGenerator.GeneratorType.Burner));
+            this.addItem(MachineIds.BurnerGenerator, new BatteryGenerator(new BasicItemInformation("", MachineIds.BurnerGenerator, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Machines.createAnimationManager("BurnerGenerator", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), BatteryGenerator.GeneratorType.Burner));
+
+            this.addItem(MachineIds.NuclearGenerator, new BatteryGenerator(new BasicItemInformation("", MachineIds.NuclearGenerator, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Machines.createAnimationManager("NuclearGenerator", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), BatteryGenerator.GeneratorType.Nuclear));
         }
 
 
@@ -414,7 +424,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         public void addItem(string key, Item I)
         {
             if (this.itemsById.ContainsKey(key))
-                throw new Exception(string.Format("Item with the same key has already been added into the mod! The offending key is {0}",key));
+                throw new Exception(string.Format("Item with the same key has already been added into the mod! The offending key is {0}", key));
             else
                 this.itemsById.Add(key, I);
         }

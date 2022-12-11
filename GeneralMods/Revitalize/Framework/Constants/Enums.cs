@@ -1596,6 +1596,16 @@ namespace Omegasis.Revitalize.Framework.Constants
             /// Steam sound effect. Used with the geode crusher.
             /// </summary>
             steam,
+
+            /// <summary>
+            /// Used for the charcoal kiln.
+            /// </summary>
+            openBox,
+
+            /// <summary>
+            /// Fireball sound effect. Used for fireball casting and the charcoal kiln.
+            /// </summary>
+            fireball,
         }
 
         /// <summary>

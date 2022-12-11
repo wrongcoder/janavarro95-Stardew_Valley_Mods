@@ -110,14 +110,20 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             PlayerUtilities.ReduceInventoryItemStackSize(who, item, amountRequired);
             if (who != null)
             {
-                SoundUtilities.PlaySound(Enums.StardewSound.furnace);
+                SoundUtilities.PlaySound(Enums.StardewSound.openBox);
+                SoundUtilities.PlaySoundWithDelay(Enums.StardewSound.fireball, 50);
             }
+
+            MultiplayerUtilities.GetMultiplayer().broadcastSprites(who.currentLocation, new TemporaryAnimatedSprite(27, this.tileLocation.Value * 64f + new Vector2(-16f, -128f), Color.White, 4, flipped: false, 50f, 10, 64, (this.tileLocation.Y + 1f) * 64f / 10000f + 0.0001f)
+            {
+                alphaFade = 0.005f
+            });
 
             this.MinutesUntilReady = TimeUtilities.GetMinutesFromTime(0, 0, 30);
             this.itemToReceive.Value = new ItemReference(Enums.SDVObject.Coal, 1);
 
             this.updateAnimation();
-            return new CraftingResult(new ItemReference(item,amountRequired),true);
+            return new CraftingResult(new ItemReference(item, amountRequired), true);
         }
 
         public override void updateAnimation()

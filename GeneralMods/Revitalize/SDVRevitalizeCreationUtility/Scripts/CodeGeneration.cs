@@ -96,7 +96,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
         /// <returns></returns>
         private static string GenerateCSharpStringVariable(string VariableName, string VariableValue)
         {
-            return string.Format("public static string {0} = \"{1}\";",VariableName,VariableValue);
+            return string.Format("public const string {0} = \"{1}\";",VariableName,VariableValue);
         }
 
         /// <summary>

@@ -3,7 +3,14 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
-~~~~~~~~~~~~0.0.1 Revitalize 11-24-2022 xx.xx P.M~~~~~~~~~~~~~~
+~~~~~~~~~~~~0.0.1 Revitalize 12-08-2022 xx.xx P.M~~~~~~~~~~~~~~
+~Fixed SDV revitalize tool to generate c# vars as const and not static
++Added in proper graphics for burner generator
++Added in nuclear generators
++Added in smoke effects for when charcoal kilns work
+~Changed charcoal kiln sound effects to match the base game.
+
+~~~~~~~~~~~~0.0.1 Revitalize 12-08-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Renamed the ItemIds folder to be Ids for future use cases.
     ~This means the SDV Revitalize tool also had some string values update accordingly as well.
 +Added in the BurnerGenerator code and a placeholder graphic in the meantime.

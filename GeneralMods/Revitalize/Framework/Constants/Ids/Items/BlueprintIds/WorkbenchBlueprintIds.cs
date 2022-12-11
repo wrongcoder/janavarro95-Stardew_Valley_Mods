@@ -47,6 +47,9 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Items.BlueprintIds
         //Misc Items
         public const string RadioactiveFuelCellBlueprint = "Revitalize.Objects.Crafting.Blueprint.Workbench.Items.Misc.RadioactiveFuel";
 
+        //Generated code below this point.
+
         public const string BurnerGenerator = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.EnergyGeneration.BurnerGenerator";
+		public const string NuclearGenerator = "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.EnergyGeneration.NuclearGenerator";
     }
 }
