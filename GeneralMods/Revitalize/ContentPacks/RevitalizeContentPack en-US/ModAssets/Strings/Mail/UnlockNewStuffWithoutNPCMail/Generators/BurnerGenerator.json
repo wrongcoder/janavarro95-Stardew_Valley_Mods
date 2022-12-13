@@ -1,0 +1,10 @@
+{
+	"mailTitle":"Revitalize.UnlockNewStuffWithoutNPCMail.Machines.BurnerBatteryGenerator",
+	"message":"@, ^Congratulations on getting to floor 50 of the mines. We like to award you the blueprints for a machine to burn coal to store the electricity into battery packs. We hope this encourages future exploration.^ -Miner's Guild, Gem Sea Branch",
+	"itemReference":{
+		"stardewValleyItemId": "NULL",
+		"stardewValleyBigCraftableId": "NULL",
+		"registeredObjectId": "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.EnergyGeneration.BurnerGenerator",
+		"amount": 1
+	},
+}

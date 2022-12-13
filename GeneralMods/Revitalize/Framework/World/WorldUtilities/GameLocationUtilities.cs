@@ -36,6 +36,14 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
             }
         }
 
+        /// <summary>
+        /// Checks to see if the hard mines are currently enabled for special benefits.
+        /// </summary>
+        /// <returns></returns>
+        public static bool AreTheHardMinesEnabled()
+        {
+            return Game1.player.team.mineShrineActivated.Value == true;
+        }
 
         /// <summary>
         /// Checks to see if the player is in the regular mine.

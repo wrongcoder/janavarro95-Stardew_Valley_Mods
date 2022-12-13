@@ -34,6 +34,8 @@ namespace Omegasis.Revitalize.Framework.Constants.Mail
         public const string NuclearGeodeCrusherUnlock = "Revitalize.UnlockNewStuffWithoutNPCMail.NuclearGeodeCrusherUnlock";
         public const string MagicalGeodeCrusherUnlock = "Revitalize.UnlockNewStuffWithoutNPCMail.MagicalGeodeCrusherUnlock";
 
+        public const string BurnerBatteryGeneratorUnlock = "Revitalize.UnlockNewStuffWithoutNPCMail.Machines.BurnerBatteryGenerator";
+        public const string NuclearBatteryGeneratorUnlock = "Revitalize.UnlockNewStuffWithoutNPCMail.Machines.NuclearBatteryGenerator";
 
     }
 }

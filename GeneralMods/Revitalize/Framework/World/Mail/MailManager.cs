@@ -65,6 +65,10 @@ namespace Omegasis.Revitalize.Framework.World.Mail
             this.addMailIfNotReceived(MailTitles.DeluxCharcoalKilnForSale, Game1.player.ForagingLevel >= 8 && PlayerUtilities.GetNumberOfGoldenWalnutsFound()>=1);
             this.addMailIfNotReceived(MailTitles.SuperiorCharcoalKilnForSale, Game1.player.ForagingLevel >= 8 && PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
 
+            this.addMailIfNotReceived(MailTitles.BurnerBatteryGeneratorUnlock, Game1.player.deepestMineLevel >= 50);
+            this.addMailIfNotReceived(MailTitles.NuclearBatteryGeneratorUnlock, GameLocationUtilities.AreTheHardMinesEnabled());
+
+            //Special cases where mail needs to repeat over and over again.
             if (!Game1.player.mailbox.Contains(MailTitles.MovieTheaterTicketSubscriptionTickets) && Game1.dayOfMonth == 1 && RevitalizeModCore.SaveDataManager.playerSaveData.hasMovieTheaterTicketSubscription)
             {
                 Game1.mailbox.Add(MailTitles.MovieTheaterTicketSubscriptionTickets);

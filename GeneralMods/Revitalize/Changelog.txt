@@ -11,6 +11,8 @@ Key:
 ~Added a more straightforward way to add light sources on CustomObjects
 ~Added LightSources to BatteryGenerators and CharcoalKilns.
 ~Fixed a glitch where Charcoal Kilns would work as long as a single piece of wood was provided.
++Added in blueprints for the Burner generator which can either be bought from Clint, or awarded to the player upon reaching floor 50 of the mines.
++Added in blueprints for the Nuclear generator which can either be bought from Clint after unlocking the Walnut Room, or by enabling the hard version of the mines.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 12-08-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed SDV revitalize tool to generate c# vars as const and not static

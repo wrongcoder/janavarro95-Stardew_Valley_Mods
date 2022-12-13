@@ -45,6 +45,9 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.DeluxCharcoalKiln, objectManager.getItem(WorkbenchBlueprintIds.DeluxCharcoalKiln, 1), shopConfig.deluxCharcoalKilnBlueprintPrice, 1, Game1.player.ForagingLevel >= 8 && PlayerUtilities.GetNumberOfGoldenWalnutsFound()>=1);
             ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.SuperiorCharcoalKiln, objectManager.getItem(WorkbenchBlueprintIds.SuperiorCharcoalKiln, 1), shopConfig.superiorCharcoalKilnBlueprintPrice, 1, Game1.player.ForagingLevel >= 8 && PlayerUtilities.GetNumberOfGoldenWalnutsFound()>=100);
 
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.BurnerGenerator, objectManager.getItem(WorkbenchBlueprintIds.BurnerGenerator), shopConfig.burnerBatteryGeneratorBlueprintPrice);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearGenerator, objectManager.getItem(WorkbenchBlueprintIds.NuclearGenerator), shopConfig.nuclearBatteryGeneratorBlueprintPrice, 1, PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
+
             AddAxeBlueprintsToShop(Menu);
             AddHoeBlueprintsToShop(Menu);
             AddPickaxeBlueprintsToShop(Menu);
