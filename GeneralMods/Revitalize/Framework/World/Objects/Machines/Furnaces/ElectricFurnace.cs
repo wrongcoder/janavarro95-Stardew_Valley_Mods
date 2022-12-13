@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Crafting;
+using Omegasis.Revitalize.Framework.Illuminate;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
@@ -122,6 +123,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                     this.consumeFuelCharge();
                     PlayerUtilities.ReduceInventoryItemStackSize(who, dropInItem, amountRequired);
                     this.updateAnimation();
+                    this.LightManager.addLightToTileLocation(new Vector2(0, 0),this.getCurrentLocation(),Illuminate.LightManager.LightIdentifier.SconceLight,Color.DarkCyan.Invert(), this.TileLocation, 1.5f);
 
                     return new CraftingResult(new ItemReference(neededDropInItem, amountRequired), true); //Found a sucessful recipe.
                 }
@@ -141,6 +143,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             //Cleans out the furnace as necessary to ensure it works properly when dropping in another item.
             if (this.finishedProduction())
             {
+                this.LightManager.removeLight(new Vector2(0, 0), this.getCurrentLocation());
                 this.getMachineOutputs(true, false, true);
             }
             this.processInput(dropInItem, who,true);
@@ -221,7 +224,22 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
-            return base.minutesElapsed(minutes, environment);
+            bool elapsed= base.minutesElapsed(minutes, environment);
+            if (this.finishedProduction())
+            {
+                this.LightManager.removeLight(new Vector2(0, 0), this.getCurrentLocation());
+            }
+            return elapsed;
+        }
+
+        public override void removeFromGameWorld(Vector2 TileLocation, GameLocation environment)
+        {
+            base.removeFromGameWorld(TileLocation, environment);
+        }
+
+        public override void performRemoveAction(Vector2 tileLocation, GameLocation environment)
+        {
+            base.performRemoveAction(tileLocation, environment);
         }
     }
 }

@@ -151,6 +151,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             }
         }
 
+        public LightManager LightManager { get => this.basicItemInformation.lightManager; set => this.basicItemInformation.lightManager=value; }
+
         /// <summary>
         /// Since objects are counted as both furniture and objects, 2 day update ticks happen for them, so we need to add a buffer for when the day updates trigger.
         /// </summary>
@@ -491,7 +493,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         public override void initializeLightSource(Vector2 tileLocation, bool mineShaft = false)
         {
-            base.initializeLightSource(tileLocation, mineShaft);
+            this.LightManager.regenerateRealLightsFromFakeLights(this.getCurrentLocation());
         }
 
         public override bool isActionable(Farmer who)
@@ -598,9 +600,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             if (environment == null) return;
 
-            this.cleanUpLights();
-
-
+            if (this.LightManager != null) this.LightManager.removeLights(this.getCurrentLocation());
 
             this.removeLights(environment);
             if ((int)this.furniture_type == 14 || (int)this.furniture_type == 16)
@@ -970,12 +970,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             }
         }
 
-
-        public virtual void cleanUpLights()
-        {
-            if (this.GetLightManager() != null) this.GetLightManager().removeForCleanUp(this.getCurrentLocation());
-        }
-
         public virtual BasicItemInformation getItemInformation()
         {
             return this.basicItemInformation;
@@ -1041,12 +1035,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             return otherStack.Stack;
         }
 
-
-        public virtual LightManager GetLightManager()
-        {
-            return this.basicItemInformation.lightManager;
-        }
-
         public override void AttemptRemoval(Action<Furniture> removal_action)
         {
             this.attemptToPickupFromGameWorld(this.TileLocation, this.getCurrentLocation(), Game1.player);
@@ -1082,6 +1070,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         {
             WorldUtilities.WorldUtility.CreateItemDebrisAtTileLocation(location,this ,origin / Game1.tileSize, destination / Game1.tileSize);
         }
+
+        
 
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
