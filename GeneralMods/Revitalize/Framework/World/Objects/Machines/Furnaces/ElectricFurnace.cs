@@ -123,7 +123,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
                     this.consumeFuelCharge();
                     PlayerUtilities.ReduceInventoryItemStackSize(who, dropInItem, amountRequired);
                     this.updateAnimation();
-                    this.LightManager.addLightToTileLocation(new Vector2(0, 0),this.getCurrentLocation(),Illuminate.LightManager.LightIdentifier.SconceLight,Color.DarkCyan.Invert(), this.TileLocation, 1.5f);
+                    this.addLight(new Vector2(0, 0),Illuminate.LightManager.LightIdentifier.SconceLight,Color.DarkCyan.Invert(), 1.5f);
 
                     return new CraftingResult(new ItemReference(neededDropInItem, amountRequired), true); //Found a sucessful recipe.
                 }
@@ -143,7 +143,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             //Cleans out the furnace as necessary to ensure it works properly when dropping in another item.
             if (this.finishedProduction())
             {
-                this.LightManager.removeLight(new Vector2(0, 0), this.getCurrentLocation());
+                this.removeLight(new Vector2(0, 0));
                 this.getMachineOutputs(true, false, true);
             }
             this.processInput(dropInItem, who,true);

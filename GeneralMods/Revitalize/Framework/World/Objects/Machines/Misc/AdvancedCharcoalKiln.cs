@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Crafting;
+using Omegasis.Revitalize.Framework.Illuminate;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
@@ -59,6 +60,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             {
                 this.heldObject.Value = (StardewValley.Object)this.itemToReceive.Value.getItem();
                 this.itemToReceive.Value = null;
+                this.removeLight(Vector2.Zero);
             }
             this.updateAnimation();
             return true;
@@ -73,6 +75,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
         /// <returns></returns>
         public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
         {
+            if (probe) return false;
             //Prevent overriding and destroying the previous operation.
             if (this.itemToReceive.Value != null) return false;
             if (this.heldObject.Value != null)
@@ -107,6 +110,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
                 amountRequired = 4;
             }
 
+            //Check to make sure the player has enough, otherwise display an error!
+            if (amountRequired > item.Stack && ShowRedMessage)
+            {
+                Game1.showRedMessage(this.getErrorString_NeedMoreInputItems(amountRequired, item));
+                return new CraftingResult(false);
+            }
+
             PlayerUtilities.ReduceInventoryItemStackSize(who, item, amountRequired);
             if (who != null)
             {
@@ -121,6 +131,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 
             this.MinutesUntilReady = TimeUtilities.GetMinutesFromTime(0, 0, 30);
             this.itemToReceive.Value = new ItemReference(Enums.SDVObject.Coal, 1);
+            this.addLight(Vector2.Zero, Illuminate.LightManager.LightIdentifier.SconceLight, Color.DarkCyan.Invert(), 1f);
 
             this.updateAnimation();
             return new CraftingResult(new ItemReference(item, amountRequired), true);

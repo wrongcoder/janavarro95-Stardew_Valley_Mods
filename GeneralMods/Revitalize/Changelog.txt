@@ -7,6 +7,10 @@ Key:
 ~ElectricFurnaces (and their upgrade tiers) now glow when smelting items.
 ~Reworked some logic regarding the LightManager class to work better, but it might still have issues since that original code was written years ago so there might be cases where I should makde different changes.
     -These changes would be made in CustomObject.cs or CustomItem.cs initializeLightSource, where maybe there should just be one initial light source???
+~Fixed some code issues with adding LightSources with the LightManager to some machines.
+~Added a more straightforward way to add light sources on CustomObjects
+~Added LightSources to BatteryGenerators and CharcoalKilns.
+~Fixed a glitch where Charcoal Kilns would work as long as a single piece of wood was provided.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 12-08-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed SDV revitalize tool to generate c# vars as const and not static

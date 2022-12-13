@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Crafting;
+using Omegasis.Revitalize.Framework.Illuminate;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
@@ -62,6 +63,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
             {
                 this.heldObject.Value = (StardewValley.Object)this.itemToReceive.Value.getItem();
                 this.itemToReceive.Value = null;
+                this.removeLight(Vector2.Zero);
             }
             this.updateAnimation();
             return true;
@@ -126,7 +128,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 
             this.MinutesUntilReady = TimeUtilities.GetMinutesFromTime(0, 1, 0);
             this.itemToReceive.Value = this.generatorType.Value== GeneratorType.Burner? new ItemReference(Enums.SDVObject.BatteryPack, 1): new ItemReference(Enums.SDVObject.BatteryPack, 5);
-
+            this.addLight(Vector2.Zero, Illuminate.LightManager.LightIdentifier.SconceLight, this.generatorType.Value== GeneratorType.Burner? Color.DarkCyan.Invert(): Color.GreenYellow, 1f);
             this.updateAnimation();
             return new CraftingResult(new ItemReference(item, amountRequired), true);
         }

@@ -13,7 +13,8 @@ namespace Omegasis.Revitalize.Framework.Illuminate
 {
     /// <summary>
     /// Deals with handling lights on custom objects.
-    /// TODO
+    /// Note that since lighting in Stardew Valley seems to work as a subtraction value, that's the reason many methods here do color inversions.
+    /// <see cref="addLightToTileLocation(Vector2, GameLocation, LightManager.LightIdentifier, Color, Vector2, float)"/> for a version that takes the actual color passed in.
     /// </summary>
     public class LightManager : NetObject
     {
@@ -179,15 +180,22 @@ namespace Omegasis.Revitalize.Framework.Illuminate
             if (!this.lights.ContainsKey(IdKey))
                 return false;
 
+
             this.lights.TryGetValue(IdKey, out var light);
 
             Game1.currentLightSources.Add(light);
 
             if (light.lightTexture == null)
                 light.lightTexture = this.loadTextureFromConstantValue(light.Identifier);
-
-            Game1.currentLightSources.Add(light);
-            location.sharedLights.Add((int)IdKey.X * lightBigNumber + (int)IdKey.Y, light);
+            if (!Game1.currentLightSources.Contains(light))
+            {
+                Game1.currentLightSources.Add(light);
+            }
+            //Light is already displayed at the shared location.
+            if (!location.sharedLights.ContainsKey((int)IdKey.X * lightBigNumber + (int)IdKey.Y))
+            {
+                location.sharedLights.Add((int)IdKey.X * lightBigNumber + (int)IdKey.Y, light);
+            }
             this.repositionLight(light, IdKey, TilePosition);
             return true;
         }

@@ -496,6 +496,16 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.LightManager.regenerateRealLightsFromFakeLights(this.getCurrentLocation());
         }
 
+        public virtual bool addLight(Vector2 IdKey, LightManager.LightIdentifier LightShape, Color DesiredColor, float Radius)
+        {
+            return this.LightManager.addLightToTileLocation(IdKey, this.getCurrentLocation(), LightShape, DesiredColor, this.TileLocation, Radius);
+        }
+
+        public virtual bool removeLight(Vector2 IdKey)
+        {
+            return this.LightManager.removeLight(IdKey, this.getCurrentLocation());
+        }
+
         public override bool isActionable(Farmer who)
         {
             return true;
