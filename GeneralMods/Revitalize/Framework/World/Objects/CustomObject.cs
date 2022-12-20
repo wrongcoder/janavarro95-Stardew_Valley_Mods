@@ -128,7 +128,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 string displayName = "";
                 if (string.IsNullOrEmpty(this.basicItemInformation.name.Value))
                 {
-                   displayName = JsonContentLoaderUtilities.LoadItemDisplayName(this.Id, false);
+                   displayName = JsonContentPackUtilities.LoadItemDisplayName(this.Id, false);
                 }
                 if (!string.IsNullOrEmpty(displayName))
                 {
@@ -458,7 +458,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public override string getDescription()
         {
-            string description = JsonContentLoaderUtilities.LoadItemDescription(this.basicItemInformation.id.Value,false);
+            string description = JsonContentPackUtilities.LoadItemDescription(this.basicItemInformation.id.Value,false);
             if (string.IsNullOrEmpty(description))
             {
                 description = this.basicItemInformation.description.Value; //Get default set description.

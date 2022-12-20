@@ -51,7 +51,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops.RevitalizeSho
                     int addedHay = FarmUtilities.GetNumberOfHayPiecesUntilFullSilosLimitByPlayersMoney(HaySellPrice());
                     FarmUtilities.FillSilosFromSiloReillItem(RevitalizeModCore.Configs.shopsConfigManager.hayMakerShopConfig.HayMakerShopHaySellPrice);
                     SoundUtilities.PlaySound(Enums.StardewSound.Ship);
-                    string infoMessage =string.Format(JsonContentLoaderUtilities.LoadShopDialogue(FarmUtilities.AreSilosAtMaxCapacity() ? "SiloFullRefill" : "SiloPartialRefill", "HayMakerShopDialogue.json"), addedHay, RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.Hay).DisplayName, Game1.getFarm().piecesOfHay.Value, FarmUtilities.GetSiloCapacity());
+                    string infoMessage =string.Format(JsonContentPackUtilities.LoadShopDialogue(FarmUtilities.AreSilosAtMaxCapacity() ? "SiloFullRefill" : "SiloPartialRefill", "HayMakerShopDialogue.json"), addedHay, RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.Hay).DisplayName, Game1.getFarm().piecesOfHay.Value, FarmUtilities.GetSiloCapacity());
                     Game1.addHUDMessage(new HUDMessage(infoMessage));
                     return true;
                 }

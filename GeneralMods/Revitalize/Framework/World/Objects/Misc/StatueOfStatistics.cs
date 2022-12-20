@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
+using Omegasis.Revitalize.Framework.Constants.PathConstants;
+using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using StardewValley;
 
@@ -41,11 +45,19 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Misc
 
             //Add all lines of dialogue below.
             //Add more statistics below!
-            List<string> lines = new List<string>();
-            lines.Add("Hello world!^");
-            lines.Add("Let's show some statistics^");
-            lines.Add("Geodes cracked:" + Game1.stats.GeodesCracked + "^");
 
+            Dictionary<string, string> statsStrings = JsonContentPackUtilities.LoadStringDictionaryFile(Path.Combine(StringsPaths.UI, "StatueOfStatistics.json"));
+
+            if (statsStrings == null)
+            {
+                Game1.showRedMessage("Why null?");
+            }
+
+            List<string> lines = new List<string>();
+
+            lines.Add(statsStrings["Statistics"]);
+            lines.Add(statsStrings["LineDivide"]);
+            lines.Add(string.Format(statsStrings["GeodesCracked"],Game1.stats.GeodesCracked));
 
             for (int i = 0; i < lines.Count; i++)
             {

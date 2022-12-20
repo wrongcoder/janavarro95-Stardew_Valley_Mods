@@ -17,6 +17,7 @@ using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json.Crafting;
+using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops;
 using StardewModdingAPI;
 

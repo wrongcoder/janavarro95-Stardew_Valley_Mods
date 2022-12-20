@@ -289,7 +289,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         /// <returns></returns>
         public virtual string getErrorString_NeedMoreInputItems(int AmountRequired, Item NeededDropInItemDisplayName)
         {
-            return JsonContentLoaderUtilities.LoadErrorString(Path.Combine("Objects", "CommonErrorStrings.json"), "NeedMoreInputItems", AmountRequired, NeededDropInItemDisplayName.DisplayName);
+            return JsonContentPackUtilities.LoadErrorString(Path.Combine("Objects", "CommonErrorStrings.json"), "NeedMoreInputItems", AmountRequired, NeededDropInItemDisplayName.DisplayName);
         }
 
         /// <summary>

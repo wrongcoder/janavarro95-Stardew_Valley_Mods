@@ -9,7 +9,10 @@ using Omegasis.Revitalize.Framework.ContentPacks;
 
 namespace Omegasis.Revitalize.Framework.Utilities.JsonContentLoading
 {
-    public static class JsonContentLoaderUtilities
+    /// <summary>
+    /// Loads in json content from content packs.
+    /// </summary>
+    public static class JsonContentPackUtilities
     {
         /// <summary>
         /// Loads a description string for the item.
@@ -147,6 +150,26 @@ namespace Omegasis.Revitalize.Framework.Utilities.JsonContentLoading
                 }
             }
             throw new JsonContentLoadingException("The given file path {0} or key {1} do not exist for any Revitalize content pack! A file can be created under the ModAssets/Strings/ShopDialogue directory with the given info.");
+        }
+
+        /// <summary>
+        /// Loads in a string dictionary file from a given content pack.
+        /// </summary>
+        /// <param name="RelativePathToFile"></param>
+        /// <returns></returns>
+        public static Dictionary<string, string> LoadStringDictionaryFile(string RelativePathToFile)
+        {
+            List<RevitalizeContentPack> contentPacks = RevitalizeModCore.ModContentManager.revitalizeContentPackManager.getContentPacksForCurrentLanguageCode();
+
+            foreach (RevitalizeContentPack contentPack in contentPacks)
+            {
+                Dictionary<string,string> dict= JsonUtilities.LoadStringDictionaryFile(contentPack,RelativePathToFile);
+                if (dict!=null)
+                {
+                    return dict;
+                }
+            }
+            throw new JsonContentLoadingException("The given file at the path {0} does not exist for any Revitalize content pack!");
         }
     }
 }

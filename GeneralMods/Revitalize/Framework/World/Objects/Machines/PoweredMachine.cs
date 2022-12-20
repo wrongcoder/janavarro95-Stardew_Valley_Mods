@@ -283,20 +283,20 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         {
             if (this.machineTier.Value == PoweredMachineTier.Coal)
             {
-                Game1.showRedMessage(JsonContentLoaderUtilities.LoadErrorString(this.getErrorStringFile(), "NeedCoal"));
+                Game1.showRedMessage(JsonContentPackUtilities.LoadErrorString(this.getErrorStringFile(), "NeedCoal"));
                 return;
             }
             if (this.machineTier.Value == PoweredMachineTier.Electric)
             {
-                Game1.showRedMessage(JsonContentLoaderUtilities.LoadErrorString(this.getErrorStringFile(), "NeedBatteryPack"));
+                Game1.showRedMessage(JsonContentPackUtilities.LoadErrorString(this.getErrorStringFile(), "NeedBatteryPack"));
                 return;
             }
             if (this.machineTier.Value == PoweredMachineTier.Nuclear)
             {
-                Game1.showRedMessage(JsonContentLoaderUtilities.LoadErrorString(this.getErrorStringFile(), "NeedNuclearFuel"));
+                Game1.showRedMessage(JsonContentPackUtilities.LoadErrorString(this.getErrorStringFile(), "NeedNuclearFuel"));
                 return;
             }
-            Game1.showRedMessage(JsonContentLoaderUtilities.LoadErrorString(this.getErrorStringFile(), "MagicalFurnaceFuelError"));
+            Game1.showRedMessage(JsonContentPackUtilities.LoadErrorString(this.getErrorStringFile(), "MagicalFurnaceFuelError"));
             return;
         }
 

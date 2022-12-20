@@ -12,6 +12,11 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
     public class ShopsConfigManager
     {
         /// <summary>
+        /// Config file for maanging extra items added to Clint's shop.
+        /// </summary>
+        public AdventureGuildShopConfig adventureGuildShopConfig;
+
+        /// <summary>
         /// Config file for marnie's normal non-animal stock.
         /// </summary>
         public AnimalShopStockConfig animalShopStockConfig;
@@ -48,6 +53,7 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
 
         public ShopsConfigManager()
         {
+            this.adventureGuildShopConfig = ConfigManager.InitializeConfig<AdventureGuildShopConfig>("Configs", "Shops", "AdventureGuildShopConfig.json");
             this.animalShopStockConfig = ConfigManager.InitializeConfig<AnimalShopStockConfig>("Configs", "Shops", "AnimalShopConfig.json");
             this.blacksmithShopsConfig = ConfigManager.InitializeConfig<BlacksmithShopConfig>("Configs", "Shops", "BlacksmithShopConfig.json");
             this.dwarfShopConfig = ConfigManager.InitializeConfig<DwarfShopConfig>("Configs", "Shops", "DwarfShopConfig.json");

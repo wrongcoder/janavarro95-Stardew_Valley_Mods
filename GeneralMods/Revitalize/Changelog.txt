@@ -4,7 +4,7 @@ Key:
 - Removed Content/Feature.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 12-20-2022 xx.xx P.M~~~~~~~~~~~~~~
-+Started working on the Statue of Statistics.
++Added Statue of Statistics.
     Shows multiple statistics about the player.
 ~~~~~~~~~~~~0.0.1 Revitalize 12-12-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~ElectricFurnaces (and their upgrade tiers) now glow when smelting items.

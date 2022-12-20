@@ -213,6 +213,10 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <returns></returns>
         public static Dictionary<string, string> LoadStringDictionaryFile(string RelativePathToFile)
         {
+            if (!RelativePathToFile.EndsWith(".json"))
+            {
+                RelativePathToFile = RelativePathToFile + ".json";
+            }
             return ReadJsonFilePathCombined<Dictionary<string, string>>(RelativePathToFile);
         }
 

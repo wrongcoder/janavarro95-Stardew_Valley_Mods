@@ -70,6 +70,10 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                         {
                             MarniesShopUtilities.AddStockToMarniesShop(menu);
                         }
+                        else if (npcName.Equals("Marlon"))
+                        {
+                            AdventureGuildShopUtilities.AddStockToAdventureGuildShop(menu);
+                        }
                     }
                     else if(menu.currency==ShopMenu.currency_qiGems && menu.storeContext.Equals("QiGemShop"))
                     {
