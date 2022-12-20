@@ -31,6 +31,7 @@ using Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneration;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Misc;
 using Omegasis.Revitalize.Framework.Constants.Ids.Objects;
 using Omegasis.Revitalize.Framework.Constants.Ids.Items;
+using Omegasis.Revitalize.Framework.World.Objects.Misc;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -104,12 +105,18 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.loadInItems();
             this.loadInCraftingTables();
             this.loadInMachines();
+            this.loadInMiscObjects();
             this.loadInAestheticsObjects();
 
             this.loadInResourcePlants();
 
             //Should load blueprints last due to the fact that they can draw references to objects.
             this.loadInBlueprints();
+        }
+
+        protected virtual void loadInMiscObjects()
+        {
+            this.addItem(new StatueOfStatistics(new BasicItemInformation("", MiscObjectIds.StatueOfStatistics, "", CategoryNames.Misc, CategoryColors.Misc, -300, -300, 0, false, 100, false, false, TextureManagers.Objects_Misc.createAnimationManager("StatueOfStatistics", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
         }
 
         /// <summary>

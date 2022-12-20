@@ -3,6 +3,9 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 12-20-2022 xx.xx P.M~~~~~~~~~~~~~~
++Started working on the Statue of Statistics.
+    Shows multiple statistics about the player.
 ~~~~~~~~~~~~0.0.1 Revitalize 12-12-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~ElectricFurnaces (and their upgrade tiers) now glow when smelting items.
 ~Reworked some logic regarding the LightManager class to work better, but it might still have issues since that original code was written years ago so there might be cases where I should makde different changes.

@@ -248,6 +248,7 @@ namespace Omegasis.Revitalize
 
              ModContentManager.objectManager.getItem(MachineIds.AdvancedCharcoalKiln,1),
                           ModContentManager.objectManager.getItem(Enums.SDVObject.Wood,100),
+                          ModContentManager.objectManager.getItem(MiscObjectIds.StatueOfStatistics)
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             });
 

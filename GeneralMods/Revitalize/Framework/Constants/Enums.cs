@@ -1606,6 +1606,11 @@ namespace Omegasis.Revitalize.Framework.Constants
             /// Fireball sound effect. Used for fireball casting and the charcoal kiln.
             /// </summary>
             fireball,
+
+            /// <summary>
+            /// The sound made when opening the statue of perfection or qi's walnut room shop.
+            /// </summary>
+            qi_shop
         }
 
         /// <summary>

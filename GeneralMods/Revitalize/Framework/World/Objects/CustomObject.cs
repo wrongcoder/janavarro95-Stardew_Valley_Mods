@@ -804,7 +804,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public override bool performUseAction(GameLocation location)
         {
-            RevitalizeModCore.log("Perform use action");
             return base.performUseAction(location);
         }
 
