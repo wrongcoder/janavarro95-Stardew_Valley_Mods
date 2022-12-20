@@ -81,12 +81,12 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                     }
 
                     //Only way to validate the movie theater currently.
-                    if (menu.potraitPersonDialogue.Equals(Game1.parseText(Game1.content.LoadString("Strings\\StringsFromCSFiles:MovieTheaterBoxOffice"), Game1.dialogueFont, 304)))
+                    else if (menu.potraitPersonDialogue.Equals(Game1.parseText(Game1.content.LoadString("Strings\\StringsFromCSFiles:MovieTheaterBoxOffice"), Game1.dialogueFont, 304)))
                     {
                         MovieTheaterShopUtilities.AddStockToShop(menu);
                     }
 
-                    if (menu.storeContext.Equals(HayMakerShopUtilities.StoreContext))
+                    else if (menu.storeContext.Equals(HayMakerShopUtilities.StoreContext))
                     {
                         HayMakerShopUtilities.AddItemsToShop(menu);
                     }

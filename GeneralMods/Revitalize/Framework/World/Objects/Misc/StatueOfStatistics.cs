@@ -46,7 +46,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Misc
             //Add all lines of dialogue below.
             //Add more statistics below!
 
-            Dictionary<string, string> statsStrings = JsonContentPackUtilities.LoadStringDictionaryFile(Path.Combine(StringsPaths.UI, "StatueOfStatistics.json"));
+            Dictionary<string, string> statsStrings = JsonContentPackUtilities.LoadStringDictionaryFile(Path.Combine(StringsPaths.UI,"Objects", "StatueOfStatistics.json"));
 
             if (statsStrings == null)
             {

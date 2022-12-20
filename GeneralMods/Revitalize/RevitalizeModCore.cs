@@ -220,8 +220,8 @@ namespace Omegasis.Revitalize
 
 
             //REMOVE THIS.
-            //Game1.warpFarmer("QiNutRoom", 7, 8, 0);
-            //Game1.player.QiGems = 100;
+            Game1.warpFarmer("QiNutRoom", 7, 8, 0);
+            Game1.player.QiGems = 100;
         }
 
         /// <summary>

@@ -6,6 +6,8 @@ Key:
 ~~~~~~~~~~~~0.0.1 Revitalize 12-20-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added Statue of Statistics.
     Shows multiple statistics about the player.
++Added in Statue of Perfection Tracking.
+    -Tells you what you are missing from shipped items, cooking recipes, crafting recipes, and caught fish.
 ~~~~~~~~~~~~0.0.1 Revitalize 12-12-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~ElectricFurnaces (and their upgrade tiers) now glow when smelting items.
 ~Reworked some logic regarding the LightManager class to work better, but it might still have issues since that original code was written years ago so there might be cases where I should makde different changes.

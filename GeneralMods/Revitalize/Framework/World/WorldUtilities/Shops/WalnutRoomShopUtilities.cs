@@ -64,6 +64,8 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                 ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(ResourceObjectIds.IridiumOreBush), shopConfig.IridiumOreResoureceBushQiGemPrice);
                 ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(ResourceObjectIds.RadioactiveOreBush), shopConfig.RadioactiveOreResoureceBushQiGemPrice);
             }
+
+            ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(MiscObjectIds.StatueOfPerfectionTracking), shopConfig.StatueOfPerfectionTracking);
         }
 
     }

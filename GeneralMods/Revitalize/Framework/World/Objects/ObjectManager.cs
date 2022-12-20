@@ -117,6 +117,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         protected virtual void loadInMiscObjects()
         {
             this.addItem(new StatueOfStatistics(new BasicItemInformation("", MiscObjectIds.StatueOfStatistics, "", CategoryNames.Misc, CategoryColors.Misc, -300, -300, 0, false, 100, false, false, TextureManagers.Objects_Misc.createAnimationManager("StatueOfStatistics", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
+            this.addItem(new StatueOfPerfecionTracking(new BasicItemInformation("", MiscObjectIds.StatueOfPerfectionTracking, "", CategoryNames.Misc, CategoryColors.Misc, -300, -300, 0, false, 100, false, false, TextureManagers.Objects_Misc.createAnimationManager("StatueOfPerfectionTracking", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
+
         }
 
         /// <summary>

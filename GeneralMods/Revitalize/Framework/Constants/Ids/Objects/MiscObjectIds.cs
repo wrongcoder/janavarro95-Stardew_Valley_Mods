@@ -10,5 +10,6 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
     {
 
         public const string StatueOfStatistics = "Revitalize.Objects.Misc.StatueOfStatistics";
+        public const string StatueOfPerfectionTracking = "Revitalize.Objects.Misc.StatueOfPerfectionTracking";
     }
 }
