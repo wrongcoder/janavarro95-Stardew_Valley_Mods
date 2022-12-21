@@ -103,6 +103,24 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
         }
 
         /// <summary>
+        /// Adds an item to the walnut room shop stock if a given crafting recipe for it is not known.
+        /// </summary>
+        /// <param name="Menu"></param>
+        /// <param name="CraftingBookName"></param>
+        /// <param name="CraftingRecipe"></param>
+        /// <param name="Item"></param>
+        /// <param name="Price"></param>
+        /// <param name="Stock"></param>
+        /// <param name="AdditionalConditions"></param>
+        public static void AddToWalnutShopIfCraftingRecipeNotKnown(ShopMenu Menu, string CraftingBookName, string CraftingRecipe, ISalable Item, int Price, int Stock = 1, bool AdditionalConditions = true)
+        {
+            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingBookName, CraftingRecipe) && AdditionalConditions)
+            {
+                ShopUtilities.AddItemToWalnutRoomShop(Menu, Item, Price, Stock);
+            }
+        }
+
+        /// <summary>
         /// Utility method to add items to a normal shop that uses gold.
         /// </summary>
         /// <param name="Menu"></param>

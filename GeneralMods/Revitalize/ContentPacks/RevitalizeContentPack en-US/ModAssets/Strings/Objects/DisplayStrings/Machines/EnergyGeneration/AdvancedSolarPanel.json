@@ -1,7 +1,8 @@
 {
-	"Revitalize.Objects.Machines.AdvancedSolarPanelV1":
+	"Revitalize.Objects.Machines.EnergyGeneration.AdvancedSolarPanel":
 	{
 		"displayName":"Advanced Solar Panel",
-		"description":"A solar panel with better efficiency for generating battery packs."
+		"description":"An upgraded solar panel that can generate a battery pack every 5 days.",
+		"category":"Machine"
 	},
 }

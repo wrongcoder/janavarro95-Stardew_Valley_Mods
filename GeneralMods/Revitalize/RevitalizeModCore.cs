@@ -219,9 +219,20 @@ namespace Omegasis.Revitalize
             ModContentManager.mailManager.tryToAddAllMailToMailbox();
 
 
-            //REMOVE THIS.
-            Game1.warpFarmer("QiNutRoom", 7, 8, 0);
-            Game1.player.QiGems = 100;
+
+            this.warpToWalnutRoom();
+        }
+
+        /// <summary>
+        /// Used just for testing purposes.
+        /// </summary>
+        private void warpToWalnutRoom()
+        {
+            if (false)
+            {
+                Game1.warpFarmer("QiNutRoom", 7, 8, 0);
+                Game1.player.QiGems = 100;
+            }
         }
 
         /// <summary>
@@ -248,7 +259,8 @@ namespace Omegasis.Revitalize
 
              ModContentManager.objectManager.getItem(MachineIds.AdvancedCharcoalKiln,1),
                           ModContentManager.objectManager.getItem(Enums.SDVObject.Wood,100),
-                          ModContentManager.objectManager.getItem(MiscObjectIds.StatueOfStatistics)
+                          ModContentManager.objectManager.getItem(MachineIds.AdvancedSolarPanel),
+                          ModContentManager.objectManager.getItem(MachineIds.SuperiorSolarPanel)
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             });
 

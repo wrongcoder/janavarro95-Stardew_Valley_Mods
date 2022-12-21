@@ -33,27 +33,16 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             WalnutRoomShopConfig shopConfig = RevitalizeModCore.Configs.shopsConfigManager.walnutRoomShopConfig;
             ObjectManager objectManager = RevitalizeModCore.ModContentManager.objectManager;
 
-            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearFurnaceRecipeId))
-            {
-                ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.NuclearFurnaceBlueprint), shopConfig.NuclearFurnaceBlueprintQiGemPrice, 1);
-            }
-            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.MagicalFurnaceRecipeId))
-            {
-                ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.MagicalFurnaceBlueprint), shopConfig.MagicalFurnaceBlueprintQigemPrice, 1);
-            }
-            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.RadioactiveFuelCellRecipeId))
-            {
-                ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.RadioactiveFuelCellBlueprint),shopConfig.RadioactiveFuelBlueprintQiGemPrice,1);
-            }
+            ShopUtilities.AddToWalnutShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearFurnaceRecipeId, objectManager.getItem(WorkbenchBlueprintIds.NuclearFurnaceBlueprint), shopConfig.NuclearFurnaceBlueprintQiGemPrice, 1);
 
-            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearMiningDrillRecipeId) && Game1.player.hasSkullKey)
-            {
-                ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.NuclearMiningDrillBlueprint), shopConfig.NuclearMiningDrillBlueprintPrice, 1);
-            }
-            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.MagicalMiningDrillRecipeId) && Game1.player.hasSkullKey)
-            {
-                ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(WorkbenchBlueprintIds.MagicalMiningDrillBlueprint), shopConfig.MagicalMiningDrillBlueprintPrice, 1);
-            }
+            ShopUtilities.AddToWalnutShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.MagicalFurnaceRecipeId, objectManager.getItem(WorkbenchBlueprintIds.MagicalFurnaceBlueprint), shopConfig.MagicalFurnaceBlueprintQigemPrice, 1);
+            ShopUtilities.AddToWalnutShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.RadioactiveFuelCellRecipeId, objectManager.getItem(WorkbenchBlueprintIds.RadioactiveFuelCellBlueprint), shopConfig.RadioactiveFuelBlueprintQiGemPrice, 1);
+
+            ShopUtilities.AddToWalnutShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearMiningDrillRecipeId, objectManager.getItem(WorkbenchBlueprintIds.NuclearMiningDrillBlueprint), shopConfig.NuclearMiningDrillBlueprintPrice, 1, Game1.player.hasSkullKey);
+            ShopUtilities.AddToWalnutShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.MagicalMiningDrillRecipeId, objectManager.getItem(WorkbenchBlueprintIds.MagicalMiningDrillBlueprint), shopConfig.MagicalMiningDrillBlueprintPrice, 1, Game1.player.hasSkullKey);
+
+            ShopUtilities.AddToWalnutShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AdvancedSolarPanel, objectManager.getItem(WorkbenchBlueprintIds.AdvancedSolarPanel), shopConfig.AdvancedSolarPanelBlueprint, 1);
+            ShopUtilities.AddToWalnutShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.SuperiorSolarPanel, objectManager.getItem(WorkbenchBlueprintIds.SuperiorSolarPanel), shopConfig.SuperiorSolarPanelBlueprint, 1);
 
             if (Game1.player.MiningLevel >= 10 && Game1.player.hasSkullKey)
             {

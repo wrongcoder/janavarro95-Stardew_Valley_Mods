@@ -17,6 +17,9 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         public int NuclearMiningDrillBlueprintPrice = 15;
         public int MagicalMiningDrillBlueprintPrice = 25;
 
+        public int AdvancedSolarPanelBlueprint = 10;
+        public int SuperiorSolarPanelBlueprint = 25;
+
         //Resource bushes.
         public int CoalResourceBushQiGemPrice = 5;
         public int CopperOreResourceBushQiGemPrice = 5;

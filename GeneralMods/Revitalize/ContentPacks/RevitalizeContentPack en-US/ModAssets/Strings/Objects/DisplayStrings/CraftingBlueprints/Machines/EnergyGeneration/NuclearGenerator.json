@@ -1,0 +1,8 @@
+{
+	"Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.EnergyGeneration.NuclearGenerator":
+	{
+		"displayName":"Nuclear Generator",
+		"description":"A blueprint on how to craft a nuclear generator at a workbench!",
+		"category":"StardewValley.Crafting"
+	},
+}

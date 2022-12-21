@@ -216,9 +216,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         private void loadInMachines()
         {
 
-            AdvancedSolarPanel solarP1 = new AdvancedSolarPanel(new BasicItemInformation("", MachineIds.AdvancedSolarPanelV1, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SolarPanelTier1", new Animation(0, 0, 16, 16)), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null));
-
-            this.addItem(MachineIds.AdvancedSolarPanelV1, solarP1);
+            this.addItem(new AdvancedSolarPanel(new BasicItemInformation("", MachineIds.AdvancedSolarPanel, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("AdvancedSolarPanel", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 2), Vector2.Zero, null, null), AdvancedSolarPanel.SolarPanelTier.Advanced));
+            this.addItem(new AdvancedSolarPanel(new BasicItemInformation("", MachineIds.SuperiorSolarPanel, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SuperiorSolarPanel", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 2), Vector2.Zero, null, null), AdvancedSolarPanel.SolarPanelTier.Superior));
 
 
             Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("", MachineIds.WindmillV1, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Machines.createAnimationManager("Windmill", new SerializableDictionary<string, Animation>() {

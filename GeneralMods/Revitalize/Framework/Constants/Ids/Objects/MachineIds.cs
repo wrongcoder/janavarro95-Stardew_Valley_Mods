@@ -13,9 +13,6 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
         /// </summary>
         public const string PREFIX = "Revitalize.Objects.Machines.";
 
-
-        public const string AdvancedSolarPanelV1 = PREFIX + "AdvancedSolarPanelV1";
-        public const string SolarArrayV1 = PREFIX + "SolarArrayV1";
         public const string WindmillV1 = PREFIX + "WindmillV1";
 
         //Mining Drills.
@@ -44,5 +41,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
         //Generated code below this point.
         public const string BurnerGenerator = PREFIX + "EnergyGeneration.BurnerGenerator";
 		public const string NuclearGenerator = "Revitalize.Objects.Machines.EnergyGeneration.NuclearGenerator";
+		public const string AdvancedSolarPanel = "Revitalize.Objects.Machines.EnergyGeneration.AdvancedSolarPanel";
+		public const string SuperiorSolarPanel = "Revitalize.Objects.Machines.EnergyGeneration.SuperiorSolarPanel";
     }
 }
