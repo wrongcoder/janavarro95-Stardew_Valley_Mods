@@ -178,6 +178,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
             var b = location.buildings[farmBuildingIndex];
             if (b.buildingType.Value == DesiredBuildingType && !TypeUtilities.IsSameType(b.GetType(), type))
             {
+                Game1.showRedMessage("Converting building!");
                 location.buildings[farmBuildingIndex] = (StardewValley.Buildings.Building)Activator.CreateInstance(type);
                 location.buildings[farmBuildingIndex].buildingType.Value = b.buildingType.Value;
                 location.buildings[farmBuildingIndex].daysOfConstructionLeft.Value = b.daysOfConstructionLeft.Value;

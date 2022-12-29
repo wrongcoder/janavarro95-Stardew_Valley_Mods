@@ -24,6 +24,9 @@ using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Content;
 using Omegasis.Revitalize.Framework.Constants.Ids.Objects;
 using Omegasis.Revitalize.Framework.Constants.Ids.Items;
+using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
+using Netcode;
+using Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces;
 
 namespace Omegasis.Revitalize
 {
@@ -256,18 +259,14 @@ namespace Omegasis.Revitalize
 
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-
-             ModContentManager.objectManager.getItem(MachineIds.AdvancedCharcoalKiln,1),
-                          ModContentManager.objectManager.getItem(Enums.SDVObject.Wood,100),
-                          ModContentManager.objectManager.getItem(MachineIds.AdvancedSolarPanel),
-                          ModContentManager.objectManager.getItem(MachineIds.SuperiorSolarPanel),
-
-                                                    ModContentManager.objectManager.getItem(Enums.SDVBigCraftable.Cask,100),
-                                                    ModContentManager.objectManager.getItem(Enums.SDVObject.Cheese,100),
+                                                    new ItemReference(new ArtisanGoodItemReference(Enums.SDVObject.TigerTrout, StardewValley.Object.PreserveType.AgedRoe), 1).getItem(),
+                                                    new ItemReference(new ArtisanGoodItemReference(Enums.SDVObject.TigerTrout, StardewValley.Object.PreserveType.Roe), 1).getItem(),
+                                                    new ItemReference(new ArtisanGoodItemReference(Enums.SDVObject.BlueJazz, Enums.SDVPreserveType.Honey), 1).getItem(),
+                                                    new ItemReference(new ArtisanGoodItemReference(Enums.SDVObject.Pumpkin, Enums.SDVPreserveType.Juice), 1).getItem(),
+                                                    new ItemReference(new ArtisanGoodItemReference(Enums.SDVObject.Pumpkin, Enums.SDVPreserveType.Pickle), 1).getItem(),
+                                                    new ItemReference(new ArtisanGoodItemReference(Enums.SDVObject.Apple, Enums.SDVPreserveType.Jelly), 1).getItem(),
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             });
-
-            Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(CraftingStations.WorkBench_Id));
             //Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AnvilCraftingRecipeBlueprint));
             //Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(Enums.SDVObject.IronBar, 20));
 

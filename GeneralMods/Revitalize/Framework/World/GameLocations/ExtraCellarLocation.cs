@@ -10,6 +10,7 @@ using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Network;
 using StardewValley.Objects;
 
 namespace Omegasis.Revitalize.Framework.World.GameLocations
@@ -20,6 +21,8 @@ namespace Omegasis.Revitalize.Framework.World.GameLocations
         public ExtraCellarLocation()
     : base(BuildingAssetLoader.GetMapsAssetName(GameLocationIds.ExtraCellar), GameLocationIds.ExtraCellar)
         {
+            //Since the original base cellar class adds in more casks, we need to clear this so that the save can load properly. Why? Honestly not sure past the first sentence, but this fixed one of my saves and properly preserved the objects upon creation...
+            this.Objects.Clear();
         }
 
         /// <summary>

@@ -155,13 +155,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             //Start migrating conent to new 1.6 format.
             foreach(SDVObject obj in Enum.GetValues<Enums.SDVObject>())
             {
-                this.addItem(this.getItemId(obj), new StardewValley.Object((int)obj, 1));
+                this.addItem(this.createVanillaObjectId(obj), new StardewValley.Object((int)obj, 1));
             }
 
             //Start migrating conent to new 1.6 format.
             foreach (SDVBigCraftable obj in Enum.GetValues<Enums.SDVBigCraftable>())
             {
-                this.addItem(this.getItemId(obj), new StardewValley.Object(Vector2.Zero, (int)obj));
+                this.addItem(this.createVanillaBigCraftableId(obj), new StardewValley.Object(Vector2.Zero, (int)obj));
             }
         }
 
@@ -516,9 +516,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// </summary>
         /// <param name="sdvObject"></param>
         /// <returns></returns>
-        public virtual string getItemId(Enums.SDVObject sdvObject)
+        public virtual string createVanillaObjectId(Enums.SDVObject sdvObject)
         {
-            return this.createVanillaItemId(StardewValleyObjectIdPrefix, ((int)sdvObject).ToString());
+            return this.createVanillaObjectId((int)sdvObject);
         }
 
         /// <summary>
@@ -526,9 +526,18 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// </summary>
         /// <param name="sdvObject"></param>
         /// <returns></returns>
-        public virtual string getItemId(Enums.SDVBigCraftable sdvObject)
+        public virtual string createVanillaBigCraftableId(Enums.SDVBigCraftable sdvObject)
         {
-            return this.createVanillaItemId(StardewValleyBigCraftablePrefix, ((int)sdvObject).ToString());
+            return this.createVanillaBigCraftableId(((int)sdvObject));
+        }
+
+        public virtual string createVanillaObjectId(int ParentSheetIndex)
+        {
+            return this.createVanillaItemId(StardewValleyObjectIdPrefix, ParentSheetIndex);
+        }
+        public virtual string createVanillaBigCraftableId(int ParentSheetIndex)
+        {
+            return this.createVanillaItemId(StardewValleyBigCraftablePrefix, ParentSheetIndex);
         }
 
         /// <summary>
@@ -537,9 +546,35 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <param name="ObjectPrefix"></param>
         /// <param name="ObjectId"></param>
         /// <returns></returns>
-        protected virtual string createVanillaItemId(string ObjectPrefix, string ObjectId)
+        public virtual string createVanillaItemId(string ObjectPrefix, int ObjectId)
+        {
+            return this.createVanillaItemId(ObjectPrefix, ObjectId.ToString());
+        }
+
+        /// <summary>
+        /// Creates a vanilla item id given an item prefix and an item id.
+        /// </summary>
+        /// <param name="ObjectPrefix"></param>
+        /// <param name="ObjectId"></param>
+        /// <returns></returns>
+        public virtual string createVanillaItemId(string ObjectPrefix, string ObjectId)
         {
             return string.Format("{0}{1}", ObjectPrefix, ObjectId);
+        }
+
+        /// <summary>
+        /// Converts an object id from the 1.6 format to the 1.5 format.
+        /// </summary>
+        /// <param name="ObjectId"></param>
+        /// <returns>-1 if failure. Otherwise returns an int representation.</returns>
+        public virtual int convertSDVStringObjectIdToIntObjectId(string ObjectId)
+        {
+
+            int position = ObjectId.IndexOf(")");
+            if (position == -1) return -1;
+            string converted = ObjectId.Remove(0, ObjectId.IndexOf(")")+1);
+            RevitalizeModCore.log(converted);
+            return Convert.ToInt32(converted);
         }
 
         /// <summary>
@@ -550,7 +585,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public virtual Item getItem(Enums.SDVObject sdvObjectId, int Stack = 1)
         {
-            return this.getItem(this.getItemId(sdvObjectId), Stack);
+            return this.getItem(this.createVanillaObjectId(sdvObjectId), Stack);
         }
 
         public virtual StardewValley.Object getObject(Enums.SDVObject sdvId, int Stack = 1)
@@ -566,7 +601,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public virtual Item getItem(Enums.SDVBigCraftable sdvBigCraftableId, int Stack = 1)
         {
-            return this.getItem(this.getItemId(sdvBigCraftableId), Stack);
+            return this.getItem(this.createVanillaBigCraftableId(sdvBigCraftableId), Stack);
         }
 
         /// <summary>

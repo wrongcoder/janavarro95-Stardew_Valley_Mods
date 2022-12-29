@@ -761,6 +761,8 @@ namespace Omegasis.Revitalize.Framework.Constants
 
             RabbitsFoot = 446,
 
+            AgedRoe = 447,
+
             StoneBase = 449,
 
             //Stone = 450,
@@ -1845,6 +1847,20 @@ namespace Omegasis.Revitalize.Framework.Constants
             Multiplier,
             Blend,
             Average
+        }
+        /// <summary>
+        /// The different types of preserves for the game.
+        /// </summary>
+        public enum SDVPreserveType
+        {
+            NULL=int.MinValue,
+            Wine=StardewValley.Object.PreserveType.Wine,
+            Jelly = StardewValley.Object.PreserveType.Jelly,
+            Pickle = StardewValley.Object.PreserveType.Pickle,
+            Juice = StardewValley.Object.PreserveType.Juice,
+            Roe = StardewValley.Object.PreserveType.Roe,
+            AgedRoe = StardewValley.Object.PreserveType.AgedRoe,
+            Honey = 6 //TODO: Update this once SDV 1.6 is released.
         }
     }
 }

@@ -6,6 +6,8 @@ Key:
 ~~~~~~~~~~~~0.0.1 Revitalize 12-29-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Removed all references to JsonItemReference and migrated all of them to ItemReference in preparation for ItemReference upgrade.
 +Now all SDV Object and BigCraftable items are registered by their 1.6 item ids in the ObjectManager to unify some of the object fetching/creation logic.
++Added support for ItemReference to hold info for Artisinal goods.
+~Fixed a bug where having multiple cellars built on the farm causes the game to not load???
 
 ~~~~~~~~~~~~0.0.1 Revitalize 12-28-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added in infrastructure to add in new buildings! Now custom buildings can be added in for the mod.
