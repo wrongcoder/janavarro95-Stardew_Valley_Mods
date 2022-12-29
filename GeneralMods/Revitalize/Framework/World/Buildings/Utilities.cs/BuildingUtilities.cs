@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using StardewValley;
 using StardewValley.Buildings;
 
-namespace Omegasis.Revitalize.Framework.World.WorldUtilities
+namespace Omegasis.Revitalize.Framework.World.Buildings
 {
     /// <summary>
     /// Utilities dealing with buildings.
@@ -28,9 +28,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
                 "Deluxe Coop" //Deluxe coop.
             });
             if (hasBuiltBuilding == true && RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop() == false)
-            {
                 RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.setHasBuiltTier2OrHigherBarnOrCoop();
-            }
             return hasBuiltBuilding;
         }
 
@@ -42,12 +40,8 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
         public static bool isBuildingTypeConstructedOnTheFarm(string BuildingType)
         {
             foreach (Building building in Game1.getFarm().buildings)
-            {
                 if (building.buildingType.Value.Equals(BuildingType))
-                {
                     return true;
-                }
-            }
             return false;
         }
 
@@ -60,12 +54,8 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
         public static bool IsAnyBuildingWithBuildingTypeConstructedOnTheFarm(List<string> buildingTypes)
         {
             foreach (Building building in Game1.getFarm().buildings)
-            {
                 if (buildingTypes.Contains(building.buildingType.Value))
-                {
                     return true;
-                }
-            }
             return false;
         }
 

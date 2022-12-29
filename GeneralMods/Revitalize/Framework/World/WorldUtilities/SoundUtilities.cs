@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using StardewValley;
 using static Omegasis.Revitalize.Framework.Constants.Enums;
 
@@ -29,6 +30,18 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
         {
             string soundName = GetSoundNameFromStardewSound(stardewSound);
             Game1.playSound(soundName);
+        }
+
+        /// <summary>
+        /// Plays a sound at a specific tile location at a game location.
+        /// </summary>
+        /// <param name="stardewSound"></param>
+        /// <param name="location"></param>
+        /// <param name="TileLocation"></param>
+        public static void PlaySoundAt(StardewSound stardewSound, GameLocation location ,Vector2 TileLocation)
+        {
+            string soundName = GetSoundNameFromStardewSound(stardewSound);
+            location.playSoundAt(soundName,TileLocation);
         }
 
         public static void PlaySoundWithDelay(StardewSound stardewSound, int delayTime)

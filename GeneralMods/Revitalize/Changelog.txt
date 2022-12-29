@@ -3,6 +3,12 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 12-28-2022 xx.xx P.M~~~~~~~~~~~~~~
++Added in infrastructure to add in new buildings! Now custom buildings can be added in for the mod.
++Added in a buildable Cellar. The first tier is smaller than the farmhouse cellar. May add in more into the future.
++Made BuildingBlueprintHelper.cs to help make Stardew Valley Building Blueprints easier.
+
+
 ~~~~~~~~~~~~0.0.1 Revitalize 12-20-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added Statue of Statistics.
     Shows multiple statistics about the player.

@@ -152,6 +152,58 @@ namespace Omegasis.Revitalize.Framework.Utilities.JsonContentLoading
             throw new JsonContentLoadingException("The given file path {0} or key {1} do not exist for any Revitalize content pack! A file can be created under the ModAssets/Strings/ShopDialogue directory with the given info.");
         }
 
+        public static string LoadBuildingDisplayName(string Id, bool ThrowExceptionIfNotFound = true)
+        {
+            /*
+            if (!RevitalizeModCore.ModContentManager.objectManager.displayStrings.ContainsKey(Id) && ThrowExceptionIfNotFound)
+            {
+                throw new JsonContentLoadingException("The given item id {0} does not have a registered value for display strings! A file can be created under the ModAssets/Strings/Objects/DisplayStrings directory with the given info.");
+            }
+            return RevitalizeModCore.ModContentManager.objectManager.displayStrings[Id].displayName;
+            */
+
+            List<RevitalizeContentPack> contentPacks = RevitalizeModCore.ModContentManager.revitalizeContentPackManager.getContentPacksForCurrentLanguageCode();
+
+            foreach (RevitalizeContentPack contentPack in contentPacks)
+            {
+                if (contentPack.buildingDisplayStrings.ContainsKey(Id) && !string.IsNullOrEmpty(contentPack.buildingDisplayStrings[Id].displayName))
+                {
+                    return contentPack.buildingDisplayStrings[Id].displayName;
+                }
+            }
+            if (ThrowExceptionIfNotFound)
+            {
+                throw new JsonContentLoadingException(string.Format("The given Building id {0} does not have a registered value for display strings in any Revitalize content pack! A file can be created under the ModAssets/Strings/Buildings/DisplayStrings directory with the given info.", Id));
+            }
+            return null;
+        }
+
+        public static string LoadBuildingDescription(string Id, bool ThrowExceptionIfNotFound = true)
+        {
+            /*
+            if (!RevitalizeModCore.ModContentManager.objectManager.displayStrings.ContainsKey(Id) && ThrowExceptionIfNotFound)
+            {
+                throw new JsonContentLoadingException("The given item id {0} does not have a registered value for display strings! A file can be created under the ModAssets/Strings/Objects/DisplayStrings directory with the given info.");
+            }
+            return RevitalizeModCore.ModContentManager.objectManager.displayStrings[Id].displayName;
+            */
+
+            List<RevitalizeContentPack> contentPacks = RevitalizeModCore.ModContentManager.revitalizeContentPackManager.getContentPacksForCurrentLanguageCode();
+
+            foreach (RevitalizeContentPack contentPack in contentPacks)
+            {
+                if (contentPack.buildingDisplayStrings.ContainsKey(Id) && !string.IsNullOrEmpty(contentPack.buildingDisplayStrings[Id].displayName))
+                {
+                    return contentPack.buildingDisplayStrings[Id].description;
+                }
+            }
+            if (ThrowExceptionIfNotFound)
+            {
+                throw new JsonContentLoadingException(string.Format("The given Building id {0} does not have a registered value for display strings in any Revitalize content pack! A file can be created under the ModAssets/Strings/Buildings/DisplayStrings directory with the given info.", Id));
+            }
+            return null;
+        }
+
         /// <summary>
         /// Loads in a string dictionary file from a given content pack.
         /// </summary>

@@ -1553,6 +1553,11 @@ namespace Omegasis.Revitalize.Framework.Constants
             dwop,
 
             /// <summary>
+            /// Sound played when closing a door.
+            /// </summary>
+            doorClose,
+
+            /// <summary>
             /// The sound the furnace makes when it is smelting.
             /// </summary>
             furnace,

@@ -12,6 +12,7 @@ using Omegasis.Revitalize.Framework.ContentPacks;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
+using Omegasis.Revitalize.Framework.World.Buildings;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewModdingAPI;
 using StardewValley;

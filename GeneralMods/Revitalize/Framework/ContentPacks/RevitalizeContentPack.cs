@@ -30,14 +30,17 @@ namespace Omegasis.Revitalize.Framework.ContentPacks
         /// <summary>
         /// Includes mail strings which are displayed to the player.
         /// </summary>
-        public Dictionary<string, MailInfo> mail;
+        public Dictionary<string, MailInfo> mail = new Dictionary<string, MailInfo>();
 
         /// <summary>
         /// Includes strings to be displayed for objects and items.
         /// </summary>
-        public Dictionary<string, IdToDisplayStrings> objectDisplayStrings;
+        public Dictionary<string, IdToDisplayStrings> objectDisplayStrings = new Dictionary<string, IdToDisplayStrings>();
 
-
+        /// <summary>
+        /// Includes strings to be displayed for objects and items.
+        /// </summary>
+        public Dictionary<string, IdToDisplayStrings> buildingDisplayStrings = new Dictionary<string, IdToDisplayStrings>();
 
         /// <summary>
         /// The unique id for this content pack.
@@ -55,8 +58,6 @@ namespace Omegasis.Revitalize.Framework.ContentPacks
         /// </summary>
         public RevitalizeContentPack()
         {
-            this.mail = new Dictionary<string, MailInfo>();
-            this.objectDisplayStrings = new Dictionary<string, IdToDisplayStrings>();
         }
 
         /// <summary>
@@ -81,8 +82,8 @@ namespace Omegasis.Revitalize.Framework.ContentPacks
         /// </summary>
         protected virtual void loadInDisplayStrings()
         {
-            List<Dictionary<string, IdToDisplayStrings>> displayStringInfo = JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, IdToDisplayStrings>>(this,Constants.PathConstants.StringsPaths.ObjectDisplayStrings);
-            foreach (Dictionary<string, IdToDisplayStrings> dict in displayStringInfo)
+            List<Dictionary<string, IdToDisplayStrings>> objectDisplayStringInfo = JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, IdToDisplayStrings>>(this,Constants.PathConstants.StringsPaths.ObjectDisplayStrings);
+            foreach (Dictionary<string, IdToDisplayStrings> dict in objectDisplayStringInfo)
             {
                 foreach (KeyValuePair<string, IdToDisplayStrings> pair in dict)
                 {
@@ -91,6 +92,19 @@ namespace Omegasis.Revitalize.Framework.ContentPacks
                         continue;
                     }
                     this.objectDisplayStrings.Add(pair.Key, pair.Value);
+                }
+            }
+
+            List<Dictionary<string, IdToDisplayStrings>> buildingDisplayStrings = JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, IdToDisplayStrings>>(this, Constants.PathConstants.StringsPaths.BuildingDisplayStrings);
+            foreach (Dictionary<string, IdToDisplayStrings> dict in buildingDisplayStrings)
+            {
+                foreach (KeyValuePair<string, IdToDisplayStrings> pair in dict)
+                {
+                    if (this.buildingDisplayStrings.ContainsKey(pair.Key))
+                    {
+                        continue;
+                    }
+                    this.buildingDisplayStrings.Add(pair.Key, pair.Value);
                 }
             }
         }

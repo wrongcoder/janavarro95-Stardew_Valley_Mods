@@ -260,7 +260,10 @@ namespace Omegasis.Revitalize
              ModContentManager.objectManager.getItem(MachineIds.AdvancedCharcoalKiln,1),
                           ModContentManager.objectManager.getItem(Enums.SDVObject.Wood,100),
                           ModContentManager.objectManager.getItem(MachineIds.AdvancedSolarPanel),
-                          ModContentManager.objectManager.getItem(MachineIds.SuperiorSolarPanel)
+                          ModContentManager.objectManager.getItem(MachineIds.SuperiorSolarPanel),
+
+                                                    ModContentManager.objectManager.getItem(Enums.SDVBigCraftable.Cask,100),
+                                                    ModContentManager.objectManager.getItem(Enums.SDVObject.Cheese,100),
               //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
             });
 

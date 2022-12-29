@@ -15,6 +15,9 @@ namespace Omegasis.Revitalize.Framework.Managers
     {
         private static bool HasLoadedTextureManagers;
 
+
+        public static TextureManager Buildings;
+
         public static TextureManager HUD;
 
         public static TextureManager Items_Resources_Ore;
@@ -47,6 +50,8 @@ namespace Omegasis.Revitalize.Framework.Managers
         {
 
             if (HasLoadedTextureManagers) return;
+
+            Buildings = InitializeTextureManager("Revitalize.Buildings", BuildingsGraphicsPaths.Buildings);
 
             //HUD
             HUD = InitializeTextureManager("Revitalize.HUD", HudGraphicsPaths.HUD);

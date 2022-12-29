@@ -12,12 +12,15 @@ namespace Omegasis.Revitalize.Framework.Constants.PathConstants
         /// <summary>
         /// Path constant to the error strings directory for the mod.
         /// </summary>
-        public static string ErrorStrings = Path.Combine(RelativePaths.Content_Strings_Folder, "ErrorStrings");
+        public static string ErrorStrings = Path.Combine(RelativePaths.ModAssets_Strings_Folder, "ErrorStrings");
 
-        public static string Mail = Path.Combine(RelativePaths.Content_Strings_Folder, "Mail");
-        public static string Objects = Path.Combine(RelativePaths.Content_Strings_Folder, "Objects");
-        public static string ShopDialogue = Path.Combine(RelativePaths.Content_Strings_Folder, "ShopDialogue");
-        public static string UI = Path.Combine(RelativePaths.Content_Strings_Folder, "UI");
+        public static string Buildings = Path.Combine(RelativePaths.ModAssets_Strings_Folder, "Buildings");
+        public static string BuildingDisplayStrings = Path.Combine(Buildings, "DisplayStrings");
+
+        public static string Mail = Path.Combine(RelativePaths.ModAssets_Strings_Folder, "Mail");
+        public static string Objects = Path.Combine(RelativePaths.ModAssets_Strings_Folder, "Objects");
+        public static string ShopDialogue = Path.Combine(RelativePaths.ModAssets_Strings_Folder, "ShopDialogue");
+        public static string UI = Path.Combine(RelativePaths.ModAssets_Strings_Folder, "UI");
 
 
         public static string ObjectDisplayStrings = Path.Combine(Objects, "DisplayStrings");
