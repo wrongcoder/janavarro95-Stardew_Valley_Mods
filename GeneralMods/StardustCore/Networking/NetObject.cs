@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Netcode;
+using Newtonsoft.Json;
 
 namespace Omegasis.StardustCore.Networking
 {
@@ -14,6 +15,7 @@ namespace Omegasis.StardustCore.Networking
     public class NetObject : INetObject<NetFields>
     {
         [XmlIgnore]
+        [JsonIgnore]
         public NetFields NetFields { get; } = new NetFields();
 
         protected virtual void initializeNetFields()

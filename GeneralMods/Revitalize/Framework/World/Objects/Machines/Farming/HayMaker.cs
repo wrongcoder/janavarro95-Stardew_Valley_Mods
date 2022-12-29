@@ -242,19 +242,19 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         /// </summary>
         public override void updateAnimation()
         {
-            if (this.feedType.Value.SdvObjectId == Enums.SDVObject.Corn)
+            if (this.feedType.Value.StardewValleyItemId == Enums.SDVObject.Corn)
             {
                 this.AnimationManager.playAnimation(CornAnimation);
             }
-            else if (this.feedType.Value.SdvObjectId == Enums.SDVObject.Fiber)
+            else if (this.feedType.Value.StardewValleyItemId == Enums.SDVObject.Fiber)
             {
                 this.AnimationManager.playAnimation(FiberAnimation);
             }
-            else if (this.feedType.Value.SdvObjectId == Enums.SDVObject.Amaranth)
+            else if (this.feedType.Value.StardewValleyItemId == Enums.SDVObject.Amaranth)
             {
                 this.AnimationManager.playAnimation(AmaranthAnimation);
             }
-            else if (this.feedType.Value.SdvObjectId == Enums.SDVObject.Wheat)
+            else if (this.feedType.Value.StardewValleyItemId == Enums.SDVObject.Wheat)
             {
                 this.AnimationManager.playAnimation(WheatAnimation);
             }

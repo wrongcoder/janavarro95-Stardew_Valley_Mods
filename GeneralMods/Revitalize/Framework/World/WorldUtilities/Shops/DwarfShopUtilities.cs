@@ -192,53 +192,53 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
         {
 
             ItemReference item = new ItemReference(purchasedItem);
-            if (item.SdvObjectId == Enums.SDVObject.Geode)
+            if (item.StardewValleyItemId == Enums.SDVObject.Geode)
             {
                 NormalGeodesRemainingToday -= AmountPurchased;
                 return false;
             }
-            if (item.SdvObjectId == Enums.SDVObject.FrozenGeode)
+            if (item.StardewValleyItemId == Enums.SDVObject.FrozenGeode)
             {
                 FrozenGeodesRemainingToday -= AmountPurchased;
                 return false;
             }
-            if (item.SdvObjectId == Enums.SDVObject.MagmaGeode)
+            if (item.StardewValleyItemId == Enums.SDVObject.MagmaGeode)
             {
                 MagmaGeodesRemainingToday -= AmountPurchased;
                 return false;
             }
-            if (item.SdvObjectId == Enums.SDVObject.OmniGeode)
+            if (item.StardewValleyItemId == Enums.SDVObject.OmniGeode)
             {
                 OmniGeodesRemainingToday -= AmountPurchased;
                 return false;
             }
 
-            if (item.ObjectManagerId.Equals(ResourceObjectIds.CoalBush))
+            if (item.RegisteredObjectId.Equals(ResourceObjectIds.CoalBush))
             {
                 CoalBushesForSaleToday--;
                 return false;
             }
-            if (item.ObjectManagerId.Equals(ResourceObjectIds.CopperOreBush))
+            if (item.RegisteredObjectId.Equals(ResourceObjectIds.CopperOreBush))
             {
                 CopperBushesForSaleToday--;
                 return false;
             }
-            if (item.ObjectManagerId.Equals(ResourceObjectIds.IronOreBush))
+            if (item.RegisteredObjectId.Equals(ResourceObjectIds.IronOreBush))
             {
                 IronBushesForSaleToday--;
                 return false;
             }
-            if (item.ObjectManagerId.Equals(ResourceObjectIds.GoldOreBush))
+            if (item.RegisteredObjectId.Equals(ResourceObjectIds.GoldOreBush))
             {
                 GoldBushesForSaleToday--;
                 return false;
             }
-            if (item.ObjectManagerId.Equals(ResourceObjectIds.IridiumOreBush))
+            if (item.RegisteredObjectId.Equals(ResourceObjectIds.IridiumOreBush))
             {
                 IridiumBushesForSaleToday--;
                 return false;
             }
-            if (item.ObjectManagerId.Equals(ResourceObjectIds.RadioactiveOreBush))
+            if (item.RegisteredObjectId.Equals(ResourceObjectIds.RadioactiveOreBush))
             {
                 RadioactiveBushesForSaleToday--;
                 return false;

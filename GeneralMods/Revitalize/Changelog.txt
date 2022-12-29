@@ -3,6 +3,10 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 12-29-2022 xx.xx P.M~~~~~~~~~~~~~~
+~Removed all references to JsonItemReference and migrated all of them to ItemReference in preparation for ItemReference upgrade.
++Now all SDV Object and BigCraftable items are registered by their 1.6 item ids in the ObjectManager to unify some of the object fetching/creation logic.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 12-28-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added in infrastructure to add in new buildings! Now custom buildings can be added in for the mod.
 +Added in a buildable Cellar. The first tier is smaller than the farmhouse cellar. May add in more into the future.

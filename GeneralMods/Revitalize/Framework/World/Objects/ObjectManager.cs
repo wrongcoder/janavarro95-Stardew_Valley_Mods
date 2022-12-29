@@ -32,6 +32,7 @@ using Omegasis.Revitalize.Framework.World.Objects.Machines.Misc;
 using Omegasis.Revitalize.Framework.Constants.Ids.Objects;
 using Omegasis.Revitalize.Framework.Constants.Ids.Items;
 using Omegasis.Revitalize.Framework.World.Objects.Misc;
+using static Omegasis.Revitalize.Framework.Constants.Enums;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -40,6 +41,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects
     /// </summary>
     public class ObjectManager
     {
+
+        public const string StardewValleyObjectIdPrefix = "(O)";
+        public const string StardewValleyBigCraftablePrefix = "(BC)";
+
         /// <summary>
         /// All of the object managers id'd by a mod's or content pack's unique id.
         /// </summary>
@@ -146,6 +151,18 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.addItem("StardewValley.Tools.IridiumAxe", new StardewValley.Tools.Axe() { UpgradeLevel = Tool.iridium });
             this.addItem("StardewValley.Tools.IridiumWateringCan", new StardewValley.Tools.WateringCan() { UpgradeLevel = Tool.iridium });
             this.addItem("StardewValley.Tools.IridiumHoe", new StardewValley.Tools.Hoe() { UpgradeLevel = Tool.iridium });
+
+            //Start migrating conent to new 1.6 format.
+            foreach(SDVObject obj in Enum.GetValues<Enums.SDVObject>())
+            {
+                this.addItem(this.getItemId(obj), new StardewValley.Object((int)obj, 1));
+            }
+
+            //Start migrating conent to new 1.6 format.
+            foreach (SDVBigCraftable obj in Enum.GetValues<Enums.SDVBigCraftable>())
+            {
+                this.addItem(this.getItemId(obj), new StardewValley.Object(Vector2.Zero, (int)obj));
+            }
         }
 
         private void loadInAestheticsObjects()
@@ -426,6 +443,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         /// <summary>
         /// Adds in an item to be tracked by the mod's object manager.
+        ///
+        /// TODO: When SDV 1.6 is released, might need to migrate this to the new ItemRegistry.
         /// </summary>
         /// <param name="key"></param>
         /// <param name="I"></param>
@@ -493,6 +512,37 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         }
 
         /// <summary>
+        /// Gets the SDV 1.6+ item id for the item. 
+        /// </summary>
+        /// <param name="sdvObject"></param>
+        /// <returns></returns>
+        public virtual string getItemId(Enums.SDVObject sdvObject)
+        {
+            return this.createVanillaItemId(StardewValleyObjectIdPrefix, ((int)sdvObject).ToString());
+        }
+
+        /// <summary>
+        /// Gets the SDV 1.6+ item id for the item. 
+        /// </summary>
+        /// <param name="sdvObject"></param>
+        /// <returns></returns>
+        public virtual string getItemId(Enums.SDVBigCraftable sdvObject)
+        {
+            return this.createVanillaItemId(StardewValleyBigCraftablePrefix, ((int)sdvObject).ToString());
+        }
+
+        /// <summary>
+        /// Creates a vanilla item id given an item prefix and an item id.
+        /// </summary>
+        /// <param name="ObjectPrefix"></param>
+        /// <param name="ObjectId"></param>
+        /// <returns></returns>
+        protected virtual string createVanillaItemId(string ObjectPrefix, string ObjectId)
+        {
+            return string.Format("{0}{1}", ObjectPrefix, ObjectId);
+        }
+
+        /// <summary>
         /// Gets a StardewValley vanilla item with the given id.
         /// </summary>
         /// <param name="sdvObjectId"></param>
@@ -500,15 +550,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public virtual Item getItem(Enums.SDVObject sdvObjectId, int Stack = 1)
         {
-            return new StardewValley.Object((int)sdvObjectId, Stack);
+            return this.getItem(this.getItemId(sdvObjectId), Stack);
         }
 
         public virtual StardewValley.Object getObject(Enums.SDVObject sdvId, int Stack = 1)
-        {
-            return (StardewValley.Object)this.getItem(sdvId, Stack);
-        }
-
-        public virtual StardewValley.Object getObject(Enums.SDVBigCraftable sdvId, int Stack = 1)
         {
             return (StardewValley.Object)this.getItem(sdvId, Stack);
         }
@@ -521,9 +566,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public virtual Item getItem(Enums.SDVBigCraftable sdvBigCraftableId, int Stack = 1)
         {
-            StardewValley.Object obj = new StardewValley.Object(Vector2.Zero, (int)sdvBigCraftableId);
-            obj.Stack = Stack;
-            return obj;
+            return this.getItem(this.getItemId(sdvBigCraftableId), Stack);
         }
 
         /// <summary>

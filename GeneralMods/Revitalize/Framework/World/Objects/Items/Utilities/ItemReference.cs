@@ -28,7 +28,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         /// </summary>
         public readonly NetInt stackSize = new NetInt(1);
         [JsonIgnore]
-        public readonly NetString objectManagerId = new NetString("");
+        public readonly NetString registeredObjectId = new NetString("");
         [JsonIgnore]
         public readonly NetEnum<Enums.SDVObject> sdvObjectId = new NetEnum<Enums.SDVObject>(Enums.SDVObject.NULL);
         [JsonIgnore]
@@ -48,20 +48,32 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         }
 
         [JsonProperty("registeredObjectId")]
-        public virtual string ObjectManagerId
+        public virtual string RegisteredObjectId
         {
             get
             {
-                return this.objectManagerId.Value;
+                if (string.IsNullOrEmpty(this.registeredObjectId.Value))
+                {
+                    if(this.StardewValleyItemId!= Enums.SDVObject.NULL)
+                    {
+                        return RevitalizeModCore.ModContentManager.objectManager.getItemId(this.StardewValleyItemId);
+                    }
+                    if (this.StardewValleyBigCraftableId != Enums.SDVBigCraftable.NULL)
+                    {
+                        return RevitalizeModCore.ModContentManager.objectManager.getItemId(this.StardewValleyBigCraftableId);
+                    }
+                }
+
+                return this.registeredObjectId.Value;
             }
             set
             {
-                this.objectManagerId.Value = value;
+                this.registeredObjectId.Value = value;
             }
         }
 
         [JsonProperty("stardewValleyItemId")]
-        public virtual Enums.SDVObject SdvObjectId
+        public virtual Enums.SDVObject StardewValleyItemId
         {
             get
             {
@@ -74,7 +86,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         }
 
         [JsonProperty("stardewValleyBigCraftableId")]
-        public virtual Enums.SDVBigCraftable SdvBigCraftableIdId
+        public virtual Enums.SDVBigCraftable StardewValleyBigCraftableId
         {
             get
             {
@@ -85,6 +97,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
                 this.sdvBigCraftableId.Value = value;
             }
         }
+
+        
 
 
         public ItemReference()
@@ -141,12 +155,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         protected override void initializeNetFields()
         {
             base.initializeNetFields();
-            this.NetFields.AddFields(this.stackSize, this.objectManagerId, this.sdvObjectId, this.sdvBigCraftableId);
+            this.NetFields.AddFields(this.stackSize, this.registeredObjectId, this.sdvObjectId, this.sdvBigCraftableId);
         }
 
         public virtual void setItemReference(string ObjectId, int StackSize = 1)
         {
-            this.objectManagerId.Value = ObjectId;
+            this.registeredObjectId.Value = ObjectId;
             this.stackSize.Value = StackSize;
         }
 
@@ -173,9 +187,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             if (item is IBasicItemInfoProvider)
             {
                 string id = (item as IBasicItemInfoProvider).Id;
-                this.objectManagerId.Value = id;
+                this.registeredObjectId.Value = id;
             }
 
+            //TODO: Replace the following section with just using the Item's Id field once SDV 1.6 is released.
             else if (item.GetType().Equals(typeof(StardewValley.Objects.Furniture)) || item.GetType().Equals(typeof(StardewValley.Objects.BedFurniture)) || item.GetType().Equals(typeof(StardewValley.Objects.FishTankFurniture)) || item.GetType().Equals(typeof(StardewValley.Objects.StorageFurniture)))
             {
                 //TODO: Maybe add in references for furniture types?
@@ -183,6 +198,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             }
             else if (item is StardewValley.Object)
             {
+
+
                 if ((item as StardewValley.Object).bigCraftable)
                 {
                     this.sdvBigCraftableId.Value = (Enums.SDVBigCraftable)item.ParentSheetIndex;
@@ -201,6 +218,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             {
                 throw new Exception("Item can not be cleanly converted to an item reference!");
             }
+            //End TODO;
 
             this.stackSize.Value = item.Stack;
         }
@@ -211,7 +229,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         /// <returns></returns>
         public virtual bool isNotNull()
         {
-            return this.sdvObjectId.Value != Enums.SDVObject.NULL || this.sdvBigCraftableId.Value != Enums.SDVBigCraftable.NULL || !string.IsNullOrEmpty(this.objectManagerId.Value);
+            return !string.IsNullOrEmpty(this.RegisteredObjectId);
         }
 
         /// <summary>
@@ -221,7 +239,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         {
             this.sdvObjectId.Value = Enums.SDVObject.NULL;
             this.sdvBigCraftableId.Value = Enums.SDVBigCraftable.NULL;
-            this.objectManagerId.Value = "";
+            this.registeredObjectId.Value = "";
             this.stackSize.Value = 1;
         }
 
@@ -254,17 +272,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
 
         public virtual Item getItem(int StackSize = 1)
         {
-            if (this.sdvObjectId.Value != Enums.SDVObject.NULL)
+            if (this.isNotNull())
             {
-                return RevitalizeModCore.ModContentManager.objectManager.getItem(this.sdvObjectId.Value, StackSize);
-            }
-            if (this.sdvBigCraftableId.Value != Enums.SDVBigCraftable.NULL)
-            {
-                return RevitalizeModCore.ModContentManager.objectManager.getItem(this.sdvBigCraftableId.Value, StackSize);
-            }
-            if (!string.IsNullOrEmpty(this.objectManagerId.Value))
-            {
-                return RevitalizeModCore.ModContentManager.objectManager.getItem(this.objectManagerId.Value, StackSize);
+                return RevitalizeModCore.ModContentManager.objectManager.getItem(this.RegisteredObjectId, StackSize);
             }
             throw new InvalidObjectManagerItemException("An ItemReference must have one of the id fields set to be valid.");
         }
@@ -274,21 +284,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             return this.getItem(this.stackSize.Value);
         }
 
-        public virtual List<INetSerializable> getNetFields()
-        {
-            return new List<INetSerializable>()
-            {
-                this.stackSize,
-                this.objectManagerId,
-                this.sdvObjectId,
-                this.sdvBigCraftableId
-            };
-        }
-
         public virtual ItemReference readItemReference(BinaryReader reader)
         {
             this.stackSize.Value = reader.ReadInt32();
-            this.objectManagerId.Value = reader.ReadString();
+            this.registeredObjectId.Value = reader.ReadString();
             this.sdvObjectId.Value = reader.ReadEnum<Enums.SDVObject>();
             this.sdvBigCraftableId.Value = reader.ReadEnum<Enums.SDVBigCraftable>();
             return this;
@@ -297,7 +296,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         public virtual void writeItemReference(BinaryWriter writer)
         {
             writer.Write(this.stackSize.Value);
-            writer.Write(this.objectManagerId.Value);
+            writer.Write(this.registeredObjectId.Value);
             writer.WriteEnum<Enums.SDVObject>(this.sdvObjectId.Value);
             writer.WriteEnum<Enums.SDVBigCraftable>(this.sdvBigCraftableId.Value);
 

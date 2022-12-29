@@ -143,9 +143,9 @@ namespace Omegasis.Revitalize.Framework.World.Buildings.Utilities.cs
             {
                 ItemReference itemReference = this.buildingMaterials[i];
                 //Add support for more items here later when SDV 1.6 releases.
-                if(itemReference.SdvObjectId!= Constants.Enums.SDVObject.NULL)
+                if(itemReference.StardewValleyItemId!= Constants.Enums.SDVObject.NULL)
                 {
-                    materialsListBuilder.Append(string.Format("{0} {1}", (int)itemReference.SdvObjectId, itemReference.StackSize));
+                    materialsListBuilder.Append(string.Format("{0} {1}", (int)itemReference.StardewValleyItemId, itemReference.StackSize));
                 }
                 if (i < this.buildingMaterials.Count - 1)
                 {

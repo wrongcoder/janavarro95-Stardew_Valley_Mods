@@ -390,7 +390,7 @@ namespace Omegasis.Revitalize.Framework.Player
             foreach (Item addedItem in items)
             {
                 ItemReference itemReference = new ItemReference(addedItem);
-                if (itemReference.SdvObjectId == Enums.SDVObject.BatteryPack)
+                if (itemReference.StardewValleyItemId == Enums.SDVObject.BatteryPack)
                 {
                     RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack = true;
                 }
