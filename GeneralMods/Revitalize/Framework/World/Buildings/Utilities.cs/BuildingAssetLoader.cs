@@ -232,7 +232,10 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
 
         public void EditBluePrints(IAssetData asset)
         {
+            //Should only add cellar if main farmhouse cellar has been built
             asset.AsDictionary<string, string>().Data.Add(BuildingIds.ExtraCellar, Blueprints[BuildingIds.ExtraCellar].toBlueprintString());
+
+            //Should only add dimensional storage unit if none have been built.
         }
 
     }

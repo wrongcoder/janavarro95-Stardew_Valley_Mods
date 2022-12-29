@@ -15,7 +15,7 @@ using StardewValley.Buildings;
 namespace Omegasis.Revitalize.Framework.World.Buildings.Structures
 {
     [XmlType("Mods_Revitalize.Buildings.ExtraCellarBuilding")]
-    public class ExtraCellarBuilding : Building
+    public class ExtraCellarBuilding : CustomBuilding
     {
         private static readonly BluePrint Blueprint = new(BuildingIds.ExtraCellar);
 
@@ -40,24 +40,6 @@ namespace Omegasis.Revitalize.Framework.World.Buildings.Structures
                 return true;
             }
             return false;
-        }
-
-        /*
-        public override void performToolAction(Tool t, int tileX, int tileY)
-        {
-            base.performToolAction(t, tileX, tileY);
-        }
-        */
-
-        public virtual bool isInteractingWithBuilding(Vector2 tileLocation, Farmer who)
-        {
-            Rectangle rect = new Rectangle(this.tileX.Value, this.tileY.Value, this.tilesWide.Value, this.tilesHigh.Value);
-            return rect.Contains(tileLocation);
-        }
-
-        public override void updateInteriorWarps(GameLocation interior = null)
-        {
-            base.updateInteriorWarps(interior);
         }
     }
 }
