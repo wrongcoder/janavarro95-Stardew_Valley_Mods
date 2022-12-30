@@ -78,7 +78,10 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
             BuildableGameLocation loc = GetDimensionalStorageUnitBuildingGameLocation();
             foreach (Item i in this.items)
             {
-                loc.debris.Add(new StardewValley.Debris(i, new Vector2(this.tileX * Game1.tileSize, this.tileY * Game1.tileSize)));
+                //building middle is about 40 pixels.
+                int randX = Game1.random.Next(40, this.tilesWide * Game1.tileSize+1-40);
+                int randY = Game1.random.Next(40, this.tilesHigh * Game1.tileSize + 1-40);
+                Game1.createItemDebris(i, new Vector2(this.tileX * Game1.tileSize+randX, this.tileY * Game1.tileSize+randY), Game1.random.Next(1, 5),loc);
             }
             this.items.Clear();
         }
