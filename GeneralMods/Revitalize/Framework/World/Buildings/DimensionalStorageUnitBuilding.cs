@@ -19,7 +19,6 @@ using StardewValley.Locations;
 namespace Omegasis.Revitalize.Framework.World.Buildings
 {
     /// <summary>
-    /// TODO: New menu for dimensional storage unit where it can manage upgrades. Maybe recycle happy birthday one? 
     /// TODO: Need better inventory management here: Capacity, upgrading it etc.
     /// TODO: Need Automate Compatibility
     /// </summary>
@@ -31,7 +30,7 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
         /// </summary>
         public static DimensionalStorageUnitBuilding CachedDimensionalStorageUnitBuilding;
 
-        public static int DimensionalStorageUnitMaxItems = 9;
+        public static ulong DimensionalStorageUnitMaxItems = 9;
 
         public static NetObjectList<Item> UniversalItems
         {
@@ -144,7 +143,7 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
                 }
             }
 
-            if (UniversalItems.Count < DimensionalStorageUnitMaxItems)
+            if ((ulong)UniversalItems.Count < DimensionalStorageUnitMaxItems)
             {
                 UniversalItems.Add(item);
                 return true;

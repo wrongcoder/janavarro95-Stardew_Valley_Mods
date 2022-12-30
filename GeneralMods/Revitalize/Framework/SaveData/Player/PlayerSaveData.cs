@@ -47,21 +47,5 @@ namespace Omegasis.Revitalize.Framework.SaveData.Player
             }
         }
 
-        public static PlayerSaveData LoadOrCreate()
-        {
-            if (File.Exists(Path.Combine(RevitalizeModCore.SaveDataManager.getFullSaveDataPath(), "PlayerSaveData.json")))
-            {
-                PlayerSaveData saveData = RevitalizeModCore.ModHelper.Data.ReadJsonFile<PlayerSaveData>(Path.Combine(RevitalizeModCore.SaveDataManager.getRelativeSaveDataPath(), "PlayerSaveData.json"));
-                saveData.load();
-                return saveData;
-            }
-            else
-            {
-                PlayerSaveData Config = new PlayerSaveData();
-                RevitalizeModCore.ModHelper.Data.WriteJsonFile(Path.Combine(RevitalizeModCore.SaveDataManager.getRelativeSaveDataPath(), "PlayerSaveData.json"), Config);
-                return Config;
-            }
-        }
-
     }
 }

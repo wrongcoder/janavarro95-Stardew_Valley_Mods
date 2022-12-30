@@ -20,15 +20,8 @@ using StardewValley.Menus;
 
 namespace Omegasis.Revitalize.Framework.Menus.Items
 {
-    /// <summary>
-    /// TODO: Draw a background behind the player's inventory.
-    /// TODO: Update the search textbox to have seperate search modes: Search By Name, and Search By Id.
-    /// TODO: When right clicking, add in functionality for shift right clicked to grab 5 items at a time.
-    /// </summary>
     public class DimensionalStorageUnitMenu : IClickableMenu
     {
-
-
         /*********
        ** Fields
        *********/
@@ -52,7 +45,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         private ClickableTextureComponent _rightButton;
 
         private int _maxRowsToDisplay = 5;
-        private int _maxColumnsToDisplay = 9;
+        private int _maxColumnsToDisplay = 6;
 
         /// <summary>
         /// The search box used for looking for specific items.
