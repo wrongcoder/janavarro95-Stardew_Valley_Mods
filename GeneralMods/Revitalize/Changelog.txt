@@ -9,6 +9,7 @@ Key:
 +Added support for ItemReference to hold info for Artisinal goods.
 ~Fixed a bug where having multiple cellars built on the farm causes the game to not load???
 +Started work on the DimensionalStorageUnitBuilding
+~Started to fix InventoryTransferMenu.cs to be able to transfer items back and forth between the player's inventory and the dimensional storage unit.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 12-28-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Added in infrastructure to add in new buildings! Now custom buildings can be added in for the mod.

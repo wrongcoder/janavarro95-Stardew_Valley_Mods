@@ -15,9 +15,7 @@ using StardewValley.Locations;
 namespace Omegasis.Revitalize.Framework.World.Buildings
 {
     /// <summary>
-    /// TODO: New menu for dimensional storage unit where it can manage upgrades. Maybe recycle happy birthday one?
-    /// TODO: Need building recipe: Galaxy soul, squid ink, void esences, prismatic shards?
-    /// TODO: Need Building Graphic: Maybe use fishpond as a starting reference point?
+    /// TODO: New menu for dimensional storage unit where it can manage upgrades. Maybe recycle happy birthday one? 
     /// TODO: Need better inventory management here: Capacity, upgrading it etc.
     /// TODO: Need Automate Compatibility
     /// </summary>
@@ -61,7 +59,7 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
             if (this.isInteractingWithBuilding(tileLocation, who))
             {
                 //TODO: Make a different menu for this too.
-                Game1.activeClickableMenu = new StardewValley.Menus.ItemGrabMenu(this.items);
+                Game1.activeClickableMenu = new InventoryTransferMenu(0,0,400,400,this.items,36);
                 return true;
             }
             return false;
