@@ -21,7 +21,9 @@ using StardewValley.Menus;
 namespace Omegasis.Revitalize.Framework.Menus.Items
 {
     /// <summary>
-    /// TODO: CustomObjects and tools don't draw properly when stored in CLickableTextureComponents, but they still do have the same item info.
+    /// TODO: Draw a background behind the player's inventory.
+    /// TODO: Update the search textbox to have seperate search modes: Search By Name, and Search By Id.
+    /// TODO: When right clicking, add in functionality for shift right clicked to grab 5 items at a time.
     /// </summary>
     public class DimensionalStorageUnitMenu : IClickableMenu
     {
@@ -40,7 +42,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         /// <summary>
         /// The item that is currently being hover overed.
         /// </summary>
-        public ItemDisplayButton currentHoverTextureItem;
+        public Item currentHoverTextureItem;
 
         public bool allFinished;
 
@@ -79,9 +81,6 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             this.searchBox.OnBackspacePressed += this.SearchBox_OnBackspacePressed;
 
             this.setUpPositions();
-
-            int yPositionForInventory = this.yPositionOnScreen + this.height+64;
-            this.playersInventory = new StardewValley.Menus.InventoryMenu(this.xPositionOnScreen, yPositionForInventory, true, null, null);
         }
 
         public static Vector2 getAppropriateMenuPosition()
@@ -124,11 +123,15 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             this.xPositionOnScreen = Game1.viewport.Width / 2 - (632 + borderWidth * 2) / 2;
             this.yPositionOnScreen = Game1.viewport.Height / 2 - (600 + borderWidth * 2) / 2 - Game1.tileSize;
 
+            this.setUpPositions();
+        }
+
+        protected virtual void setUpPlayersInventoryMenu()
+        {
+            int yPositionForInventory = this.yPositionOnScreen + this.height + 64;
+            this.playersInventory = new StardewValley.Menus.InventoryMenu(this.xPositionOnScreen, yPositionForInventory, true, null, null);
             this.playersInventory.xPositionOnScreen = Game1.viewport.Width / 2 - (632 + borderWidth * 2) / 2;
             this.playersInventory.yPositionOnScreen = this.yPositionOnScreen + this.height + 64;
-            this.setUpPositions();
-
-            this.playersInventory.gameWindowSizeChanged(oldBounds, newBounds);
         }
 
 
@@ -153,6 +156,8 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             this.searchBox.Height = 192;
 
             this.populateItemsToDisplay();
+
+            this.setUpPlayersInventoryMenu();
 
         }
 
@@ -247,9 +252,11 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                         continue;
                     }
                     SoundUtilities.PlaySound(Enums.StardewSound.coin);
-                    DimensionalStorageUnitBuilding.UniversalItems.Add(item);
+                    bool added = DimensionalStorageUnitBuilding.AddItemToDimensionalStorageUnit(item);
+                    if (!added) break;
                     Game1.player.removeItemFromInventory(item);
                     clickedPlayersItem = true;
+
                     break;
                 }
             }
@@ -309,7 +316,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
 
                     i.Stack--;
 
-                    if (i.Stack < 0)
+                    if (i.Stack <= 0)
                     {
                         clickedItem = true;
                         DimensionalStorageUnitBuilding.UniversalItems.Remove(i);
@@ -338,14 +345,16 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                         continue;
                     }
                     SoundUtilities.PlaySound(Enums.StardewSound.coin);
-                    DimensionalStorageUnitBuilding.UniversalItems.Add(item.getOne());
-
+                    bool added = DimensionalStorageUnitBuilding.AddItemToDimensionalStorageUnit(item.getOne());
+                    if (!added)
+                    {
+                        break;
+                    }
                     item.Stack--;
-
-                    if (item.Stack == 0)
+                    clickedPlayersItem = true;
+                    if (item.Stack <= 0)
                     {
                         Game1.player.removeItemFromInventory(item);
-                        clickedPlayersItem = true;
                     }
                     break;
                 }
@@ -365,24 +374,45 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         {
             bool hoverOverItemButtonThisFrame = false;
             foreach (ItemDisplayButton button in this.itemButtons)
+            {
                 if (button.containsPoint(x, y))
                 {
                     button.scale = button.containsPoint(x, y)
                         ? Math.Min(button.scale + 0.02f, button.baseScale + 0.1f)
                         : Math.Max(button.scale - 0.02f, button.baseScale);
-                    this.currentHoverTextureItem = button;
+                    this.currentHoverTextureItem = button.item;
                     hoverOverItemButtonThisFrame = true;
                 }
+            }
+
+            foreach (ClickableComponent c in this.playersInventory.inventory)
+            {
+
+                if (!c.containsPoint(x, y))
+                {
+                    continue;
+                }
+                else
+                {
+                    int slotNumber = Convert.ToInt32(c.name);
+                    Item item = Game1.player.items.ElementAt(slotNumber);
+                    if (item == null)
+                    {
+                        continue;
+                    }
+                    this.currentHoverTextureItem = item;
+                    hoverOverItemButtonThisFrame = true;
+                    break;
+                }
+
+            }
 
             if (hoverOverItemButtonThisFrame == false)
                 this.currentHoverTextureItem = null;
 
             this.OkButton.scale = this.OkButton.containsPoint(x, y)
-                ? Math.Min(this.OkButton.scale + 0.02f, this.OkButton.baseScale + 0.1f)
-                : Math.Max(this.OkButton.scale - 0.02f, this.OkButton.baseScale);
-
-
-
+    ? Math.Min(this.OkButton.scale + 0.02f, this.OkButton.baseScale + 0.1f)
+    : Math.Max(this.OkButton.scale - 0.02f, this.OkButton.baseScale);
         }
 
         /// <summary>Draw the menu to the screen.</summary>
@@ -423,12 +453,11 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             this._leftButton.draw(b);
             this._rightButton.draw(b);
 
+            this.playersInventory.draw(b);
+
             if (this.currentHoverTextureItem != null)
                 //Draws the item tooltip in the menu.
-                drawToolTip(b, this.currentHoverTextureItem.item.getDescription(), this.currentHoverTextureItem.item.DisplayName, this.currentHoverTextureItem.item);
-
-
-            this.playersInventory.draw(b);
+                drawToolTip(b, this.currentHoverTextureItem.getDescription(), this.currentHoverTextureItem.DisplayName, this.currentHoverTextureItem);
 
             // draw cursor
             this.drawMouse(b);
@@ -470,7 +499,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                     Rectangle textureBounds = GameLocation.getSourceRectForObject(selectedItem.getOne().ParentSheetIndex);
                     float itemScale = 4f;
                     Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + (column * 24 * itemScale)), (int)(this.yPositionOnScreen + 256 + row * 16 * itemScale), 16, 16);
-                    ItemDisplayButton itemButton = new ItemDisplayButton(selectedItem.DisplayName,selectedItem,null, placementBounds, 4f, true,Color.White);
+                    ItemDisplayButton itemButton = new ItemDisplayButton(selectedItem.DisplayName, selectedItem, null, placementBounds, 4f, true, Color.White);
                     itemButton.item = selectedItem;
                     this.itemButtons.Add(itemButton);
                 }

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Constants.Ids.Buildings;
+using Omegasis.Revitalize.Framework.HUD;
 using Omegasis.Revitalize.Framework.Menus;
 using Omegasis.Revitalize.Framework.Menus.Items;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
@@ -29,6 +30,8 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
         /// Used for optimizations.
         /// </summary>
         public static DimensionalStorageUnitBuilding CachedDimensionalStorageUnitBuilding;
+
+        public static int DimensionalStorageUnitMaxItems = 9;
 
         public static NetObjectList<Item> UniversalItems
         {
@@ -65,7 +68,7 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
                 if (who.ActiveObject != null)
                 {
                     SoundUtilities.PlaySoundAt(Enums.StardewSound.throwDownITem, GetDimensionalStorageUnitBuildingGameLocation(), new Vector2(this.tileX + this.tilesWide / 2, this.tileY + this.tilesHigh / 2));
-                    UniversalItems.Add(who.ActiveObject);
+                    AddItemToDimensionalStorageUnit(who.ActiveObject);
                     who.removeItemFromInventory(who.ActiveObject);
                     return true;
                 }
@@ -76,7 +79,7 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
                 return true;
             }
             return false;
-            
+
         }
 
         public override void BeforeDemolish()
@@ -85,9 +88,9 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
             foreach (Item i in this.items)
             {
                 //building middle is about 40 pixels.
-                int randX = Game1.random.Next(40, this.tilesWide * Game1.tileSize+1-40);
-                int randY = Game1.random.Next(40, this.tilesHigh * Game1.tileSize + 1-40);
-                Game1.createItemDebris(i, new Vector2(this.tileX * Game1.tileSize+randX, this.tileY * Game1.tileSize+randY), Game1.random.Next(1, 5),loc);
+                int randX = Game1.random.Next(40, this.tilesWide * Game1.tileSize + 1 - 40);
+                int randY = Game1.random.Next(40, this.tilesHigh * Game1.tileSize + 1 - 40);
+                Game1.createItemDebris(i, new Vector2(this.tileX * Game1.tileSize + randX, this.tileY * Game1.tileSize + randY), Game1.random.Next(1, 5), loc);
             }
             this.items.Clear();
         }
@@ -128,5 +131,32 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
             }
             return null;
         }
+
+        public static bool AddItemToDimensionalStorageUnit(Item item)
+        {
+            for (int i = 0; i < UniversalItems.Count; i++)
+            {
+                //Check to see if the items can stack. If they can simply add them together and then continue on.
+                if (UniversalItems[i] != null && UniversalItems[i].canStackWith(item))
+                {
+                    UniversalItems[i].Stack += item.Stack;
+                    return true;
+                }
+            }
+
+            if (UniversalItems.Count < DimensionalStorageUnitMaxItems)
+            {
+                UniversalItems.Add(item);
+                return true;
+            }
+            else
+            {
+                HudUtilities.ShowInventoryFullErrorMessage();
+            }
+            return false;
+        }
+
+
+
     }
 }
