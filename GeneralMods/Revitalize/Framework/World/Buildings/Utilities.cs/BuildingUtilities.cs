@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.Revitalize.Framework.Constants.Ids.Buildings;
 using StardewValley;
 using StardewValley.Buildings;
 
@@ -59,6 +60,10 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
             return false;
         }
 
+        public static bool HasBuiltDimensionalStorageUnitOnFarm()
+        {
+            return IsAnyBuildingWithBuildingTypeConstructedOnTheFarm(new List<string>() { BuildingIds.DimensionalStorageUnit });
+        }
 
 
     }

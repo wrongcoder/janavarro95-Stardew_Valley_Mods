@@ -11,7 +11,7 @@ using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Constants.PathConstants.Data;
 using Omegasis.Revitalize.Framework.Managers;
 using Omegasis.Revitalize.Framework.Utilities;
-using Omegasis.Revitalize.Framework.World.Buildings.Structures;
+using Omegasis.Revitalize.Framework.World.Buildings;
 using Omegasis.Revitalize.Framework.World.Buildings.Utilities.cs;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using StardewModdingAPI;
@@ -31,10 +31,11 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
     /// 1. A new BlueprintHelper.json file (renamed for the building) loacated in ModAssets/Data/BuildingBlueprintHelpers. These will be auto loaded and can be deeply nested.
     /// 2. A new graphic located at ModAsserts/Graphics/Buildings/... These will be auto loaded into the <see cref="TextureManagers.Buildings"/> texture manager for use by file name.
     /// 3. Display strings located in the mod's content pack. Located in {ContentPack}/ModAssets/Strings/Buildings/DisplayStrings. File name doesn't matter and will be auto laoded. Can also be deeply nested.
-    /// 4. A .tbin map file. Maps will be stored in ModAssets/Maps/.
-    /// 5. Add a new id to building type to <see cref="BuildingTypeToCSharpType"/>
-    /// 6. Make the new Building c# class.
-    /// 7. Make the new GameLocation c# class.
+    /// 4. Add a new id to building type to <see cref="BuildingTypeToCSharpType"/>
+    /// 5. Make the new Building c# class.
+    /// 5.5. Need to update: Content_AssetRequested field. Might be able to rewrite this later.
+    /// 6. (Optional) A .tbin map file (Optional, use only if building has indoors location). Maps will be stored in ModAssets/Maps/
+    /// 7. (Optional) Make the new GameLocation c# class. (Not necessary for buildings you interact with.
     /// </summary>
     public class BuildingAssetLoader
     {
@@ -43,7 +44,8 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
         /// </summary>
         public static Dictionary<string, Type> BuildingTypeToCSharpType = new Dictionary<string, Type>()
             {
-                {BuildingIds.ExtraCellar,typeof(ExtraCellarBuilding) }
+                {BuildingIds.ExtraCellar,typeof(ExtraCellarBuilding) },
+                {BuildingIds.DimensionalStorageUnit,typeof(DimensionalStorageUnitBuilding) }
             };
 
         /// <summary>
@@ -82,6 +84,10 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
                 {
                     Blueprints.Add(helper.revitalizeBuildingId, helper);
                 }
+                else
+                {
+                    Revitalize.RevitalizeModCore.logWarning("Didn't add duplicated building key: " + helper.revitalizeBuildingId);
+                }
             }
         }
 
@@ -100,11 +106,19 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
             if (e.NameWithoutLocale.IsEquivalentTo("Data\\Blueprints"))
                 e.Edit(this.EditBluePrints);
 
-            //Need to add special type handling here, but may be able to write code to automatically manage this as well.
-            else if (e.NameWithoutLocale.IsEquivalentTo(GetBuildingsAssetName(BuildingIds.ExtraCellar)))
-                e.LoadFrom(() => TextureManagers.Buildings.getTexture("ExtraCellar"), AssetLoadPriority.Exclusive);
+            //Load all building graphics.
+            foreach(string s in Blueprints.Keys)
+            {
+                if (e.NameWithoutLocale.IsEquivalentTo(GetBuildingsAssetName(s)))
+                {
+                    //Graphic name should be the last part of the building id for simplicity.
+                    e.LoadFrom(() => TextureManagers.Buildings.getTexture(s.Split(".").Last()), AssetLoadPriority.Exclusive);
+                }
+            }
+
+            //Find a way to maybe automate loading maps as well?? Depends on how many of these I need to make.
             //Need to check both ids here since I accidentally changed this afterwards so this is to prevent losing a save file....
-            else if (e.NameWithoutLocale.IsEquivalentTo(GetMapsAssetName(BuildingIds.ExtraCellar)) || e.NameWithoutLocale.IsEquivalentTo(GetMapsAssetName(GameLocationIds.ExtraCellar)))
+            if (e.NameWithoutLocale.IsEquivalentTo(GetMapsAssetName(BuildingIds.ExtraCellar)) || e.NameWithoutLocale.IsEquivalentTo(GetMapsAssetName(GameLocationIds.ExtraCellar)))
                 e.LoadFromModFile<xTile.Map>(this.getMapFileFromName("ExtraCellar.tbin"), AssetLoadPriority.Exclusive);
         }
 
@@ -222,20 +236,39 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
             if (e.NewMenu is CarpenterMenu carpenterMenu)
             {
                 var blueprints = Revitalize.RevitalizeModCore.ModHelper.Reflection.GetField<List<BluePrint>>(carpenterMenu, "blueprints").GetValue();
-
-                //Add in new blueprints here!
-
-                //The blueprint constructor is the name here.
-                blueprints.Add(new BluePrint(BuildingIds.ExtraCellar));
+                foreach(string s in Blueprints.Keys)
+                {
+                    //Can add special conditional logic for hinding specific blueprints.
+                    if (s.Equals(BuildingIds.DimensionalStorageUnit))
+                    {
+                        if (!BuildingUtilities.HasBuiltDimensionalStorageUnitOnFarm())
+                        {
+                            blueprints.Add(new BluePrint(s));
+                        }
+                    }
+                    else if(s.Equals(BuildingIds.ExtraCellar))
+                    {
+                        if (Game1.player.HouseUpgradeLevel >= 2)
+                        {
+                            blueprints.Add(new BluePrint(s));
+                        }
+                    }
+                    else
+                    {
+                        blueprints.Add(new BluePrint(s));
+                    }
+                }
             }
         }
 
         public void EditBluePrints(IAssetData asset)
         {
-            //Should only add cellar if main farmhouse cellar has been built
-            asset.AsDictionary<string, string>().Data.Add(BuildingIds.ExtraCellar, Blueprints[BuildingIds.ExtraCellar].toBlueprintString());
+            if (Blueprints == null) return;
 
-            //Should only add dimensional storage unit if none have been built.
+            foreach (var kvp in Blueprints)
+            {
+                asset.AsDictionary<string, string>().Data.Add(kvp.Key, kvp.Value.toBlueprintString());
+            }
         }
 
     }

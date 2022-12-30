@@ -12,7 +12,7 @@ using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewValley;
 using StardewValley.Buildings;
 
-namespace Omegasis.Revitalize.Framework.World.Buildings.Structures
+namespace Omegasis.Revitalize.Framework.World.Buildings
 {
     [XmlType("Mods_Revitalize.Buildings.ExtraCellarBuilding")]
     public class ExtraCellarBuilding : CustomBuilding

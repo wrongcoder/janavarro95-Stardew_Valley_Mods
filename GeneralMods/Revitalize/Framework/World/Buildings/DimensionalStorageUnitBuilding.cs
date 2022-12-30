@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants.Ids.Buildings;
+using Omegasis.Revitalize.Framework.Menus;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -14,14 +15,20 @@ using StardewValley.Locations;
 namespace Omegasis.Revitalize.Framework.World.Buildings
 {
     /// <summary>
-    /// TODO: New menu for dimensional storage unit where it can manage upgrades.
+    /// TODO: New menu for dimensional storage unit where it can manage upgrades. Maybe recycle happy birthday one?
     /// TODO: Need building recipe: Galaxy soul, squid ink, void esences, prismatic shards?
     /// TODO: Need Building Graphic: Maybe use fishpond as a starting reference point?
     /// TODO: Need better inventory management here: Capacity, upgrading it etc.
+    /// TODO: Need Automate Compatibility
     /// </summary>
     [XmlType("Mods_Revitalize.Buildings.DimensionalStorageUnitBuilding")]
     public class DimensionalStorageUnitBuilding : CustomBuilding
     {
+        /// <summary>
+        /// Used for optimizations.
+        /// </summary>
+        public static DimensionalStorageUnitBuilding CachedDimensionalStorageUnitBuilding;
+
         public static NetObjectList<Item> UniversalItems
         {
             get
@@ -35,13 +42,19 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
             }
         }
 
-        private static readonly BluePrint Blueprint = new(BuildingIds.ExtraCellar);
+        private static readonly BluePrint Blueprint = new(BuildingIds.DimensionalStorageUnit);
 
 
         public NetObjectList<Item> items = new NetObjectList<Item>();
 
         public DimensionalStorageUnitBuilding()
     : base(Blueprint, Vector2.Zero) { }
+
+        protected override void initNetFields()
+        {
+            base.initNetFields();
+            this.NetFields.AddFields(this.items);
+        }
 
         public override bool doAction(Vector2 tileLocation, Farmer who)
         {
@@ -74,12 +87,18 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
 
         public static DimensionalStorageUnitBuilding GetDimensionalStorageUnitBuilding()
         {
+            if (CachedDimensionalStorageUnitBuilding != null)
+            {
+                return CachedDimensionalStorageUnitBuilding;
+            }
+
             foreach (BuildableGameLocation loc in Game1.locations)
             {
                 foreach (Building b in loc.buildings)
                 {
                     if (b is DimensionalStorageUnitBuilding)
                     {
+                        CachedDimensionalStorageUnitBuilding = (b as DimensionalStorageUnitBuilding);
                         return (b as DimensionalStorageUnitBuilding);
                     }
                 }
@@ -95,6 +114,7 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
                 {
                     if (b is DimensionalStorageUnitBuilding)
                     {
+                        CachedDimensionalStorageUnitBuilding = (b as DimensionalStorageUnitBuilding);
                         return loc;
                     }
                 }

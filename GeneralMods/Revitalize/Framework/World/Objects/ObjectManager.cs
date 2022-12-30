@@ -573,7 +573,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             int position = ObjectId.IndexOf(")");
             if (position == -1) return -1;
             string converted = ObjectId.Remove(0, ObjectId.IndexOf(")")+1);
-            RevitalizeModCore.log(converted);
             return Convert.ToInt32(converted);
         }
 

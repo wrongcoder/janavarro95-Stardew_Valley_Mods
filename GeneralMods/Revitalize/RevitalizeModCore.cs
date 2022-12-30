@@ -27,6 +27,7 @@ using Omegasis.Revitalize.Framework.Constants.Ids.Items;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Netcode;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces;
+using Omegasis.Revitalize.Framework.World.Buildings;
 
 namespace Omegasis.Revitalize
 {
@@ -200,6 +201,11 @@ namespace Omegasis.Revitalize
 
         private void GameLoop_ReturnedToTitle(object sender, StardewModdingAPI.Events.ReturnedToTitleEventArgs e)
         {
+
+            DimensionalStorageUnitBuilding.CachedDimensionalStorageUnitBuilding = null;
+
+            //Do more cleanup here...
+
         }
 
         
