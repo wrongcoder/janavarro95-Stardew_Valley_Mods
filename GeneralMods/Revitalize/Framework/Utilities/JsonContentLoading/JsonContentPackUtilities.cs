@@ -223,5 +223,56 @@ namespace Omegasis.Revitalize.Framework.Utilities.JsonContentLoading
             }
             throw new JsonContentLoadingException("The given file at the path {0} does not exist for any Revitalize content pack!");
         }
+
+        /// <summary>
+        /// Loads in a <typeparamref name="T"/> object dictionary file from a given content pack.
+        /// </summary>
+        /// <param name="RelativePathToFile"></param>
+        /// <returns></returns>
+        public static Dictionary<string, T> LoadDictionaryFile<T>(string RelativePathToFile)
+        {
+            List<RevitalizeContentPack> contentPacks = RevitalizeModCore.ModContentManager.revitalizeContentPackManager.getContentPacksForCurrentLanguageCode();
+
+            foreach (RevitalizeContentPack contentPack in contentPacks)
+            {
+                Dictionary<string, T> dict = JsonUtilities.LoadDictionaryFile<T>(contentPack, RelativePathToFile);
+                if (dict != null)
+                {
+                    return dict;
+                }
+            }
+            throw new JsonContentLoadingException("The given file at the path {0} does not exist for any Revitalize content pack!");
+        }
+
+        /// <summary>
+        /// Loads an object from a dictionary file.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="RelativePathToFile"></param>
+        /// <param name="Key"></param>
+        /// <returns></returns>
+        public static T LoadFromDictionaryFile<T>(string RelativePathToFile, string Key)
+        {
+            Dictionary<string, T> dict = LoadDictionaryFile<T>(RelativePathToFile);
+            if (dict != null)
+            {
+                if (dict.ContainsKey(Key))
+                {
+                    return (T)dict[Key];
+                }
+            }
+            return default(T);
+        }
+
+        /// <summary>
+        /// Loads a string from a content pack.
+        /// </summary>
+        /// <param name="RelativePathToFile"></param>
+        /// <param name="Key"></param>
+        /// <returns></returns>
+        public static string LoadStringFromDictionaryFile(string RelativePathToFile, string Key)
+        {
+            return LoadFromDictionaryFile<string>(RelativePathToFile, Key);
+        }
     }
 }

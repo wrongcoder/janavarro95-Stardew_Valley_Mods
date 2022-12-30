@@ -56,6 +56,10 @@ namespace Omegasis.Revitalize.Framework.Menus
             return Game1.input.GetGamePadState().IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.B) || Game1.input.GetKeyboardState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape) || Game1.input.GetGamePadState().IsButtonDown(Microsoft.Xna.Framework.Input.Buttons.Start);
         }
 
+        public override void exitMenu(bool playSound = true)
+        {
+            base.exitMenu(playSound);
+        }
 
         /// <summary>
         /// Handles what happens when the menu is left clicked.

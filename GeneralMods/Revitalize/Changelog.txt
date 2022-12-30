@@ -3,6 +3,10 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 12-30-2022 xx.xx P.M~~~~~~~~~~~~~~
++Dimensional storage unit menu is starting to become more complete. Now has a grab menu that the player can use to throw items into it.
++Dimensional storage unit cna have items thrown into it directly. Just for fun.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 12-29-2022 xx.xx P.M~~~~~~~~~~~~~~
 ~Removed all references to JsonItemReference and migrated all of them to ItemReference in preparation for ItemReference upgrade.
 +Now all SDV Object and BigCraftable items are registered by their 1.6 item ids in the ObjectManager to unify some of the object fetching/creation logic.

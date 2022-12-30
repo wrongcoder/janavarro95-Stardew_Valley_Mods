@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Netcode;
+using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Constants.Ids.Buildings;
 using Omegasis.Revitalize.Framework.Menus;
+using Omegasis.Revitalize.Framework.Menus.Items;
+using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -58,19 +61,22 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
         {
             if (this.isInteractingWithBuilding(tileLocation, who))
             {
-                //TODO: Make a different menu for this too.
-                Game1.activeClickableMenu = new InventoryTransferMenu(0,0,400,400,this.items,36);
+
+                if (who.ActiveObject != null)
+                {
+                    SoundUtilities.PlaySoundAt(Enums.StardewSound.throwDownITem, GetDimensionalStorageUnitBuildingGameLocation(), new Vector2(this.tileX + this.tilesWide / 2, this.tileY + this.tilesHigh / 2));
+                    UniversalItems.Add(who.ActiveObject);
+                    who.removeItemFromInventory(who.ActiveObject);
+                    return true;
+                }
+
+                SoundUtilities.PlaySound(Constants.Enums.StardewSound.qi_shop);
+                Game1.activeClickableMenu = new DimensionalStorageUnitMenu();
+                //Game1.activeClickableMenu = new InventoryTransferMenu(0,0,400,400,this.items,36);
                 return true;
             }
             return false;
             
-        }
-
-        public override bool performActiveObjectDropInAction(Farmer who, bool probe)
-        {
-            //Maybe use void essences here to upgrade the capacity?
-
-            return base.performActiveObjectDropInAction(who, probe);
         }
 
         public override void BeforeDemolish()

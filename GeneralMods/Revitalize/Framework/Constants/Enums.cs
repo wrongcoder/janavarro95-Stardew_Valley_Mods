@@ -1617,7 +1617,17 @@ namespace Omegasis.Revitalize.Framework.Constants
             /// <summary>
             /// The sound made when opening the statue of perfection or qi's walnut room shop.
             /// </summary>
-            qi_shop
+            qi_shop,
+
+            /// <summary>
+            /// The sound of the Journey of the Pararie King gunshot. Also used for hovering over items or turning pages sometimes.
+            /// </summary>
+            Cowboy_gunshot,
+
+            /// <summary>
+            /// Sound played when throwing down an item. Also yes this is purposely misspelled as this is how it is in the game's code.
+            /// </summary>
+            throwDownITem
         }
 
         /// <summary>
