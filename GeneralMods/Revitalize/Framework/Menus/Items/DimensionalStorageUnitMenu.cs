@@ -62,6 +62,9 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
 
         public string hoverText;
 
+        protected string defaultTitle;
+        public ClickableComponent capacityDisplayComponent;
+
         /*********
         ** Public methods
         *********/
@@ -72,11 +75,15 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         public DimensionalStorageUnitMenu()
             : base((int)getAppropriateMenuPosition().X, (int)getAppropriateMenuPosition().Y, menuWidth, menuHeight)
         {
-            this.searchBox = new ItemSearchTextBox(null, null, Game1.dialogueFont, Game1.textColor);
+            this.searchBox = new ItemSearchTextBox(null, null, Game1.dialogueFont, Game1.textColor, new Rectangle(0, 0, 0, 0));
             Game1.keyboardDispatcher.Subscriber = this.searchBox;
             this.searchBox.Selected = false;
             this.searchBox.onTextReceived += this.SearchBox_onTextReceived;
             this.searchBox.OnBackspacePressed += this.SearchBox_OnBackspacePressed;
+
+            this.allClickableComponents = new List<ClickableComponent>();
+
+            this.allClickableComponents.Add(this.searchBox.underlyingComponent);
 
             this.setUpPositions();
         }
@@ -126,10 +133,9 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
 
         protected virtual void setUpPlayersInventoryMenu()
         {
-            int yPositionForInventory = this.yPositionOnScreen + this.height + 64;
-            this.playersInventory = new StardewValley.Menus.InventoryMenu(this.xPositionOnScreen, yPositionForInventory, true, null, null);
-            this.playersInventory.xPositionOnScreen = Game1.viewport.Width / 2 - (632 + borderWidth * 2) / 2;
-            this.playersInventory.yPositionOnScreen = this.yPositionOnScreen + this.height + 64;
+            int yPositionForInventory = this.yPositionOnScreen + this.height + 96;
+            int xPositionForInventory = this.xPositionOnScreen;
+            this.playersInventory = new StardewValley.Menus.InventoryMenu(xPositionForInventory, yPositionForInventory, true, null, null);
         }
 
 
@@ -139,19 +145,14 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         /// <summary>Regenerate the UI.</summary>
         private void setUpPositions()
         {
-            this.Labels.Clear();
             this.OkButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), "", null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f);
             this._leftButton = new ClickableTextureComponent("LeftButton", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, TextureManagers.Menus_InventoryMenu.getExtendedTexture("PreviousPageButton").getTexture(), new Rectangle(0, 0, 32, 32), 2f);
             this._rightButton = new ClickableTextureComponent("RightButton", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize + 96, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, TextureManagers.Menus_InventoryMenu.getExtendedTexture("NextPageButton").getTexture(), new Rectangle(0, 0, 32, 32), 2f);
 
-            string title = JsonContentPackUtilities.LoadStringFromDictionaryFile(Path.Combine(Constants.PathConstants.StringsPaths.Menus, "DimensionalStorageUnit.json"), "Title");
-            this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 128, this.yPositionOnScreen + 128, 1, 1), title));
+            this.defaultTitle = JsonContentPackUtilities.LoadStringFromDictionaryFile(Path.Combine(Constants.PathConstants.StringsPaths.Menus, "DimensionalStorageUnit.json"), "Title") + " Capacity: {0} / {1}";
+            this.capacityDisplayComponent = new ClickableComponent(new Rectangle(this.xPositionOnScreen + 128, this.yPositionOnScreen + 128, 1, 1), "");
 
-
-            this.searchBox.X = this.xPositionOnScreen + 96;
-            this.searchBox.Y = this.yPositionOnScreen;
-            this.searchBox.Width = 256;
-            this.searchBox.Height = 192;
+            this.searchBox.Bounds = new Rectangle(this.xPositionOnScreen + 96, this.yPositionOnScreen, 256, 192);
 
             this._searchModeButton = new ClickableTextureComponent("SearchMode", new Rectangle(this.searchBox.X - 96, this.searchBox.Y, 64, 64), "", "", TextureManagers.Menus_InventoryMenu.getExtendedTexture("SearchButton").getTexture(), new Rectangle(0, 0, 32, 32), 2f);
 
@@ -173,6 +174,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                 // OK button
                 case "OK":
                     this.allFinished = true;
+                    SoundUtilities.PlaySound(Enums.StardewSound.coin);
                     Game1.exitActiveMenu();
                     return;
 
@@ -309,6 +311,9 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         {
 
             bool clickedItem = false;
+
+            int amountToGrab = 1;
+
             foreach (ItemDisplayButton button in this.itemButtons)
                 if (button.containsPoint(x, y))
                 {
@@ -316,21 +321,30 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                     button.scale -= 0.5f;
                     button.scale = Math.Max(3.5f, button.scale);
 
-                    Item i = button.item;
 
-                    if (i == null)
+
+                    if (button.item == null)
                     {
                         continue;
                     }
 
-                    Game1.player.addItemToInventory(i.getOne());
+                    if (Game1.input.GetKeyboardState().IsKeyDown(Keys.LeftShift) || Game1.input.GetKeyboardState().IsKeyDown(Keys.Right))
+                    {
+                        amountToGrab = Math.Max(button.item.Stack / 2, 1);
+                    }
 
-                    i.Stack--;
 
-                    if (i.Stack <= 0)
+                    Item i = button.item.getOne();
+                    i.Stack = amountToGrab;
+
+                    Game1.player.addItemToInventory(i);
+
+                    button.item.Stack -= amountToGrab;
+
+                    if (button.item.Stack <= 0)
                     {
                         clickedItem = true;
-                        DimensionalStorageUnitBuilding.UniversalItems.Remove(i);
+                        DimensionalStorageUnitBuilding.UniversalItems.Remove(button.item);
                     }
                     break;
                 }
@@ -356,12 +370,20 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                         continue;
                     }
                     SoundUtilities.PlaySound(Enums.StardewSound.coin);
-                    bool added = DimensionalStorageUnitBuilding.AddItemToDimensionalStorageUnit(item.getOne());
+
+                    if (Game1.input.GetKeyboardState().IsKeyDown(Keys.LeftShift) || Game1.input.GetKeyboardState().IsKeyDown(Keys.Right))
+                    {
+                        amountToGrab = Math.Max(item.Stack / 2, 1);
+                    }
+
+                    Item itemToAdd = item.getOne();
+                    itemToAdd.Stack = amountToGrab;
+                    bool added = DimensionalStorageUnitBuilding.AddItemToDimensionalStorageUnit(itemToAdd);
                     if (!added)
                     {
                         break;
                     }
-                    item.Stack--;
+                    item.Stack -= amountToGrab;
                     clickedPlayersItem = true;
                     if (item.Stack <= 0)
                     {
@@ -428,11 +450,136 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             if (this._searchModeButton.containsPoint(x, y))
             {
                 this.hoverText = this.searchBox.getCurrentSearchModeDisplayString();
+                this._searchModeButton.scale = Math.Min(this._searchModeButton.scale + 0.02f, this._searchModeButton.baseScale + 0.1f);
             }
             else
             {
                 this.hoverText = "";
+                this._searchModeButton.scale = Math.Max(this._searchModeButton.scale - 0.02f, this._searchModeButton.baseScale);
             }
+        }
+
+
+
+
+        public override bool readyToClose()
+        {
+            return this.allFinished;
+        }
+
+
+        /// <summary>
+        /// Populates all of the items for the menu.
+        /// </summary>
+        /// <returns></returns>
+        private void populateItemsToDisplay()
+        {
+            this.capacityDisplayComponent.name = string.Format(this.defaultTitle, DimensionalStorageUnitBuilding.UniversalItems.Count.ToString(), DimensionalStorageUnitBuilding.DimensionalStorageUnitMaxItems);
+
+            this.itemButtons.Clear();
+            if (this.allClickableComponents != null)
+            {
+                this.allClickableComponents.Clear();
+            }
+            IList<Item> validItems = this.searchBox.getValidItems(DimensionalStorageUnitBuilding.UniversalItems);
+
+            this._searchModeButton.myID = -999;
+            this._searchModeButton.downNeighborID = 0;
+
+            this._leftButton.myID = -1999;
+            this._rightButton.myID = -2999;
+
+
+
+            for (int row = 0; row < this._maxRowsToDisplay; row++)
+                for (int column = 0; column < this._maxColumnsToDisplay; column++)
+                {
+                    int value = this.currentPageNumber * this._maxRowsToDisplay * this._maxColumnsToDisplay + row * this._maxColumnsToDisplay + column;
+                    if (value >= validItems.Count) continue;
+
+
+                    Item selectedItem = validItems.ElementAt(value);
+                    float itemScale = 4f;
+                    Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + (column * 24 * itemScale)), (int)(this.yPositionOnScreen + 256 + row * 16 * itemScale), 16, 16);
+                    ItemDisplayButton itemButton = new ItemDisplayButton(selectedItem.DisplayName, selectedItem, null, placementBounds, 4f, true, Color.White);
+                    itemButton.item = selectedItem;
+
+                    //this.allClickableComponents.Add(itemButton);
+
+                    itemButton.myID = row * this._maxColumnsToDisplay + column + 2;
+
+                    if (row == 0)
+                    {
+                        itemButton.upNeighborID = this._searchModeButton.myID;
+                    }
+                    else if (row == this._maxRowsToDisplay)
+                    {
+                        itemButton.downNeighborID = itemButton.myID += this._maxColumnsToDisplay;
+                    }
+                    else
+                    {
+                        itemButton.upNeighborID = itemButton.myID -= this._maxColumnsToDisplay;
+                        itemButton.downNeighborID = itemButton.myID += this._maxColumnsToDisplay;
+                    }
+
+
+                    itemButton.leftNeighborID = itemButton.myID--;
+                    itemButton.rightNeighborID = itemButton.myID++;
+
+
+                    if (itemButton.leftNeighborID == -1)
+                    {
+                        itemButton.leftNeighborID = 0;
+                    }
+                    if (itemButton.rightNeighborID == this._maxColumnsToDisplay * this._maxRowsToDisplay)
+                    {
+                        itemButton.rightNeighborID = itemButton.myID;
+                    }
+
+
+                    this.itemButtons.Add(itemButton);
+                }
+            this._leftButton.upNeighborID = this.itemButtons.Last().myID;
+            this._rightButton.upNeighborID = this.itemButtons.Last().myID;
+
+        }
+
+        public override void receiveGamePadButton(Buttons b)
+        {
+            if (b.Equals(Buttons.A))
+            {
+                this.receiveLeftClick(Game1.getMouseX(), Game1.getMouseY(), true);
+            }
+            if (b.Equals(Buttons.Y) || b.Equals(Buttons.Start))
+            {
+                this.allFinished = true;
+            }
+        }
+
+        public override void receiveKeyPress(Keys key)
+        {
+            if (key.Equals(Keys.Escape))
+            {
+                this.allFinished = true;
+            }
+            else
+            {
+                base.receiveKeyPress(key);
+            }
+        }
+
+        public override bool areGamePadControlsImplemented()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Make this true if free cursor movement is desired.
+        /// </summary>
+        /// <returns></returns>
+        public override bool overrideSnappyMenuCursorMovementBan()
+        {
+            return true;
         }
 
         /// <summary>Draw the menu to the screen.</summary>
@@ -440,7 +587,11 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         public override void draw(SpriteBatch b)
         {
             // draw menu box
-            Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true);
+            Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true, r:Color.Purple.R/4, g:Color.Purple.G/4, b: Color.Purple.B/4);
+
+            //Why does this have really weird positioning? Once again, not sure, but for some reason, this is what works.
+            Game1.drawDialogueBox(this.playersInventory.xPositionOnScreen - 32, this.playersInventory.yPositionOnScreen - 136, (int)(this.playersInventory.width * 1.1f), (int)(this.playersInventory.height * 1.8f), false, true);
+
             //b.Draw(Game1.daybg, new Vector2((this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)), Color.White);
             //Game1.player.FarmerSprite.draw(b, new Vector2((this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)),1f);
 
@@ -457,17 +608,16 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             // draw labels
             foreach (ClickableComponent label in this.Labels)
             {
-                Color color = Color.Violet;
-                Utility.drawTextWithShadow(b, label.name, Game1.smallFont, new Vector2(label.bounds.X, label.bounds.Y), color);
+
             }
-            foreach (ClickableComponent label in this.Labels)
-            {
-                string text = "";
-                Color color = Game1.textColor;
-                Utility.drawTextWithShadow(b, label.name, Game1.smallFont, new Vector2(label.bounds.X, label.bounds.Y), color);
-                if (text.Length > 0)
-                    Utility.drawTextWithShadow(b, text, Game1.smallFont, new Vector2(label.bounds.X + Game1.tileSize / 3 - Game1.smallFont.MeasureString(text).X / 2f, label.bounds.Y + Game1.tileSize / 2), color);
-            }
+            Color color = Color.Violet;
+            Utility.drawTextWithShadow(b, this.capacityDisplayComponent.name, Game1.smallFont, new Vector2(this.capacityDisplayComponent.bounds.X, this.capacityDisplayComponent.bounds.Y), color);
+            string text = "";
+            color = Color.White;
+            Utility.drawTextWithShadow(b, this.capacityDisplayComponent.name, Game1.smallFont, new Vector2(this.capacityDisplayComponent.bounds.X, this.capacityDisplayComponent.bounds.Y), color);
+            if (text.Length > 0)
+                Utility.drawTextWithShadow(b, text, Game1.smallFont, new Vector2(this.capacityDisplayComponent.bounds.X + Game1.tileSize / 3 - Game1.smallFont.MeasureString(text).X / 2f, this.capacityDisplayComponent.bounds.Y + Game1.tileSize / 2), color);
+
 
             if (!string.IsNullOrEmpty(this.hoverText))
             {
@@ -488,61 +638,5 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             // draw cursor
             this.drawMouse(b);
         }
-
-
-        public override bool readyToClose()
-        {
-            return this.allFinished;
-        }
-
-
-        /// <summary>
-        /// Populates all of the items for the menu.
-        /// </summary>
-        /// <returns></returns>
-        private void populateItemsToDisplay()
-        {
-            this.itemButtons.Clear();
-            IList<Item> validItems = this.searchBox.getValidItems(DimensionalStorageUnitBuilding.UniversalItems);
-
-            for (int row = 0; row < this._maxRowsToDisplay; row++)
-                for (int column = 0; column < this._maxColumnsToDisplay; column++)
-                {
-                    int value = this.currentPageNumber * this._maxRowsToDisplay * this._maxColumnsToDisplay + row * this._maxColumnsToDisplay + column;
-                    if (value >= validItems.Count) continue;
-
-
-                    Item selectedItem = validItems.ElementAt(value);
-                    Rectangle textureBounds = GameLocation.getSourceRectForObject(selectedItem.getOne().ParentSheetIndex);
-                    float itemScale = 4f;
-                    Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + (column * 24 * itemScale)), (int)(this.yPositionOnScreen + 256 + row * 16 * itemScale), 16, 16);
-                    ItemDisplayButton itemButton = new ItemDisplayButton(selectedItem.DisplayName, selectedItem, null, placementBounds, 4f, true, Color.White);
-                    itemButton.item = selectedItem;
-                    this.itemButtons.Add(itemButton);
-                }
-        }
-
-        public override void receiveGamePadButton(Buttons b)
-        {
-            if (b.Equals(Buttons.A))
-            {
-                this.receiveLeftClick(Game1.getMouseX(), Game1.getMouseY(), true);
-            }
-        }
-
-        public override bool areGamePadControlsImplemented()
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// Make this true if free cursor movement is desired.
-        /// </summary>
-        /// <returns></returns>
-        public override bool overrideSnappyMenuCursorMovementBan()
-        {
-            return true;
-        }
-
     }
 }

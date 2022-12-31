@@ -6,21 +6,15 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
 {
     /// <summary>
     /// A simple menu component for displaying SDV Items as well as being able to click them.
     /// </summary>
-    public class ItemDisplayButton
+    public class ItemDisplayButton:ClickableComponent
     {
-
-        public string name;
-
-        /// <summary>
-        /// The item owned by the button.
-        /// </summary>
-        public StardewValley.Item item;
 
         private Rectangle defaultBounds;
 
@@ -34,10 +28,6 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
                 return new Rectangle((int)this.defaultBounds.X, (int)this.defaultBounds.Y, (int)(this.defaultBounds.Width * this.scale), (int)(this.defaultBounds.Height * this.scale));
             }
         }
-        /// <summary>
-        /// The scale of the button.
-        /// </summary>
-        public float scale;
 
         public float baseScale;
 
@@ -70,7 +60,7 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
             }
         }
 
-        public ItemDisplayButton()
+        public ItemDisplayButton():base(new Rectangle(0,0,0,0),"","")
         {
 
         }
@@ -84,7 +74,7 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         /// <param name="Scale"></param>
         /// <param name="DrawStackNumber"></param>
         /// <param name="DrawColor"></param>
-        public ItemDisplayButton(Item I, Omegasis.StardustCore.Animations.AnimatedSprite Background,Vector2 Position, Rectangle BoundingBox, float Scale, bool DrawStackNumber, Color DrawColor)
+        public ItemDisplayButton(Item I, Omegasis.StardustCore.Animations.AnimatedSprite Background,Vector2 Position, Rectangle BoundingBox, float Scale, bool DrawStackNumber, Color DrawColor) : base(BoundingBox,I)
         {
             this.name = I.DisplayName;
             this.item = I;
@@ -97,7 +87,7 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
             this.baseScale = Scale;
         }
 
-        public ItemDisplayButton(string Name,Item I, Omegasis.StardustCore.Animations.AnimatedSprite Background, Rectangle BoundingBox, float Scale, bool DrawStackNumber, Color DrawColor)
+        public ItemDisplayButton(string Name,Item I, Omegasis.StardustCore.Animations.AnimatedSprite Background, Rectangle BoundingBox, float Scale, bool DrawStackNumber, Color DrawColor) : base(BoundingBox, I)
         {
             this.name = Name;
             this.item = I;
@@ -193,7 +183,7 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
             return this.boundingBox.Contains(new Point(x, y));
         }
 
-        public bool containsPoint(int x, int y)
+        public override bool containsPoint(int x, int y)
         {
             return this.boundingBox.Contains(new Point(x, y));
         }

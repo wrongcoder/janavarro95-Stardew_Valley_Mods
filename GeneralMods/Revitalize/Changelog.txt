@@ -6,6 +6,8 @@ Key:
 ~~~~~~~~~~~~0.0.1 Revitalize 12-30-2022 xx.xx P.M~~~~~~~~~~~~~~
 ! Happy New Years! 
 +Added new search modes to the item search bar for the Dimensional Storage Unit, to have different ways to find different items.
++Added a background to the player's inventory in the dimensional storage unit menu.
++Added a way to see the capacity of the dimensional storage unit.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 12-30-2022 xx.xx P.M~~~~~~~~~~~~~~
 +Dimensional storage unit menu is starting to become more complete. Now has a grab menu that the player can use to throw items into it.

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewValley.Menus;
 
 namespace Omegasis.Revitalize.Framework.Menus.MenuComponents
 {
@@ -13,9 +14,27 @@ namespace Omegasis.Revitalize.Framework.Menus.MenuComponents
 
         public event EventHandler<string> onTextReceived;
 
-        public SearchTextBox(Texture2D textBoxTexture, Texture2D caretTexture, SpriteFont font, Color textColor) : base(textBoxTexture, caretTexture, font, textColor)
+        public virtual Rectangle Bounds
         {
+            get
+            {
+                return new Rectangle(this.X, this.Y, this.Width, this.Height);
+            }
+            set
+            {
+                this.X = value.X;
+                this.Y = value.Y;
+                this.Width = value.Width;
+                this.Height = value.Height;
+                this.underlyingComponent.bounds = value;
+            }
+        }
+        public ClickableComponent underlyingComponent;
 
+
+        public SearchTextBox(Texture2D textBoxTexture, Texture2D caretTexture, SpriteFont font, Color textColor, Rectangle Bounds) : base(textBoxTexture, caretTexture, font, textColor)
+        {
+            this.underlyingComponent = new ClickableComponent(Bounds, "");
         }
 
         public override void RecieveTextInput(char inputChar)

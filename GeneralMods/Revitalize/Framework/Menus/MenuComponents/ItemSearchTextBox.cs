@@ -10,6 +10,7 @@ using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
 using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace Omegasis.Revitalize.Framework.Menus.MenuComponents
 {
@@ -30,10 +31,10 @@ namespace Omegasis.Revitalize.Framework.Menus.MenuComponents
             Any
         }
 
+
         public ItemSearchMode currentSearchMode = ItemSearchMode.DisplayName;
 
-
-        public ItemSearchTextBox(Texture2D textBoxTexture, Texture2D caretTexture, SpriteFont font, Color textColor, ItemSearchMode CurrentSearchMode = ItemSearchMode.DisplayName) : base(textBoxTexture, caretTexture, font, textColor)
+        public ItemSearchTextBox(Texture2D textBoxTexture, Texture2D caretTexture, SpriteFont font, Color textColor, Rectangle bounds,ItemSearchMode CurrentSearchMode = ItemSearchMode.DisplayName) : base(textBoxTexture, caretTexture, font, textColor,bounds)
         {
             this.currentSearchMode = CurrentSearchMode;
         }
@@ -49,7 +50,6 @@ namespace Omegasis.Revitalize.Framework.Menus.MenuComponents
                 return;
             }
             this.currentSearchMode=(ItemSearchMode)((int)this.currentSearchMode)+1;
-            RevitalizeModCore.logWarning("Current search mode: " + Enum.GetName(this.currentSearchMode));
         }
 
         /// <summary>
