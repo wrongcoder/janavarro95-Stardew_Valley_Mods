@@ -159,9 +159,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
             }
             if (this.generatorType.Value == GeneratorType.Nuclear)
             {
-                if (dropInItem is IBasicItemInformationProvider)
+                if (dropInItem is CustomItem)
                 {
-                    correctDropInItem = (dropInItem as IBasicItemInformationProvider).Id == Constants.Ids.Items.MiscItemIds.RadioactiveFuel;
+                    correctDropInItem = (dropInItem as CustomItem).Id == Constants.Ids.Items.MiscItemIds.RadioactiveFuel;
                 }
             }
             return correctDropInItem;

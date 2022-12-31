@@ -33,9 +33,9 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 
         public static bool OnItemBought(ISalable purchasedItem, Farmer who, int AmountPurchased)
         {
-            if(purchasedItem is IBasicItemInformationProvider)
+            if(purchasedItem is CustomItem)
             {
-                IBasicItemInformationProvider item = (purchasedItem as IBasicItemInformationProvider);
+                CustomItem item = (purchasedItem as CustomItem);
                 if (item.Id.Equals(MiscItemIds.MovieTheaterTicketSubscription))
                 {
                     RevitalizeModCore.SaveDataManager.playerSaveData.hasMovieTheaterTicketSubscription = true;

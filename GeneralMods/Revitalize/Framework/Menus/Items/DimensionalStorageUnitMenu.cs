@@ -44,18 +44,23 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         private ClickableTextureComponent _leftButton;
         private ClickableTextureComponent _rightButton;
 
+
+        private ClickableTextureComponent _searchModeButton;
+
         private int _maxRowsToDisplay = 5;
         private int _maxColumnsToDisplay = 6;
 
         /// <summary>
         /// The search box used for looking for specific items.
         /// </summary>
-        public SearchTextBox searchBox;
+        public ItemSearchTextBox searchBox;
 
         public static int menuWidth = 632 + borderWidth * 2;
         public static int menuHeight = 600 + borderWidth * 2 + Game1.tileSize;
 
         public StardewValley.Menus.InventoryMenu playersInventory;
+
+        public string hoverText;
 
         /*********
         ** Public methods
@@ -67,7 +72,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         public DimensionalStorageUnitMenu()
             : base((int)getAppropriateMenuPosition().X, (int)getAppropriateMenuPosition().Y, menuWidth, menuHeight)
         {
-            this.searchBox = new SearchTextBox(null, null, Game1.dialogueFont, Game1.textColor);
+            this.searchBox = new ItemSearchTextBox(null, null, Game1.dialogueFont, Game1.textColor);
             Game1.keyboardDispatcher.Subscriber = this.searchBox;
             this.searchBox.Selected = false;
             this.searchBox.onTextReceived += this.SearchBox_onTextReceived;
@@ -143,10 +148,12 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 128, this.yPositionOnScreen + 128, 1, 1), title));
 
 
-            this.searchBox.X = this.xPositionOnScreen + 64;
+            this.searchBox.X = this.xPositionOnScreen + 96;
             this.searchBox.Y = this.yPositionOnScreen;
             this.searchBox.Width = 256;
             this.searchBox.Height = 192;
+
+            this._searchModeButton = new ClickableTextureComponent("SearchMode", new Rectangle(this.searchBox.X - 96, this.searchBox.Y, 64, 64), "", "", TextureManagers.Menus_InventoryMenu.getExtendedTexture("SearchButton").getTexture(), new Rectangle(0, 0, 32, 32), 2f);
 
             this.populateItemsToDisplay();
 
@@ -167,7 +174,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                 case "OK":
                     this.allFinished = true;
                     Game1.exitActiveMenu();
-                    break;
+                    return;
 
                 case "LeftButton":
                     if (this.currentPageNumber == 0) break;
@@ -176,7 +183,8 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                         this.currentPageNumber--;
                         this.setUpPositions();
                     }
-                    break;
+                    SoundUtilities.PlaySound(Enums.StardewSound.shwip);
+                    return;
 
                 case "RightButton":
                     NetObjectList<Item> ids = DimensionalStorageUnitBuilding.UniversalItems;
@@ -187,13 +195,19 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                         this.currentPageNumber++;
                         this.setUpPositions();
                     }
+                    SoundUtilities.PlaySound(Enums.StardewSound.shwip);
+                    return;
 
-                    break;
+                case "SearchMode":
+                    this.searchBox.cycleSearchMode();
+                    SoundUtilities.PlaySound(Enums.StardewSound.coin);
+                    this.populateItemsToDisplay();
+                    return;
 
                 default:
                     break;
             }
-            Game1.playSound("coin");
+            SoundUtilities.PlaySound(Enums.StardewSound.coin);
         }
 
         /// <summary>The method invoked when the player left-clicks on the menu.</summary>
@@ -270,6 +284,10 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                 this.handleButtonClick(this._leftButton.name);
             if (this._rightButton.containsPoint(x, y))
                 this.handleButtonClick(this._rightButton.name);
+            if (this._searchModeButton.containsPoint(x, y))
+            {
+                this.handleButtonClick(this._searchModeButton.name);
+            }
 
             Rectangle r = new Rectangle(this.searchBox.X, this.searchBox.Y, this.searchBox.Width, this.searchBox.Height / 2);
             if (r.Contains(x, y))
@@ -406,6 +424,15 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             this.OkButton.scale = this.OkButton.containsPoint(x, y)
     ? Math.Min(this.OkButton.scale + 0.02f, this.OkButton.baseScale + 0.1f)
     : Math.Max(this.OkButton.scale - 0.02f, this.OkButton.baseScale);
+
+            if (this._searchModeButton.containsPoint(x, y))
+            {
+                this.hoverText = this.searchBox.getCurrentSearchModeDisplayString();
+            }
+            else
+            {
+                this.hoverText = "";
+            }
         }
 
         /// <summary>Draw the menu to the screen.</summary>
@@ -418,6 +445,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             //Game1.player.FarmerSprite.draw(b, new Vector2((this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)),1f);
 
             this.searchBox.Draw(b, true);
+            this._searchModeButton.draw(b);
 
             // draw season buttons
             foreach (ItemDisplayButton button in this.itemButtons)
@@ -439,6 +467,11 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                 Utility.drawTextWithShadow(b, label.name, Game1.smallFont, new Vector2(label.bounds.X, label.bounds.Y), color);
                 if (text.Length > 0)
                     Utility.drawTextWithShadow(b, text, Game1.smallFont, new Vector2(label.bounds.X + Game1.tileSize / 3 - Game1.smallFont.MeasureString(text).X / 2f, label.bounds.Y + Game1.tileSize / 2), color);
+            }
+
+            if (!string.IsNullOrEmpty(this.hoverText))
+            {
+                drawHoverText(b, this.hoverText, Game1.dialogueFont);
             }
 
             // draw OK button
@@ -470,16 +503,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         private void populateItemsToDisplay()
         {
             this.itemButtons.Clear();
-            NetObjectList<Item> validItems = new NetObjectList<Item>();
-            if (string.IsNullOrEmpty(this.searchBox.Text) == false)
-                foreach (Item item in DimensionalStorageUnitBuilding.UniversalItems)
-                {
-                    if (item.DisplayName.ToLowerInvariant().Contains(this.searchBox.Text.ToLowerInvariant()))
-                        validItems.Add(item);
-                }
-            else
-                validItems = DimensionalStorageUnitBuilding.UniversalItems;
-
+            IList<Item> validItems = this.searchBox.getValidItems(DimensionalStorageUnitBuilding.UniversalItems);
 
             for (int row = 0; row < this._maxRowsToDisplay; row++)
                 for (int column = 0; column < this._maxColumnsToDisplay; column++)

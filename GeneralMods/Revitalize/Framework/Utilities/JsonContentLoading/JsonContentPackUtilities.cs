@@ -221,7 +221,7 @@ namespace Omegasis.Revitalize.Framework.Utilities.JsonContentLoading
                     return dict;
                 }
             }
-            throw new JsonContentLoadingException("The given file at the path {0} does not exist for any Revitalize content pack!");
+            throw new JsonContentLoadingException(string.Format("The given file at the path {0} does not exist for any Revitalize content pack!",RelativePathToFile));
         }
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace Omegasis.Revitalize.Framework.Utilities.JsonContentLoading
                     return dict;
                 }
             }
-            throw new JsonContentLoadingException("The given file at the path {0} does not exist for any Revitalize content pack!");
+            throw new JsonContentLoadingException(string.Format("The given file at the path {0} does not exist for any Revitalize content pack!",RelativePathToFile));
         }
 
         /// <summary>

@@ -22,6 +22,7 @@ namespace Omegasis.Revitalize.Framework.Constants.PathConstants
         public static string ShopDialogue = Path.Combine(RelativePaths.ModAssets_Strings_Folder, "ShopDialogue");
         public static string UI = Path.Combine(RelativePaths.ModAssets_Strings_Folder, "UI");
         public static string Menus = Path.Combine(UI, "Menus");
+        public static string MenuComponents = Path.Combine(Menus, "MenuComponents");
 
         public static string ObjectDisplayStrings = Path.Combine(Objects, "DisplayStrings");
 

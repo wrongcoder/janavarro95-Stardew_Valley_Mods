@@ -18,7 +18,7 @@ using StardewValley;
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.CustomItem")]
-    public class IBasicItemInformationProvider : StardewValley.Object, ICustomModObject
+    public class CustomItem : StardewValley.Object, ICustomModObject
     {
         public readonly NetRef<BasicItemInformation> netBasicItemInformation = new NetRef<BasicItemInformation>();
 
@@ -117,14 +117,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             }
         }
 
-        public IBasicItemInformationProvider()
+        public CustomItem()
         {
             this.basicItemInformation = new BasicItemInformation();
             this.initNetFieldsPostConstructor();
 
         }
 
-        public IBasicItemInformationProvider(BasicItemInformation info) : base(Vector2.Zero, 0)
+        public CustomItem(BasicItemInformation info) : base(Vector2.Zero, 0)
         {
             this.basicItemInformation = info;
             this.initNetFieldsPostConstructor();
@@ -236,7 +236,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         public override Item getOne()
         {
-            return new IBasicItemInformationProvider(this.basicItemInformation.Copy());
+            return new CustomItem(this.basicItemInformation.Copy());
         }
 
         public override void drawAsProp(SpriteBatch b)

@@ -20,7 +20,7 @@ using StardewValley.Network;
 namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.Crafting.Blueprint")]
-    public class Blueprint : IBasicItemInformationProvider
+    public class Blueprint : CustomItem
     {
         /// <summary>
         /// A mapping from the name of the crafting book to the name of the crafting recipe to unlock.

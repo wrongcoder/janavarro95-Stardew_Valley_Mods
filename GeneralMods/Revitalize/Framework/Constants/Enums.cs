@@ -1620,7 +1620,7 @@ namespace Omegasis.Revitalize.Framework.Constants
             qi_shop,
 
             /// <summary>
-            /// The sound of the Journey of the Pararie King gunshot. Also used for hovering over items or turning pages sometimes.
+            /// The sound of the Journey of the Pararie King gunshot. Also used when typing in characters into fields.
             /// </summary>
             Cowboy_gunshot,
 
