@@ -87,7 +87,7 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
         protected override void initNetFields()
         {
             base.initNetFields();
-            this.NetFields.AddFields(this.items);
+            this.NetFields.AddFields(this.items,this.dimensionalStorageUnitStartingCapacity,this.dimensionalStorageUnitMaxItems);
         }
 
         public override bool doAction(Vector2 tileLocation, Farmer who)
