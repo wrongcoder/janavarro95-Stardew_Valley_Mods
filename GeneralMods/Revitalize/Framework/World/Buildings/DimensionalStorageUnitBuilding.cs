@@ -30,7 +30,7 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
         /// </summary>
         public static DimensionalStorageUnitBuilding CachedDimensionalStorageUnitBuilding;
 
-        public static ulong DimensionalStorageUnitMaxItems = 9;
+        public static ulong DimensionalStorageUnitMaxItems = 36;
 
         public static NetObjectList<Item> UniversalItems
         {
@@ -155,7 +155,10 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
             return false;
         }
 
-
+        public static ulong GetUpgradeCost()
+        {
+            return DimensionalStorageUnitMaxItems / 36UL;
+        }
 
     }
 }

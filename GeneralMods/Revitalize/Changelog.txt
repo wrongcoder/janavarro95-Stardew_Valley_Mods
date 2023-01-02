@@ -3,6 +3,9 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 1-2-2023 xx.xx P.M~~~~~~~~~~~~~~
++Added the ability to upgrade the dimensional storage unit building using void essences from either the dimensional storage unit or the player's inventory.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 12-30-2022 xx.xx P.M~~~~~~~~~~~~~~
 ! Happy New Years! 
 +Added new search modes to the item search bar for the Dimensional Storage Unit, to have different ways to find different items.

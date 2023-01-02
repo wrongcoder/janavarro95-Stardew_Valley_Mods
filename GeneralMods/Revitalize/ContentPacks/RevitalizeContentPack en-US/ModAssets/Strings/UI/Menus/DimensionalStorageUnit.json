@@ -1,3 +1,6 @@
 {
-  "Title":"Dimensional Storage Unit"	
+  "Title":"Dimensional Storage Unit",
+  "Capacity":"Dimensional Storage Unit Capacity: {0} / {1}",
+  "UpgradePrompt":"Upgrade Max Capacity to {0} for {1} {2}?",
+  "MissingUpgradeItem":"Found {0} {1} need {2}",
 }

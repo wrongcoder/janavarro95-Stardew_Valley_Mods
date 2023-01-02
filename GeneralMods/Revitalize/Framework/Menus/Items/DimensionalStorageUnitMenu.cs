@@ -44,8 +44,9 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         private ClickableTextureComponent _leftButton;
         private ClickableTextureComponent _rightButton;
 
-
         private ClickableTextureComponent _searchModeButton;
+
+        private ClickableTextureComponent _upgradeButton;
 
         private int _maxRowsToDisplay = 5;
         private int _maxColumnsToDisplay = 6;
@@ -65,6 +66,11 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         protected string defaultTitle;
         public ClickableComponent capacityDisplayComponent;
 
+        private string upgradePromptUnformatted;
+        private string upgradePrompt;
+        private Item upgradeItem;
+        private string missingItemPrompt;
+
         /*********
         ** Public methods
         *********/
@@ -81,11 +87,16 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             this.searchBox.onTextReceived += this.SearchBox_onTextReceived;
             this.searchBox.OnBackspacePressed += this.SearchBox_OnBackspacePressed;
 
-            this.allClickableComponents = new List<ClickableComponent>();
+            this.upgradeItem = RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.VoidEssence);
+            this.upgradePromptUnformatted = JsonContentPackUtilities.LoadStringFromDictionaryFile(Path.Combine(Constants.PathConstants.StringsPaths.Menus, "DimensionalStorageUnit.json"), "UpgradePrompt");
+            this.missingItemPrompt = JsonContentPackUtilities.LoadStringFromDictionaryFile(Path.Combine(Constants.PathConstants.StringsPaths.Menus, "DimensionalStorageUnit.json"), "MissingUpgradeItem");
 
-            this.allClickableComponents.Add(this.searchBox.underlyingComponent);
+            this.defaultTitle = JsonContentPackUtilities.LoadStringFromDictionaryFile(Path.Combine(Constants.PathConstants.StringsPaths.Menus, "DimensionalStorageUnit.json"), "Capacity");
+
+
 
             this.setUpPositions();
+
         }
 
         public static Vector2 getAppropriateMenuPosition()
@@ -131,13 +142,6 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             this.setUpPositions();
         }
 
-        protected virtual void setUpPlayersInventoryMenu()
-        {
-            int yPositionForInventory = this.yPositionOnScreen + this.height + 96;
-            int xPositionForInventory = this.xPositionOnScreen;
-            this.playersInventory = new StardewValley.Menus.InventoryMenu(xPositionForInventory, yPositionForInventory, true, null, null);
-        }
-
 
         /*********
         ** Private methods
@@ -149,16 +153,19 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             this._leftButton = new ClickableTextureComponent("LeftButton", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, TextureManagers.Menus_InventoryMenu.getExtendedTexture("PreviousPageButton").getTexture(), new Rectangle(0, 0, 32, 32), 2f);
             this._rightButton = new ClickableTextureComponent("RightButton", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize + 96, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4 + 96, Game1.tileSize, Game1.tileSize), "", null, TextureManagers.Menus_InventoryMenu.getExtendedTexture("NextPageButton").getTexture(), new Rectangle(0, 0, 32, 32), 2f);
 
-            this.defaultTitle = JsonContentPackUtilities.LoadStringFromDictionaryFile(Path.Combine(Constants.PathConstants.StringsPaths.Menus, "DimensionalStorageUnit.json"), "Title") + " Capacity: {0} / {1}";
             this.capacityDisplayComponent = new ClickableComponent(new Rectangle(this.xPositionOnScreen + 128, this.yPositionOnScreen + 128, 1, 1), "");
 
             this.searchBox.Bounds = new Rectangle(this.xPositionOnScreen + 96, this.yPositionOnScreen, 256, 192);
 
             this._searchModeButton = new ClickableTextureComponent("SearchMode", new Rectangle(this.searchBox.X - 96, this.searchBox.Y, 64, 64), "", "", TextureManagers.Menus_InventoryMenu.getExtendedTexture("SearchButton").getTexture(), new Rectangle(0, 0, 32, 32), 2f);
 
+            this._upgradeButton = new ClickableTextureComponent("UpgradeButton", new Rectangle(this.searchBox.X + this.searchBox.Width + 96, this.searchBox.Y, 192, 48), "", "", TextureManagers.Menus_DimensionalStorageMenu.getExtendedTexture("UpgradeButton").getTexture(), new Rectangle(0, 0, 192, 48), 1f);
+
             this.populateItemsToDisplay();
 
-            this.setUpPlayersInventoryMenu();
+            int yPositionForInventory = this.yPositionOnScreen + this.height + 96;
+            int xPositionForInventory = this.xPositionOnScreen;
+            this.playersInventory = new StardewValley.Menus.InventoryMenu(xPositionForInventory, yPositionForInventory, true, null, null);
 
         }
 
@@ -206,10 +213,141 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                     this.populateItemsToDisplay();
                     return;
 
+
+                case "UpgradeButton":
+
+                    if (this.hasEnoughToUpgrade())
+                    {
+                        ulong found = this.getUpgradeItemAmount();
+                        List<Item> dimensionalStorageVoidEssence = new List<Item>();
+                        foreach (Item voidEssence in DimensionalStorageUnitBuilding.UniversalItems)
+                        {
+                            if (voidEssence.canStackWith(this.upgradeItem))
+                            {
+                                dimensionalStorageVoidEssence.Add(voidEssence);
+                            }
+                        }
+                        bool updadeDimensionalStorageUnitDisplay = false;
+                        foreach (Item voidEssence in dimensionalStorageVoidEssence)
+                        {
+                            if (voidEssence.Stack == 1)
+                            {
+                                //There's an odd edge case where the stack is truely never 0 so we need to have some special handling logic here.
+                                DimensionalStorageUnitBuilding.UniversalItems.Remove(voidEssence);
+                                updadeDimensionalStorageUnitDisplay = true;
+                                found--;
+                            }
+                            else
+                            {
+                                ulong subTractionAmount = Math.Min((ulong)voidEssence.Stack, DimensionalStorageUnitBuilding.GetUpgradeCost());
+                                voidEssence.Stack -= (int)subTractionAmount; //Stacks should cap at about 999 anyways so no need to worry about conversion losses here.
+                                if (voidEssence.Stack == 0)
+                                {
+                                    DimensionalStorageUnitBuilding.UniversalItems.Remove(voidEssence);
+                                    updadeDimensionalStorageUnitDisplay = true;
+                                }
+                                found -= subTractionAmount;
+                            }
+
+                            if (found == 0)
+                            {
+                                break;
+                            }
+                        }
+                        foreach (Item item in Game1.player.items)
+                        {
+                            if (item == null) continue;
+                            if (!item.canStackWith(this.upgradeItem))
+                            {
+                                continue;
+                            }
+
+                            if (item.Stack == 1)
+                            {
+                                //There's an odd edge case where the stack is truely never 0 so we need to have some special handling logic here.
+                                Game1.player.items.Remove(item);
+                                found--;
+                            }
+                            else
+                            {
+                                ulong subTractionAmount = Math.Min((ulong)item.Stack, DimensionalStorageUnitBuilding.GetUpgradeCost());
+                                item.Stack -= (int)subTractionAmount; //Stacks should cap at about 999 anyways so no need to worry about conversion losses here.
+                                if (item.Stack == 0)
+                                {
+                                    Game1.player.items.Remove(item);
+                                }
+                                found -= subTractionAmount;
+                            }
+                            if (found == 0)
+                            {
+                                break;
+                            }
+                        }
+                        DimensionalStorageUnitBuilding.DimensionalStorageUnitMaxItems++;
+                        if (updadeDimensionalStorageUnitDisplay)
+                        {
+                            this.populateItemsToDisplay();
+                        }
+                        this.updateUpgradeAndCapacityTexts();
+                    }
+                    else
+                    {
+                        SoundUtilities.PlaySound(Enums.StardewSound.Cowboy_gunshot);
+                        return;
+                    }
+
+                    break;
+
                 default:
                     break;
             }
             SoundUtilities.PlaySound(Enums.StardewSound.coin);
+        }
+
+        /// <summary>
+        /// Gets the total amount of items found in dimensional storage unti that can be used for upgrades. In this case, void essence.
+        /// </summary>
+        /// <returns></returns>
+        private ulong getUpgradeItemAmount()
+        {
+            List<Item> dimensionalStorageVoidEssence = new List<Item>();
+            foreach (Item voidEssence in DimensionalStorageUnitBuilding.UniversalItems)
+            {
+                if (voidEssence.canStackWith(this.upgradeItem))
+                {
+                    dimensionalStorageVoidEssence.Add(voidEssence);
+                }
+            }
+
+            ulong found = 0;
+            foreach (Item voidEssence in dimensionalStorageVoidEssence)
+            {
+                found += (ulong)voidEssence.Stack;
+            }
+            foreach (Item voidEssence in Game1.player.items)
+            {
+                if (voidEssence == null) continue;
+                if (voidEssence.canStackWith(this.upgradeItem))
+                {
+                    found += (ulong)voidEssence.Stack;
+                }
+            }
+            return found;
+        }
+
+        /// <summary>
+        /// Is there enough items to upgrade the dimensional storage unit?
+        /// </summary>
+        /// <returns></returns>
+        private bool hasEnoughToUpgrade()
+        {
+            return this.getUpgradeItemAmount() >= DimensionalStorageUnitBuilding.GetUpgradeCost();
+        }
+
+        private void updateUpgradeAndCapacityTexts()
+        {
+            this.capacityDisplayComponent.name = string.Format(this.defaultTitle, DimensionalStorageUnitBuilding.UniversalItems.Count.ToString(), DimensionalStorageUnitBuilding.DimensionalStorageUnitMaxItems);
+            this.upgradePrompt = string.Format(this.upgradePromptUnformatted, (DimensionalStorageUnitBuilding.DimensionalStorageUnitMaxItems + 1).ToString(), DimensionalStorageUnitBuilding.GetUpgradeCost().ToString(), this.upgradeItem.DisplayName);
         }
 
         /// <summary>The method invoked when the player left-clicks on the menu.</summary>
@@ -289,6 +427,11 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             if (this._searchModeButton.containsPoint(x, y))
             {
                 this.handleButtonClick(this._searchModeButton.name);
+            }
+
+            if (this._upgradeButton.containsPoint(x, y))
+            {
+                this.handleButtonClick(this._upgradeButton.name);
             }
 
             Rectangle r = new Rectangle(this.searchBox.X, this.searchBox.Y, this.searchBox.Width, this.searchBox.Height / 2);
@@ -452,6 +595,17 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                 this.hoverText = this.searchBox.getCurrentSearchModeDisplayString();
                 this._searchModeButton.scale = Math.Min(this._searchModeButton.scale + 0.02f, this._searchModeButton.baseScale + 0.1f);
             }
+            else if (this._upgradeButton.containsPoint(x, y) && this.hasEnoughToUpgrade())
+            {
+
+                this.hoverText = this.upgradePrompt;
+                this._upgradeButton.scale = Math.Min(this._upgradeButton.scale + 0.02f, this._upgradeButton.baseScale + 0.1f);
+            }
+            else if(this._upgradeButton.containsPoint(x, y) && !this.hasEnoughToUpgrade())
+            {
+                this.hoverText = this.upgradePrompt+"\n"+string.Format(this.missingItemPrompt, this.getUpgradeItemAmount().ToString(), this.upgradeItem.DisplayName, DimensionalStorageUnitBuilding.GetUpgradeCost().ToString());
+                this._upgradeButton.scale = Math.Min(this._upgradeButton.scale + 0.02f, this._upgradeButton.baseScale + 0.1f);
+            }
             else
             {
                 this.hoverText = "";
@@ -474,22 +628,10 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         /// <returns></returns>
         private void populateItemsToDisplay()
         {
-            this.capacityDisplayComponent.name = string.Format(this.defaultTitle, DimensionalStorageUnitBuilding.UniversalItems.Count.ToString(), DimensionalStorageUnitBuilding.DimensionalStorageUnitMaxItems);
+            this.updateUpgradeAndCapacityTexts();
 
             this.itemButtons.Clear();
-            if (this.allClickableComponents != null)
-            {
-                this.allClickableComponents.Clear();
-            }
             IList<Item> validItems = this.searchBox.getValidItems(DimensionalStorageUnitBuilding.UniversalItems);
-
-            this._searchModeButton.myID = -999;
-            this._searchModeButton.downNeighborID = 0;
-
-            this._leftButton.myID = -1999;
-            this._rightButton.myID = -2999;
-
-
 
             for (int row = 0; row < this._maxRowsToDisplay; row++)
                 for (int column = 0; column < this._maxColumnsToDisplay; column++)
@@ -504,43 +646,8 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                     ItemDisplayButton itemButton = new ItemDisplayButton(selectedItem.DisplayName, selectedItem, null, placementBounds, 4f, true, Color.White);
                     itemButton.item = selectedItem;
 
-                    //this.allClickableComponents.Add(itemButton);
-
-                    itemButton.myID = row * this._maxColumnsToDisplay + column + 2;
-
-                    if (row == 0)
-                    {
-                        itemButton.upNeighborID = this._searchModeButton.myID;
-                    }
-                    else if (row == this._maxRowsToDisplay)
-                    {
-                        itemButton.downNeighborID = itemButton.myID += this._maxColumnsToDisplay;
-                    }
-                    else
-                    {
-                        itemButton.upNeighborID = itemButton.myID -= this._maxColumnsToDisplay;
-                        itemButton.downNeighborID = itemButton.myID += this._maxColumnsToDisplay;
-                    }
-
-
-                    itemButton.leftNeighborID = itemButton.myID--;
-                    itemButton.rightNeighborID = itemButton.myID++;
-
-
-                    if (itemButton.leftNeighborID == -1)
-                    {
-                        itemButton.leftNeighborID = 0;
-                    }
-                    if (itemButton.rightNeighborID == this._maxColumnsToDisplay * this._maxRowsToDisplay)
-                    {
-                        itemButton.rightNeighborID = itemButton.myID;
-                    }
-
-
                     this.itemButtons.Add(itemButton);
                 }
-            this._leftButton.upNeighborID = this.itemButtons.Last().myID;
-            this._rightButton.upNeighborID = this.itemButtons.Last().myID;
 
         }
 
@@ -587,7 +694,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         public override void draw(SpriteBatch b)
         {
             // draw menu box
-            Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true, r:Color.Purple.R/4, g:Color.Purple.G/4, b: Color.Purple.B/4);
+            Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true, r: Color.Purple.R / 4, g: Color.Purple.G / 4, b: Color.Purple.B / 4);
 
             //Why does this have really weird positioning? Once again, not sure, but for some reason, this is what works.
             Game1.drawDialogueBox(this.playersInventory.xPositionOnScreen - 32, this.playersInventory.yPositionOnScreen - 136, (int)(this.playersInventory.width * 1.1f), (int)(this.playersInventory.height * 1.8f), false, true);
@@ -597,6 +704,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
 
             this.searchBox.Draw(b, true);
             this._searchModeButton.draw(b);
+            this._upgradeButton.draw(b);
 
             // draw season buttons
             foreach (ItemDisplayButton button in this.itemButtons)

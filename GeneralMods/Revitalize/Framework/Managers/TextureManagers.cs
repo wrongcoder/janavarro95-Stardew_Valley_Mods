@@ -36,6 +36,7 @@ namespace Omegasis.Revitalize.Framework.Managers
         public static TextureManager Menus_CraftingMenu;
         public static TextureManager Menus_EnergyMenu;
         public static TextureManager Menus_InventoryMenu;
+        public static TextureManager Menus_DimensionalStorageMenu;
 
         public static TextureManager Resources_Misc;
         public static TextureManager Resources_Ore;
@@ -75,6 +76,7 @@ namespace Omegasis.Revitalize.Framework.Managers
             Menus_CraftingMenu = InitializeTextureManager("Revitalize.Menus.CraftingMenu", MenusGraphicPaths.CraftingMenu);
             Menus_EnergyMenu = InitializeTextureManager("Revitalize.Menus.EnergyMenu", MenusGraphicPaths.EnergyMenu);
             Menus_InventoryMenu = InitializeTextureManager("Revitalize.Menus.InventoryMenu", MenusGraphicPaths.InventoryMenu);
+            Menus_DimensionalStorageMenu = InitializeTextureManager("Revitalize.Menus.DimensionalStorageMenu", MenusGraphicPaths.DimensionalStorageMenu);
 
             //Resources
             Resources_Ore = InitializeTextureManager("Revitalize.Resources.Ore", ObjectsGraphicsPaths.Resources_Ore);
