@@ -541,6 +541,11 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                 return;
             }
 
+            if (this._upgradeButton.containsPoint(x, y))
+            {
+                this.handleButtonClick(this._upgradeButton.name);
+            }
+
         }
 
         /// <summary>The method invoked when the player hovers the cursor over the menu.</summary>

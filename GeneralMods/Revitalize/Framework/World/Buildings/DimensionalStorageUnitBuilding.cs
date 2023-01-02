@@ -30,7 +30,8 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
         /// </summary>
         public static DimensionalStorageUnitBuilding CachedDimensionalStorageUnitBuilding;
 
-        public static ulong DimensionalStorageUnitMaxItems = 36;
+        public static ulong DimensionalStorageUnitStartingCapacity = 360;
+        public static ulong DimensionalStorageUnitMaxItems = 360;
 
         public static NetObjectList<Item> UniversalItems
         {
@@ -155,9 +156,13 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
             return false;
         }
 
+        /// <summary>
+        /// Gets the upgrade cost for upgrading the dimensional storage unit building.
+        /// </summary>
+        /// <returns></returns>
         public static ulong GetUpgradeCost()
         {
-            return DimensionalStorageUnitMaxItems / 36UL;
+            return Math.Max(1,((DimensionalStorageUnitMaxItems - DimensionalStorageUnitStartingCapacity) / 36UL)+1);
         }
 
     }
