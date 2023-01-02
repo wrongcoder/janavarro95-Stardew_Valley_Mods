@@ -218,7 +218,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
 
                     if (this.hasEnoughToUpgrade())
                     {
-                        ulong found = this.getUpgradeItemAmount();
+                        long found = this.getUpgradeItemAmount();
                         List<Item> dimensionalStorageVoidEssence = new List<Item>();
                         foreach (Item voidEssence in DimensionalStorageUnitBuilding.UniversalItems)
                         {
@@ -239,7 +239,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                             }
                             else
                             {
-                                ulong subTractionAmount = Math.Min((ulong)voidEssence.Stack, DimensionalStorageUnitBuilding.GetUpgradeCost());
+                                long subTractionAmount = Math.Min((long)voidEssence.Stack, DimensionalStorageUnitBuilding.GetDimensionalStorageUnitBuilding().getUpgradeCost());
                                 voidEssence.Stack -= (int)subTractionAmount; //Stacks should cap at about 999 anyways so no need to worry about conversion losses here.
                                 if (voidEssence.Stack == 0)
                                 {
@@ -270,7 +270,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                             }
                             else
                             {
-                                ulong subTractionAmount = Math.Min((ulong)item.Stack, DimensionalStorageUnitBuilding.GetUpgradeCost());
+                                long subTractionAmount = Math.Min((long)item.Stack, DimensionalStorageUnitBuilding.GetDimensionalStorageUnitBuilding().getUpgradeCost());
                                 item.Stack -= (int)subTractionAmount; //Stacks should cap at about 999 anyways so no need to worry about conversion losses here.
                                 if (item.Stack == 0)
                                 {
@@ -283,7 +283,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                                 break;
                             }
                         }
-                        DimensionalStorageUnitBuilding.DimensionalStorageUnitMaxItems++;
+                        DimensionalStorageUnitBuilding.GetDimensionalStorageUnitBuilding().DimensionalStorageUnitMaxItems++;
                         if (updadeDimensionalStorageUnitDisplay)
                         {
                             this.populateItemsToDisplay();
@@ -308,7 +308,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         /// Gets the total amount of items found in dimensional storage unti that can be used for upgrades. In this case, void essence.
         /// </summary>
         /// <returns></returns>
-        private ulong getUpgradeItemAmount()
+        private long getUpgradeItemAmount()
         {
             List<Item> dimensionalStorageVoidEssence = new List<Item>();
             foreach (Item voidEssence in DimensionalStorageUnitBuilding.UniversalItems)
@@ -319,17 +319,17 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                 }
             }
 
-            ulong found = 0;
+            long found = 0;
             foreach (Item voidEssence in dimensionalStorageVoidEssence)
             {
-                found += (ulong)voidEssence.Stack;
+                found += (long)voidEssence.Stack;
             }
             foreach (Item voidEssence in Game1.player.items)
             {
                 if (voidEssence == null) continue;
                 if (voidEssence.canStackWith(this.upgradeItem))
                 {
-                    found += (ulong)voidEssence.Stack;
+                    found += (long)voidEssence.Stack;
                 }
             }
             return found;
@@ -341,13 +341,13 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         /// <returns></returns>
         private bool hasEnoughToUpgrade()
         {
-            return this.getUpgradeItemAmount() >= DimensionalStorageUnitBuilding.GetUpgradeCost();
+            return this.getUpgradeItemAmount() >= DimensionalStorageUnitBuilding.GetDimensionalStorageUnitBuilding().getUpgradeCost();
         }
 
         private void updateUpgradeAndCapacityTexts()
         {
-            this.capacityDisplayComponent.name = string.Format(this.defaultTitle, DimensionalStorageUnitBuilding.UniversalItems.Count.ToString(), DimensionalStorageUnitBuilding.DimensionalStorageUnitMaxItems);
-            this.upgradePrompt = string.Format(this.upgradePromptUnformatted, (DimensionalStorageUnitBuilding.DimensionalStorageUnitMaxItems + 1).ToString(), DimensionalStorageUnitBuilding.GetUpgradeCost().ToString(), this.upgradeItem.DisplayName);
+            this.capacityDisplayComponent.name = string.Format(this.defaultTitle, DimensionalStorageUnitBuilding.UniversalItems.Count.ToString(), DimensionalStorageUnitBuilding.GetDimensionalStorageUnitBuilding().DimensionalStorageUnitMaxItems);
+            this.upgradePrompt = string.Format(this.upgradePromptUnformatted, (DimensionalStorageUnitBuilding.GetDimensionalStorageUnitBuilding().DimensionalStorageUnitMaxItems + 1).ToString(), DimensionalStorageUnitBuilding.GetDimensionalStorageUnitBuilding().getUpgradeCost().ToString(), this.upgradeItem.DisplayName);
         }
 
         /// <summary>The method invoked when the player left-clicks on the menu.</summary>
@@ -608,7 +608,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             }
             else if(this._upgradeButton.containsPoint(x, y) && !this.hasEnoughToUpgrade())
             {
-                this.hoverText = this.upgradePrompt+"\n"+string.Format(this.missingItemPrompt, this.getUpgradeItemAmount().ToString(), this.upgradeItem.DisplayName, DimensionalStorageUnitBuilding.GetUpgradeCost().ToString());
+                this.hoverText = this.upgradePrompt+"\n"+string.Format(this.missingItemPrompt, this.getUpgradeItemAmount().ToString(), this.upgradeItem.DisplayName, DimensionalStorageUnitBuilding.GetDimensionalStorageUnitBuilding().getUpgradeCost().ToString());
                 this._upgradeButton.scale = Math.Min(this._upgradeButton.scale + 0.02f, this._upgradeButton.baseScale + 0.1f);
             }
             else

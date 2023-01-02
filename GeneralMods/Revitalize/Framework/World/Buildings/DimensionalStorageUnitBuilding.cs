@@ -30,9 +30,6 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
         /// </summary>
         public static DimensionalStorageUnitBuilding CachedDimensionalStorageUnitBuilding;
 
-        public static ulong DimensionalStorageUnitStartingCapacity = 360;
-        public static ulong DimensionalStorageUnitMaxItems = 360;
-
         public static NetObjectList<Item> UniversalItems
         {
             get
@@ -50,6 +47,39 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
 
 
         public NetObjectList<Item> items = new NetObjectList<Item>();
+
+        protected NetLong dimensionalStorageUnitStartingCapacity = new NetLong(360L);
+
+        public long DimensionalStorageUnitStartingCapacity
+        {
+            get
+            {
+                return this.dimensionalStorageUnitStartingCapacity.Value;
+            }
+            set
+            {
+                this.dimensionalStorageUnitStartingCapacity.Value = value;
+            }
+        }
+
+        protected NetLong dimensionalStorageUnitMaxItems = new NetLong(360L);
+
+        public long DimensionalStorageUnitMaxItems
+        {
+            get
+            {
+                //Set the capacity here from the mod's save data.
+                if (RevitalizeModCore.SaveDataManager.worldSaveData.buildingSaveData.DimensionalStorageUnitMaxItems >= this.dimensionalStorageUnitMaxItems.Value)
+                {
+                    this.dimensionalStorageUnitMaxItems.Value = RevitalizeModCore.SaveDataManager.worldSaveData.buildingSaveData.DimensionalStorageUnitMaxItems;
+                }
+                return this.dimensionalStorageUnitMaxItems.Value;
+            }
+            set
+            {
+                this.dimensionalStorageUnitMaxItems.Value = value;
+            }
+        }
 
         public DimensionalStorageUnitBuilding()
     : base(Blueprint, Vector2.Zero) { }
@@ -93,6 +123,15 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
                 Game1.createItemDebris(i, new Vector2(this.tileX * Game1.tileSize + randX, this.tileY * Game1.tileSize + randY), Game1.random.Next(1, 5), loc);
             }
             this.items.Clear();
+        }
+
+        /// <summary>
+        /// Gets the upgrade cost for upgrading the dimensional storage unit building.
+        /// </summary>
+        /// <returns></returns>
+        public long getUpgradeCost()
+        {
+            return Math.Max(1, ((this.dimensionalStorageUnitMaxItems - this.dimensionalStorageUnitStartingCapacity) / 36L) + 1);
         }
 
         public static DimensionalStorageUnitBuilding GetDimensionalStorageUnitBuilding()
@@ -144,7 +183,7 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
                 }
             }
 
-            if ((ulong)UniversalItems.Count < DimensionalStorageUnitMaxItems)
+            if ((long)UniversalItems.Count < DimensionalStorageUnitBuilding.GetDimensionalStorageUnitBuilding().dimensionalStorageUnitMaxItems.Value)
             {
                 UniversalItems.Add(item);
                 return true;
@@ -156,14 +195,7 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
             return false;
         }
 
-        /// <summary>
-        /// Gets the upgrade cost for upgrading the dimensional storage unit building.
-        /// </summary>
-        /// <returns></returns>
-        public static ulong GetUpgradeCost()
-        {
-            return Math.Max(1,((DimensionalStorageUnitMaxItems - DimensionalStorageUnitStartingCapacity) / 36UL)+1);
-        }
+
 
     }
 }

@@ -15,17 +15,7 @@ namespace Omegasis.Revitalize.Framework.SaveData.World
         /// <summary>
         /// The maximum items that can be stored in the dimensional storage unit.
         /// </summary>
-        public ulong DimensionalStorageUnitMaxItems
-        {
-            get
-            {
-                return DimensionalStorageUnitBuilding.DimensionalStorageUnitMaxItems;
-            }
-            set
-            {
-                DimensionalStorageUnitBuilding.DimensionalStorageUnitMaxItems = value;
-            }
-        }
+        public long DimensionalStorageUnitMaxItems;
         public BuildingSaveData()
         {
 
