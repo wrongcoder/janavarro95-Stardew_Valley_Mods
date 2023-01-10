@@ -18,7 +18,11 @@ namespace Omegasis.Revitalize.Framework.Menus
 {
     /// <summary>
     /// Used with transfering items between two inventories.
+    /// 
     /// </summary>
+
+
+    [Obsolete("Please use InventoryDisplayMenu instead.")]
     public class InventoryTransferMenu : IClickableMenuExtended
     {
         public InventoryMenu playerInventory;

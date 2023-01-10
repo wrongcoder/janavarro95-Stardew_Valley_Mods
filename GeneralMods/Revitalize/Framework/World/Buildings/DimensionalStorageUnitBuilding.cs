@@ -104,7 +104,8 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
                 }
 
                 SoundUtilities.PlaySound(Constants.Enums.StardewSound.qi_shop);
-                Game1.activeClickableMenu = new DimensionalStorageUnitMenu();
+
+                Game1.activeClickableMenu = new DimensionalStorageUnitMenu(this);
                 //Game1.activeClickableMenu = new InventoryTransferMenu(0,0,400,400,this.items,36);
                 return true;
             }
@@ -131,7 +132,7 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
         /// <returns></returns>
         public long getUpgradeCost()
         {
-            return Math.Max(1, ((this.dimensionalStorageUnitMaxItems - this.dimensionalStorageUnitStartingCapacity) / 36L) + 1);
+            return Math.Max(1, ((this.dimensionalStorageUnitMaxItems.Value - this.dimensionalStorageUnitStartingCapacity.Value) / 36L) + 1);
         }
 
         public static DimensionalStorageUnitBuilding GetDimensionalStorageUnitBuilding()

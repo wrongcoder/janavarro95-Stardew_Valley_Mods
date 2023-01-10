@@ -3,6 +3,9 @@ Key:
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
 
+~~~~~~~~~~~~0.0.1 Revitalize 1-9-2023 xx.xx P.M~~~~~~~~~~~~~~
+~Separated the logic from the DimensionalStorageUnitMenu into a base InventoryDisplayMenu and extended off of that for more flexibility to be reused with future storage containers.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 1-2-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Added the ability to upgrade the dimensional storage unit building using void essences from either the dimensional storage unit or the player's inventory.
 
