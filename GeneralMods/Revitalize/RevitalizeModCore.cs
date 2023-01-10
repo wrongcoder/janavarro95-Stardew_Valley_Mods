@@ -265,13 +265,10 @@ namespace Omegasis.Revitalize
 
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-                                                    new ItemReference(new ArtisanGoodItemReference(Enums.SDVObject.TigerTrout, StardewValley.Object.PreserveType.AgedRoe), 1).getItem(),
-                                                    new ItemReference(new ArtisanGoodItemReference(Enums.SDVObject.TigerTrout, StardewValley.Object.PreserveType.Roe), 1).getItem(),
-                                                    new ItemReference(new ArtisanGoodItemReference(Enums.SDVObject.BlueJazz, Enums.SDVPreserveType.Honey), 1).getItem(),
-                                                    new ItemReference(new ArtisanGoodItemReference(Enums.SDVObject.Pumpkin, Enums.SDVPreserveType.Juice), 1).getItem(),
-                                                    new ItemReference(new ArtisanGoodItemReference(Enums.SDVObject.Pumpkin, Enums.SDVPreserveType.Pickle), 1).getItem(),
-                                                    new ItemReference(new ArtisanGoodItemReference(Enums.SDVObject.Apple, Enums.SDVPreserveType.Jelly), 1).getItem(),
-              //ObjectManager.getItem(Enums.SDVBigCraftable.Furnace),
+
+              ModContentManager.objectManager.getItem(MachineIds.AdvancedCharcoalKiln),
+              ModContentManager.objectManager.getItem(Enums.SDVObject.Wood,100)
+
             });
             //Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AnvilCraftingRecipeBlueprint));
             //Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(Enums.SDVObject.IronBar, 20));

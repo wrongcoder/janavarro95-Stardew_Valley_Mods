@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Constants.Ids.Items;
+using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.HUD;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
@@ -25,7 +26,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
     /// </summary>
     ///
     [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.PoweredMachine")]
-    public class PoweredMachine : Machine
+    public class PoweredMachine : ItemRecipeDropInMachine
     {
         public enum PoweredMachineTier
         {
@@ -100,19 +101,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         /// <returns></returns>
         public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
         {
-            //Prevent overriding and destroying the previous operation.
-            if (this.heldObject.Value != null && who!=null)
-            {
-                Game1.player.addItemToInventory(this.heldObject.Value);
-                this.heldObject.Value = null;
-            }
             bool success = base.performObjectDropInAction(dropInItem, probe, who) && this.useFuelItemToIncreaseCharges(who, false, true);
             if (!success) return false;
 
             this.processInput(dropInItem, who, true);
             return false;
         }
-
 
         /// <summary>
         /// Consumes a single charge of fuel used on this funace.
@@ -268,6 +262,23 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 return true;
             }
             return false;
+        }
+
+        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, Recipe craftingRecipe, Farmer who = null)
+        {
+            //Make sure enough fue is present for the furnace to operate (if necessary!)
+            bool success = this.useFuelItemToIncreaseCharges(who, false, who != null);
+            if (success == false)
+            {
+                return new CraftingResult(false);
+            }
+
+            CraftingResult result= base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
+            if (result.successful)
+            {
+                this.consumeFuelCharge();
+            }
+            return result;
         }
 
         public virtual bool hasFuel()

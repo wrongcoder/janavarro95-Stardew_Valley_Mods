@@ -682,6 +682,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             if (environment != null)
             {
+
+                if (this.LightManager != null)
+                {
+                    this.LightManager.removeLights(environment);
+                }
+
                 environment.objects.Remove(TileLocation);
                 this.boundingBox.Value = new Rectangle(0, 0, 0, 0);
 

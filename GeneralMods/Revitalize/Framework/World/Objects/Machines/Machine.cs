@@ -236,7 +236,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 this.getMachineOutputs(true, false, true);
             }
 
-            this.updateAnimation();
             return base.rightClicked(who);
         }
 

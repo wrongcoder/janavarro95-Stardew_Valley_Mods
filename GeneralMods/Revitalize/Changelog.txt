@@ -5,6 +5,13 @@ Key:
 
 ~~~~~~~~~~~~0.0.1 Revitalize 1-9-2023 xx.xx P.M~~~~~~~~~~~~~~
 ~Separated the logic from the DimensionalStorageUnitMenu into a base InventoryDisplayMenu and extended off of that for more flexibility to be reused with future storage containers.
+~Restructured a lot of code surounding machines and their json crafting recipes.
+    -Removed the old MachinRecipeBookIds in most cases since it makes more sense to use the object's id instead.
+    +Added recipe books for Advanced, Superior, and Delux Charcoal Kilns
+    ~Cleaned up a lot of duplicate code across machine implementations, so now classes are far more streamlines for implementation and readibility.
+    +Added new ItemDropInMachine.cs to be an intermediary class between PoweredMachine and Machine.cs.
+        *Note that some machines like MinindDrill and GeodeCrusher don't currently have recipe books as they still carry their own custom implementations.
+    ~Fixed a few bugs regarding item drop-in actions for machines.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 1-2-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Added the ability to upgrade the dimensional storage unit building using void essences from either the dimensional storage unit or the player's inventory.

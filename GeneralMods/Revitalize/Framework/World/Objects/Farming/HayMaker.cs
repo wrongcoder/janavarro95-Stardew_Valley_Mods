@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Constants.CraftingIds;
 using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Player;
@@ -25,7 +26,7 @@ using StardewValley.Menus;
 namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 {
     [XmlType("Mods_Revitalize.Framework.World.Objects.Farming.HayMaker")]
-    public class HayMaker : Machine
+    public class HayMaker : ItemRecipeDropInMachine
     {
         public readonly NetRef<ItemReference> feedType = new NetRef<ItemReference>(new ItemReference());
 
@@ -45,7 +46,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         public HayMaker(BasicItemInformation info, bool isUsedForBuyingHayAtAnyTime = false) : base(info)
         {
             this.isUsedForBuyingHayAtAnyTime.Value = isUsedForBuyingHayAtAnyTime;
-
         }
 
         protected override void initializeNetFieldsPostConstructor()
@@ -104,7 +104,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             {
                 if (Game1.activeClickableMenu == null)
                 {
-                    
+
                     ShopMenu shopMenu = new ShopMenu(new Dictionary<ISalable, int[]>());
                     shopMenu.storeContext = HayMakerShopUtilities.StoreContext;
                     shopMenu.potraitPersonDialogue = JsonContentPackUtilities.LoadShopDialogue("ShopText_1", "HayMakerShopDialogue.json");
@@ -166,75 +166,42 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             if (dropInItem == null) return false;
             if (this.MinutesUntilReady > 0) return false;
             if (this.isUsedForBuyingHayAtAnyTime.Value == true) return false;
-            if (this.heldObject.Value != null && this.MinutesUntilReady==0)
+            if (this.heldObject.Value != null && this.MinutesUntilReady == 0)
                 this.cleanOutHayMaker(true);
 
             return this.processInput(dropInItem, who).successful;
         }
 
-
-        /// <summary>
-        /// Processes a player's item that they are holding to set recipe to be processed for the hay maker.
-        /// </summary>
-        /// <param name="dropInItem"></param>
-        /// <param name="who"></param>
-        /// <param name="ShowRedMessage"></param>
-        /// <returns></returns>
-        public override CraftingResult processInput(Item dropInItem, Farmer who, bool ShowRedMessage = true)
+        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, Recipe craftingRecipe, Farmer who = null)
         {
-            foreach (var craftingRecipe in RevitalizeModCore.ModContentManager.craftingManager.getUnlockedCraftingRecipes(this.getCraftingBookName()))
+            CraftingResult result = base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
+
+            if (result.successful)
             {
-                Item neededDropInItem = craftingRecipe.ingredients[0].item;
-                int amountRequired = craftingRecipe.ingredients[0].requiredAmount;
-
-                ItemReference itemRef = new ItemReference(neededDropInItem);
-
-                if (neededDropInItem.canStackWith(dropInItem) || itemRef.itemEquals(dropInItem))
+                //Allow expensive crops such as amaranth and iridium quality corn to get a small bonus, since otherwise wheat would be the best item to process.
+                this.feedType.Value.setItemReference(dropInItem);
+                int additionalHayPieces = 0;
+                if (dropInItem is StardewValley.Object)
                 {
-                    //Check to make sure the player has enough, otherwise display an error!
-                    if (amountRequired > dropInItem.Stack)
+                    long playerBonusId = -1;
+                    if (who == null)
                     {
-                        if (ShowRedMessage)
-                        {
-                            Game1.showRedMessage(this.getErrorString_NeedMoreInputItems(amountRequired, dropInItem));
-                        }
-                        return new CraftingResult(false);
+                        playerBonusId = this.owner.Value;
                     }
-
-                    this.feedType.Value.setItemReference(neededDropInItem);
-                    Item outputItem = craftingRecipe.outputs[0].item.getOne();
-
-                    //Allow expensive crops such as amaranth and iridium quality corn to get a small bonus, since otherwise wheat would be the best item to process.
-                    int additionalHayPieces = 0;
-                    if(dropInItem is StardewValley.Object)
+                    else
                     {
-                        long playerBonusId = -1;
-                        if (who == null)
-                        {
-                            playerBonusId = this.owner.Value;
-                        }
-                        else
-                        {
-                            playerBonusId = who.uniqueMultiplayerID.Value;
-                        }
-                        additionalHayPieces += (dropInItem as StardewValley.Object).sellToStorePrice(playerBonusId) / 100;
+                        playerBonusId = who.UniqueMultiplayerID;
                     }
-
-                    outputItem.Stack = craftingRecipe.outputs[0].requiredAmount + additionalHayPieces;
-                    this.heldObject.Value = (StardewValley.Object)outputItem;
-                    this.MinutesUntilReady = (int)(craftingRecipe.timeToCraft);
-                    if (who != null)
-                    {
-                        SoundUtilities.PlaySound(Enums.StardewSound.Ship);
-                    }
-                    //Due to a quirk on how the game's logic works, when this method returns true and we return true from performObjectDrop in, the active item is naturally reduced by 1 anyways, so we want skip removing too many items from the player's inventory.
-                    PlayerUtilities.ReduceInventoryItemStackSize(who, dropInItem, amountRequired-1);
-                    this.updateAnimation();
-
-                    return new CraftingResult(new ItemReference(neededDropInItem,amountRequired), true); //Found a sucessful recipe.
+                    additionalHayPieces += (dropInItem as StardewValley.Object).sellToStorePrice(playerBonusId) / 100;
                 }
+                this.heldObject.Value.Stack += additionalHayPieces;
             }
-            return new CraftingResult(false);
+            return result;
+        }
+
+        public override void playDropInSound()
+        {
+            SoundUtilities.PlaySound(Enums.StardewSound.Ship);
         }
 
         /// <summary>
@@ -262,11 +229,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             {
                 this.AnimationManager.playDefaultAnimation();
             }
-        }
-
-        public virtual string getCraftingBookName()
-        {
-            return Constants.CraftingIds.MachineCraftingRecipeBooks.HayMakerRecipes;
         }
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
@@ -306,7 +268,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
         protected override void drawStatusBubble(SpriteBatch b, int x, int y, float Alpha)
         {
-            if (this.machineStatusBubbleBox == null || this.machineStatusBubbleBox.Value == null) this.createStatusBubble();
+            if (this.machineStatusBubbleBox.Value == null || this.machineStatusBubbleBox.Value == null) this.createStatusBubble();
             if (this.MinutesUntilReady == 0 && this.heldObject.Value != null)
             {
                 y--;

@@ -47,22 +47,22 @@ namespace Omegasis.Revitalize.Framework.Player
                 {
 
                     //Find the first empty index in the player's inventory.
-                    if (Who.items[i] == null && emptyIndex == -1)
+                    if (Who.Items[i] == null && emptyIndex == -1)
                     {
                         emptyIndex = i;
                         continue;
                     }
                     //Check to see if the items can stack. If they can simply add them together and then continue on.
-                    if (Who.items[i] != null && Who.items[i].canStackWith(I))
+                    if (Who.Items[i] != null && Who.Items[i].canStackWith(I))
                     {
-                        Who.items[i].Stack += I.Stack;
+                        Who.Items[i].Stack += I.Stack;
                         return true;
                     }
                 }
 
                 if (emptyIndex != -1)
                 {
-                    Who.items[emptyIndex] = I;
+                    Who.Items[emptyIndex] = I;
 
                     //Set as active toolbar item.
                     if (emptyIndex < 12)
@@ -142,16 +142,21 @@ namespace Omegasis.Revitalize.Framework.Player
                 {
 
                     //Find the first empty index in the player's inventory.
-                    if (Who.items[i] == null)
+                    if (Who.Items[i] == null)
                     {
                         continue;
                     }
                     //Check to see if the items can stack. If they can simply add them together and then continue on.
-                    if (Who.items[i].ParentSheetIndex == ParentSheetIndex)
+                    if (Who.Items[i].ParentSheetIndex == ParentSheetIndex)
                     {
-                        Who.items[i].Stack -= StackSizeToReduce;
+                        if (Who.Items[i].Stack == StackSizeToReduce)
+                        {
+                            Who.Items[i] = null;
+                            return true;
+                        }
+                        Who.Items[i].Stack -= StackSizeToReduce;
 
-                        if (Who.items[i].Stack <= 0) Who.items[i] = null;
+                        if (Who.Items[i].Stack <= 0) Who.Items[i] = null;
                         return true;
                     }
                 }
@@ -181,7 +186,7 @@ namespace Omegasis.Revitalize.Framework.Player
                         if (infoProvider.Id.Equals(BasicItemInfoId))
                         {
                             item.Stack -= StackSizeToReduce;
-                            if (Who.CurrentItem.Stack <= 0) Who.items[Who.getIndexOfInventoryItem(Who.CurrentItem)] = null;
+                            if (Who.CurrentItem.Stack <= 0) Who.Items[Who.getIndexOfInventoryItem(Who.CurrentItem)] = null;
                             return true;
                         }
                     }
@@ -190,21 +195,27 @@ namespace Omegasis.Revitalize.Framework.Player
                 for (int i = 0; i < Who.MaxItems; i++)
                 {
                     //Find the first empty index in the player's inventory.
-                    if (Who.items[i] == null)
+                    if (Who.Items[i] == null)
                     {
                         continue;
                     }
 
-                    Item item = Who.items[i];
+                    Item item = Who.Items[i];
                     if (item is IBasicItemInfoProvider)
                     {
                         IBasicItemInfoProvider infoProvider = (IBasicItemInfoProvider)item;
                         //Check to see if the items can stack. If they can simply add them together and then continue on.
                         if (infoProvider.Id.Equals(BasicItemInfoId))
                         {
-                            Who.items[i].Stack -= StackSizeToReduce;
+                            if (Who.Items[i].Stack == StackSizeToReduce)
+                            {
+                                Who.Items[i] = null;
+                                return true;
+                            }
 
-                            if (Who.items[i].Stack <= 0) Who.items[i] = null;
+                            Who.Items[i].Stack -= StackSizeToReduce;
+
+                            if (Who.Items[i].Stack <= 0) Who.Items[i] = null;
                             return true;
                         }
                     }
@@ -229,16 +240,22 @@ namespace Omegasis.Revitalize.Framework.Player
                 {
 
                     //Find the first empty index in the player's inventory.
-                    if (Who.items[i] == null)
+                    if (Who.Items[i] == null)
                     {
                         continue;
                     }
-                    Item item = Who.items[i];
+                    Item item = Who.Items[i];
                     if (item == itemToReduce)
                     {
-                        Who.items[i].Stack -= StackSizeToReduce;
+                        if (Who.Items[i].Stack == StackSizeToReduce)
+                        {
+                            Who.Items[i] = null;
+                            return true;
+                        }
 
-                        if (Who.items[i].Stack <= 0) Who.items[i] = null;
+                        Who.Items[i].Stack -= StackSizeToReduce;
+
+                        if (Who.Items[i].Stack <= 0) Who.Items[i] = null;
                         return true;
                     }
                 }
@@ -261,12 +278,12 @@ namespace Omegasis.Revitalize.Framework.Player
                 {
 
                     //Find the first empty index in the player's inventory.
-                    if (Who.items[i] == null)
+                    if (Who.Items[i] == null)
                     {
                         continue;
                     }
                     //Check to see if the items can stack. If they can simply add them together and then continue on.
-                    if (Who.items[i].ParentSheetIndex == ParentSheetIndex && Who.items[i].Stack >= MinStackSize)
+                    if (Who.Items[i].ParentSheetIndex == ParentSheetIndex && Who.Items[i].Stack >= MinStackSize)
                     {
                         return true;
                     }
@@ -295,14 +312,14 @@ namespace Omegasis.Revitalize.Framework.Player
                 {
 
                     //Find the first empty index in the player's inventory.
-                    if (Who.items[i] == null)
+                    if (Who.Items[i] == null)
                     {
                         continue;
                     }
                     //Check to see if the items can stack. If they can simply add them together and then continue on.
-                    if ((Who.items[i] is T))
+                    if ((Who.Items[i] is T))
                     {
-                        validTools.Add((T)Who.items[i]);
+                        validTools.Add((T)Who.Items[i]);
                     }
                 }
             }
@@ -346,19 +363,19 @@ namespace Omegasis.Revitalize.Framework.Player
                 {
 
                     //Find the first empty index in the player's inventory.
-                    if (Who.items[i] == null)
+                    if (Who.Items[i] == null)
                     {
                         continue;
                     }
 
 
-                    Item item = Who.items[i];
+                    Item item = Who.Items[i];
 
                     if (item is IBasicItemInfoProvider)
                     {
                         IBasicItemInfoProvider infoProvider = (IBasicItemInfoProvider)item;
                         //Check to see if the items can stack. If they can simply add them together and then continue on.
-                        if (infoProvider.Id.Equals(BasicItemInfoId) && Who.items[i].Stack >= MinStackSize)
+                        if (infoProvider.Id.Equals(BasicItemInfoId) && Who.Items[i].Stack >= MinStackSize)
                         {
                             return true;
                         }

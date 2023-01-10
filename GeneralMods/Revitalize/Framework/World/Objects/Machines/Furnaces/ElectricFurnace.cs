@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Constants.CraftingIds;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Illuminate;
 using Omegasis.Revitalize.Framework.Player;
@@ -50,106 +51,51 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             this.createStatusBubble();
         }
 
-        /// <summary>
-        /// Processes a player's item that they are holding to set recipe to be processed for the furnace.
-        /// </summary>
-        /// <param name="dropInItem"></param>
-        /// <param name="who"></param>
-        /// <param name="ShowRedMessage"></param>
-        /// <returns></returns>
-        public override CraftingResult processInput(Item dropInItem, Farmer who, bool ShowRedMessage=true)
+        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, Recipe craftingRecipe, Farmer who = null)
         {
-            if (this.isWorking() || this.finishedProduction()) return new CraftingResult(false);
+            CraftingResult result = base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
 
-            foreach(var craftingRecipe in RevitalizeModCore.ModContentManager.craftingManager.getUnlockedCraftingRecipes(this.getCraftingBookName()))
+            if (result.successful)
             {
-                Item neededDropInItem = craftingRecipe.ingredients[0].item;
-                int amountRequired = craftingRecipe.ingredients[0].requiredAmount;
-
-                ItemReference itemRef = new ItemReference(neededDropInItem);
-
-                if (neededDropInItem.canStackWith(dropInItem) || itemRef.itemEquals(dropInItem))
+                float multiplier = 1f;
+                if (this.machineTier.Value == PoweredMachineTier.Electric)
                 {
-                    //Check to make sure the player has enough, otherwise display an error!
-                    if (amountRequired > dropInItem.Stack)
-                    {
-                        if (ShowRedMessage)
-                        {
-                            Game1.showRedMessage(this.getErrorString_NeedMoreInputItems(amountRequired, neededDropInItem));
-                        }
-                        return new CraftingResult(false);
-                    }
-
-                    float multiplier = 1f;
-                    if (this.machineTier.Value == PoweredMachineTier.Electric)
-                    {
-                        multiplier = .75f;
-                    }
-                    if (this.machineTier.Value == PoweredMachineTier.Nuclear)
-                    {
-                        multiplier = .5f;
-                    }
-                    if (this.machineTier.Value == PoweredMachineTier.Magical)
-                    {
-                        multiplier = .25f;
-                    }
-                    if (this.machineTier.Value == PoweredMachineTier.Galaxy)
-                    {
-                        multiplier = .1f;
-                    }
-
-                    //Make sure enough fue is present for the furnace to operate (if necessary!)
-                    bool success = this.useFuelItemToIncreaseCharges(who,false ,ShowRedMessage);
-
-                    if (success == false)
-                    {
-                        return new CraftingResult(false);
-                    }
-
-                    Item outputItem = craftingRecipe.outputs[0].item.getOne();
-                    outputItem.Stack = craftingRecipe.outputs[0].requiredAmount;
-                    this.heldObject.Value = (StardewValley.Object)outputItem;
-                    this.MinutesUntilReady = (int)(craftingRecipe.timeToCraft * multiplier);
-                    this.MinutesUntilReady -= this.MinutesUntilReady % 10; //Want to make sure the time remaining is divisible by 10, so we will just round down.
-                    if (this.MinutesUntilReady < 10)
-                    {
-                        this.MinutesUntilReady = 10; //Make sure there is at least 10 minues to craft something.
-                    }
-
-                    if (who != null)
-                    {
-                        SoundUtilities.PlaySound(Enums.StardewSound.furnace);
-                    }
-                    this.consumeFuelCharge();
-                    PlayerUtilities.ReduceInventoryItemStackSize(who, dropInItem, amountRequired);
-                    this.updateAnimation();
-                    this.addLight(new Vector2(0, 0),Illuminate.LightManager.LightIdentifier.SconceLight,Color.DarkCyan.Invert(), 1.5f);
-
-                    return new CraftingResult(new ItemReference(neededDropInItem, amountRequired), true); //Found a sucessful recipe.
+                    multiplier = .75f;
                 }
+                if (this.machineTier.Value == PoweredMachineTier.Nuclear)
+                {
+                    multiplier = .5f;
+                }
+                if (this.machineTier.Value == PoweredMachineTier.Magical)
+                {
+                    multiplier = .25f;
+                }
+                if (this.machineTier.Value == PoweredMachineTier.Galaxy)
+                {
+                    multiplier = .1f;
+                }
+
+                this.MinutesUntilReady = (int)(craftingRecipe.timeToCraft * multiplier);
+                this.MinutesUntilReady -= this.MinutesUntilReady % 10; //Want to make sure the time remaining is divisible by 10, so we will just round down.
+                if (this.MinutesUntilReady < 10)
+                {
+                    this.MinutesUntilReady = 10; //Make sure there is at least 10 minues to craft something.
+                }
+                this.addLight(new Vector2(0, 0), Illuminate.LightManager.LightIdentifier.SconceLight, Color.DarkCyan.Invert(), 1.5f);
             }
-            return new CraftingResult(false);
+
+
+            return result;
+        }
+
+        public override void playDropInSound()
+        {
+            SoundUtilities.PlaySound(Enums.StardewSound.furnace);
         }
 
         public virtual string getCraftingBookName()
         {
             return Constants.CraftingIds.MachineCraftingRecipeBooks.ElectricFurnaceCraftingRecipies;
-        }
-
-        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
-        {
-            if (probe == true || this.MinutesUntilReady > 0) return false;
-
-            //Cleans out the furnace as necessary to ensure it works properly when dropping in another item.
-            if (this.finishedProduction())
-            {
-                this.removeLight(new Vector2(0, 0));
-                this.getMachineOutputs(true, false, true);
-            }
-            this.processInput(dropInItem, who,true);
-
-            //return base.performObjectDropInAction(dropInItem, probe, who);
-            return false;
         }
 
         /// <summary>
@@ -215,13 +161,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             return new ElectricFurnace(this.basicItemInformation.Copy(), this.machineTier.Value);
         }
 
-        public override bool canStackWith(ISalable other)
-        {
-            if (!(other is ElectricFurnace)) return false;
-            ElectricFurnace otherFurnace = (ElectricFurnace)other;
-            return base.canStackWith(other) && otherFurnace.machineTier.Value == this.machineTier.Value;
-        }
-
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
             bool elapsed= base.minutesElapsed(minutes, environment);
@@ -232,14 +171,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             return elapsed;
         }
 
-        public override void removeFromGameWorld(Vector2 TileLocation, GameLocation environment)
+        public override string getCraftingRecipeBookId()
         {
-            base.removeFromGameWorld(TileLocation, environment);
-        }
-
-        public override void performRemoveAction(Vector2 tileLocation, GameLocation environment)
-        {
-            base.performRemoveAction(tileLocation, environment);
+            return MachineCraftingRecipeBooks.ElectricFurnaceCraftingRecipies;
         }
     }
 }
