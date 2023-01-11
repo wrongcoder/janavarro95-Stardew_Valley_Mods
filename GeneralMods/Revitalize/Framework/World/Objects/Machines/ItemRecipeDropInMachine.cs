@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Crafting;
+using Omegasis.Revitalize.Framework.HUD;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
@@ -34,10 +35,19 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         {
             if (probe) return false;
             //Prevent overriding and destroying the previous operation.
-            if (this.heldObject.Value != null && who != null)
+            if (who != null && this.finishedProduction())
             {
-                Game1.player.addItemToInventory(this.heldObject.Value);
-                this.heldObject.Value = null;
+                bool added=Game1.player.addItemToInventoryBool(this.heldObject.Value);
+                if (!added)
+                {
+                    HudUtilities.ShowInventoryFullErrorMessage();
+                    return false;
+                }
+                else
+                {
+                    SoundUtilities.PlaySound(Enums.StardewSound.coin);
+                    this.heldObject.Value = null;
+                }
             }
             bool success = base.performItemDropInAction(dropInItem, probe, who);
             if (!success) return false;

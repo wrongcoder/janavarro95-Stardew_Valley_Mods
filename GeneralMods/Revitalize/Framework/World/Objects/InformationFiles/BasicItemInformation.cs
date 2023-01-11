@@ -72,8 +72,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
                 if (this.dyedColor != null)
 
                     if (this.dyedColor.color.A != 0)
-                        return this.dyedColor.getBlendedColor(this._drawColorBase);
-                return this._drawColorBase;
+                        return this.dyedColor.getBlendedColor(this._drawColorBase.Value);
+                return this._drawColorBase.Value;
             }
             set
             {
@@ -277,7 +277,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
         /// <returns></returns>
         public int shakeTimerOffset()
         {
-            return this.shakeTimer > 0 ? Game1.random.Next(-1, 2) : 0;
+            return this.shakeTimer.Value > 0 ? Game1.random.Next(-1, 2) : 0;
         }
 
         /// <summary>
@@ -287,26 +287,26 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
         public BasicItemInformation Copy()
         {
             return new BasicItemInformation(
-                this.name,
-                this.id,
-                this.description,
-                this.categoryName,
-                this.categoryColor,
-                this.staminaRestoredOnEating,
-                this.healthRestoredOnEating,
-                this.fragility,
-                this.isLamp,
-                this.price,
-                this.canBeSetOutdoors,
-                this.canBeSetIndoors,
+                this.name.Value,
+                this.id.Value,
+                this.description.Value,
+                this.categoryName.Value,
+                this.categoryColor.Value,
+                this.staminaRestoredOnEating.Value,
+                this.healthRestoredOnEating.Value,
+                this.fragility.Value,
+                this.isLamp.Value,
+                this.price.Value,
+                this.canBeSetOutdoors.Value,
+                this.canBeSetIndoors.Value,
                 this.animationManager.Copy(),
                 this.DrawColor,
-                this.ignoreBoundingBox,
-                this.boundingBoxTileDimensions,
-                this.drawOffset ,
+                this.ignoreBoundingBox.Value,
+                this.boundingBoxTileDimensions.Value,
+                this.drawOffset.Value ,
                 this.inventory.Copy(),
                 this.lightManager.Copy(),
-                this.alwaysDrawAbovePlayer,
+                this.alwaysDrawAbovePlayer.Value,
                 this.dyedColor.getCopy());
         }
 
@@ -322,7 +322,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
             if (this.dyedColor.color.A == 0)
                 return "";
             else
-                return this.dyedColor.name;
+                return this.dyedColor.name.Value;
         }
 
         /// <summary>

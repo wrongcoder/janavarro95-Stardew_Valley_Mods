@@ -208,7 +208,7 @@ namespace Omegasis.Revitalize
 
         }
 
-        
+
 
 
 
@@ -267,7 +267,9 @@ namespace Omegasis.Revitalize
             {
 
               ModContentManager.objectManager.getItem(FarmingObjects.HayMaker),
-              ModContentManager.objectManager.getItem(Enums.SDVObject.Corn,100)
+              ModContentManager.objectManager.getItem(Enums.SDVObject.Corn,100),
+                            ModContentManager.objectManager.getItem(MachineIds.ElectricAdvancedGeodeCrusher),
+                            ModContentManager.objectManager.getItem(Enums.SDVObject.OmniGeode,100),
 
             });
             //Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AnvilCraftingRecipeBlueprint));
