@@ -44,7 +44,8 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds
 
         //Generated code below this point.
         public const string BurnerGenerator = "Revitalize.Workbench.Machines.EnergyGeneration.BurnerGenerator";
-		public const string NuclearGenerator = "Revitalize.Workbench.Machines.EnergyGeneration.NuclearGenerator";
+        public const string AdvancedGenerator = "Revitalize.Workbench.Machines.EnergyGeneration.AdvancedGenerator";
+        public const string NuclearGenerator = "Revitalize.Workbench.Machines.EnergyGeneration.NuclearGenerator";
 		public const string AdvancedSolarPanel = "Revitalize.Workbench.Machines.EnergyGeneration.AdvancedSolarPanel";
 		public const string SuperiorSolarPanel = "Revitalize.Workbench.Machines.EnergyGeneration.SuperiorSolarPanel";
     }

@@ -121,23 +121,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
         }
 
-        /// <summary>
-        /// Performed when dropping in an object into the mining drill.
-        /// </summary>
-        /// <param name="dropInItem"></param>
-        /// <param name="probe"></param>
-        /// <param name="who"></param>
-        /// <returns></returns>
-        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
-        {
-            if (probe == true) return false; //Just checking for action.
-            if (who != null && who.ActiveObject == null) return false;
-            if (dropInItem == null) return false;
-            if (this.heldObject.Value != null) return false;
-
-            return true;
-        }
-
 
         /// <summary>
         /// Used to process input for machines as well as providing an accessor to the Automate mod for this mod.
@@ -164,6 +147,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             bool shouldShowInventoryFullError = false;
             foreach (Item item in items)
             {
+                if(item==null) continue;
                 if (AddToPlayersInventory)
                 {
 
@@ -208,6 +192,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         public virtual Item getMachineOutputItem(bool ClearValue = false)
         {
             if (this.heldObject.Value == null) return null;
+            if (!this.finishedProduction()) return null;
             Item item = this.heldObject.Value;
             if (ClearValue)
             {
@@ -308,6 +293,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
+            if (this.AnimationManager.getTexture() == null)
+            {
+                RevitalizeModCore.log("NULL TEXTURE FOR ID: " + this.Id);
+            }
+
             x = (int)this.TileLocation.X;
 
             y = (int)this.TileLocation.Y;

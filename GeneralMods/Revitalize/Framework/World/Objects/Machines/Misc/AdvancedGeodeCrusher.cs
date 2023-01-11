@@ -59,17 +59,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             return true;
         }
 
-        /// <summary>
-        /// Performed when dropping in an object into the mining drill.
-        /// </summary>
-        /// <param name="dropInItem"></param>
-        /// <param name="probe"></param>
-        /// <param name="who"></param>
-        /// <returns></returns>
-        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
+        public override bool performItemDropInAction(Item dropInItem, bool probe, Farmer who)
         {
             if (this.itemToReceive.Value != null) return false;
-            return base.performObjectDropInAction(dropInItem, probe, who);
+            return base.performItemDropInAction(dropInItem, probe, who);
         }
 
         public override CraftingResult processInput(Item item, Farmer who, bool ShowRedMessage = true)

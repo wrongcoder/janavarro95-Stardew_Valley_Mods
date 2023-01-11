@@ -2,7 +2,7 @@
   "whichTab": "Default",
   "isUnlocked": false,
   "recipe": {
-	"craftingRecipeId": "Revitalize.Workbench.Machines.EnergyGeneration.NuclearGenerator",
+	"craftingRecipeId": "Revitalize.Workbench.Machines.EnergyGeneration.AdvancedGenerator",
     "outputName": "",
     "outputDescription": "",
     "MinutesToCraft": 0,
@@ -17,7 +17,7 @@
 	},
 	{
 			"item":{
-			"stardewValleyItemId": "IridiumBar",
+			"stardewValleyItemId": "GoldBar",
 			"stardewValleyBigCraftableId": "NULL",
 			"registeredObjectId": "",
 			"amount": 2
@@ -25,10 +25,18 @@
 	},
 	{
 			"item":{
-			"stardewValleyItemId": "CinderShard",
+			"stardewValleyItemId": "IronBar",
 			"stardewValleyBigCraftableId": "NULL",
 			"registeredObjectId": "",
-			"amount": 5
+			"amount": 10
+			}
+	},
+	{
+			"item":{
+			"stardewValleyItemId": "Stone",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 50
 			}
 	},
 	],

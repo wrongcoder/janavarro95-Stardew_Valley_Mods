@@ -9,16 +9,43 @@ using StardewValley;
 
 namespace Omegasis.StardustCore.UIUtilities
 {
-    public class Texture2DExtended:INetObject<NetFields>
+    public class Texture2DExtended : INetObject<NetFields>
     {
 
-        public NetString name = new NetString();
+        public readonly NetString name = new NetString();
+
+        [XmlIgnore]
+        public string Name
+        {
+            get
+            {
+                return this.name.Value;
+            }
+            set
+            {
+                this.name.Value = value;
+            }
+        }
 
         [XmlIgnore]
         public Texture2D texture;
-        public NetString path = new NetString();
-        public NetString modID = new NetString();
-        public NetString textureManagerId = new NetString();
+
+        public readonly NetString path = new NetString();
+
+        public string Path
+        {
+            get
+            {
+                return this.path.Value;
+            }
+            set
+            {
+                this.path.Value = value;
+            }
+        }
+
+        public readonly NetString modID = new NetString();
+        public readonly NetString textureManagerId = new NetString();
 
         [XmlIgnore]
         public int Width
@@ -56,7 +83,7 @@ namespace Omegasis.StardustCore.UIUtilities
         /// <param name="path">The relative path to file on disk. See StardustCore.Utilities.getRelativePath(modname,path);
         public Texture2DExtended(IManifest manifest, string path, string TextureManagerId)
         {
-            this.name.Value = Path.GetFileNameWithoutExtension(path);
+            this.name.Value = System.IO.Path.GetFileNameWithoutExtension(path);
             this.path.Value = path;
             this.modID.Value = manifest.UniqueID;
             this.textureManagerId.Value = TextureManagerId;
@@ -65,7 +92,7 @@ namespace Omegasis.StardustCore.UIUtilities
 
         public Texture2DExtended(string modID, string path, string TextureManagerId)
         {
-            this.name.Value = Path.GetFileNameWithoutExtension(path);
+            this.name.Value = System.IO.Path.GetFileNameWithoutExtension(path);
             this.path.Value = path;
             this.modID.Value = modID;
             this.textureManagerId.Value = TextureManagerId;
@@ -75,7 +102,7 @@ namespace Omegasis.StardustCore.UIUtilities
 
         public Texture2DExtended(IContentPack content, string path, string TextureManagerId)
         {
-            this.name.Value = Path.GetFileNameWithoutExtension(path);
+            this.name.Value = System.IO.Path.GetFileNameWithoutExtension(path);
             this.path.Value = path;
             this.modID.Value = content.Manifest.UniqueID;
             this.textureManagerId.Value = TextureManagerId;
@@ -107,7 +134,7 @@ namespace Omegasis.StardustCore.UIUtilities
 
         public Texture2DExtended Copy()
         {
-            return new Texture2DExtended(this.modID.Value, this.path.Value,this.textureManagerId.Value);
+            return new Texture2DExtended(this.modID.Value, this.path.Value, this.textureManagerId.Value);
         }
 
         /// <summary>Returns the actual 2D texture held by this wrapper class.</summary>
@@ -140,7 +167,7 @@ namespace Omegasis.StardustCore.UIUtilities
         {
             if (string.IsNullOrEmpty(this.path.Value))
             {
-                ModCore.log("Texture path is null: "+this.path.Value);
+                ModCore.log("Texture path is null: " + this.path.Value);
                 return;
 
             }
@@ -157,7 +184,12 @@ namespace Omegasis.StardustCore.UIUtilities
 
             if (this.texture == null)
             {
-                StardustCore.UIUtilities.TextureManager.GetTextureManager(this.modID, this.textureManagerId).loadTexture(this.path, this.name, this);
+                this.texture = StardustCore.UIUtilities.TextureManager.GetTextureManager(this.modID.Value, this.textureManagerId.Value).loadTexture(this.Path, this.Name, this);
+
+                if (this.texture == null)
+                {
+                    this.texture = StardustCore.UIUtilities.TextureManager.GetTextureManager(this.modID.Value, this.textureManagerId.Value).getTexture(this.Name);
+                }
             }
         }
     }

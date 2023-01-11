@@ -28,6 +28,11 @@ namespace Omegasis.Revitalize.Framework.SaveData
         public PlayerSaveData playerSaveData;
 
         /// <summary>
+        /// Keeps track of all items obtained by the player. Used to determine if certain recipes should be unlocked or not.
+        /// </summary>
+        public PlayerObtainedItems playerObtainedItems;
+
+        /// <summary>
         /// Save data in regards to things involving the world.
         /// </summary>
         public WorldSaveDataManager worldSaveData;
@@ -40,6 +45,7 @@ namespace Omegasis.Revitalize.Framework.SaveData
         public virtual void loadOrCreateSaveData()
         {
             this.playerSaveData = this.initializeSaveData<PlayerSaveData>(this.getRelativeSaveDataPath(), "PlayerSaveData.json");
+            this.playerObtainedItems = this.initializeSaveData<PlayerObtainedItems>(this.getRelativeSaveDataPath(), "PlayerObtainedItems.json");
 
             //Save data managers work a bit differently.
 
@@ -72,7 +78,7 @@ namespace Omegasis.Revitalize.Framework.SaveData
         {
             string friendlyName = SaveGame.FilterFileName(Game1.GetSaveGameName());
             string filenameNoTmpString = friendlyName + "_" + Game1.uniqueIDForThisGame;
-            filenameNoTmpString += Game1.player.name + "_" + Game1.player.uniqueMultiplayerID.Value;
+            filenameNoTmpString += Game1.player.Name + "_" + Game1.player.UniqueMultiplayerID;
 
             return Path.Combine("SaveData", filenameNoTmpString + Path.DirectorySeparatorChar);
         }
@@ -83,8 +89,15 @@ namespace Omegasis.Revitalize.Framework.SaveData
         public virtual void save()
         {
             this.shopSaveData.save();
-            this.playerSaveData.save();
+            this.writeSaveFile(this.playerSaveData, RevitalizeModCore.SaveDataManager.getRelativeSaveDataPath(), "PlayerSaveData.json");
+            this.writeSaveFile(this.playerObtainedItems, RevitalizeModCore.SaveDataManager.getRelativeSaveDataPath(), "PlayerObtainedItems.json");
+
             this.worldSaveData.save();
+        }
+
+        public virtual void writeSaveFile(object SaveData, params string[] RelativePathToSaveFile)
+        {
+            RevitalizeModCore.ModHelper.Data.WriteJsonFile(Path.Combine(RelativePathToSaveFile), this);
         }
 
         /// <summary>

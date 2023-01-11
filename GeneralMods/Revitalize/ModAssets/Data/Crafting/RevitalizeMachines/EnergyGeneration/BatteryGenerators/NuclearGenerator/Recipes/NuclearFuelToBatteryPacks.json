@@ -1,0 +1,37 @@
+{
+  "whichTab": "",
+  "isUnlocked": true,
+  "recipe": {
+	"craftingRecipeId": "Omegasis.Revitalize.Machines.Misc.NuclearGenerator.NuclearFuelToBatteryPacks",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 60,
+    "inputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "Revitalize.Framework.World.Objects.Items.Misc.RadioactiveFuel",
+			"amount": 1
+			}
+		}
+	
+	],
+    "outputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "BatteryPack",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 5
+			}
+		},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}

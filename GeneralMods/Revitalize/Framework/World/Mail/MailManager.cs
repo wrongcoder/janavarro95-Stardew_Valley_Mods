@@ -50,7 +50,7 @@ namespace Omegasis.Revitalize.Framework.World.Mail
             this.addMailIfNotReceived(MailTitles.HayMakerAvailableForPurchase, RevitalizeModCore.SaveDataManager.shopSaveData.animalShopSaveData.getHasBuiltTier2OrHigherBarnOrCoop() || BuildingUtilities.HasBuiltTier2OrHigherBarnOrCoop());
             this.addMailIfNotReceived(MailTitles.SiloRefillServiceAvailable, Utility.numSilos() >= 1);
             this.addMailIfNotReceived(MailTitles.AutomaticFarmingSystemAvailableForPurchase, Game1.player.FarmingLevel >= 10);
-            this.addMailIfNotReceived(MailTitles.ElectricFurnaceCanBePurchased, RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack);
+            this.addMailIfNotReceived(MailTitles.ElectricFurnaceCanBePurchased, PlayerUtilities.HasObtainedItem(Enums.SDVObject.BatteryPack));
 
             //Geode crushers available.
             this.addMailIfNotReceived(MailTitles.AdvancedGeodeCrusherUnlock, Game1.stats.GeodesCracked >= 200);

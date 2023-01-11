@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.Utilities.Extensions;
@@ -79,16 +80,16 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
         }
 
         /// <summary>
-        /// Performed when dropping in an object into the mining drill.
+        /// Performed when dropping an item into the mining drill.
         /// </summary>
         /// <param name="dropInItem"></param>
         /// <param name="probe"></param>
         /// <param name="who"></param>
         /// <returns></returns>
-        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
+        public override bool performItemDropInAction(Item dropInItem, bool probe, Farmer who)
         {
             if (this.itemToMine.Value != null) return false;
-            bool success = base.performObjectDropInAction(dropInItem, probe, who) && this.useFuelItemToIncreaseCharges(who, true, true);
+            bool success = base.performItemDropInAction(dropInItem, probe, who);
 
             if (success)
             {
@@ -98,7 +99,21 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             {
                 SoundUtilities.PlaySound(Enums.StardewSound.Ship);
             }
+
+            //If this is true, an extra battery pack is consumed, so we need to return false here.
             return success;
+        }
+
+        public override bool tryToIncreaseFuelCharges(Farmer who)
+        {
+            bool hasFuel = this.useFuelItemToIncreaseCharges(who, true, true);
+            return hasFuel;
+        }
+
+        public override CraftingResult processInput(Item dropInItem, Farmer who, bool ShowRedMessage = true)
+        {
+            //Since we don't use a recipe book here, we need to return true so that the logic properly updates.
+            return new CraftingResult(true);
         }
 
         public override void updateAnimation()

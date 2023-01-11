@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.SaveData.Player;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using StardewValley;
@@ -398,21 +399,47 @@ namespace Omegasis.Revitalize.Framework.Player
 
         public static void CheckForInventoryItem(IEnumerable<Item> items)
         {
-            if (RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack == true)
-            {
-                return;
-            }
-
-
+            PlayerSaveData saveData = RevitalizeModCore.SaveDataManager.playerSaveData;
             foreach (Item addedItem in items)
             {
                 ItemReference itemReference = new ItemReference(addedItem);
-                if (itemReference.StardewValleyItemId == Enums.SDVObject.BatteryPack)
+
+                if (!HasObtainedItem(itemReference.RegisteredObjectId))
                 {
-                    RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack = true;
+                    RevitalizeModCore.SaveDataManager.playerObtainedItems.obtainedItems.Add(itemReference.RegisteredObjectId);
                 }
 
             }
+
+        }
+
+        /// <summary>
+        /// Checks to see if the player has obtained an item with the specific item id.
+        /// </summary>
+        /// <param name="ItemId"></param>
+        /// <returns></returns>
+        public static bool HasObtainedItem(string ItemId)
+        {
+            return RevitalizeModCore.SaveDataManager.playerObtainedItems.obtainedItems.Contains(ItemId);
+        }
+
+        /// <summary>
+        /// Checks to see if the player has has obtained an object.
+        /// </summary>
+        /// <param name="ItemId"></param>
+        /// <returns></returns>
+        public static bool HasObtainedItem(Enums.SDVObject ItemId)
+        {
+            return HasObtainedItem(RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(ItemId));
+        }
+        /// <summary>
+        /// Checks to see if the player has obtained a specific big craftable object before.
+        /// </summary>
+        /// <param name="ItemId"></param>
+        /// <returns></returns>
+        public static bool HasObtainedItem(Enums.SDVBigCraftable ItemId)
+        {
+            return HasObtainedItem(RevitalizeModCore.ModContentManager.objectManager.createVanillaBigCraftableId(ItemId));
         }
 
         /// <summary>

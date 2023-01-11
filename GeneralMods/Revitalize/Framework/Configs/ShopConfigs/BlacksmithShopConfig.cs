@@ -51,6 +51,7 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         public int superiorCharcoalKilnBlueprintPrice = 25_000;
 
         public int burnerBatteryGeneratorBlueprintPrice = 5_000;
+        public int advancedBatteryGeneratorBlueprintPrice = 12_500;
         public int nuclearBatteryGeneratorBlueprintPrice = 35_000;
         /// <summary>
         /// How much a regular axe blueprint sells for in clint's shop.

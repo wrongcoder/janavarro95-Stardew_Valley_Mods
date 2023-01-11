@@ -159,7 +159,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         /// <param name="probe"></param>
         /// <param name="who"></param>
         /// <returns></returns>
-        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
+        public override bool performItemDropInAction(Item dropInItem, bool probe, Farmer who)
         {
             if (probe == true) return false; //Just checking for action.
             if (who.ActiveObject == null) return false;

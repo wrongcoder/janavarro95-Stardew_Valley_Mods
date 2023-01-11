@@ -50,6 +50,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             }
         }
 
+        /// <summary>
+        /// The item id that should be compared to all item's ids.
+        /// </summary>
         [JsonProperty("registeredObjectId")]
         public virtual string RegisteredObjectId
         {
@@ -228,11 +231,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
 
                 if (obj.bigCraftable)
                 {
-                    this.sdvBigCraftableId.Value = (Enums.SDVBigCraftable)obj.ParentSheetIndex;
+                    this.StardewValleyBigCraftableId = (Enums.SDVBigCraftable)obj.ParentSheetIndex;
                 }
                 else
                 {
-                    this.sdvObjectId.Value = (Enums.SDVObject)item.ParentSheetIndex;
+                    this.StardewValleyItemId = (Enums.SDVObject)item.ParentSheetIndex;
                     //Note that this is changed to a string in SDV 1.6, so this will break with that update. Change the condition to check against a string of "-1" instead.
                     if (obj.preservedParentSheetIndex.Value !=-1 && obj.preserve.Value.HasValue)
                     {

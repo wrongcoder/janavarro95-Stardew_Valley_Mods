@@ -585,9 +585,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             base.onReadyForHarvest(environment);
         }
 
-        /*
         /// <summary>
-        /// When the object is droped into (???) what happens?
+        /// Wraps Stardew valleys object dropin code. For actual mod implementation see <see cref="performItemDropInAction(Item, bool, Farmer)"/>
         /// </summary>
         /// <param name="dropInItem"></param>
         /// <param name="probe"></param>
@@ -595,10 +594,25 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
         {
+            bool success=this.performItemDropInAction(dropInItem, probe, who);
+            if (dropInItem == null) return false;
+            if(success && (dropInItem is StardewValley.Object) && (dropInItem as StardewValley.Object).Edibility!= StardewValley.Object.inedible)
+            {
+                dropInItem.Stack++;
+                return true;
+            }
+
             return false;
-            
         }
-        */
+
+        public virtual bool performItemDropInAction(Item dropInItem, bool probe, Farmer who)
+        {
+            if (probe == true) return false; //Just checking for action.
+            if (who != null && who.ActiveObject == null) return false;
+            if (dropInItem == null) return false;
+            if (this.heldObject.Value != null) return false;
+            return true;
+        }
 
         /// <summary>
         /// Performs cleanup that should happen related to an object's removal and removes it properly from the game world.

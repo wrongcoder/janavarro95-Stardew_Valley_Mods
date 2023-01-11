@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input;
+using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Content.JsonContent.Objects;
 using Omegasis.Revitalize.Framework.ContentPacks;
 
@@ -104,6 +106,16 @@ namespace Omegasis.Revitalize.Framework.Utilities.JsonContentLoading
             if (ThrowExceptionIfNotFound)
             {
                 throw new JsonContentLoadingException(string.Format("The given item id {0} does not have a registered value for display strings in any Revitalize content pack! A file can be created under the ModAssets/Strings/Objects/DisplayStrings directory with the given info."));
+            }
+            return null;
+        }
+
+        public static string LoadCategory(string CategoryID)
+        {
+          Dictionary<string,string> dict=  LoadStringDictionaryFile(Path.Combine(StringsPaths.Objects, "CategoryNames.json"));
+            if (dict.ContainsKey(CategoryID))
+            {
+                return dict[CategoryID];
             }
             return null;
         }

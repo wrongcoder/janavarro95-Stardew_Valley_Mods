@@ -30,21 +30,21 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
         }
 
-        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
+        public override bool performItemDropInAction(Item dropInItem, bool probe, Farmer who)
         {
             if (probe) return false;
             //Prevent overriding and destroying the previous operation.
-            if (this.heldObject.Value != null && who!=null)
+            if (this.heldObject.Value != null && who != null)
             {
                 Game1.player.addItemToInventory(this.heldObject.Value);
                 this.heldObject.Value = null;
             }
-            bool success = base.performObjectDropInAction(dropInItem, probe, who);
+            bool success = base.performItemDropInAction(dropInItem, probe, who);
             if (!success) return false;
-            this.processInput(dropInItem, who, true);
+            CraftingResult result = this.processInput(dropInItem, who, true);
 
 
-            return false;
+            return result.successful;
         }
 
         /// <summary>
@@ -90,14 +90,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             int amountRequired = craftingRecipe.ingredients[0].requiredAmount;
             Item outputItem = craftingRecipe.outputs[0].item.getOne();
 
-            outputItem.Stack = amountRequired;
+            outputItem.Stack = craftingRecipe.outputs[0].requiredAmount;
             this.heldObject.Value = (StardewValley.Object)outputItem;
             this.MinutesUntilReady = (int)(craftingRecipe.timeToCraft);
             if (who != null)
             {
                 this.playDropInSound();
             }
-            //Due to a quirk on how the game's logic works, when this method returns true and we return true from performObjectDrop in, the active item is naturally reduced by 1 anyways, so we want skip removing too many items from the player's inventory.
             PlayerUtilities.ReduceInventoryItemStackSize(who, dropInItem, amountRequired);
             this.updateAnimation();
 

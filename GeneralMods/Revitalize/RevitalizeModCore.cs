@@ -266,8 +266,8 @@ namespace Omegasis.Revitalize
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
 
-              ModContentManager.objectManager.getItem(MachineIds.AdvancedCharcoalKiln),
-              ModContentManager.objectManager.getItem(Enums.SDVObject.Wood,100)
+              ModContentManager.objectManager.getItem(FarmingObjects.HayMaker),
+              ModContentManager.objectManager.getItem(Enums.SDVObject.Corn,100)
 
             });
             //Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AnvilCraftingRecipeBlueprint));

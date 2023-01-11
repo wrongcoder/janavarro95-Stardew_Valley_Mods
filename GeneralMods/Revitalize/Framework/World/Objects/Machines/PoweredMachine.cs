@@ -92,20 +92,18 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             this.NetFields.AddFields(this.machineTier, this.fuelChargesRemaining);
         }
 
-        /// <summary>
-        /// Performed when dropping in an object into the mining drill.
-        /// </summary>
-        /// <param name="dropInItem"></param>
-        /// <param name="probe"></param>
-        /// <param name="who"></param>
-        /// <returns></returns>
-        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
+        public override bool performItemDropInAction(Item dropInItem, bool probe, Farmer who)
         {
-            bool success = base.performObjectDropInAction(dropInItem, probe, who) && this.useFuelItemToIncreaseCharges(who, false, true);
-            if (!success) return false;
+            if (probe) return false;
+            bool hasFuel = this.tryToIncreaseFuelCharges(who);
+            if (!hasFuel) return false;
+            return base.performItemDropInAction(dropInItem, probe, who);
+        }
 
-            this.processInput(dropInItem, who, true);
-            return false;
+        public virtual bool tryToIncreaseFuelCharges(Farmer who)
+        {
+            bool hasFuel = this.useFuelItemToIncreaseCharges(who, false, true);
+            return hasFuel;
         }
 
         /// <summary>

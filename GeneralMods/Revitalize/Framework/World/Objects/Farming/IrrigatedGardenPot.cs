@@ -131,7 +131,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             this.NetFields.AddFields(this.bush, this.hoeDirt, this.bushLoadDirty, this.hasPlanterAttachment,this.hasEnricherAttachment,this.hasAutoHarvestAttachment);
         }
 
-        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
+        public override bool performItemDropInAction(Item dropInItem, bool probe, Farmer who)
         {
             if (who != null && dropInItem != null && this.bush.Value == null && this.hoeDirt.Value.canPlantThisSeedHere(dropInItem.parentSheetIndex, (int)base.tileLocation.X, (int)base.tileLocation.Y, dropInItem.Category == -19))
             {

@@ -60,7 +60,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                         }
                         else if (npcName.Equals("Clint"))
                         {
-                            ClintsShopUtilities.AddStockToClintsShop(menu);
+                            BlacksmithShopUtilities.AddStockToClintsShop(menu);
                         }
                         else if (npcName.Equals("Dwarf"))
                         {

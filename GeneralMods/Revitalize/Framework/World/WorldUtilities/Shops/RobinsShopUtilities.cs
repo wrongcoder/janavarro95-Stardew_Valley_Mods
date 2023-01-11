@@ -73,7 +73,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             List<ShopInventoryProbe> blueprintsToAdd = new List<ShopInventoryProbe>();
             RobinsShopConfig shopConfig = RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig;
 
-            if (RevitalizeModCore.SaveDataManager.playerSaveData.hasObtainedBatteryPack)
+            if (PlayerUtilities.HasObtainedItem(Enums.SDVObject.BatteryPack))
             {
                 blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ElectricFurnaceRecipeId, WorkbenchBlueprintIds.ElectricFurnaceBlueprint, shopConfig.ElectricFurnaceBlueprintPrice));
             }

@@ -57,7 +57,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
         }
 
 
-        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
+        public override bool performItemDropInAction(Item dropInItem, bool probe, Farmer who)
         {
             return false; //this.pickUpItem()==PickUpState.DoNothing;
         }

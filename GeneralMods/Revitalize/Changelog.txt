@@ -2,6 +2,18 @@ Key:
 + Added Content/Feature.
 ~ Changed Content/Feature or Bugfix.
 - Removed Content/Feature.
+! Broken/Alert
+
+~~~~~~~~~~~~0.0.1 Revitalize 1-10-2023 xx.xx P.M~~~~~~~~~~~~~~
+~TextureManagers now can recover from missing asset errors if a image is moved to a different folder inside of it's search params.
+~Added AdvancedBatteryPackGenerator
+~Fixed some issues with loading category names
+~Migrated BatteryGenerators to the recipe format.
+~Added a way to keep track of what items the player has obtained.
+~Rewrote more code where now performObjectDropInAction->performItemDropinAction to prevent consuming the player's active item.
+~Fixed mining drills not working
+~Fixed HayMakers not working by renaming the recipe book.json
+~Fixed an issue where interacting with HayMakers with edible items would bring up the edibility prompt.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 1-9-2023 xx.xx P.M~~~~~~~~~~~~~~
 ~Separated the logic from the DimensionalStorageUnitMenu into a base InventoryDisplayMenu and extended off of that for more flexibility to be reused with future storage containers.

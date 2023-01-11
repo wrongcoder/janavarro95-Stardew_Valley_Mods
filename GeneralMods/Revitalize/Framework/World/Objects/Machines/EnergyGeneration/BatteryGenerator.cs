@@ -23,153 +23,67 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
     ///Object type that takes in a fuel type and converts it into battery packs.
     /// </summary>
     [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.EnergyGeneration.BatteryGenerator")]
-    public class BatteryGenerator : Machine
+    public class BatteryGenerator : ItemRecipeDropInMachine
     {
-        public enum GeneratorType
-        {
-            Burner,
-            Nuclear
-        }
 
-        public NetEnum<GeneratorType> generatorType = new NetEnum<GeneratorType>(GeneratorType.Burner);
-        public NetRef<ItemReference> itemToReceive = new NetRef<ItemReference>();
+        public readonly NetColor lightColor = new NetColor();
+        public Color LightColor
+        {
+            get { return this.lightColor.Value; }
+            set { this.lightColor.Value = value;}
+        }
 
         public BatteryGenerator()
         {
 
         }
 
-        public BatteryGenerator(BasicItemInformation Info, GeneratorType generatorType) : this(Info, Vector2.Zero, generatorType)
+        public BatteryGenerator(BasicItemInformation Info, Color LightColor) : this(Info, Vector2.Zero, LightColor)
         {
 
         }
 
-        public BatteryGenerator(BasicItemInformation Info, Vector2 TilePosition, GeneratorType generatorType) : base(Info, TilePosition)
+        public BatteryGenerator(BasicItemInformation Info, Vector2 TilePosition, Color LightColor) : base(Info, TilePosition)
         {
-            this.generatorType.Value = generatorType;
+            this.LightColor = LightColor;
         }
 
         protected override void initializeNetFieldsPostConstructor()
         {
             base.initializeNetFieldsPostConstructor();
-            this.NetFields.AddFields(this.generatorType);
+            this.NetFields.AddField(this.lightColor);
         }
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
             base.minutesElapsed(minutes, environment);
 
-            if (this.MinutesUntilReady == 0 && this.itemToReceive.Value != null)
+            if (this.finishedProduction())
             {
-                this.heldObject.Value = (StardewValley.Object)this.itemToReceive.Value.getItem();
-                this.itemToReceive.Value = null;
                 this.removeLight(Vector2.Zero);
             }
             this.updateAnimation();
             return true;
         }
 
-        /// <summary>
-        /// Performed when dropping in an object into the mining drill.
-        /// </summary>
-        /// <param name="dropInItem"></param>
-        /// <param name="probe"></param>
-        /// <param name="who"></param>
-        /// <returns></returns>
-        public override bool performObjectDropInAction(Item dropInItem, bool probe, Farmer who)
+        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, Recipe craftingRecipe, Farmer who = null)
         {
-            //Prevent overriding and destroying the previous operation.
-            if (this.itemToReceive.Value != null) return false;
-            if (this.heldObject.Value != null)
+            CraftingResult result= base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
+            if (result.successful)
             {
-                Game1.player.addItemToInventory(this.heldObject.Value);
-                this.heldObject.Value = null;
+                this.addLight(Vector2.Zero, Illuminate.LightManager.LightIdentifier.SconceLight, this.LightColor, 1f);
             }
-
-            bool success = base.performObjectDropInAction(dropInItem, probe, who) && this.hasCorrectDropInItem(dropInItem);
-            if (!success) return false;
-            this.processInput(dropInItem, who, true);
-            return false;
+            return result;
         }
 
-        public override CraftingResult processInput(Item item, Farmer who, bool ShowRedMessage = true)
+        public override void playDropInSound()
         {
-            if (this.isWorking() || this.finishedProduction()) return new CraftingResult(false);
-            if (!this.hasCorrectDropInItem(item))
-            {
-                return new CraftingResult(false);
-            }
-
-            int amountRequired = 0;
-            if (this.generatorType.Value == GeneratorType.Burner)
-            {
-                amountRequired = 4;
-            }
-            if (this.generatorType.Value == GeneratorType.Nuclear)
-            {
-                amountRequired = 1;
-            }
-
-            //Check to make sure the player has enough, otherwise display an error!
-            if (amountRequired > item.Stack)
-            {
-                if (ShowRedMessage)
-                {
-                    Game1.showRedMessage(this.getErrorString_NeedMoreInputItems(amountRequired, item));
-                }
-                return new CraftingResult(false);
-            }
-
-            PlayerUtilities.ReduceInventoryItemStackSize(who, item, amountRequired);
-            if (who != null)
-            {
-                SoundUtilities.PlaySound(Enums.StardewSound.furnace);
-            }
-
-            this.MinutesUntilReady = TimeUtilities.GetMinutesFromTime(0, 1, 0);
-            this.itemToReceive.Value = this.generatorType.Value== GeneratorType.Burner? new ItemReference(Enums.SDVObject.BatteryPack, 1): new ItemReference(Enums.SDVObject.BatteryPack, 5);
-            this.addLight(Vector2.Zero, Illuminate.LightManager.LightIdentifier.SconceLight, this.generatorType.Value== GeneratorType.Burner? Color.DarkCyan.Invert(): Color.GreenYellow, 1f);
-            this.updateAnimation();
-            return new CraftingResult(new ItemReference(item, amountRequired), true);
-        }
-
-        public override void updateAnimation()
-        {
-            if (this.itemToReceive.Value != null)
-            {
-                this.AnimationManager.playAnimation(Machine.WORKING_ANIMATION_KEY);
-            }
-            else
-            {
-                this.AnimationManager.playDefaultAnimation();
-            }
-        }
-
-        /// <summary>
-        /// Checks to see if the input item is correct or not.
-        /// </summary>
-        /// <param name="dropInItem"></param>
-        /// <returns></returns>
-        public virtual bool hasCorrectDropInItem(Item dropInItem)
-        {
-            bool correctDropInItem = false;
-            if (this.generatorType.Value == GeneratorType.Burner)
-            {
-                correctDropInItem = dropInItem.parentSheetIndex == (int)Enums.SDVObject.Coal;
-            }
-            if (this.generatorType.Value == GeneratorType.Nuclear)
-            {
-                if (dropInItem is CustomItem)
-                {
-                    correctDropInItem = (dropInItem as CustomItem).Id == Constants.Ids.Items.MiscItemIds.RadioactiveFuel;
-                }
-            }
-            return correctDropInItem;
+            SoundUtilities.PlaySound(Enums.StardewSound.furnace);
         }
 
         public override Item getOne()
         {
-            return new BatteryGenerator(this.basicItemInformation.Copy(), this.generatorType.Value);
+            return new BatteryGenerator(this.basicItemInformation.Copy(),this.LightColor);
         }
     }
 }

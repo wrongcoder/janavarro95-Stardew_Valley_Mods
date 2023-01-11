@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Omegasis.Revitalize.Framework.Configs.ShopConfigs;
+using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Constants.CraftingIds;
 using Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds;
 using Omegasis.Revitalize.Framework.Constants.Ids.Items.BlueprintIds;
@@ -15,7 +16,7 @@ using StardewValley.Tools;
 
 namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 {
-    public static class ClintsShopUtilities
+    public static class BlacksmithShopUtilities
     {
 
         /// <summary>
@@ -46,6 +47,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.SuperiorCharcoalKiln, objectManager.getItem(WorkbenchBlueprintIds.SuperiorCharcoalKiln, 1), shopConfig.superiorCharcoalKilnBlueprintPrice, 1, Game1.player.ForagingLevel >= 8 && PlayerUtilities.GetNumberOfGoldenWalnutsFound()>=100);
 
             ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.BurnerGenerator, objectManager.getItem(WorkbenchBlueprintIds.BurnerGenerator), shopConfig.burnerBatteryGeneratorBlueprintPrice);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AdvancedGenerator, objectManager.getItem(WorkbenchBlueprintIds.AdvancedGenerator), shopConfig.advancedBatteryGeneratorBlueprintPrice, 1, PlayerUtilities.HasObtainedItem(Enums.SDVObject.SolarEssence));
             ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearGenerator, objectManager.getItem(WorkbenchBlueprintIds.NuclearGenerator), shopConfig.nuclearBatteryGeneratorBlueprintPrice, 1, PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
 
             AddAxeBlueprintsToShop(Menu);

@@ -40,7 +40,8 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
 
         //Generated code below this point.
         public const string BurnerGenerator = PREFIX + "EnergyGeneration.BurnerGenerator";
-		public const string NuclearGenerator = "Revitalize.Objects.Machines.EnergyGeneration.NuclearGenerator";
+        public const string AdvancedGenerator = "Revitalize.Objects.Machines.EnergyGeneration.AdvancedGenerator";
+        public const string NuclearGenerator = "Revitalize.Objects.Machines.EnergyGeneration.NuclearGenerator";
 		public const string AdvancedSolarPanel = "Revitalize.Objects.Machines.EnergyGeneration.AdvancedSolarPanel";
 		public const string SuperiorSolarPanel = "Revitalize.Objects.Machines.EnergyGeneration.SuperiorSolarPanel";
     }

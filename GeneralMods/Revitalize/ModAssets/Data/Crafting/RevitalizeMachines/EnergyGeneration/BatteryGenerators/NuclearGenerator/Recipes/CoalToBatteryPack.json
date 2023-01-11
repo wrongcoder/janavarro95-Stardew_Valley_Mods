@@ -1,0 +1,37 @@
+{
+  "whichTab": "",
+  "isUnlocked": true,
+  "recipe": {
+	"craftingRecipeId": "Omegasis.Revitalize.Machines.Misc.NuclearGenerator.CoalToBatteryPack",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 60,
+    "inputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "Coal",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 4
+			}
+		}
+	
+	],
+    "outputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "BatteryPack",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 1
+			}
+		},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}
