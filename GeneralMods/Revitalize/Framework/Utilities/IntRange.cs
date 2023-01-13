@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Netcode;
 using Newtonsoft.Json;
+using Omegasis.StardustCore.Networking;
 using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.Utilities
@@ -13,7 +14,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
     /// <summary>
     /// A class for dealing with integer value ranges.
     /// </summary>
-    public class IntRange
+    public class IntRange: NetObject
     {
         [JsonIgnore]
         /// <summary>
@@ -40,18 +41,12 @@ namespace Omegasis.Revitalize.Framework.Utilities
             set { this.max.Value = value;}
         }
 
-        public IntRange()
+        public IntRange():this(0,0)
         {
 
         }
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="SingleValue">The single value to be tested on for min and max. Note that this will fail every test except for ContainsInclusive.</param>
-        public IntRange(int SingleValue)
-        {
-            this.min.Value = this.max.Value = SingleValue;
-        }
+
+
 
         /// <summary>
         /// Constructor.
@@ -60,17 +55,16 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <param name="Max">The max value.</param>
         public IntRange(int Min, int Max)
         {
-            this.min.Value = Min;
-            this.max.Value = Max;
+            this.Min = Min;
+            this.Max = Max;
+
+            this.initializeNetFields();
         }
 
-        public virtual List<INetSerializable> getNetFields()
+        protected override void initializeNetFields()
         {
-            return new List<INetSerializable>()
-            {
-                this.min,
-                this.max
-            };
+            base.initializeNetFields();
+            this.NetFields.AddFields(this.min, this.max);
         }
 
         /// <summary>
@@ -80,7 +74,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <returns></returns>
         public bool ContainsInclusive(int value)
         {
-            if (value >= this.min && value <= this.max) return true;
+            if (value >= this.Min && value <= this.Max) return true;
             else return false;
         }
 
@@ -91,7 +85,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <returns></returns>
         public bool ContainsExclusiveCeil(int value)
         {
-            if (value >= this.min && value < this.max) return true;
+            if (value >= this.Min && value < this.Max) return true;
             else return false;
         }
         /// <summary>
@@ -101,7 +95,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <returns></returns>
         public bool ContainsExclusiveFloor(int value)
         {
-            if (value >= this.min && value < this.max) return true;
+            if (value >= this.Min && value < this.Max) return true;
             else return false;
         }
         /// <summary>
@@ -111,7 +105,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <returns></returns>
         public bool ContainsExclusive(int value)
         {
-            if (value > this.min && value < this.max) return true;
+            if (value > this.Min && value < this.Max) return true;
             else return false;
         }
 
@@ -121,7 +115,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <returns></returns>
         public int getRandomInclusive()
         {
-            int number = Game1.random.Next(this.min, this.max + 1);
+            int number = Game1.random.Next(this.Min, this.Max + 1);
             return number;
         }
 
@@ -131,7 +125,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <returns></returns>
         public int getRandomExclusive()
         {
-            int number = Game1.random.Next(this.min, this.max);
+            int number = Game1.random.Next(this.Min, this.Max);
             return number;
         }
 
@@ -144,8 +138,8 @@ namespace Omegasis.Revitalize.Framework.Utilities
 
         public virtual void writeIntRange(BinaryWriter writer)
         {
-            writer.Write(this.min);
-            writer.Write(this.max);
+            writer.Write(this.min.Value);
+            writer.Write(this.max.Value);
         }
     }
 }

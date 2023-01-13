@@ -34,6 +34,20 @@ namespace Omegasis.Revitalize.Framework.Crafting.JsonContent
             this.item = new ItemReference();
         }
 
+        public JsonCraftingComponent(ItemReference item)
+        {
+            this.item = item;
+        }
+
+        public JsonCraftingComponent(ItemReference item, int minStackSize, int maxStackSize)
+        {
+            this.item = item;
+            this.minStackSize = minStackSize;
+            this.maxStackSize = maxStackSize;
+        }
+
+
+
         /// <summary>
         /// Creates a <see cref="CraftingRecipeComponent"/> from a json version loaded from disk.
         /// </summary>
@@ -87,12 +101,41 @@ namespace Omegasis.Revitalize.Framework.Crafting.JsonContent
         {
             if (this.minStackSize != 0 && this.maxStackSize != 0)
             {
-                return new CraftingRecipeComponent(this.getItem(), Game1.random.Next(this.minStackSize,this.maxStackSize));
+                return new CraftingRecipeComponent(this.getItem(), this.minStackSize, this.maxStackSize);
             }
             else
             {
                 return new CraftingRecipeComponent(this.getItem(), this.item.StackSize);
             }
+        }
+
+        /// <summary>
+        /// Returns the required amount for the crafting recipe component.
+        /// </summary>
+        /// <returns></returns>
+        public virtual int getRequiredAmount()
+        {
+            if (this.getMinStackSize() != 0 && this.getMaxStackSize() != 0)
+            {
+                return Game1.random.Next(this.getMinStackSize(), this.getMaxStackSize() + 1);
+            }
+            else
+            {
+                return this.item.StackSize;
+            }
+
+        }
+
+        public virtual int getMinStackSize()
+        {
+            if (this.minStackSize == 0) return this.item.StackSize;
+            return this.minStackSize;
+        }
+
+        public virtual int getMaxStackSize()
+        {
+            if (this.maxStackSize == 0) return this.item.StackSize;
+            return this.item.StackSize;
         }
     }
 }

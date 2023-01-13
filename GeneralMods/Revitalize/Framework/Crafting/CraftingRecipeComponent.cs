@@ -35,25 +35,32 @@ namespace Omegasis.Revitalize.Framework.Crafting
         }
 
         /// <summary>
-        /// Returns the 
+        /// Returns the required amount for the crafting recipe component.
         /// </summary>
         /// <returns></returns>
         public virtual int getRequiredAmount()
         {
-            if(this.requiredAmount!=0) return this.requiredAmount;
-            return Game1.random.Next(this.minAmount, this.maxAmount + 1);
+            if(this.minAmount!=0 && this.maxAmount != 0)
+            {
+                return Game1.random.Next(this.getMinStackSize(), this.getMaxStackSize() + 1);
+            }
+            else
+            {
+                return this.requiredAmount;
+            }
+
         }
 
         public virtual int getMinStackSize()
         {
-            if(this.requiredAmount!=0) return this.requiredAmount;
+            if(this.minAmount==0) return this.requiredAmount;
             return this.minAmount;
         }
 
         public virtual int getMaxStackSize()
         {
-            if (this.requiredAmount != 0) return this.requiredAmount;
-            return this.maxAmount;
+            if (this.maxAmount == 0) return this.requiredAmount;
+            return this.requiredAmount;
         }
 
     }

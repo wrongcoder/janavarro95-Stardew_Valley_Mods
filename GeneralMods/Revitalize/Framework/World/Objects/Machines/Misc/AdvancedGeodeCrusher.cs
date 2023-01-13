@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
@@ -24,33 +25,151 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
     [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Misc.AdvancedGeodeCrusher")]
     public class AdvancedGeodeCrusher : PoweredMachine
     {
+        [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Misc.AdvancedGeodeCrusher.GeodeCrusherOutput")]
         /// <summary>
-        /// Example file for geode crusher inputs.
+        /// Helper class for generating outputs for geode crushers from input .json files (or just using this class directly)
         /// </summary>
-        public class FileExample
-        {
-            //Key here is the object's id and the rest calculates the amounts. When reading in all of the files, if the key exists already, just add onto it. 
-            Dictionary<string, List<ExampleJsonInputForGeodeCracking>> cracking = new Dictionary<string, List<ExampleJsonInputForGeodeCracking>>();
-        }
-
-        /// <summary>
-        /// Example data for geode crusher input.
-        /// </summary>
-        public class ExampleJsonInputForGeodeCracking
+        public class GeodeCrusherOutput
         {
             /// <summary>
             /// Contains basic item information as well as the base amounts to be given when cracking open a geode.
             /// </summary>
-            public JsonCraftingComponent baseOutputItem;
+            public ItemReference baseOutputItem;
 
-            //Make sure to make an entry key for every tier, otherwise it'll be assumed to be nothing!!!!
-            public Dictionary<PoweredMachineTier, IntRange> bonusPerMachineTier;
+            /// <summary>
+            /// Determines the odds for getting a specific type of item given some input values. The checked ranges should always be between 1-100. Should only be used in 
+            /// </summary>
+            public List<IntOutcomeChanceDeterminer> chancedOutcomeValues;
 
+            /// <summary>
+            /// Modifies the amount of output based on the machine's tier.
+            /// </summary>
+            public IntRange bonusForMachineTier;
+            /// <summary>
+            /// Modifies the amount based on if the player has the miner profession or not. Used for ores.
+            /// </summary>
             public IntRange bonusForMinerProfession;
+            /// <summary>
+            /// Modifies the amount based on if the player has the prospector profession or not. (Used for coal, and maybe stone, clay, etc as well?)
+            /// </summary>
             public IntRange bonusForProspectorProfession;
+            /// <summary>
+            /// Modifies the amount based on if the player has the geologist profession or not. Used for gems (and maybe minerals too in this case?)
+            /// </summary>
             public IntRange bonusForGeologistProfession;
 
-            
+
+            public GeodeCrusherOutput()
+            {
+
+            }
+
+            /// <summary>
+            /// Create a geode crusher output with a single determined item with no chance of variations for calculated stack sizes.
+            /// </summary>
+            /// <param name="itemReference"></param>
+            /// <param name="StackSize"></param>
+            /// <param name="BonusForMachineTier"></param>
+            /// <param name="BonusForMinerProfession"></param>
+            /// <param name="BonusForProspectorProfession"></param>
+            /// <param name="BonusForGeologistProfession"></param>
+            public GeodeCrusherOutput(ItemReference itemReference, int StackSize, IntRange BonusForMachineTier, IntRange BonusForMinerProfession, IntRange BonusForProspectorProfession, IntRange BonusForGeologistProfession)
+            {
+                this.baseOutputItem = itemReference;
+                this.chancedOutcomeValues = new List<IntOutcomeChanceDeterminer>()
+                {
+                    new IntOutcomeChanceDeterminer(new IntRange(0,100),new IntRange(StackSize,StackSize))
+                };
+                this.bonusForMachineTier = BonusForMachineTier;
+                this.bonusForMinerProfession = BonusForMinerProfession;
+                this.bonusForProspectorProfession = BonusForProspectorProfession;
+                this.bonusForGeologistProfession = BonusForGeologistProfession;
+            }
+
+            /// <summary>
+            /// Create a geode crusher output with a single determined item with a variable stack size base chance.
+            /// </summary>
+            /// <param name="itemReference"></param>
+            /// <param name="StackSize"></param>
+            /// <param name="BonusForMachineTier"></param>
+            /// <param name="BonusForMinerProfession"></param>
+            /// <param name="BonusForProspectorProfession"></param>
+            /// <param name="BonusForGeologistProfession"></param>
+            public GeodeCrusherOutput(ItemReference itemReference, IntRange StackSize, IntRange BonusForMachineTier, IntRange BonusForMinerProfession, IntRange BonusForProspectorProfession, IntRange BonusForGeologistProfession)
+            {
+                this.baseOutputItem = itemReference;
+                this.chancedOutcomeValues = new List<IntOutcomeChanceDeterminer>()
+                {
+                    new IntOutcomeChanceDeterminer(new IntRange(0,100),StackSize)
+                };
+                this.bonusForMachineTier = BonusForMachineTier;
+                this.bonusForMinerProfession = BonusForMinerProfession;
+                this.bonusForProspectorProfession = BonusForProspectorProfession;
+                this.bonusForGeologistProfession = BonusForGeologistProfession;
+            }
+
+            /// <summary>
+            /// Create a geode crusher output with variance among an item's stack size and the chance to obtain that stack size amount.
+            /// </summary>
+            /// <param name="itemReference"></param>
+            /// <param name="ItemStackSizesWithChances"></param>
+            /// <param name="BonusForMachineTier"></param>
+            /// <param name="BonusForMinerProfession"></param>
+            /// <param name="BonusForProspectorProfession"></param>
+            /// <param name="BonusForGeologistProfession"></param>
+            public GeodeCrusherOutput(ItemReference itemReference, List<IntOutcomeChanceDeterminer> ItemStackSizesWithChances ,IntRange BonusForMachineTier, IntRange BonusForMinerProfession, IntRange BonusForProspectorProfession, IntRange BonusForGeologistProfession)
+            {
+                this.baseOutputItem = itemReference;
+                this.chancedOutcomeValues= ItemStackSizesWithChances;
+                this.bonusForMachineTier= BonusForMachineTier;
+                this.bonusForMinerProfession=BonusForMinerProfession;
+                this.bonusForProspectorProfession=BonusForProspectorProfession;
+                this.bonusForGeologistProfession = BonusForGeologistProfession;
+            }
+
+            /// <summary>
+            /// Calculates the final output amount for a given player. Note that the actual values will be determined by .json and not by the game's definition of if it should count or not.
+            /// </summary>
+            /// <param name="who"></param>
+            /// <returns></returns>
+            public virtual int getFinalOutputAmount(Farmer who=null)
+            {
+                int rand = Game1.random.Next(1, 101); //Get a value from 1-100
+                int outcomeValue = 0;
+                foreach(IntOutcomeChanceDeterminer outcome in this.chancedOutcomeValues)
+                {
+                    if (outcome.containsInclusive(rand))
+                    {
+                        outcomeValue=outcome.getValueIfInInclusiveBounds(rand);
+                        break;
+                    }
+                }
+
+                int amount = outcomeValue + this.bonusForMachineTier.getRandomInclusive();
+
+                if (who != null)
+                {
+                    bool playerHasMinerProfession = who.getProfessionForSkill(Farmer.miningSkill, 5) == Farmer.miner;
+                    bool playerHasProspectorProfession = who.getProfessionForSkill(Farmer.miningSkill, 10) == Farmer.burrower;
+                    bool playerHasGemologistProfession = who.getProfessionForSkill(Farmer.miningSkill, 5) == Farmer.geologist;
+
+                    if (playerHasMinerProfession)
+                    {
+                        amount += this.bonusForMinerProfession.getRandomInclusive();
+                    }
+                    if (playerHasProspectorProfession)
+                    {
+                        amount += this.bonusForProspectorProfession.getRandomInclusive();
+                    }
+                    if (playerHasGemologistProfession)
+                    {
+                        amount += this.bonusForGeologistProfession.getRandomInclusive();
+                    }
+
+                }
+
+                return amount;
+            }
         }
 
 
@@ -105,11 +224,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             {
                 if (who != null)
                 {
-                    Utility.addSmokePuff(who.currentLocation, this.tileLocation.Value * 64f + new Vector2(4f, -48f), 200);
-                    Utility.addSmokePuff(who.currentLocation, this.tileLocation.Value * 64f + new Vector2(-16f, -56f), 300);
-                    Utility.addSmokePuff(who.currentLocation, this.tileLocation.Value * 64f + new Vector2(16f, -52f), 400);
-                    Utility.addSmokePuff(who.currentLocation, this.tileLocation.Value * 64f + new Vector2(32f, -56f), 200);
-                    Utility.addSmokePuff(who.currentLocation, this.tileLocation.Value * 64f + new Vector2(40f, -44f), 500);
+                    Utility.addSmokePuff(who.currentLocation, this.TileLocation * 64f + new Vector2(4f, -48f), 200);
+                    Utility.addSmokePuff(who.currentLocation, this.TileLocation * 64f + new Vector2(-16f, -56f), 300);
+                    Utility.addSmokePuff(who.currentLocation, this.TileLocation * 64f + new Vector2(16f, -52f), 400);
+                    Utility.addSmokePuff(who.currentLocation, this.TileLocation * 64f + new Vector2(32f, -56f), 200);
+                    Utility.addSmokePuff(who.currentLocation, this.TileLocation * 64f + new Vector2(40f, -44f), 500);
                     SoundUtilities.PlaySound(Enums.StardewSound.drumkit4);
                     SoundUtilities.PlaySound(Enums.StardewSound.stoneCrack);
                     SoundUtilities.PlaySoundWithDelay(Enums.StardewSound.steam, 200);
@@ -152,9 +271,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 
             ObjectManager objectManager = RevitalizeModCore.ModContentManager.objectManager;
 
-            bool playerHasMinerProfession = this.getOwner().getProfessionForSkill(Farmer.miningSkill, 5) == Farmer.miner;
-            bool playerHasProspectorProfession = this.getOwner().getProfessionForSkill(Farmer.miningSkill, 10) == Farmer.burrower;
-            bool playerHasGemologistProfession = this.getOwner().getProfessionForSkill(Farmer.miningSkill, 5) == Farmer.geologist;
+
 
             List<StardewValley.Object> potentialItems = new List<StardewValley.Object>();
 
@@ -163,6 +280,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
                 bonusForMachineTier = 1;
             if (this.machineTier.Value == PoweredMachineTier.Magical)
                 bonusForMachineTier = 2;
+
+            bool playerHasMinerProfession = who.getProfessionForSkill(Farmer.miningSkill, 5) == Farmer.miner;
+            bool playerHasProspectorProfession = who.getProfessionForSkill(Farmer.miningSkill, 10) == Farmer.burrower;
+            bool playerHasGemologistProfession = who.getProfessionForSkill(Farmer.miningSkill, 5) == Farmer.geologist;
 
             int stoneBonus = Game1.random.Next(0, bonusForMachineTier * 5 + 1);
             int clayBonus = Game1.random.Next(1, 4 + bonusForMachineTier);
@@ -368,6 +489,52 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
         public override Item getOne()
         {
             return new AdvancedGeodeCrusher(this.basicItemInformation.Copy(), this.machineTier.Value);
+        }
+
+        /// <summary>
+        /// TODO: Finish filling this out and serialize this method to generate all of the code files for this implementation.
+        /// Then replace the <see cref="AdvancedGeodeCrusher.generateOutput(Item, Farmer)"/> code with code that reads in these dictionary files, adds all of the results of outputs together and then spits out an item. Probably will also migrate to content packs as well.
+        /// </summary>
+        public static void GenerateGeodeCrusherFiles()
+        {
+            Dictionary<string, List<GeodeCrusherOutput>> normalGeodeOutputsDict_electricMachine = new Dictionary<string, List<GeodeCrusherOutput>>();
+
+            List<GeodeCrusherOutput> normalGeodeOutputs_electricMachine = new List<GeodeCrusherOutput>();
+            normalGeodeOutputs_electricMachine.Add(new GeodeCrusherOutput(new ItemReference(Enums.SDVObject.Stone), GenerateIntOutcomeChanceDeterminersForResource(), new IntRange(0, 0), new IntRange(0, 0), new IntRange(0, 0), new IntRange(0, 0)));
+        }
+
+        /// <summary>
+        /// Generates lists of stack sizes based on a 1-100 chance of rolling into them for normal resources based on the game's default statistics.
+        /// </summary>
+        /// <returns></returns>
+        public static List<IntOutcomeChanceDeterminer> GenerateIntOutcomeChanceDeterminersForResource()
+        {
+            return new List<IntOutcomeChanceDeterminer>()
+            {
+                new IntOutcomeChanceDeterminer(new IntRange(1,29),1),
+                new IntOutcomeChanceDeterminer(new IntRange(30,59),3),
+                new IntOutcomeChanceDeterminer(new IntRange(60,89),5),
+                new IntOutcomeChanceDeterminer(new IntRange(90,99),10),
+                new IntOutcomeChanceDeterminer(new IntRange(100,100),20)
+
+            };
+        }
+
+        /// <summary>
+        /// Generates lists of stack sizes based on a 1-100 chance of rolling into them for rare resources based on the game's default statistics.
+        /// </summary>
+        /// <returns></returns>
+        public static List<IntOutcomeChanceDeterminer> GenerateIntOutcomeChanceDeterminersForRareResource()
+        {
+            return new List<IntOutcomeChanceDeterminer>()
+            {
+                new IntOutcomeChanceDeterminer(new IntRange(1,29),1),
+                new IntOutcomeChanceDeterminer(new IntRange(30,59),2),
+                new IntOutcomeChanceDeterminer(new IntRange(60,89),3),
+                new IntOutcomeChanceDeterminer(new IntRange(90,99),6),
+                new IntOutcomeChanceDeterminer(new IntRange(100,100),11)
+
+            };
         }
     }
 }

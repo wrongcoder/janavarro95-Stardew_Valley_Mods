@@ -18,7 +18,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
     ///
     /// TODO: Add in support for quality?
     /// TODO: Add in support for colored objects?
-    /// TODO: Add in support for stack size ranges to be used in rng stack size gains. Also need to update <see cref="Revitalize.Framework.Crafting.CraftingRecipeComponent"/> to include random amounts as well.
     /// </summary>
     [XmlType("Mods_Revitalize.Framework.World.Objects.Items.Utilities.ItemReference")]
     public class ItemReference : StardustCore.Networking.NetObject
