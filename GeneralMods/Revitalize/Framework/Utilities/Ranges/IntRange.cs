@@ -9,12 +9,12 @@ using Newtonsoft.Json;
 using Omegasis.StardustCore.Networking;
 using StardewValley;
 
-namespace Omegasis.Revitalize.Framework.Utilities
+namespace Omegasis.Revitalize.Framework.Utilities.Ranges
 {
     /// <summary>
     /// A class for dealing with integer value ranges.
     /// </summary>
-    public class IntRange: NetObject
+    public class IntRange : NetObject
     {
         [JsonIgnore]
         /// <summary>
@@ -31,17 +31,17 @@ namespace Omegasis.Revitalize.Framework.Utilities
         public int Min
         {
             get { return this.min.Value; }
-            set { this.min.Value = value;}
+            set { this.min.Value = value; }
         }
 
         [JsonProperty("max")]
         public int Max
         {
             get { return this.max.Value; }
-            set { this.max.Value = value;}
+            set { this.max.Value = value; }
         }
 
-        public IntRange():this(0,0)
+        public IntRange() : this(0, 0)
         {
 
         }

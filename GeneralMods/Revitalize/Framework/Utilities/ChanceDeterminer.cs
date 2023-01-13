@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.Revitalize.Framework.Utilities.Ranges;
 
 namespace Omegasis.Revitalize.Framework.Utilities
 {
@@ -14,7 +15,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <summary>
         /// The chance range for if this value should occur. For example a range of 1-20 means there is a 20% chance a range check of 1-100 (inclusive) passes and retuns the value determined by <see cref="getValueIfInInclusiveBounds(int)"/>
         /// </summary>
-        public IntRange validRangeForChance;
+        public DoubleRange validRangeForChance;
         /// <summary>
         /// The returned value if the <see cref="getValueIfInInclusiveBounds(int)"/> returns true.
         /// </summary>
@@ -25,30 +26,30 @@ namespace Omegasis.Revitalize.Framework.Utilities
 
         }
 
-        public IntOutcomeChanceDeterminer(IntRange validRangeForChance, int outcomeValue)
+        public IntOutcomeChanceDeterminer(DoubleRange validRangeForChance, int outcomeValue)
         {
             this.validRangeForChance = validRangeForChance;
             this.outcomeValue = new IntRange(outcomeValue,outcomeValue);
         }
 
-        public IntOutcomeChanceDeterminer(IntRange validRangeForChance, IntRange outcomeValue)
+        public IntOutcomeChanceDeterminer(DoubleRange validRangeForChance, IntRange outcomeValue)
         {
             this.validRangeForChance = validRangeForChance;
             this.outcomeValue = outcomeValue;
         }
 
-        public virtual int getValueIfInInclusiveBounds(int Determiner)
+        public virtual int getValueIfInInclusiveBounds(double Determiner)
         {
-            if (this.validRangeForChance.ContainsExclusive(Determiner))
+            if (this.validRangeForChance.containsInclusive(Determiner))
             {
                 return this.outcomeValue.getRandomInclusive();
             }
             return 0;
         }
 
-        public virtual bool containsInclusive(int Determiner)
+        public virtual bool containsInclusive(double Determiner)
         {
-            return this.validRangeForChance.ContainsExclusive(Determiner);
+            return this.validRangeForChance.containsInclusive(Determiner);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.Revitalize.Framework.Utilities.Ranges;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewValley;

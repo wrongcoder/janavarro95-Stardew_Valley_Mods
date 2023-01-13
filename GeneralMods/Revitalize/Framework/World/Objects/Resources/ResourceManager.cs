@@ -5,7 +5,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using Omegasis.Revitalize.Framework.Constants;
-using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Items;
 using Omegasis.Revitalize.Framework.World.Objects;
@@ -18,6 +17,7 @@ using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Resources;
 using Omegasis.Revitalize.Framework.Constants.Ids.Resources.EarthenResources;
 using Omegasis.Revitalize.Framework.Constants.Ids.Objects;
+using Omegasis.Revitalize.Framework.Utilities.Ranges;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Resources
 {

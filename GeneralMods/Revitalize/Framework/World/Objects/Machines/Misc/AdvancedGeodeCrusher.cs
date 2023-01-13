@@ -14,6 +14,7 @@ using Omegasis.Revitalize.Framework.Crafting.JsonContent;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.Utilities.Extensions;
+using Omegasis.Revitalize.Framework.Utilities.Ranges;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
@@ -28,18 +29,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
         [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Misc.AdvancedGeodeCrusher.GeodeCrusherOutput")]
         /// <summary>
         /// Helper class for generating outputs for geode crushers from input .json files (or just using this class directly)
+        /// Probably just assume all items can have a 100% chance of being obtained to risk either never rolling an item or accidentally rolling into nothing. Just grab a valid item from this list as long as it can be obtained.
         /// </summary>
-        public class GeodeCrusherOutput
+        public class GeodeCrusherOutput:LootTableEntry
         {
-            /// <summary>
-            /// Contains basic item information as well as the base amounts to be given when cracking open a geode.
-            /// </summary>
-            public ItemReference baseOutputItem;
-
-            /// <summary>
-            /// Determines the odds for getting a specific type of item given some input values. The checked ranges should always be between 1-100. Should only be used in 
-            /// </summary>
-            public List<IntOutcomeChanceDeterminer> chancedOutcomeValues;
 
             /// <summary>
             /// Modifies the amount of output based on the machine's tier.
@@ -73,13 +66,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             /// <param name="BonusForMinerProfession"></param>
             /// <param name="BonusForProspectorProfession"></param>
             /// <param name="BonusForGeologistProfession"></param>
-            public GeodeCrusherOutput(ItemReference itemReference, int StackSize, IntRange BonusForMachineTier, IntRange BonusForMinerProfession, IntRange BonusForProspectorProfession, IntRange BonusForGeologistProfession)
+            public GeodeCrusherOutput(ItemReference itemReference, int StackSize, IntRange BonusForMachineTier, IntRange BonusForMinerProfession, IntRange BonusForProspectorProfession, IntRange BonusForGeologistProfession):base(itemReference,StackSize)
             {
-                this.baseOutputItem = itemReference;
-                this.chancedOutcomeValues = new List<IntOutcomeChanceDeterminer>()
-                {
-                    new IntOutcomeChanceDeterminer(new IntRange(0,100),new IntRange(StackSize,StackSize))
-                };
                 this.bonusForMachineTier = BonusForMachineTier;
                 this.bonusForMinerProfession = BonusForMinerProfession;
                 this.bonusForProspectorProfession = BonusForProspectorProfession;
@@ -95,13 +83,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             /// <param name="BonusForMinerProfession"></param>
             /// <param name="BonusForProspectorProfession"></param>
             /// <param name="BonusForGeologistProfession"></param>
-            public GeodeCrusherOutput(ItemReference itemReference, IntRange StackSize, IntRange BonusForMachineTier, IntRange BonusForMinerProfession, IntRange BonusForProspectorProfession, IntRange BonusForGeologistProfession)
+            public GeodeCrusherOutput(ItemReference itemReference, IntRange StackSize, IntRange BonusForMachineTier, IntRange BonusForMinerProfession, IntRange BonusForProspectorProfession, IntRange BonusForGeologistProfession) : base(itemReference, StackSize)
             {
-                this.baseOutputItem = itemReference;
-                this.chancedOutcomeValues = new List<IntOutcomeChanceDeterminer>()
-                {
-                    new IntOutcomeChanceDeterminer(new IntRange(0,100),StackSize)
-                };
                 this.bonusForMachineTier = BonusForMachineTier;
                 this.bonusForMinerProfession = BonusForMinerProfession;
                 this.bonusForProspectorProfession = BonusForProspectorProfession;
@@ -117,10 +100,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             /// <param name="BonusForMinerProfession"></param>
             /// <param name="BonusForProspectorProfession"></param>
             /// <param name="BonusForGeologistProfession"></param>
-            public GeodeCrusherOutput(ItemReference itemReference, List<IntOutcomeChanceDeterminer> ItemStackSizesWithChances ,IntRange BonusForMachineTier, IntRange BonusForMinerProfession, IntRange BonusForProspectorProfession, IntRange BonusForGeologistProfession)
+            public GeodeCrusherOutput(ItemReference itemReference, List<IntOutcomeChanceDeterminer> ItemStackSizesWithChances ,IntRange BonusForMachineTier, IntRange BonusForMinerProfession, IntRange BonusForProspectorProfession, IntRange BonusForGeologistProfession) : base(itemReference, ItemStackSizesWithChances)
             {
-                this.baseOutputItem = itemReference;
-                this.chancedOutcomeValues= ItemStackSizesWithChances;
                 this.bonusForMachineTier= BonusForMachineTier;
                 this.bonusForMinerProfession=BonusForMinerProfession;
                 this.bonusForProspectorProfession=BonusForProspectorProfession;
@@ -132,20 +113,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             /// </summary>
             /// <param name="who"></param>
             /// <returns></returns>
-            public virtual int getFinalOutputAmount(Farmer who=null)
+            public override int getFinalOutputAmount(Farmer who=null)
             {
-                int rand = Game1.random.Next(1, 101); //Get a value from 1-100
-                int outcomeValue = 0;
-                foreach(IntOutcomeChanceDeterminer outcome in this.chancedOutcomeValues)
-                {
-                    if (outcome.containsInclusive(rand))
-                    {
-                        outcomeValue=outcome.getValueIfInInclusiveBounds(rand);
-                        break;
-                    }
-                }
-
-                int amount = outcomeValue + this.bonusForMachineTier.getRandomInclusive();
+                int amount = base.getFinalOutputAmount(who);
 
                 if (who != null)
                 {
@@ -511,11 +481,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
         {
             return new List<IntOutcomeChanceDeterminer>()
             {
-                new IntOutcomeChanceDeterminer(new IntRange(1,29),1),
-                new IntOutcomeChanceDeterminer(new IntRange(30,59),3),
-                new IntOutcomeChanceDeterminer(new IntRange(60,89),5),
-                new IntOutcomeChanceDeterminer(new IntRange(90,99),10),
-                new IntOutcomeChanceDeterminer(new IntRange(100,100),20)
+                new IntOutcomeChanceDeterminer(new DoubleRange(1,29),1),
+                new IntOutcomeChanceDeterminer(new DoubleRange(30,59),3),
+                new IntOutcomeChanceDeterminer(new DoubleRange(60,89),5),
+                new IntOutcomeChanceDeterminer(new DoubleRange(90,99),10),
+                new IntOutcomeChanceDeterminer(new DoubleRange(100,100),20)
 
             };
         }
@@ -528,11 +498,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
         {
             return new List<IntOutcomeChanceDeterminer>()
             {
-                new IntOutcomeChanceDeterminer(new IntRange(1,29),1),
-                new IntOutcomeChanceDeterminer(new IntRange(30,59),2),
-                new IntOutcomeChanceDeterminer(new IntRange(60,89),3),
-                new IntOutcomeChanceDeterminer(new IntRange(90,99),6),
-                new IntOutcomeChanceDeterminer(new IntRange(100,100),11)
+                new IntOutcomeChanceDeterminer(new DoubleRange(1,29),1),
+                new IntOutcomeChanceDeterminer(new DoubleRange(30,59),2),
+                new IntOutcomeChanceDeterminer(new DoubleRange(60,89),3),
+                new IntOutcomeChanceDeterminer(new DoubleRange(90,99),6),
+                new IntOutcomeChanceDeterminer(new DoubleRange(100,100),11)
 
             };
         }

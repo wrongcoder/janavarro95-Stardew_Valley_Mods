@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Omegasis.Revitalize.Framework.Utilities;
+using Omegasis.Revitalize.Framework.Utilities.Ranges;
 using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.Configs.ObjectsConfigs
