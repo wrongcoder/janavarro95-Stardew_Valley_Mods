@@ -20,6 +20,15 @@ namespace Omegasis.Revitalize.Framework.Crafting.JsonContent
         /// </summary>
         public ItemReference item;
 
+        /// <summary>
+        /// The min stack size for this item. If this and <see cref="maxStackSize"/> are zero then <see cref="JsonCraftingComponent.item"/>'s <see cref="ItemReference.StackSize"/> is used for stack ranges instead.
+        /// </summary>
+        public int minStackSize;
+        /// <summary>
+        /// The max stack size for this item. If this and <see cref="minStackSize"/> are zero then <see cref="JsonCraftingComponent.item"/>'s <see cref="ItemReference.StackSize"/> is used for stack ranges instead.
+        /// </summary>
+        public int maxStackSize;
+
         public JsonCraftingComponent()
         {
             this.item = new ItemReference();
@@ -29,11 +38,11 @@ namespace Omegasis.Revitalize.Framework.Crafting.JsonContent
         /// Creates a <see cref="CraftingRecipeComponent"/> from a json version loaded from disk.
         /// </summary>
         /// <returns></returns>
-        public CraftingRecipeComponent createCraftingRecipeComponent()
+        public virtual CraftingRecipeComponent createCraftingRecipeComponent()
         {
             if (!string.IsNullOrEmpty(this.item.RegisteredObjectId))
             {
-                return new CraftingRecipeComponent(RevitalizeModCore.ModContentManager.objectManager.getItem(this.item.RegisteredObjectId, 1), this.item.StackSize);
+                return this.toCraftingRecipeComponent();
             }
             throw new InvalidJsonCraftingComponentException("A json crafting component must have one one of the following: a stardewValleyItemId, a stardewValleyBigCraftableId or a registeredObjectId set to be valid!");
         }
@@ -76,7 +85,14 @@ namespace Omegasis.Revitalize.Framework.Crafting.JsonContent
         /// <returns></returns>
         public virtual CraftingRecipeComponent toCraftingRecipeComponent()
         {
-            return new CraftingRecipeComponent(this.getItem(), this.item.StackSize);
+            if (this.minStackSize != 0 && this.maxStackSize != 0)
+            {
+                return new CraftingRecipeComponent(this.getItem(), Game1.random.Next(this.minStackSize,this.maxStackSize));
+            }
+            else
+            {
+                return new CraftingRecipeComponent(this.getItem(), this.item.StackSize);
+            }
         }
     }
 }

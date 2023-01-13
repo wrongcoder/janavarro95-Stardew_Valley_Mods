@@ -2,7 +2,7 @@
 	"Revitalize.Objects.Machines.EnergyGeneration.AdvancedSolarPanel":
 	{
 		"displayName":"Advanced Solar Panel",
-		"description":"An upgraded solar panel that can generate a battery pack every 5 days.",
+		"description":"An upgraded solar panel that can generate a battery pack every 5 sunny days.",
 		"category":"Machine"
 	},
 }

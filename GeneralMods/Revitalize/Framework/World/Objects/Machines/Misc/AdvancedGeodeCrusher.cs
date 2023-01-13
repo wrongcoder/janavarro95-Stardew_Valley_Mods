@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Crafting;
+using Omegasis.Revitalize.Framework.Crafting.JsonContent;
 using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.Utilities.Extensions;
@@ -23,6 +24,36 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
     [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Misc.AdvancedGeodeCrusher")]
     public class AdvancedGeodeCrusher : PoweredMachine
     {
+        /// <summary>
+        /// Example file for geode crusher inputs.
+        /// </summary>
+        public class FileExample
+        {
+            //Key here is the object's id and the rest calculates the amounts. When reading in all of the files, if the key exists already, just add onto it. 
+            Dictionary<string, List<ExampleJsonInputForGeodeCracking>> cracking = new Dictionary<string, List<ExampleJsonInputForGeodeCracking>>();
+        }
+
+        /// <summary>
+        /// Example data for geode crusher input.
+        /// </summary>
+        public class ExampleJsonInputForGeodeCracking
+        {
+            /// <summary>
+            /// Contains basic item information as well as the base amounts to be given when cracking open a geode.
+            /// </summary>
+            public JsonCraftingComponent baseOutputItem;
+
+            //Make sure to make an entry key for every tier, otherwise it'll be assumed to be nothing!!!!
+            public Dictionary<PoweredMachineTier, IntRange> bonusPerMachineTier;
+
+            public IntRange bonusForMinerProfession;
+            public IntRange bonusForProspectorProfession;
+            public IntRange bonusForGeologistProfession;
+
+            
+        }
+
+
 
         public readonly NetRef<ItemReference> itemToReceive = new NetRef<ItemReference>();
 
@@ -123,6 +154,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 
             bool playerHasMinerProfession = this.getOwner().getProfessionForSkill(Farmer.miningSkill, 5) == Farmer.miner;
             bool playerHasProspectorProfession = this.getOwner().getProfessionForSkill(Farmer.miningSkill, 10) == Farmer.burrower;
+            bool playerHasGemologistProfession = this.getOwner().getProfessionForSkill(Farmer.miningSkill, 5) == Farmer.geologist;
 
             List<StardewValley.Object> potentialItems = new List<StardewValley.Object>();
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Netcode;
+using Newtonsoft.Json;
 using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.Utilities
@@ -14,14 +15,30 @@ namespace Omegasis.Revitalize.Framework.Utilities
     /// </summary>
     public class IntRange
     {
+        [JsonIgnore]
         /// <summary>
         /// The min value for the range.
         /// </summary>
         public readonly NetInt min = new NetInt();
+        [JsonIgnore]
         /// <summary>
         /// The max value for the range.
         /// </summary>
         public readonly NetInt max = new NetInt();
+
+        [JsonProperty("min")]
+        public int Min
+        {
+            get { return this.min.Value; }
+            set { this.min.Value = value;}
+        }
+
+        [JsonProperty("max")]
+        public int Max
+        {
+            get { return this.max.Value; }
+            set { this.max.Value = value;}
+        }
 
         public IntRange()
         {

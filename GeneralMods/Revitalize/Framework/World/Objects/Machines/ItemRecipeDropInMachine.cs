@@ -73,7 +73,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             foreach (Recipe craftingRecipe in RevitalizeModCore.ModContentManager.craftingManager.getUnlockedCraftingRecipes(this.getCraftingRecipeBookId()))
             {
                 Item neededDropInItem = craftingRecipe.ingredients[0].item;
-                int amountRequired = craftingRecipe.ingredients[0].requiredAmount;
+                int amountRequired = craftingRecipe.ingredients[0].getRequiredAmount();
 
                 ItemReference itemRef = new ItemReference(neededDropInItem);
 
@@ -97,10 +97,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
         public virtual CraftingResult onSuccessfulRecipeFound(Item dropInItem, Recipe craftingRecipe, Farmer who=null)
         {
-            int amountRequired = craftingRecipe.ingredients[0].requiredAmount;
+            int amountRequired = craftingRecipe.ingredients[0].getRequiredAmount();
             Item outputItem = craftingRecipe.outputs[0].item.getOne();
 
-            outputItem.Stack = craftingRecipe.outputs[0].requiredAmount;
+            outputItem.Stack = craftingRecipe.outputs[0].getRequiredAmount();
             this.heldObject.Value = (StardewValley.Object)outputItem;
             this.MinutesUntilReady = (int)(craftingRecipe.timeToCraft);
             if (who != null)

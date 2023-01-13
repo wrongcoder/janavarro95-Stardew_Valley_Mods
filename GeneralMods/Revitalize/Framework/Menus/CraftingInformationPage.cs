@@ -94,7 +94,7 @@ namespace Omegasis.Revitalize.Framework.Menus
             for (int i = 0; i < this.infoButton.recipe.ingredients.Count; i++)
             {
                 ItemDisplayButton b = new ItemDisplayButton(this.infoButton.recipe.ingredients.ElementAt(i).item, null, new Vector2(this.xPositionOnScreen + 64 + this.width, this.yPositionOnScreen + i * 64 + 128), new Rectangle(0, 0, 32, 32), 2f, true, Color.White);
-                this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).requiredAmount);
+                this.requiredItems.Add(b, this.infoButton.recipe.ingredients.ElementAt(i).getRequiredAmount());
             }
             this.craftingButton = new AnimatedButton(new StardustCore.Animations.AnimatedSprite("CraftingButton", new Vector2(this.xPositionOnScreen + this.width / 2 - 96, this.getCraftingButtonHeight()), TextureManagers.Menus_CraftingMenu.createAnimationManager("CraftButton", new StardustCore.Animations.Animation(0, 0, 48, 16)), Color.White), new Rectangle(0, 0, 48, 16), 4f);
 

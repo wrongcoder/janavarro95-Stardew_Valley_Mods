@@ -68,7 +68,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 
         public override bool shouldDoDayUpdate()
         {
-            return this.dayUpdateCounter>=2;
+            return this.dayUpdateCounter.Value>=2;
         }
 
         public virtual int getDaysToProduceABattery()
