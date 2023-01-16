@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Omegasis.Revitalize.Framework.Content.JsonContent.Objects;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Mail;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Items;
 using Omegasis.StardustCore.Events;
 using StardewModdingAPI;
 
@@ -42,6 +43,8 @@ namespace Omegasis.Revitalize.Framework.ContentPacks
         /// </summary>
         public Dictionary<string, IdToDisplayStrings> buildingDisplayStrings = new Dictionary<string, IdToDisplayStrings>();
 
+        public ContentPackProcessingRecipeManager objectProcessingRecipeManager = new ContentPackProcessingRecipeManager();
+
         /// <summary>
         /// The unique id for this content pack.
         /// </summary>
@@ -74,6 +77,8 @@ namespace Omegasis.Revitalize.Framework.ContentPacks
 
             this.loadInDisplayStrings();
             this.loadInMail();
+
+            this.objectProcessingRecipeManager.loadRecipes();
 
         }
 

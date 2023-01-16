@@ -4,6 +4,9 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 1-16-2023 xx.xx P.M~~~~~~~~~~~~~~
++Continued to work on code to migrate old machine processing recipes from CraftingRecipe class to ProcessingRecipe class rebuilt with machines in mind.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 1-10-2023 xx.xx P.M~~~~~~~~~~~~~~
 ~TextureManagers now can recover from missing asset errors if a image is moved to a different folder inside of it's search params.
 ~Added AdvancedBatteryPackGenerator

@@ -279,7 +279,7 @@ namespace Omegasis.Revitalize.Framework.Crafting
                     continue;
                 }
 
-                RevitalizeModCore.logWarning("Attempting to load recipes from " + relativeCraftingRecipesPath);
+                //RevitalizeModCore.logWarning("Attempting to load recipes from " + relativeCraftingRecipesPath);
                 CraftingRecipeBook craftingRecipeBook = new CraftingRecipeBook(recipeBookDefinition, JsonUtilities.LoadJsonFilesFromDirectories<JsonCraftingMenuTab>(relativeCratingTabsPath), JsonUtilities.LoadJsonFilesFromDirectories<UnlockableJsonCraftingRecipe>(relativeCraftingRecipesPath));
 
                 //Add validation + add in recipies that may or may not be added specifically from json to the already existing data.
@@ -340,7 +340,7 @@ namespace Omegasis.Revitalize.Framework.Crafting
                     continue;
                 }
 
-                RevitalizeModCore.logWarning("Attempting to load recipes from " + relativeCraftingRecipesPath);
+                //RevitalizeModCore.logWarning("Attempting to load recipes from " + relativeCraftingRecipesPath);
                 CraftingRecipeBook craftingRecipeBook = new CraftingRecipeBook(recipeBookDefinition, new List<JsonCraftingMenuTab>(), JsonUtilities.LoadJsonFilesFromDirectories<UnlockableJsonCraftingRecipe>(relativeCraftingRecipesPath));
 
                 //Add validation + add in recipies that may or may not be added specifically from json to the already existing data.

@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.Utilities.Ranges;
+using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using StardewValley;
 
-namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
+namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
 {
     /// <summary>
     /// Determines things like an item that can have a random stack size and a random chance of being obtained for machines, buildings, etc.
@@ -18,19 +19,20 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         /// <summary>
         /// Contains basic item information.
         /// </summary>
-        public ItemReference itemReference;
+        public ItemReference item;
 
         /// <summary>
         /// Determines the odds for getting a specific type of item given some input values. The checked ranges should always be between 1-100.
         /// </summary>
-        public List<IntOutcomeChanceDeterminer> chancedStackSizeOutcomeValues;
+        public List<IntOutcomeChanceDeterminer> stackSizeDeterminer;
 
         /// <summary>
         /// This value should be between 0 and 100, but since it's a double range it should be very flexible in terms of granular control. 100 means this will always be obtained.
         /// </summary>
         public DoubleRange chanceToObtain = new DoubleRange();
 
-        public LootTableEntry() {
+        public LootTableEntry()
+        {
 
         }
 
@@ -38,7 +40,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         /// Creates a determined item outcome with a stack size reflected by the passed in reference's <see cref="ItemReference.StackSize"/> with a 100% chance of being obtained.
         /// </summary>
         /// <param name="reference"></param>
-        public LootTableEntry(ItemReference reference) : this(reference, new List<IntOutcomeChanceDeterminer>(){new IntOutcomeChanceDeterminer(new DoubleRange(0, 100),reference.StackSize)},new DoubleRange(0,100))
+        public LootTableEntry(ItemReference reference) : this(reference, new List<IntOutcomeChanceDeterminer>() { new IntOutcomeChanceDeterminer(new DoubleRange(0, 100), reference.StackSize) }, new DoubleRange(0, 100))
         {
         }
         /// <summary>
@@ -46,7 +48,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         /// </summary>
         /// <param name="reference"></param>
         /// <param name="StackSize"></param>
-        public LootTableEntry(ItemReference reference, int StackSize):this(reference, new List<IntOutcomeChanceDeterminer>(){ new IntOutcomeChanceDeterminer(new DoubleRange(0, 100),StackSize)}, new DoubleRange(0,100))
+        public LootTableEntry(ItemReference reference, int StackSize) : this(reference, new List<IntOutcomeChanceDeterminer>() { new IntOutcomeChanceDeterminer(new DoubleRange(0, 100), StackSize) }, new DoubleRange(0, 100))
         {
         }
 
@@ -55,7 +57,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         /// </summary>
         /// <param name="reference"></param>
         /// <param name="StackSize"></param>
-        public LootTableEntry(ItemReference reference, IntRange StackSize) :this(reference, new List<IntOutcomeChanceDeterminer>() { new IntOutcomeChanceDeterminer(new DoubleRange(0, 100), StackSize) },new DoubleRange(0, 100))
+        public LootTableEntry(ItemReference reference, IntRange StackSize) : this(reference, new List<IntOutcomeChanceDeterminer>() { new IntOutcomeChanceDeterminer(new DoubleRange(0, 100), StackSize) }, new DoubleRange(0, 100))
         {
         }
 
@@ -84,7 +86,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         /// </summary>
         /// <param name="reference"></param>
         /// <param name="chancedStackSizeOutcomeValues"></param>
-        public LootTableEntry(ItemReference reference, List<IntOutcomeChanceDeterminer> chancedStackSizeOutcomeValues):this(reference,chancedStackSizeOutcomeValues,new DoubleRange(0, 100))
+        public LootTableEntry(ItemReference reference, List<IntOutcomeChanceDeterminer> chancedStackSizeOutcomeValues) : this(reference, chancedStackSizeOutcomeValues, new DoubleRange(0, 100))
         {
         }
 
@@ -97,8 +99,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         /// <param name="chanceToObtain"></param>
         public LootTableEntry(ItemReference baseOutputItem, List<IntOutcomeChanceDeterminer> chancedStackSizeOutcomeValues, DoubleRange chanceToObtain)
         {
-            this.itemReference = baseOutputItem;
-            this.chancedStackSizeOutcomeValues = chancedStackSizeOutcomeValues;
+            this.item = baseOutputItem;
+            this.stackSizeDeterminer = chancedStackSizeOutcomeValues;
             this.chanceToObtain = chanceToObtain;
         }
 
@@ -113,14 +115,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         {
             double rand = Game1.random.NextDouble() * 100; //Get a value from 0 to less than 100.
             int outcomeValue = 0;
-            foreach (IntOutcomeChanceDeterminer potentialOutcomeChanceRange in this.chancedStackSizeOutcomeValues)
+            foreach (IntOutcomeChanceDeterminer potentialOutcomeChanceRange in this.stackSizeDeterminer)
             {
                 //Skip 0 chance outcomes. Why they would be included in this list, I'm not sure, but we should filter them out regardless becuse logically it doesn't make sense.
                 //Note that if rand is 0 and the out potentialOutcoemChanceRange is greater than 0, this code will still trigger.
-                if(potentialOutcomeChanceRange.validRangeForChance.Min==0 && potentialOutcomeChanceRange.validRangeForChance.Max == 0)
-                {
+                if (potentialOutcomeChanceRange.validRangeForChance.Min == 0 && potentialOutcomeChanceRange.validRangeForChance.Max == 0)
                     continue;
-                }
                 if (potentialOutcomeChanceRange.containsInclusive(rand))
                 {
                     outcomeValue = potentialOutcomeChanceRange.getValueIfInInclusiveBounds(rand);

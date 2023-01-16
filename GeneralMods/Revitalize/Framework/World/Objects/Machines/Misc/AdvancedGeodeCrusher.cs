@@ -18,6 +18,7 @@ using Omegasis.Revitalize.Framework.Utilities.Ranges;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Items;
 using StardewValley;
 using StardewValley.Locations;
 

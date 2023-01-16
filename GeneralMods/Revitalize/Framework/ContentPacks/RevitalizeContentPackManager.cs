@@ -95,6 +95,23 @@ namespace Omegasis.Revitalize.Framework.ContentPacks
         }
 
         /// <summary>
+        /// Gets all content packs that have been loaded in.
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<RevitalizeContentPack> getAllContentPacks()
+        {
+            List<RevitalizeContentPack> contentPacks= new List<RevitalizeContentPack>();
+            foreach(KeyValuePair<string,List<RevitalizeContentPack>> contentPacksByLanguageCode in this.contentPacks)
+            {
+                foreach(RevitalizeContentPack contentPack in contentPacksByLanguageCode.Value)
+                {
+                    contentPacks.Add(contentPack);
+                }
+            }
+            return contentPacks;
+        }
+
+        /// <summary>
         /// Gets all of the <see cref="HappyBirthdayContentPack"/>s that affect the current localization.
         /// </summary>
         /// <returns></returns>

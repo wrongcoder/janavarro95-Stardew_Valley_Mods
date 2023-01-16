@@ -13,7 +13,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
     public class IntOutcomeChanceDeterminer
     {
         /// <summary>
-        /// The chance range for if this value should occur. For example a range of 1-20 means there is a 20% chance a range check of 1-100 (inclusive) passes and retuns the value determined by <see cref="getValueIfInInclusiveBounds(int)"/>
+        /// The chance range for if this value should occur. For example a range of 0-20 means there is a 20% chance a range check of 1-100 (inclusive) passes and retuns the value determined by <see cref="getValueIfInInclusiveBounds(int)"/> For 100% chance always do a range from 0-100.
         /// </summary>
         public DoubleRange validRangeForChance;
         /// <summary>
