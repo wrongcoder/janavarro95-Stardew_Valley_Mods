@@ -14,6 +14,7 @@ using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Items;
 using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
@@ -47,12 +48,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             return true;
         }
 
-        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, Recipe craftingRecipe, Farmer who = null)
+        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
         {
             CraftingResult result= base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
             if(result.successful)
             {
-                MultiplayerUtilities.GetMultiplayer().broadcastSprites(who.currentLocation, new TemporaryAnimatedSprite(27, this.tileLocation.Value * 64f + new Vector2(-16f, -128f), Color.White, 4, flipped: false, 50f, 10, 64, (this.tileLocation.Y + 1f) * 64f / 10000f + 0.0001f)
+                MultiplayerUtilities.GetMultiplayer().broadcastSprites(who.currentLocation, new TemporaryAnimatedSprite(27, this.TileLocation * 64f + new Vector2(-16f, -128f), Color.White, 4, flipped: false, 50f, 10, 64, (this.TileLocation.Y + 1f) * 64f / 10000f + 0.0001f)
                 {
                     alphaFade = 0.005f
                 });

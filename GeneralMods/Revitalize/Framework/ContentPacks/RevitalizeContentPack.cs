@@ -43,7 +43,7 @@ namespace Omegasis.Revitalize.Framework.ContentPacks
         /// </summary>
         public Dictionary<string, IdToDisplayStrings> buildingDisplayStrings = new Dictionary<string, IdToDisplayStrings>();
 
-        public ContentPackProcessingRecipeManager objectProcessingRecipeManager = new ContentPackProcessingRecipeManager();
+        public ContentPackProcessingRecipeManager objectProcessingRecipeManager;
 
         /// <summary>
         /// The unique id for this content pack.
@@ -78,6 +78,7 @@ namespace Omegasis.Revitalize.Framework.ContentPacks
             this.loadInDisplayStrings();
             this.loadInMail();
 
+            this.objectProcessingRecipeManager = new ContentPackProcessingRecipeManager(this);
             this.objectProcessingRecipeManager.loadRecipes();
 
         }

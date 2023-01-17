@@ -20,15 +20,6 @@ namespace Omegasis.Revitalize.Framework.Crafting.JsonContent
         /// </summary>
         public ItemReference item;
 
-        /// <summary>
-        /// The min stack size for this item. If this and <see cref="maxStackSize"/> are zero then <see cref="JsonCraftingComponent.item"/>'s <see cref="ItemReference.StackSize"/> is used for stack ranges instead.
-        /// </summary>
-        public int minStackSize;
-        /// <summary>
-        /// The max stack size for this item. If this and <see cref="minStackSize"/> are zero then <see cref="JsonCraftingComponent.item"/>'s <see cref="ItemReference.StackSize"/> is used for stack ranges instead.
-        /// </summary>
-        public int maxStackSize;
-
         public JsonCraftingComponent()
         {
             this.item = new ItemReference();
@@ -38,14 +29,6 @@ namespace Omegasis.Revitalize.Framework.Crafting.JsonContent
         {
             this.item = item;
         }
-
-        public JsonCraftingComponent(ItemReference item, int minStackSize, int maxStackSize)
-        {
-            this.item = item;
-            this.minStackSize = minStackSize;
-            this.maxStackSize = maxStackSize;
-        }
-
 
 
         /// <summary>
@@ -77,7 +60,7 @@ namespace Omegasis.Revitalize.Framework.Crafting.JsonContent
             {
                 throw new InvalidJsonCraftingComponentException("A json crafting component must have at least one field set to be valid!");
             }
-        }     
+        }
 
         /// <summary>
         /// Gets the item that is referenced by this crafting component.
@@ -99,14 +82,7 @@ namespace Omegasis.Revitalize.Framework.Crafting.JsonContent
         /// <returns></returns>
         public virtual CraftingRecipeComponent toCraftingRecipeComponent()
         {
-            if (this.minStackSize != 0 && this.maxStackSize != 0)
-            {
-                return new CraftingRecipeComponent(this.getItem(), this.minStackSize, this.maxStackSize);
-            }
-            else
-            {
-                return new CraftingRecipeComponent(this.getItem(), this.item.StackSize);
-            }
+            return new CraftingRecipeComponent(this.getItem(), this.item.StackSize);
         }
 
         /// <summary>
@@ -115,26 +91,7 @@ namespace Omegasis.Revitalize.Framework.Crafting.JsonContent
         /// <returns></returns>
         public virtual int getRequiredAmount()
         {
-            if (this.getMinStackSize() != 0 && this.getMaxStackSize() != 0)
-            {
-                return Game1.random.Next(this.getMinStackSize(), this.getMaxStackSize() + 1);
-            }
-            else
-            {
-                return this.item.StackSize;
-            }
 
-        }
-
-        public virtual int getMinStackSize()
-        {
-            if (this.minStackSize == 0) return this.item.StackSize;
-            return this.minStackSize;
-        }
-
-        public virtual int getMaxStackSize()
-        {
-            if (this.maxStackSize == 0) return this.item.StackSize;
             return this.item.StackSize;
         }
     }

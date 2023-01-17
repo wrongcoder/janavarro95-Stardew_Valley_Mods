@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -29,21 +30,18 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
 
         public override void loadRecipes()
         {
-            base.loadRecipes();
-
-            foreach (KeyValuePair<string, List<ProcessingRecipe<LootTableEntry>>> entry in this.processingRecipes)
+            //Load in general cases recipes.
+            List<Dictionary<string, List<ProcessingRecipe<LootTableEntry>>>> processingRecipes = this.loadProcessingRecipesFromJsonFiles();
+            foreach (Dictionary<string, List<ProcessingRecipe<LootTableEntry>>> objectIdToProcessingRecipesDict in processingRecipes)
             {
-                foreach (ProcessingRecipe<LootTableEntry> recipe in entry.Value)
-                {
-                    RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.addProcessingRecipe(entry.Key, recipe);
-                }
-            }
 
-            foreach (KeyValuePair<string, List<ProcessingRecipe<AdvancedGeodeCrusher.GeodeCrusherOutput>>> entry in this.advancedGeodeCrusherRecipes)
-            {
-                foreach (ProcessingRecipe<AdvancedGeodeCrusher.GeodeCrusherOutput> recipe in entry.Value)
+                foreach (KeyValuePair<string, List<ProcessingRecipe<LootTableEntry>>> entry in objectIdToProcessingRecipesDict)
                 {
-                    RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.addAdvancedGeodeCrusherProcessingRecipe(entry.Key, recipe);
+                    foreach (ProcessingRecipe<LootTableEntry> recipe in entry.Value)
+                    {
+                        this.addProcessingRecipe(entry.Key, recipe);
+                        RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.addProcessingRecipe(entry.Key, recipe);
+                    }
                 }
             }
         }
@@ -60,19 +58,15 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
             }
         }
 
-        public override List<ProcessingRecipe<AdvancedGeodeCrusher.GeodeCrusherOutput>> getAdvancedGeodeCrusherProcessingRecipes(string GeodeCrusherId)
-        {
-            return base.getAdvancedGeodeCrusherProcessingRecipes(GeodeCrusherId);
-        }
-
-        protected override List<Dictionary<string, List<ProcessingRecipe<AdvancedGeodeCrusher.GeodeCrusherOutput>>>> loadAdvancedGeodeCrusherProcessingRecipesFromJsonFiles()
-        {
-            return JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, List<ProcessingRecipe<AdvancedGeodeCrusher.GeodeCrusherOutput>>>>(this.contentPack, ObjectsDataPaths.ProcessingRecipesSpecialCases_AdvancedGeodeCrushers);
-        }
-
         protected override List<Dictionary<string, List<ProcessingRecipe<LootTableEntry>>>> loadProcessingRecipesFromJsonFiles()
         {
-            return JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, List<ProcessingRecipe<LootTableEntry>>>>(this.contentPack, ObjectsDataPaths.ProcessingRecipesGeneralCasesPath);
+            if(!Directory.Exists(Path.Combine(this.contentPack.baseContentPack.DirectoryPath, ObjectsDataPaths.ProcessingRecipesPath)))
+            {
+                Directory.CreateDirectory(Path.Combine(this.contentPack.baseContentPack.DirectoryPath, ObjectsDataPaths.ProcessingRecipesPath));
+            }
+
+            return JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, List<ProcessingRecipe<LootTableEntry>>>>(this.contentPack, ObjectsDataPaths.ProcessingRecipesPath);
         }
+
     }
 }

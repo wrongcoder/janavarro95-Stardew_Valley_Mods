@@ -4,15 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Netcode;
+using Newtonsoft.Json;
 using Omegasis.StardustCore.Networking;
 
 namespace Omegasis.Revitalize.Framework.Utilities.Ranges
 {
     public class DoubleRange:NetObject
     {
+        [JsonIgnore]
         public readonly NetDouble min = new NetDouble();
+        [JsonIgnore]
         public readonly NetDouble max = new NetDouble();
+
+        [JsonProperty("min")]
         public double Min { get => this.min.Value; set => this.min.Value = value; }
+        [JsonProperty("max")]
         public double Max { get => this.max.Value; set => this.max.Value = value; }
 
         public DoubleRange() { }

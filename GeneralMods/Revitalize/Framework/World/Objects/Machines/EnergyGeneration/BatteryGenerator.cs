@@ -15,6 +15,7 @@ using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Items;
 using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
@@ -66,7 +67,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
             return true;
         }
 
-        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, Recipe craftingRecipe, Farmer who = null)
+        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
         {
             CraftingResult result= base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
             if (result.successful)

@@ -19,6 +19,7 @@ using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Items;
 using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
@@ -51,36 +52,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
             this.createStatusBubble();
         }
 
-        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, Recipe craftingRecipe, Farmer who = null)
+        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
         {
             CraftingResult result = base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
 
             if (result.successful)
             {
-                float multiplier = 1f;
-                if (this.machineTier.Value == PoweredMachineTier.Electric)
-                {
-                    multiplier = .75f;
-                }
-                if (this.machineTier.Value == PoweredMachineTier.Nuclear)
-                {
-                    multiplier = .5f;
-                }
-                if (this.machineTier.Value == PoweredMachineTier.Magical)
-                {
-                    multiplier = .25f;
-                }
-                if (this.machineTier.Value == PoweredMachineTier.Galaxy)
-                {
-                    multiplier = .1f;
-                }
-
-                this.MinutesUntilReady = (int)(craftingRecipe.timeToCraft * multiplier);
-                this.MinutesUntilReady -= this.MinutesUntilReady % 10; //Want to make sure the time remaining is divisible by 10, so we will just round down.
-                if (this.MinutesUntilReady < 10)
-                {
-                    this.MinutesUntilReady = 10; //Make sure there is at least 10 minues to craft something.
-                }
                 this.addLight(new Vector2(0, 0), Illuminate.LightManager.LightIdentifier.SconceLight, Color.DarkCyan.Invert(), 1.5f);
             }
 

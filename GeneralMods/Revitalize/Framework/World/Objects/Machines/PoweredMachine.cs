@@ -17,6 +17,7 @@ using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Items;
 using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines
@@ -262,7 +263,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             return false;
         }
 
-        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, Recipe craftingRecipe, Farmer who = null)
+        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
         {
             //Make sure enough fue is present for the furnace to operate (if necessary!)
             bool success = this.useFuelItemToIncreaseCharges(who, false, who != null);

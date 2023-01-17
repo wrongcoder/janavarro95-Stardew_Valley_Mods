@@ -19,6 +19,7 @@ using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.Machines;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Items;
 using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops.RevitalizeShops;
 using StardewValley;
 using StardewValley.Menus;
@@ -172,7 +173,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             return this.processInput(dropInItem, who).successful;
         }
 
-        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, Recipe craftingRecipe, Farmer who = null)
+        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
         {
             CraftingResult result = base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
 

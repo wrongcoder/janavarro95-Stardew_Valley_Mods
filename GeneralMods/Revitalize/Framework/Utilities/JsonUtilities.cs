@@ -97,6 +97,36 @@ namespace Omegasis.Revitalize.Framework.Utilities
         /// <param name="onFileFound">The action that occurs when the json file is loaded. Note that this is not <see cref="ReadJsonFile{T}(string[])"/> incase there is post processing that should be done first.</param>
         /// <param name="relativePath"></param>
         /// <returns>A list of all json files that were loaded.</returns>
+        public static Dictionary<string,T> LoadJsonFilesFromDirectoriesWithPaths<T>(Func<string, T> onFileFound, params string[] relativePath) where T : class
+        {
+            string relativePathString = Path.Combine(relativePath);
+            string absPath = Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, relativePathString);
+            Dictionary<string, T> returnedJsonFiles = new Dictionary<string, T>();
+            foreach (string folder in Directory.GetDirectories(absPath))
+            {
+                string folderRelativePath = Path.Combine(relativePathString, Path.GetFileName(folder));
+
+                Dictionary<string, T> dict = LoadJsonFilesFromDirectoriesWithPaths(onFileFound, folderRelativePath);
+
+                foreach(KeyValuePair<string,T> pair in dict)
+                {
+                    returnedJsonFiles.TryAdd(pair.Key, pair.Value);
+                }
+            }
+            foreach (string file in Directory.GetFiles(absPath, "*.json"))
+            {
+                string fileRelativePath = Path.Combine(relativePathString, Path.GetFileName(file));
+                returnedJsonFiles.Add(fileRelativePath,onFileFound.Invoke(fileRelativePath));
+            }
+            return returnedJsonFiles;
+        }
+
+        /// <summary>
+        /// Recursively searches all directories and sub directories under the relative path passed in, and loads them from disk.
+        /// </summary>
+        /// <param name="onFileFound">The action that occurs when the json file is loaded. Note that this is not <see cref="ReadJsonFile{T}(string[])"/> incase there is post processing that should be done first.</param>
+        /// <param name="relativePath"></param>
+        /// <returns>A list of all json files that were loaded.</returns>
         public static List<T> LoadJsonFilesFromDirectories<T>(Func<RevitalizeContentPack,string, T> onFileFound, RevitalizeContentPack ContentPack ,params string[] relativePath) where T : class
         {
             string relativePathString = Path.Combine(relativePath);
@@ -135,6 +165,11 @@ namespace Omegasis.Revitalize.Framework.Utilities
         public static List<T> LoadJsonFilesFromDirectories<T>(params string[] relativePath) where T : class
         {
             return LoadJsonFilesFromDirectories<T>(new Func<string, T>(ReadJsonFilePathCombined<T>), relativePath);
+        }
+
+        public static Dictionary<string,T> LoadJsonFilesFromDirectoriesWithPaths<T>(params string[] relativePath) where T : class
+        {
+            return LoadJsonFilesFromDirectoriesWithPaths<T>(new Func<string, T>(ReadJsonFilePathCombined<T>), relativePath);
         }
 
         /// <summary>

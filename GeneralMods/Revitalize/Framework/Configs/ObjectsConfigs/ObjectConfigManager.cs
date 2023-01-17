@@ -13,14 +13,12 @@ namespace Omegasis.Revitalize.Framework.Configs.ObjectsConfigs
     {
         public FurnitureConfig furnitureConfig;
         public HayMakerConfig hayMakerConfig;
-        public MiningDrillConfig miningDrillConfig;
         public ObjectsConfig objectsConfig;
 
         public ObjectConfigManager()
         {
             this.furnitureConfig = FurnitureConfig.InitializeConfig();
             this.hayMakerConfig = HayMakerConfig.InitializeConfig();
-            this.miningDrillConfig = MiningDrillConfig.InitializeConfig();
             this.objectsConfig = ObjectsConfig.InitializeConfig();
         }
 

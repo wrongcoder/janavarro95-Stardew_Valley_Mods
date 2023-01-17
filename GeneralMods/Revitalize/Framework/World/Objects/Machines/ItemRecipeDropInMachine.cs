@@ -12,6 +12,7 @@ using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Items;
 using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines
@@ -70,10 +71,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             {
                 return new CraftingResult(false);
             }
-            foreach (Recipe craftingRecipe in RevitalizeModCore.ModContentManager.craftingManager.getUnlockedCraftingRecipes(this.getCraftingRecipeBookId()))
+            foreach (ProcessingRecipe<LootTableEntry> craftingRecipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId()))
             {
-                Item neededDropInItem = craftingRecipe.ingredients[0].item;
-                int amountRequired = craftingRecipe.ingredients[0].getRequiredAmount();
+                Item neededDropInItem = craftingRecipe.inputs[0].getItem();
+                int amountRequired = craftingRecipe.inputs[0].StackSize;
 
                 ItemReference itemRef = new ItemReference(neededDropInItem);
 
@@ -95,14 +96,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             return new CraftingResult(false);
         }
 
-        public virtual CraftingResult onSuccessfulRecipeFound(Item dropInItem, Recipe craftingRecipe, Farmer who=null)
+        public virtual CraftingResult onSuccessfulRecipeFound(Item dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who=null)
         {
-            int amountRequired = craftingRecipe.ingredients[0].getRequiredAmount();
-            Item outputItem = craftingRecipe.outputs[0].item.getOne();
+            Item outputItem = craftingRecipe.outputs[0].item.getItem();
+            int amountRequired = craftingRecipe.inputs[0].StackSize;
 
-            outputItem.Stack = craftingRecipe.outputs[0].getRequiredAmount();
+            outputItem.Stack = craftingRecipe.outputs[0].getFinalOutputAmount();
             this.heldObject.Value = (StardewValley.Object)outputItem;
-            this.MinutesUntilReady = (int)(craftingRecipe.timeToCraft);
+            this.MinutesUntilReady = (int)(craftingRecipe.timeToProcess.toInGameMinutes());
             if (who != null)
             {
                 this.playDropInSound();

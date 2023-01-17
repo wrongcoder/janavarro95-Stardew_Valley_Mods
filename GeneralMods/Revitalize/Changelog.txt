@@ -4,6 +4,10 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 1-17-2023 xx.xx P.M~~~~~~~~~~~~~~
++Added in conversion method to convert old JsonCraftingRecipe files for machines into the new ProcessingRecipe format.
+    ~Also converted all of the old machine recipes as well, but need to run extensive testing on them first.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 1-16-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Continued to work on code to migrate old machine processing recipes from CraftingRecipe class to ProcessingRecipe class rebuilt with machines in mind.
 
