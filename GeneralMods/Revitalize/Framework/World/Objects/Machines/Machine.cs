@@ -19,6 +19,7 @@ using Omegasis.Revitalize.Framework.HUD;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Crafting;
+using Newtonsoft.Json;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 {
@@ -37,6 +38,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         [XmlIgnore]
         public NetRef<AnimationManager> machineStatusBubbleBox = new NetRef<AnimationManager>();
 
+
+        [JsonIgnore]
+        public readonly NetObjectList<Item> heldItems = new NetObjectList<Item>();
         public Machine()
         {
 
@@ -56,7 +60,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         protected override void initializeNetFieldsPostConstructor()
         {
             base.initializeNetFieldsPostConstructor();
-            this.NetFields.AddFields(this.machineStatusBubbleBox, this.lerpScaleIncreasing);
+            this.NetFields.AddFields(this.machineStatusBubbleBox, this.lerpScaleIncreasing,this.heldItems);
         }
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
@@ -262,6 +266,35 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         public virtual bool isIdle()
         {
             return this.MinutesUntilReady == 0 && this.heldObject.Value == null;
+        }
+
+        public virtual void addItemToHeldItemQueue(Item item)
+        {
+            this.heldItems.Add(item);
+        }
+
+        /// <summary>
+        /// Gets the first item in the held item queue for this object.
+        /// </summary>
+        /// <returns></returns>
+        public virtual Item getItemFromHeldItemQueue()
+        {
+            if (!this.hasItemsInHeldItemQueue())
+            {
+                return null;
+            }
+            Item item = this.heldItems[0];
+            this.heldItems.RemoveAt(0);
+            return item;
+        }
+
+        /// <summary>
+        /// Checks to see if there are any held items that should be removed from the held item queue for this machine.
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool hasItemsInHeldItemQueue()
+        {
+            return this.heldItems.Count > 0;
         }
 
 

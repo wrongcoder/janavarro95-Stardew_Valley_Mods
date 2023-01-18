@@ -106,5 +106,21 @@ namespace Omegasis.RevitalizeAutomateCompatibility.Objects.Machines
              */
         }
 
+        /// <summary>Get the output item.</summary>
+        public override ITrackedStack GetOutput()
+        {
+            //Returns a tracked object which is set to modify the machine's held object value to be null when complete.
+            return new TrackedItem(this.customObject.heldObject.Value, onReduced: item =>
+            {
+                this.customObject.heldObject.Value.Stack = item.Stack;
+            }
+            , onEmpty: item =>
+            {
+                this.customObject.clearHeldObject();
+                this.customObject.heldObject.Value = (StardewValley.Object)this.customObject.getItemFromHeldItemQueue();
+                this.customObject.readyForHarvest.Value= true;
+            });
+        }
+
     }
 }

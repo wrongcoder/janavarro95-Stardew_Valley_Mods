@@ -21,8 +21,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 {
     public class ItemRecipeDropInMachine : Machine
     {
-        [JsonIgnore]
-        public readonly NetObjectList<Item> heldItems = new NetObjectList<Item>();
+
 
         public ItemRecipeDropInMachine()
         {
@@ -36,12 +35,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         public ItemRecipeDropInMachine(BasicItemInformation info, Vector2 TileLocation) : base(info, TileLocation)
         {
 
-        }
-
-        protected override void initializeNetFieldsPostConstructor()
-        {
-            base.initializeNetFieldsPostConstructor();
-            this.NetFields.AddFields(this.heldItems);
         }
 
         public override bool performItemDropInAction(Item dropInItem, bool probe, Farmer who)
@@ -232,35 +225,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         public virtual string getCraftingRecipeBookId()
         {
             return this.Id;
-        }
-
-        public virtual void addItemToHeldItemQueue(Item item)
-        {
-            this.heldItems.Add(item);
-        }
-
-        /// <summary>
-        /// Gets the first item in the held item queue for this object.
-        /// </summary>
-        /// <returns></returns>
-        public virtual Item getItemFromHeldItemQueue()
-        {
-            if (!this.hasItemsInHeldItemQueue())
-            {
-                return null;
-            }
-            Item item = this.heldItems[0];
-            this.heldItems.RemoveAt(0);
-            return item;
-        }
-
-        /// <summary>
-        /// Checks to see if there are any held items that should be removed from the held item queue for this machine.
-        /// </summary>
-        /// <returns></returns>
-        public virtual bool hasItemsInHeldItemQueue()
-        {
-            return this.heldItems.Count > 0;
         }
 
     }
