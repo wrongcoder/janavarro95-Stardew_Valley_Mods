@@ -1,0 +1,50 @@
+{
+  "Revitalize.Crafting.CraftingRecipeBooks.RevitalizeMachines.ElectricFurnace": [
+    {
+      "id": "StardewValley.Object.FireQuartzToRefinedQuartz",
+      "timeToProcess": {
+        "minutes": 30,
+        "hours": 1,
+        "days": 0,
+        "seasons": 0,
+        "years": 0
+      },
+      "inputs": [
+        {
+          "amount": 1,
+          "registeredObjectId": "(O)82",
+          "stardewValleyItemId": "FireQuartz",
+          "stardewValleyBigCraftableId": "NULL",
+          "artisanGoodItemReference": null
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "amount": 3,
+            "registeredObjectId": "(O)338",
+            "stardewValleyItemId": "RefinedQuartz",
+            "stardewValleyBigCraftableId": "NULL",
+            "artisanGoodItemReference": null
+          },
+          "stackSizeDeterminer": [
+            {
+              "validRangeForChance": {
+                "min": 0.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 3,
+                "max": 3
+              }
+            }
+          ],
+          "chanceToObtain": {
+            "min": 0.0,
+            "max": 100.0
+          }
+        }
+      ]
+    }
+  ]
+}

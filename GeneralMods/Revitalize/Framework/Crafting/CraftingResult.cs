@@ -36,5 +36,10 @@ namespace Omegasis.Revitalize.Framework.Crafting
             this.consumedItems.Add(item);
             this.successful = Success;
         }
+
+        public CraftingResult(List<ItemReference> consumedItems, bool successful) : this(successful)
+        {
+            this.consumedItems.AddRange(consumedItems);
+        }
     }
 }

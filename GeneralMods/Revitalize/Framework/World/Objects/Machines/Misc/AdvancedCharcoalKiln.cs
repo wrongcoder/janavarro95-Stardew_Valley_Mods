@@ -48,12 +48,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             return true;
         }
 
-        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
+        public override CraftingResult onSuccessfulRecipeFound(IList<Item> dropInItems, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
         {
-            CraftingResult result= base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
+            CraftingResult result= base.onSuccessfulRecipeFound(dropInItems, craftingRecipe, who);
             if(result.successful)
             {
-                MultiplayerUtilities.GetMultiplayer().broadcastSprites(who.currentLocation, new TemporaryAnimatedSprite(27, this.TileLocation * 64f + new Vector2(-16f, -128f), Color.White, 4, flipped: false, 50f, 10, 64, (this.TileLocation.Y + 1f) * 64f / 10000f + 0.0001f)
+                MultiplayerUtilities.GetMultiplayer().broadcastSprites(this.getCurrentLocation(), new TemporaryAnimatedSprite(27, this.TileLocation * 64f + new Vector2(-16f, -128f), Color.White, 4, flipped: false, 50f, 10, 64, (this.TileLocation.Y + 1f) * 64f / 10000f + 0.0001f)
                 {
                     alphaFade = 0.005f
                 });

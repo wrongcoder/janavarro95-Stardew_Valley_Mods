@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Omegasis.Revitalize.Framework.Crafting;
+using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.Machines;
 using Pathoschild.Stardew.Automate;
 using StardewValley;
@@ -37,20 +38,43 @@ namespace Omegasis.RevitalizeAutomateCompatibility.Objects.Machines
             //Optimize to ensure that we don't do unnecessary logic for setting inputs.
             if (this.customObject.isWorking() || this.customObject.finishedProduction()) return false;
 
+            IList<Item> validItems = new List<Item>();
             foreach (ITrackedStack obj in input.GetItems())
             {
                 Item item = obj.Sample;
                 if (item == null) continue;
                 item.Stack = obj.Count;
 
-                CraftingResult result = this.customObject.processInput(item, null, false);
-                if (result.successful)
-                {
-                    obj.Take(result.consumedItems[0].StackSize);
-                    this.customObject.updateAnimation();
-                    return true;
-                }
+                validItems.Add(item);
             }
+
+            CraftingResult result = this.customObject.processInput(validItems, null, false);
+            //Need a way to reduce stack size amounts again. Iterate across items that were taken???
+            if (result.successful)
+            {
+                //obj.Take(result.consumedItems[0].StackSize);
+                this.customObject.updateAnimation();
+
+                foreach (ItemReference consumedItem in result.consumedItems)
+                {
+                    foreach (ITrackedStack obj in input.GetItems())
+                    {
+                        Item item = obj.Sample;
+                        if (item == null) continue;
+                        item.Stack = obj.Count;
+
+                        ItemReference itemRef = new ItemReference(item);
+                        if (itemRef.RegisteredObjectId.Equals(consumedItem.RegisteredObjectId))
+                        {
+                            obj.Reduce(consumedItem.StackSize);
+                            break;
+                        }
+                    }
+                }
+
+                return true;
+            }
+
             this.customObject.updateAnimation();
 
             return false;

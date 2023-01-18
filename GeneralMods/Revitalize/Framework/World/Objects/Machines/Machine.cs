@@ -129,7 +129,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         /// <param name="who"></param>
         /// <param name="ShowRedMessage"></param>
         /// <returns></returns>
-        public virtual CraftingResult processInput(Item item, Farmer who, bool ShowRedMessage = true)
+        public virtual CraftingResult processInput(IList<Item> items, Farmer who, bool ShowRedMessage = true)
         {
             return new CraftingResult(false);
         }

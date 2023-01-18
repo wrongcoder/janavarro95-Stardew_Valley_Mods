@@ -67,9 +67,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
             return true;
         }
 
-        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
+        public override CraftingResult onSuccessfulRecipeFound(IList<Item> dropInItems, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
         {
-            CraftingResult result= base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
+            CraftingResult result= base.onSuccessfulRecipeFound(dropInItems, craftingRecipe, who);
             if (result.successful)
             {
                 this.addLight(Vector2.Zero, Illuminate.LightManager.LightIdentifier.SconceLight, this.LightColor, 1f);

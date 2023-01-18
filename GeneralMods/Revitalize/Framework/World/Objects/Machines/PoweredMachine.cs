@@ -263,7 +263,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             return false;
         }
 
-        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
+        public override CraftingResult onSuccessfulRecipeFound(IList<Item> dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
         {
             //Make sure enough fue is present for the furnace to operate (if necessary!)
             bool success = this.useFuelItemToIncreaseCharges(who, false, who != null);

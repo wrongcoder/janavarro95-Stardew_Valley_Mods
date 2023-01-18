@@ -21,11 +21,12 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
         public const int MinutesPerSeason = MinutesPerDay * DaysPerSeason;
         public const int MinutesPerYear = MinutesPerSeason * SeasonsPerYear;
 
-        public int minutes;
-        public int hours;
-        public int days;
-        public int seasons;
         public int years;
+        public int seasons;
+        public int days;
+        public int hours;
+        public int minutes;
+
 
         public GameTimeStamp()
         {

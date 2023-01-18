@@ -1,0 +1,50 @@
+{
+  "Revitalize.Objects.Machines.EnergyGeneration.NuclearGenerator": [
+    {
+      "id": "Omegasis.Revitalize.Machines.Misc.NuclearGenerator.NuclearFuelToBatteryPacks",
+      "timeToProcess": {
+        "minutes": 0,
+        "hours": 1,
+        "days": 0,
+        "seasons": 0,
+        "years": 0
+      },
+      "inputs": [
+        {
+          "amount": 1,
+          "registeredObjectId": "Revitalize.Framework.World.Objects.Items.Misc.RadioactiveFuel",
+          "stardewValleyItemId": "NULL",
+          "stardewValleyBigCraftableId": "NULL",
+          "artisanGoodItemReference": null
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "amount": 5,
+            "registeredObjectId": "(O)787",
+            "stardewValleyItemId": "BatteryPack",
+            "stardewValleyBigCraftableId": "NULL",
+            "artisanGoodItemReference": null
+          },
+          "stackSizeDeterminer": [
+            {
+              "validRangeForChance": {
+                "min": 0.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 5,
+                "max": 5
+              }
+            }
+          ],
+          "chanceToObtain": {
+            "min": 0.0,
+            "max": 100.0
+          }
+        }
+      ]
+    }
+  ]
+}

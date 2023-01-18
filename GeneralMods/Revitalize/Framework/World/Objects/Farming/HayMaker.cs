@@ -170,17 +170,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             if (this.heldObject.Value != null && this.MinutesUntilReady == 0)
                 this.cleanOutHayMaker(true);
 
-            return this.processInput(dropInItem, who).successful;
+            return base.performItemDropInAction(dropInItem, probe, who);
         }
 
-        public override CraftingResult onSuccessfulRecipeFound(Item dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
+        public override CraftingResult onSuccessfulRecipeFound(IList<Item> dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
         {
             CraftingResult result = base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
 
             if (result.successful)
             {
                 //Allow expensive crops such as amaranth and iridium quality corn to get a small bonus, since otherwise wheat would be the best item to process.
-                this.feedType.Value.setItemReference(dropInItem);
+                this.feedType.Value.setItemReference(dropInItem.ElementAt(0));
                 int additionalHayPieces = 0;
                 if (dropInItem is StardewValley.Object)
                 {

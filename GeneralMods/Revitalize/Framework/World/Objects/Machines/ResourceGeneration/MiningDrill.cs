@@ -110,7 +110,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             return hasFuel;
         }
 
-        public override CraftingResult processInput(Item dropInItem, Farmer who, bool ShowRedMessage = true)
+        public override CraftingResult processInput(IList<Item> dropInItem, Farmer who, bool ShowRedMessage = true)
         {
             //Since we don't use a recipe book here, we need to return true so that the logic properly updates.
             return new CraftingResult(true);

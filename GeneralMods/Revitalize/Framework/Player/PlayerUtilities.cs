@@ -169,10 +169,10 @@ namespace Omegasis.Revitalize.Framework.Player
         /// Reduces a <see cref="IBasicItemInfoProvider"/>'s stack size by a certain amount.
         /// </summary>
         /// <param name="Who"></param>
-        /// <param name="BasicItemInfoId"></param>
+        /// <param name="ItemId"></param>
         /// <param name="StackSizeToReduce"></param>
         /// <returns></returns>
-        public static bool ReduceInventoryItemStackSize(this Farmer Who, string BasicItemInfoId, int StackSizeToReduce = 1)
+        public static bool ReduceInventoryItemStackSize(this Farmer Who, string ItemId, int StackSizeToReduce = 1)
         {
             if (Who != null)
             {
@@ -184,7 +184,7 @@ namespace Omegasis.Revitalize.Framework.Player
                     {
                         IBasicItemInfoProvider infoProvider = (IBasicItemInfoProvider)item;
                         //Check to see if the items can stack. If they can simply add them together and then continue on.
-                        if (infoProvider.Id.Equals(BasicItemInfoId))
+                        if (infoProvider.Id.Equals(ItemId))
                         {
                             item.Stack -= StackSizeToReduce;
                             if (Who.CurrentItem.Stack <= 0) Who.Items[Who.getIndexOfInventoryItem(Who.CurrentItem)] = null;
@@ -206,7 +206,25 @@ namespace Omegasis.Revitalize.Framework.Player
                     {
                         IBasicItemInfoProvider infoProvider = (IBasicItemInfoProvider)item;
                         //Check to see if the items can stack. If they can simply add them together and then continue on.
-                        if (infoProvider.Id.Equals(BasicItemInfoId))
+                        if (infoProvider.Id.Equals(ItemId))
+                        {
+                            if (Who.Items[i].Stack == StackSizeToReduce)
+                            {
+                                Who.Items[i] = null;
+                                return true;
+                            }
+
+                            Who.Items[i].Stack -= StackSizeToReduce;
+
+                            if (Who.Items[i].Stack <= 0) Who.Items[i] = null;
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        //This needs to be changed for Stardew Valley 1.6 to fully qualified item name.
+                        string inventoryItemId = item.ParentSheetIndex.ToString();
+                        if (inventoryItemId.Equals(ItemId))
                         {
                             if (Who.Items[i].Stack == StackSizeToReduce)
                             {
@@ -225,6 +243,7 @@ namespace Omegasis.Revitalize.Framework.Player
             return false;
         }
 
+
         /// <summary>
         /// Reduces a <see cref="Item"/>'s stack size by a certain amount.
         /// </summary>
@@ -237,30 +256,38 @@ namespace Omegasis.Revitalize.Framework.Player
             if (StackSizeToReduce == 0) return false;
             if (Who != null)
             {
-                for (int i = 0; i < Who.MaxItems; i++)
+                ReduceInventoryItemStackSize(Who.Items, itemToReduce, StackSizeToReduce);
+            }
+            return false;
+        }
+
+        public static bool ReduceInventoryItemStackSize(IList<Item> Items, Item itemToReduce, int StackSizeToReduce = 1)
+        {
+            if (StackSizeToReduce == 0) return false;
+            for (int i = 0; i < Items.Count; i++)
+            {
+
+                //Find the first empty index in the player's inventory.
+                if (Items[i] == null)
                 {
-
-                    //Find the first empty index in the player's inventory.
-                    if (Who.Items[i] == null)
+                    continue;
+                }
+                Item item = Items[i];
+                if (item == itemToReduce || itemToReduce.canStackWith(item))
+                {
+                    if (Items[i].Stack == StackSizeToReduce)
                     {
-                        continue;
-                    }
-                    Item item = Who.Items[i];
-                    if (item == itemToReduce)
-                    {
-                        if (Who.Items[i].Stack == StackSizeToReduce)
-                        {
-                            Who.Items[i] = null;
-                            return true;
-                        }
-
-                        Who.Items[i].Stack -= StackSizeToReduce;
-
-                        if (Who.Items[i].Stack <= 0) Who.Items[i] = null;
+                        Items[i] = null;
                         return true;
                     }
+
+                    Items[i].Stack -= StackSizeToReduce;
+
+                    if (Items[i].Stack <= 0) Items[i] = null;
+                    return true;
                 }
             }
+
             return false;
         }
 
