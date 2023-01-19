@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -15,6 +16,7 @@ using Omegasis.Revitalize.Framework.Utilities.Extensions;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
+using Omegasis.Revitalize.Framework.World.WorldUtilities.Items;
 using StardewValley;
 using StardewValley.Locations;
 
@@ -23,8 +25,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
     [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.ResourceGeneration.MiningDrill")]
     public class MiningDrill : PoweredMachine
     {
-
-        public readonly NetRef<ItemReference> itemToMine = new NetRef<ItemReference>();
 
 
         public MiningDrill()
@@ -41,91 +41,42 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
         {
         }
 
-        protected override void initializeNetFieldsPostConstructor()
-        {
-            base.initializeNetFieldsPostConstructor();
-            this.NetFields.AddFields(this.itemToMine);
-        }
-
         public override void doActualDayUpdateLogic(GameLocation location)
         {
             base.doActualDayUpdateLogic(location);
-
-            if (this.itemToMine.Value != null)
+            if (this.hasFuel())
             {
-                this.heldObject.Value = (StardewValley.Object)this.itemToMine.Value.getItem();
-                this.itemToMine.Value = null;
-            }
-
-            this.tryToRunMiningDrill();
-        }
-
-        public override bool minutesElapsed(int minutes, GameLocation environment)
-        {
-            this.updateAnimation();
-            return base.minutesElapsed(minutes, environment);
-        }
-
-        /// <summary>
-        /// Attempts to run the mining drill again to generate it's outputs for the next day.
-        /// </summary>
-        public virtual void tryToRunMiningDrill()
-        {
-            if (this.fuelChargesRemaining.Value > 0)
-            {
-                this.consumeFuelCharge();
                 this.generateMiningOutput();
+                this.updateAnimation();
+                this.consumeFuelCharge();
             }
-            this.updateAnimation();
-        }
-
-        /// <summary>
-        /// Performed when dropping an item into the mining drill.
-        /// </summary>
-        /// <param name="dropInItem"></param>
-        /// <param name="probe"></param>
-        /// <param name="who"></param>
-        /// <returns></returns>
-        public override bool performItemDropInAction(Item dropInItem, bool probe, Farmer who)
-        {
-            if (this.itemToMine.Value != null) return false;
-            bool success = base.performItemDropInAction(dropInItem, probe, who);
-
-            if (success)
-            {
-                this.tryToRunMiningDrill();
-            }
-            if (who != null && success)
-            {
-                SoundUtilities.PlaySound(Enums.StardewSound.Ship);
-            }
-
-            //If this is true, an extra battery pack is consumed, so we need to return false here.
-            return success;
-        }
-
-        public override bool tryToIncreaseFuelCharges(Farmer who)
-        {
-            bool hasFuel = this.useFuelItemToIncreaseCharges(who, true, true);
-            return hasFuel;
         }
 
         public override CraftingResult processInput(IList<Item> dropInItem, Farmer who, bool ShowRedMessage = true)
         {
             //Since we don't use a recipe book here, we need to return true so that the logic properly updates.
-            return new CraftingResult(true);
+            //return new CraftingResult(true);
+
+
+            if (string.IsNullOrEmpty(this.getCraftingRecipeBookId()) || this.isWorking() || this.finishedProduction())
+            {
+                return new CraftingResult(false);
+            }
+
+            List<KeyValuePair<IList<Item>, ProcessingRecipe>> validRecipes = this.getListOfValidRecipes(dropInItem, who, ShowRedMessage);
+
+            if (validRecipes.Count > 0)
+            {
+                int randElement = Game1.random.Next(validRecipes.Count);
+                return this.onSuccessfulRecipeFound(validRecipes.ElementAt(randElement).Key, validRecipes.ElementAt(randElement).Value, who);
+            }
+
+            return new CraftingResult(false);
         }
 
-        public override void updateAnimation()
+        public override void playDropInSound()
         {
-            if (this.itemToMine.Value != null)
-            {
-                this.AnimationManager.playAnimation("Working");
-            }
-            else
-            {
-                this.AnimationManager.playDefaultAnimation();
-            }
+            SoundUtilities.PlaySound(Enums.StardewSound.Ship);
         }
 
         public override int getElectricFuelChargeIncreaseAmount()
@@ -307,19 +258,127 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
 
             }
 
+        }
 
-            this.itemToMine.Value = new ItemReference(potentialItems.GetRandom());
+        public override List<KeyValuePair<IList<Item>, ProcessingRecipe>> getListOfValidRecipes(IList<Item> inputItems, Farmer who, bool ShowRedMessage = true)
+        {
+            GameLocation objectLocation = this.getCurrentLocation();
+            List<KeyValuePair<IList<Item>, ProcessingRecipe>> validRecipes = new();
+            if (objectLocation == null) return validRecipes;
 
+
+            //Load different recipes depending on the different conditions.
+            if (GameLocationUtilities.IsLocationTheEntranceToTheMines(objectLocation))
+            {
+                foreach (ProcessingRecipe recipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId() + "_MinesEntrance"))
+                {
+                    validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(new List<Item>(), recipe));
+                }
+            }
+            else if (GameLocationUtilities.IsLocationInTheMines(objectLocation))
+            {
+
+
+                int floorLevel = GameLocationUtilities.CurrentMineLevel(objectLocation);
+
+
+                foreach (ProcessingRecipe recipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId() + "_Mines"))
+                {
+                    validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(new List<Item>(), recipe));
+                }
+
+                if (floorLevel <= 39)
+                {
+                    foreach (ProcessingRecipe recipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId() + "_Mines_0-39"))
+                    {
+                        validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(new List<Item>(), recipe));
+                    }
+
+                }
+                if (floorLevel >= 50)
+                {
+                    foreach (ProcessingRecipe recipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId() + "_Mines_50+"))
+                    {
+                        validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(new List<Item>(), recipe));
+                    }
+                }
+
+                if (floorLevel >= 40 && floorLevel <= 80)
+                {
+                    foreach (ProcessingRecipe recipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId() + "_Mines_40_80"))
+                    {
+                        validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(new List<Item>(), recipe));
+                    }
+                }
+                if (floorLevel >= 80)
+                {
+                    foreach (ProcessingRecipe recipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId() + "_Mines_80+"))
+                    {
+                        validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(new List<Item>(), recipe));
+                    }
+                }
+
+                if (Game1.player.hasOrWillReceiveMail("reachedBottomOfHardMines"))
+                {
+                    foreach (ProcessingRecipe recipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId() + "_ReachedBottomOfHardMines"))
+                    {
+                        validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(new List<Item>(), recipe));
+                    }
+                }
+            }
+            else if (GameLocationUtilities.IsLocationInSkullCaves(objectLocation))
+            {
+                foreach (ProcessingRecipe recipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId() + "_SkullCavern"))
+                {
+                    validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(new List<Item>(), recipe));
+                }
+
+                if (Game1.player.hasOrWillReceiveMail("reachedBottomOfHardMines"))
+                {
+                    foreach (ProcessingRecipe recipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId() + "_ReachedBottomOfHardMines"))
+                    {
+                        validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(new List<Item>(), recipe));
+                    }
+                }
+            }
+            else if (GameLocationUtilities.IsLocationTheVolcanoDungeon(objectLocation) || GameLocationUtilities.IsLocationTheCaldera(objectLocation))
+            {
+                foreach (ProcessingRecipe recipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId() + "_VolcanoDungeon"))
+                {
+                    validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(new List<Item>(), recipe));
+                }
+            }
+
+            else
+            {
+                //Maybe eventually decide to add in resources for the hilltop and maybe the 4 corners farm?
+
+                //Small easter egg. When using a mining drill on wooden floors, the player can get some wood as the output.
+                if (ObjectUtilities.GetFloorType(this) == Enums.FloorType.Wood)
+                {
+                    foreach (ProcessingRecipe recipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId() + "_EasterEggs_WoodFloor"))
+                    {
+                        validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(new List<Item>(), recipe));
+                    }
+                }
+                else
+                {
+                    foreach (ProcessingRecipe recipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId() + "_UndeterminedLocation"))
+                    {
+                        validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(new List<Item>(), recipe));
+                    }
+                }
+
+
+            }
+
+
+            return validRecipes;
         }
 
         public override Item getOne()
         {
             return new MiningDrill(this.basicItemInformation.Copy(), this.machineTier.Value);
-        }
-
-        public override bool isWorking()
-        {
-            return this.itemToMine.Value != null;
         }
     }
 }

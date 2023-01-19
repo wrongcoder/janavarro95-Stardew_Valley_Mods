@@ -8,6 +8,7 @@ Key:
 +Successfully generated out output recipes for all geode crushers into ProcessingRecipe format.
 +Updated GeodeCrushers to take a random recipe and use that to generate it's outputs.
 ~Processing recipes now properly take item chance to obtain into considerations when generating outputs.
+~Started to define loot tables for mining drills.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 1-17-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Added in conversion method to convert old JsonCraftingRecipe files for machines into the new ProcessingRecipe format.

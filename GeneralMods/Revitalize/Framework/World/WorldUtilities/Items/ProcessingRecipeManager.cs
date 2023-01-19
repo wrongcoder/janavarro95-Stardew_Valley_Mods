@@ -63,7 +63,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
 
             //Add in special cases below.
 
-            this.convertJsonCraftingRecipeBookToProcessingRecipeBook();
+            //this.convertJsonCraftingRecipeBookToProcessingRecipeBook();
 
         }
 
