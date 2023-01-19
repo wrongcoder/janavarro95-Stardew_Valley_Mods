@@ -31,13 +31,13 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
         public override void loadRecipes()
         {
             //Load in general cases recipes.
-            List<Dictionary<string, List<ProcessingRecipe<LootTableEntry>>>> processingRecipes = this.loadProcessingRecipesFromJsonFiles();
-            foreach (Dictionary<string, List<ProcessingRecipe<LootTableEntry>>> objectIdToProcessingRecipesDict in processingRecipes)
+            List<Dictionary<string, List<ProcessingRecipe>>> processingRecipes = this.loadProcessingRecipesFromJsonFiles();
+            foreach (Dictionary<string, List<ProcessingRecipe>> objectIdToProcessingRecipesDict in processingRecipes)
             {
 
-                foreach (KeyValuePair<string, List<ProcessingRecipe<LootTableEntry>>> entry in objectIdToProcessingRecipesDict)
+                foreach (KeyValuePair<string, List<ProcessingRecipe>> entry in objectIdToProcessingRecipesDict)
                 {
-                    foreach (ProcessingRecipe<LootTableEntry> recipe in entry.Value)
+                    foreach (ProcessingRecipe recipe in entry.Value)
                     {
                         this.addProcessingRecipe(entry.Key, recipe);
                         RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.addProcessingRecipe(entry.Key, recipe);
@@ -46,7 +46,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
             }
         }
 
-        public override List<ProcessingRecipe<LootTableEntry>> getProcessingRecipesForObject(string Id)
+        public override List<ProcessingRecipe> getProcessingRecipesForObject(string Id)
         {
             if (this.processingRecipes.ContainsKey(Id))
             {
@@ -58,14 +58,14 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
             }
         }
 
-        protected override List<Dictionary<string, List<ProcessingRecipe<LootTableEntry>>>> loadProcessingRecipesFromJsonFiles()
+        protected override List<Dictionary<string, List<ProcessingRecipe>>> loadProcessingRecipesFromJsonFiles()
         {
             if(!Directory.Exists(Path.Combine(this.contentPack.baseContentPack.DirectoryPath, ObjectsDataPaths.ProcessingRecipesPath)))
             {
                 Directory.CreateDirectory(Path.Combine(this.contentPack.baseContentPack.DirectoryPath, ObjectsDataPaths.ProcessingRecipesPath));
             }
 
-            return JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, List<ProcessingRecipe<LootTableEntry>>>>(this.contentPack, ObjectsDataPaths.ProcessingRecipesPath);
+            return JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, List<ProcessingRecipe>>>(this.contentPack, ObjectsDataPaths.ProcessingRecipesPath);
         }
 
     }

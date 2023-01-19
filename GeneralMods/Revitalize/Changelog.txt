@@ -4,6 +4,9 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 1-18-2023 xx.xx P.M~~~~~~~~~~~~~~
++Successfully generated out output recipes for all geode crushers into ProcessingRecipe format.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 1-17-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Added in conversion method to convert old JsonCraftingRecipe files for machines into the new ProcessingRecipe format.
     ~Also converted all of the old machine recipes as well, but need to run extensive testing on them first.

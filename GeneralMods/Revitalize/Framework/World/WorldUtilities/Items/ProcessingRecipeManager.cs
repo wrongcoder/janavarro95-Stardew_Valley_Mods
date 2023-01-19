@@ -24,12 +24,12 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
         /// <summary>
         /// A list of processing recipes per object keyed by the object's id.
         /// </summary>
-        public Dictionary<string, List<ProcessingRecipe<LootTableEntry>>> processingRecipes = new Dictionary<string, List<ProcessingRecipe<LootTableEntry>>>();
+        public Dictionary<string, List<ProcessingRecipe>> processingRecipes = new Dictionary<string, List<ProcessingRecipe>>();
 
         public ProcessingRecipeManager() { }
 
 
-        public virtual void addProcessingRecipe(string ObjectId, ProcessingRecipe<LootTableEntry> recipe)
+        public virtual void addProcessingRecipe(string ObjectId, ProcessingRecipe recipe)
         {
             if (this.processingRecipes.ContainsKey(ObjectId))
             {
@@ -37,7 +37,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
             }
             else
             {
-                this.processingRecipes.Add(ObjectId, new List<ProcessingRecipe<LootTableEntry>>() { recipe });
+                this.processingRecipes.Add(ObjectId, new List<ProcessingRecipe>() { recipe });
             }
         }
 
@@ -48,13 +48,13 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
         public virtual void loadRecipes()
         {
             //Load in general cases recipes.
-            List<Dictionary<string, List<ProcessingRecipe<LootTableEntry>>>> processingRecipes = this.loadProcessingRecipesFromJsonFiles();
-            foreach (Dictionary<string, List<ProcessingRecipe<LootTableEntry>>> objectIdToProcessingRecipesDict in processingRecipes)
+            List<Dictionary<string, List<ProcessingRecipe>>> processingRecipes = this.loadProcessingRecipesFromJsonFiles();
+            foreach (Dictionary<string, List<ProcessingRecipe>> objectIdToProcessingRecipesDict in processingRecipes)
             {
 
-                foreach (KeyValuePair<string, List<ProcessingRecipe<LootTableEntry>>> entry in objectIdToProcessingRecipesDict)
+                foreach (KeyValuePair<string, List<ProcessingRecipe>> entry in objectIdToProcessingRecipesDict)
                 {
-                    foreach (ProcessingRecipe<LootTableEntry> recipe in entry.Value)
+                    foreach (ProcessingRecipe recipe in entry.Value)
                     {
                         this.addProcessingRecipe(entry.Key, recipe);
                     }
@@ -64,19 +64,20 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
             //Add in special cases below.
 
             this.convertJsonCraftingRecipeBookToProcessingRecipeBook();
+
         }
 
         /// <summary>
         /// Loads in all processing files for the mod.
         /// </summary>
         /// <returns></returns>
-        protected virtual List<Dictionary<string, List<ProcessingRecipe<LootTableEntry>>>> loadProcessingRecipesFromJsonFiles()
+        protected virtual List<Dictionary<string, List<ProcessingRecipe>>> loadProcessingRecipesFromJsonFiles()
         {
             if (!Directory.Exists(Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, ObjectsDataPaths.ProcessingRecipesPath)))
             {
                 Directory.CreateDirectory(Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, ObjectsDataPaths.ProcessingRecipesPath));
             }
-            return JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, List<ProcessingRecipe<LootTableEntry>>>>(ObjectsDataPaths.ProcessingRecipesPath);
+            return JsonUtilities.LoadJsonFilesFromDirectories<Dictionary<string, List<ProcessingRecipe>>>(ObjectsDataPaths.ProcessingRecipesPath);
         }
 
 
@@ -85,9 +86,9 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public virtual List<ProcessingRecipe<LootTableEntry>> getProcessingRecipesForObject(string Id)
+        public virtual List<ProcessingRecipe> getProcessingRecipesForObject(string Id)
         {
-            List<ProcessingRecipe<LootTableEntry>> processingRecipesForObject = new List<ProcessingRecipe<LootTableEntry>>();
+            List<ProcessingRecipe> processingRecipesForObject = new List<ProcessingRecipe>();
             if (this.processingRecipes.ContainsKey(Id))
             {
                 processingRecipesForObject.AddRange(this.processingRecipes[Id]);
@@ -97,7 +98,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
             {
                 if (contentPack.objectProcessingRecipeManager != null)
                 {
-                    List<ProcessingRecipe<LootTableEntry>> processingRecipesFromContentPack = contentPack.objectProcessingRecipeManager.getProcessingRecipesForObject(Id);
+                    List<ProcessingRecipe> processingRecipesFromContentPack = contentPack.objectProcessingRecipeManager.getProcessingRecipesForObject(Id);
                     if (processingRecipesFromContentPack != null)
                     {
                         processingRecipesForObject.AddRange(processingRecipesFromContentPack);
@@ -144,7 +145,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
 
                 if (!this.processingRecipes.ContainsKey(recipeBookDefinition.craftingRecipeBookId))
                 {
-                    this.processingRecipes.Add(recipeBookDefinition.craftingRecipeBookId, new List<ProcessingRecipe<LootTableEntry>>());
+                    this.processingRecipes.Add(recipeBookDefinition.craftingRecipeBookId, new List<ProcessingRecipe>());
                 }
 
 
@@ -165,11 +166,11 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
                     string newFilePath = Path.Combine(ObjectsDataPaths.ProcessingRecipesPath, refinedDirectoryPath, recipe.Key.Split("\\").Last());
                     if (File.Exists(Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, newFilePath))) continue;
 
-                    ProcessingRecipe<LootTableEntry> entry = new ProcessingRecipe<LootTableEntry>(recipe.Value.recipe.craftingRecipeId, new GameTimeStamp(recipe.Value.recipe.MinutesToCraft), recipe.Value.recipe.inputs.Select(recipe => recipe.item).ToList(), (recipe.Value.recipe.outputs.Select(recipe => new LootTableEntry(recipe.item)).ToList()));
+                    ProcessingRecipe entry = new ProcessingRecipe(recipe.Value.recipe.craftingRecipeId, new GameTimeStamp(recipe.Value.recipe.MinutesToCraft), recipe.Value.recipe.inputs.Select(recipe => recipe.item).ToList(), (recipe.Value.recipe.outputs.Select(recipe => new LootTableEntry(recipe.item)).ToList()));
                     this.processingRecipes[recipeBookDefinition.craftingRecipeBookId].Add(entry);
-                    List<ProcessingRecipe<LootTableEntry>> toJsonEntries = new List<ProcessingRecipe<LootTableEntry>>() { entry };
+                    List<ProcessingRecipe> toJsonEntries = new List<ProcessingRecipe>() { entry };
 
-                    Dictionary<string, List<ProcessingRecipe<LootTableEntry>>> newRecipes = new();
+                    Dictionary<string, List<ProcessingRecipe>> newRecipes = new();
                     newRecipes.Add(recipeBookDefinition.craftingRecipeBookId, toJsonEntries);
                     JsonUtilities.WriteJsonFile(newRecipes, newFilePath);
                 }

@@ -1,0 +1,90 @@
+{
+  "Revitalize.Objects.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher": [
+    {
+      "id": "Omegasis.Revitalize.Machines.GeodeCrusherOutputs.Geode.PetrifiedSlime",
+      "timeToProcess": {
+        "years": 0,
+        "seasons": 0,
+        "days": 0,
+        "hours": 1,
+        "minutes": 0
+      },
+      "inputs": [
+        {
+          "amount": 1,
+          "registeredObjectId": "(O)535",
+          "stardewValleyItemId": "Geode",
+          "stardewValleyBigCraftableId": "NULL",
+          "artisanGoodItemReference": null
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "amount": 1,
+            "registeredObjectId": "(O)557",
+            "stardewValleyItemId": "PetrifiedSlime",
+            "stardewValleyBigCraftableId": "NULL",
+            "artisanGoodItemReference": null
+          },
+          "stackSizeDeterminer": [
+            {
+              "validRangeForChance": {
+                "min": 0.0,
+                "max": 20.0
+              },
+              "outcomeValue": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            {
+              "validRangeForChance": {
+                "min": 90.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 2,
+                "max": 2
+              }
+            },
+            {
+              "validRangeForChance": {
+                "min": 75.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 2,
+                "max": 2
+              }
+            },
+            {
+              "validRangeForChance": {
+                "min": 50.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 2,
+                "max": 2
+              }
+            },
+            {
+              "validRangeForChance": {
+                "min": 20.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 2,
+                "max": 2
+              }
+            }
+          ],
+          "chanceToObtain": {
+            "min": 0.0,
+            "max": 100.0
+          }
+        }
+      ]
+    }
+  ]
+}

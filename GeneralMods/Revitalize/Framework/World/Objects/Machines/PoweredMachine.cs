@@ -125,12 +125,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
         public virtual int getElectricFuelChargeIncreaseAmount()
         {
-            return 3;
+            return 5;
         }
 
         public virtual int getNuclearFuelChargeIncreaseAmount()
         {
-            return 14;
+            return 50;
         }
 
         public virtual int getMagicalFuelChargeIncreaseAmount()
@@ -263,7 +263,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             return false;
         }
 
-        public override CraftingResult onSuccessfulRecipeFound(IList<Item> dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
+        public override CraftingResult onSuccessfulRecipeFound(IList<Item> dropInItem, ProcessingRecipe craftingRecipe, Farmer who = null)
         {
             //Make sure enough fue is present for the furnace to operate (if necessary!)
             bool success = this.useFuelItemToIncreaseCharges(who, false, who != null);

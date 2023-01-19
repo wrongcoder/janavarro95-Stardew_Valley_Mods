@@ -173,7 +173,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             return base.performItemDropInAction(dropInItem, probe, who);
         }
 
-        public override CraftingResult onSuccessfulRecipeFound(IList<Item> dropInItem, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
+        public override CraftingResult onSuccessfulRecipeFound(IList<Item> dropInItem, ProcessingRecipe craftingRecipe, Farmer who = null)
         {
             CraftingResult result = base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
 

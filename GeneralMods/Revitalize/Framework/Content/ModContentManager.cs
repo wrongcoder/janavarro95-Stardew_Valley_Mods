@@ -17,6 +17,7 @@ using Omegasis.Revitalize.Framework.World.Objects;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json.Crafting;
+using Omegasis.Revitalize.Framework.World.Objects.Machines.Misc;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities.Items;
 using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops;
@@ -98,7 +99,7 @@ namespace Omegasis.Revitalize.Framework.Content
             //Once all objects have been initialized, then we can add references to them for recipes and initialize all of the crafting recipes for the mod.
             this.craftingManager.initializeRecipeBooks();
 
-            
+            //AdvancedGeodeCrusher.GenerateOutputJsonFiles(); Don't need this anymore, but keep it just in case.
 
             this.dumpAllObjectIdsToJsonFile();
         }

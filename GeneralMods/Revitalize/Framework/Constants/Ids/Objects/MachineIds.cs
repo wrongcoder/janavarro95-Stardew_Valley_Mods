@@ -23,10 +23,12 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
 
 
         //Geode Crushers.
-        public const string CoalAdvancedGeodeCrusher = PREFIX + "GeodeCrushers.CoalAdvancedGeodeCrusher";
+        public const string AdvancedBurnerGeodeCrusher = PREFIX + "GeodeCrushers.CoalAdvancedGeodeCrusher";
         public const string ElectricAdvancedGeodeCrusher = PREFIX + "GeodeCrushers.ElectricAdvancedGeodeCrusher";
         public const string NuclearAdvancedGeodeCrusher = PREFIX + "GeodeCrushers.NuclearAdvancedGeodeCrusher";
         public const string MagicalAdvancedGeodeCrusher = PREFIX + "GeodeCrushers.MagicalAdvancedGeodeCrusher";
+        public const string GalaxyAdvancedGeodeCrusher = PREFIX + "GeodeCrushers.GalaxyAdvancedGeodeCrusher";
+
 
         //Charcoal Kilns
         public const string AdvancedCharcoalKiln = PREFIX + "CharcoalKilns.AdvancedCharcoalKiln";

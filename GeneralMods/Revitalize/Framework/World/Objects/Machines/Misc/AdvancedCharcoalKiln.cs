@@ -48,7 +48,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             return true;
         }
 
-        public override CraftingResult onSuccessfulRecipeFound(IList<Item> dropInItems, ProcessingRecipe<LootTableEntry> craftingRecipe, Farmer who = null)
+        public override CraftingResult onSuccessfulRecipeFound(IList<Item> dropInItems, ProcessingRecipe craftingRecipe, Farmer who = null)
         {
             CraftingResult result= base.onSuccessfulRecipeFound(dropInItems, craftingRecipe, who);
             if(result.successful)

@@ -123,14 +123,28 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
                     continue;
                 if (potentialOutcomeChanceRange.containsInclusive(rand))
                 {
-                    outcomeValue = potentialOutcomeChanceRange.getValueIfInInclusiveBounds(rand);
-                    break;
+                    outcomeValue = Math.Max(outcomeValue,potentialOutcomeChanceRange.getValueIfInInclusiveBounds(rand));
                 }
             }
 
             int amount = outcomeValue;
 
             return amount;
+        }
+
+        public virtual Item getOutputItem()
+        {
+            double chance=Game1.random.NextDouble() * 100;
+            if (this.chanceToObtain.containsInclusive(chance))
+            {
+                Item item = this.item.getItem();
+                item.Stack = this.getFinalOutputAmount();
+                return item;
+            }
+            else
+            {
+                return null;
+            }
         }
 
     }

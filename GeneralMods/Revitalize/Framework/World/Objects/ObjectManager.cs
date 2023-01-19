@@ -366,7 +366,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         protected virtual void addInGeodeCrushers()
         {
-            this.addItem(MachineIds.CoalAdvancedGeodeCrusher, new AdvancedGeodeCrusher(new BasicItemInformation("", MachineIds.CoalAdvancedGeodeCrusher, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Machines.createAnimationManager("CoalAdvancedGeodeCrusher", new Dictionary<string, Animation>()
+            this.addItem(MachineIds.AdvancedBurnerGeodeCrusher, new AdvancedGeodeCrusher(new BasicItemInformation("", MachineIds.AdvancedBurnerGeodeCrusher, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Machines.createAnimationManager("CoalAdvancedGeodeCrusher", new Dictionary<string, Animation>()
                 {
                     {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }

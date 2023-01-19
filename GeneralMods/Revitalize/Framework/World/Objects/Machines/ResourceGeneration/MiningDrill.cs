@@ -128,6 +128,16 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
             }
         }
 
+        public override int getElectricFuelChargeIncreaseAmount()
+        {
+            return 3;
+        }
+
+        public override int getNuclearFuelChargeIncreaseAmount()
+        {
+            return this.getElectricFuelChargeIncreaseAmount() * 10;
+        }
+
         /// <summary>
         /// Generates a potential item to be produced for the next day.
         /// </summary>
