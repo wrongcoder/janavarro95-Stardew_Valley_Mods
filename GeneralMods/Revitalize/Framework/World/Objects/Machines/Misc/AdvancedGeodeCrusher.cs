@@ -48,8 +48,20 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
         public override CraftingResult processInput(IList<Item> inputItems, Farmer who, bool ShowRedMessage = true)
         {
             //TODO rewrite logic to select a recipe at random valid recipe instead of iterating across the list.
+            if (string.IsNullOrEmpty(this.getCraftingRecipeBookId()) || this.isWorking() || this.finishedProduction())
+            {
+                return new CraftingResult(false);
+            }
 
-            return base.processInput(inputItems, who, ShowRedMessage);
+            List<KeyValuePair<IList<Item>, ProcessingRecipe>> validRecipes = this.getListOfValidRecipes(inputItems, who, ShowRedMessage);
+
+            if (validRecipes.Count > 0)
+            {
+                int randElement=Game1.random.Next(validRecipes.Count);
+                return this.onSuccessfulRecipeFound(validRecipes.ElementAt(randElement).Key, validRecipes.ElementAt(randElement).Value, who);
+            }
+
+            return new CraftingResult(false);
         }
 
         public override CraftingResult onSuccessfulRecipeFound(IList<Item> dropInItem, ProcessingRecipe craftingRecipe, Farmer who = null)

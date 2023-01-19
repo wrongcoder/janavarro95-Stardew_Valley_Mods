@@ -80,11 +80,25 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 return new CraftingResult(false);
             }
 
+            List<KeyValuePair<IList<Item>, ProcessingRecipe>> validRecipes = this.getListOfValidRecipes(inputItems,who,ShowRedMessage);
+
+            if(validRecipes.Count > 0)
+            {
+                return this.onSuccessfulRecipeFound(validRecipes.ElementAt(0).Key, validRecipes.ElementAt(0).Value, who);
+            }
+
+            return new CraftingResult(false);
+        }
+
+        public virtual List<KeyValuePair<IList<Item>,ProcessingRecipe>> getListOfValidRecipes(IList<Item> inputItems, Farmer who, bool ShowRedMessage = true)
+        {
+            List<KeyValuePair<IList<Item>, ProcessingRecipe>> validRecipes = new List<KeyValuePair<IList<Item>, ProcessingRecipe>>();
 
             foreach (ProcessingRecipe craftingRecipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId()))
             {
                 IList<Item> consumedItems = new List<Item>();
                 bool activeObjectChecked = false;
+                bool invalid = false;
                 foreach (ItemReference requiredItem in craftingRecipe.inputs)
                 {
                     Item neededDropInItem = requiredItem.getItem();
@@ -105,7 +119,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                                     {
                                         Game1.showRedMessage(this.getErrorString_NeedMoreInputItems(amountRequired, who.ActiveObject));
                                     }
-                                    return new CraftingResult(false);
+                                    invalid= true;
+                                    break;
                                 }
                                 consumedItems.Add(who.ActiveObject);
                                 activeObjectChecked = true;
@@ -138,7 +153,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                                 {
                                     Game1.showRedMessage(this.getErrorString_NeedMoreInputItems(amountRequired, inputItem));
                                 }
-                                return new CraftingResult(false);
+                                invalid = true;
+                                break;
                             }
                             consumedItems.Add(inputItem);
                             break;
@@ -150,12 +166,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                     }
                 }
 
+                if (invalid)
+                {
+                    continue;
+                }
+
                 if (consumedItems.Count == craftingRecipe.inputs.Count)
                 {
                     //If the player is the one interacting with this object, force the recipe to be used only if the active object is part of the recipe.
                     if (who != null && activeObjectChecked)
                     {
-                        return this.onSuccessfulRecipeFound(consumedItems, craftingRecipe, who);
+                        validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(consumedItems, craftingRecipe));
                     }
                     else if (who != null && activeObjectChecked == false)
                     {
@@ -163,12 +184,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                     }
                     else
                     {
-                        return this.onSuccessfulRecipeFound(consumedItems, craftingRecipe, who);
+                        validRecipes.Add(new KeyValuePair<IList<Item>, ProcessingRecipe>(consumedItems, craftingRecipe));
                     }
 
                 }
             }
-            return new CraftingResult(false);
+            return validRecipes;
         }
 
         public virtual CraftingResult onSuccessfulRecipeFound(IList<Item> consumedItems, ProcessingRecipe craftingRecipe, Farmer who = null)
@@ -180,10 +201,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
             foreach (LootTableEntry outputItem in craftingRecipe.outputs)
             {
-                Item item = outputItem.item.getItem();
-                item.Stack = outputItem.getFinalOutputAmount();
-
-                this.addItemToHeldItemQueue(item);
+                Item item = outputItem.getOutputItem();
+                if (item != null)
+                {
+                    this.addItemToHeldItemQueue(item);
+                }
             }
 
             this.heldObject.Value = (StardewValley.Object)this.getItemFromHeldItemQueue();
