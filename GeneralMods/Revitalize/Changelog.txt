@@ -4,6 +4,11 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 1-24-2023 xx.xx P.M~~~~~~~~~~~~~~
++Migrated all mining drill outputs to ProcessingRecipe format .json files.
+~Machines should not process the next imput until it's entire output queue has been grabbed by the player (or automate).
+-Removed easter eggs for mining drills as there are simply better sources of wood...
+
 ~~~~~~~~~~~~0.0.1 Revitalize 1-18-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Successfully generated out output recipes for all geode crushers into ProcessingRecipe format.
 +Updated GeodeCrushers to take a random recipe and use that to generate it's outputs.

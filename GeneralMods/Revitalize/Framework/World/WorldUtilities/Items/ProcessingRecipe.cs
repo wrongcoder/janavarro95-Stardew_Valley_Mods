@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Omegasis.Revitalize.Framework.Constants;
+using Omegasis.Revitalize.Framework.Utilities.Ranges;
+using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 
 namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
@@ -56,6 +59,33 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Items
             this.timeToProcess = timeToProcess;
             this.inputs = inputs;
             this.outputs = outputs;
+        }
+
+
+        public static KeyValuePair<string, ProcessingRecipe> GenerateLootTableEntry(string baseId, Enums.SDVObject inputObject, Enums.SDVObject outputObject, int outputStackSize)
+        {
+            return GenerateLootTableEntry(baseId, inputObject, outputObject, new IntRange(outputStackSize, outputStackSize));
+        }
+
+        public static KeyValuePair<string, ProcessingRecipe> GenerateLootTableEntry(string baseId, Enums.SDVObject inputObject, Enums.SDVObject outputObject, IntRange outputStackSizeRange)
+        {
+            return GenerateLootTableEntry(baseId, inputObject, outputObject, new List<IntOutcomeChanceDeterminer>() { new IntOutcomeChanceDeterminer(new DoubleRange(0, 100), outputStackSizeRange) });
+        }
+
+        public static KeyValuePair<string, ProcessingRecipe> GenerateLootTableEntry(string baseId, Enums.SDVObject inputObject, Enums.SDVObject outputObject, List<IntOutcomeChanceDeterminer> outputStackSizeRange)
+        {
+            string inputName = Enum.GetName(inputObject);
+            string outputName = Enum.GetName(outputObject);
+            string id = baseId + inputName + "." + outputName;
+            string relativePath = Path.Combine(inputName, outputName);
+
+            return new KeyValuePair<string, ProcessingRecipe>(relativePath, new ProcessingRecipe(id, new GameTimeStamp(0, 0, 0, 1, 0), new ItemReference(inputObject), new LootTableEntry(new ItemReference(outputObject), outputStackSizeRange)));
+        }
+
+        public static KeyValuePair<string, ProcessingRecipe> GenerateLootTableEntry(string Id, string Path, Enums.SDVObject inputObject, ItemReference outputObject, List<IntOutcomeChanceDeterminer> outputStackSizeRange)
+        {
+
+            return new KeyValuePair<string, ProcessingRecipe>(Path, new ProcessingRecipe(Id, new GameTimeStamp(0, 0, 0, 1, 0), new ItemReference(inputObject), new LootTableEntry(outputObject, outputStackSizeRange)));
         }
 
     }

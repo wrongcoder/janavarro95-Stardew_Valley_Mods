@@ -229,7 +229,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             {
                 StardewValley.Object obj = (item as StardewValley.Object);
 
-                if (obj.bigCraftable)
+                if (obj.bigCraftable.Value)
                 {
                     this.StardewValleyBigCraftableId = (Enums.SDVBigCraftable)obj.ParentSheetIndex;
                 }

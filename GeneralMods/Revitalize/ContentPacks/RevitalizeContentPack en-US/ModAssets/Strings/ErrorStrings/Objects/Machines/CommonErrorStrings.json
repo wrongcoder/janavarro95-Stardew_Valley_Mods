@@ -3,5 +3,7 @@
 	"NeedBatteryPack":"Needs a battery pack to operate!",
 	"NeedNuclearFuel":"Needs nuclear fuel to operate!",
 	"MagicalFurnaceFuelError":"Magical furnace failure! Please contact Omegasis to address this issue!",
-	"NeedMoreInputItems":"Requires {0} {1}!"
+	"NeedMoreInputItems":"Requires {0} {1}!",
+	"CantRunHere":"{0} can not run here!",
+	"NoValidRecipes":"{0} has no valid recipes!"
 }

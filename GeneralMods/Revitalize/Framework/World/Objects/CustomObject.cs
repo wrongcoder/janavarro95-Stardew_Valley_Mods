@@ -23,6 +23,8 @@ using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.World.Debris;
 using StardewValley.Menus;
 using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
+using StardewValley.TerrainFeatures;
+using StardewValley.Locations;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -299,8 +301,147 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         public override bool canBePlacedHere(GameLocation l, Vector2 tile)
         {
+            //Replace with SDV 1.6 code when that releases. I'll know because this method calling signiture WILL break.
 
-            return base.canBePlacedHere(l, tile);
+            if (!this.isGroundFurniture())
+            {
+                tile.Y = this.GetModifiedWallTilePosition(l, (int)tile.X, (int)tile.Y);
+            }
+            for (int x = 0; x < base.boundingBox.Width / 64; x++)
+            {
+                for (int y = 0; y < base.boundingBox.Height / 64; y++)
+                {
+                    Vector2 nonTile = tile * 64f + new Vector2(x, y) * 64f;
+                    nonTile.X += 32f;
+                    nonTile.Y += 32f;
+                    foreach (Furniture f in l.furniture)
+                    {
+                        if ((int)f.furniture_type == 11 && f.getBoundingBox(f.tileLocation).Contains((int)nonTile.X, (int)nonTile.Y) && f.heldObject.Value == null && this.getTilesWide() == 1 && this.getTilesHigh() == 1)
+                        {
+                            return true;
+                        }
+                        if (((int)f.furniture_type != 12 || (int)this.furniture_type == 12) && f.getBoundingBox(f.tileLocation).Contains((int)nonTile.X, (int)nonTile.Y) && !f.AllowPlacementOnThisTile((int)tile.X + x, (int)tile.Y + y))
+                        {
+                            return false;
+                        }
+                    }
+                    Vector2 currentTile = tile + new Vector2(x, y);
+                    if (l.Objects.ContainsKey(currentTile))
+                    {
+                        return false;
+                    }
+                    if (l.getLargeTerrainFeatureAt((int)currentTile.X, (int)currentTile.Y) != null)
+                    {
+                        return false;
+                    }
+                    if (l.terrainFeatures.ContainsKey(currentTile) && l.terrainFeatures[currentTile] is Tree)
+                    {
+                        return false;
+                    }
+                    if (l.isTerrainFeatureAt((int)currentTile.X, (int)currentTile.Y))
+                    {
+                        return false;
+                    }
+                }
+            }
+            Rectangle bounding_box = new Rectangle(base.boundingBox.Value.X, base.boundingBox.Value.Y, base.boundingBox.Value.Width, base.boundingBox.Value.Height);
+            bounding_box.X = (int)tile.X * 64;
+            bounding_box.Y = (int)tile.Y * 64;
+            if (!this.isPassable())
+            {
+                foreach (Farmer farmer in l.farmers)
+                {
+                    if (farmer.GetBoundingBox().Intersects(bounding_box))
+                    {
+                        return false;
+                    }
+                }
+                foreach (NPC character in l.characters)
+                {
+                    if (character.GetBoundingBox().Intersects(bounding_box))
+                    {
+                        return false;
+                    }
+                }
+            }
+            if (this.GetAdditionalFurniturePlacementStatus(l, (int)tile.X * 64, (int)tile.Y * 64) != 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public override int GetAdditionalFurniturePlacementStatus(GameLocation location, int x, int y, Farmer who = null)
+        {
+            //Migrtae this code once SDV 1.6 is released.
+
+            Point point = new Point(x / 64, y / 64);
+            this.tileLocation.Value = new Vector2(point.X, point.Y);
+            bool flag = false;
+            if ((int)this.furniture_type == 6 || (int)this.furniture_type == 17 || (int)this.furniture_type == 13 || (int)this.parentSheetIndex == 1293)
+            {
+                int num = (((int)this.parentSheetIndex == 1293) ? 3 : 0);
+                bool flag2 = false;
+                if (location is DecoratableLocation)
+                {
+                    DecoratableLocation decoratableLocation = location as DecoratableLocation;
+                    if (((int)this.furniture_type == 6 || (int)this.furniture_type == 17 || (int)this.furniture_type == 13 || num != 0) && decoratableLocation.isTileOnWall(point.X, point.Y - num) && decoratableLocation.GetWallTopY(point.X, point.Y - num) + num == point.Y)
+                    {
+                        flag2 = true;
+                    }
+                    else if (!this.isGroundFurniture() && decoratableLocation.isTileOnWall(point.X, point.Y - 1) && decoratableLocation.GetWallTopY(point.X, point.Y) + 1 == point.Y)
+                    {
+                        flag2 = true;
+                    }
+                }
+
+                if (!flag2)
+                {
+                    return 1;
+                }
+
+                flag = true;
+            }
+
+            int num2 = this.getTilesHigh();
+            if ((int)this.furniture_type == 6 && num2 > 2)
+            {
+                num2 = 2;
+            }
+
+            for (int i = point.X; i < point.X + this.getTilesWide(); i++)
+            {
+                for (int j = point.Y; j < point.Y + num2; j++)
+                {
+                    if (location.doesTileHaveProperty(i, j, "NoFurniture", "Back") != null)
+                    {
+                        return 2;
+                    }
+
+                    if (!flag && location is DecoratableLocation && (location as DecoratableLocation).isTileOnWall(i, j))
+                    {
+                        if (!(this is BedFurniture) || j != point.Y)
+                        {
+                            return 3;
+                        }
+
+                        continue;
+                    }
+
+                    int tileIndexAt = location.getTileIndexAt(i, j, "Buildings");
+                    if (tileIndexAt != -1 && (!(location is IslandFarmHouse) || tileIndexAt < 192 || tileIndexAt > 194 || !(location.getTileSheetIDAt(i, j, "Buildings") == "untitled tile sheet")))
+                    {
+                        return -1;
+                    }
+
+                    if (location is BuildableGameLocation && (location as BuildableGameLocation).isTileOccupiedForPlacement(new Vector2(i, j), this))
+                    {
+                        return -1;
+                    }
+                }
+            }
+
+            return 0;
         }
 
         public override bool canBePlacedInWater()
@@ -971,6 +1112,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <summary>What happens when the player right clicks the object.</summary>
         public virtual bool rightClicked(Farmer who)
         {
+
+
             return false;
         }
 

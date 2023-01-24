@@ -43,16 +43,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             //Prevent overriding and destroying the previous operation.
             if (who != null && this.finishedProduction())
             {
-                bool added = Game1.player.addItemToInventoryBool(this.heldObject.Value);
-                if (!added)
+                bool added = this.tryToAddHeldItemToFarmersInventory();
+                //Either player's inventory is full or not all outputs were gathered.
+                if (!added || this.heldObject.Value!=null)
                 {
-                    HudUtilities.ShowInventoryFullErrorMessage();
                     return false;
-                }
-                else
-                {
-                    SoundUtilities.PlaySound(Enums.StardewSound.coin);
-                    this.heldObject.Value = (StardewValley.Object)this.getItemFromHeldItemQueue();
                 }
             }
             bool success = base.performItemDropInAction(dropInItem, probe, who);
@@ -64,6 +59,36 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
 
             return result.successful;
+        }
+
+        public virtual bool tryToAddHeldItemToFarmersInventory()
+        {
+            bool added = Game1.player.addItemToInventoryBool(this.heldObject.Value);
+            if (!added)
+            {
+                HudUtilities.ShowInventoryFullErrorMessage();
+                return false;
+            }
+            else
+            {
+                SoundUtilities.PlaySound(Enums.StardewSound.coin);
+                this.heldObject.Value = (StardewValley.Object)this.getItemFromHeldItemQueue();
+            }
+            return added;
+        }
+
+        public override bool rightClicked(Farmer who)
+        {
+            if (who != null && this.finishedProduction())
+            {
+                bool added = this.tryToAddHeldItemToFarmersInventory();
+                if (!added || this.heldObject.Value!=null)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -196,7 +221,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         {
             foreach (ItemReference requiredItem in craftingRecipe.inputs)
             {
-                PlayerUtilities.ReduceInventoryItemStackSize(consumedItems, requiredItem.getItem(), requiredItem.StackSize);
+                if (requiredItem.isNotNull())
+                {
+                    PlayerUtilities.ReduceInventoryItemStackSize(consumedItems, requiredItem.getItem(), requiredItem.StackSize);
+                }
             }
 
             foreach (LootTableEntry outputItem in craftingRecipe.outputs)

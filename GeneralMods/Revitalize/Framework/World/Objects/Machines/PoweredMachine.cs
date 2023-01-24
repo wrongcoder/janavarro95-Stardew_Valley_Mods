@@ -101,9 +101,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             return base.performItemDropInAction(dropInItem, probe, who);
         }
 
-        public virtual bool tryToIncreaseFuelCharges(Farmer who)
+        public virtual bool tryToIncreaseFuelCharges(Farmer who, bool ShowRedMessage=true)
         {
-            bool hasFuel = this.useFuelItemToIncreaseCharges(who, false, true);
+            if (this.getListOfValidRecipes(null, who, ShowRedMessage).Count == 0)
+            {
+                if (ShowRedMessage) Game1.showRedMessage(JsonContentPackUtilities.LoadErrorString(this.getErrorStringFile(), "NoValidRecipes", this.DisplayName));
+                return false; //Don't consume fuel when no valid recipes can be set.
+            }
+
+            bool hasFuel = this.useFuelItemToIncreaseCharges(who, false, ShowRedMessage);
             return hasFuel;
         }
 

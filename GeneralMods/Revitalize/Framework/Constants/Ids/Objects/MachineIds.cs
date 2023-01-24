@@ -11,7 +11,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
         /// <summary>
         /// Prefix for machine ids.
         /// </summary>
-        public const string PREFIX = "Revitalize.Objects.Machines.";
+        public const string PREFIX = "Revitalize.Objects.Machines."; //Change this to start with Omegasis.
 
         public const string WindmillV1 = PREFIX + "WindmillV1";
 
@@ -20,6 +20,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
         public const string ElectricMiningDrill = PREFIX + "ElectricMiningDrill";
         public const string NuclearMiningDrill = PREFIX + "NuclearMiningDrill";
         public const string MagicalMiningDrill = PREFIX + "MagicalMiningDrill";
+        public const string GalaxyMiningDrill = PREFIX + "GalaxyMiningDrill";
 
 
         //Geode Crushers.

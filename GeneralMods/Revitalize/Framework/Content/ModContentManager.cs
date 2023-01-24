@@ -18,6 +18,7 @@ using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json.Crafting;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Misc;
+using Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneration;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using Omegasis.Revitalize.Framework.World.WorldUtilities.Items;
 using Omegasis.Revitalize.Framework.World.WorldUtilities.Shops;
@@ -100,6 +101,7 @@ namespace Omegasis.Revitalize.Framework.Content
             this.craftingManager.initializeRecipeBooks();
 
             //AdvancedGeodeCrusher.GenerateOutputJsonFiles(); Don't need this anymore, but keep it just in case.
+            MiningDrill.GenerateOutputJsonFiles();
 
             this.dumpAllObjectIdsToJsonFile();
         }

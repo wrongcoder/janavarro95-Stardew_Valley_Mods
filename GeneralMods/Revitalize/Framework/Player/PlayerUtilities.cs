@@ -35,6 +35,16 @@ namespace Omegasis.Revitalize.Framework.Player
         }
 
         /// <summary>
+        /// Has the bottom of the hard mines been completed as Qi's special quest?
+        /// </summary>
+        /// <param name="who"></param>
+        /// <returns></returns>
+        public static bool HasReachedBottomOfHardMines(this Farmer who)
+        {
+           return who.hasOrWillReceiveMail("reachedBottomOfHardMines");
+        }
+
+        /// <summary>
         /// Adds an item to the player's inventory by a new slot, or stackable equivalent.
         /// </summary>
         /// <param name="Who"></param>
