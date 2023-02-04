@@ -19,7 +19,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
     /// TODO: Add in support for quality?
     /// TODO: Add in support for colored objects?
     /// </summary>
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Items.Utilities.ItemReference")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Items.Utilities.ItemReference")]
     public class ItemReference : StardustCore.Networking.NetObject
     {
         [JsonIgnore]

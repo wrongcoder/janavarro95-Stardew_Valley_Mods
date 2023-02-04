@@ -2,7 +2,7 @@
   "whichTab": "Default",
   "isUnlocked": false,
   "recipe": {
-	"craftingRecipeId": "Revitalize.Workbench.Machines.MiningDrills.MagicalMiningDrill",
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.Machines.MiningDrills.MagicalMiningDrill",
     "outputName": "",
     "outputDescription": "",
     "MinutesToCraft": 0,
@@ -43,7 +43,7 @@
 			"item":{
 			"stardewValleyItemId": "NULL",
 			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Objects.Machines.NuclearMiningDrill",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.NuclearMiningDrill",
 			"amount": 1
 			}
 		}
@@ -54,7 +54,7 @@
 			"item":{
 			"stardewValleyItemId": "NULL",
 			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Objects.Machines.MagicalMiningDrill",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.MagicalMiningDrill",
 			"amount": 1
 			}
 		},

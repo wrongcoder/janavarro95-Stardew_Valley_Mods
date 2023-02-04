@@ -6,9 +6,9 @@
     "amount": 1
   },
   "recipesToUnlock": {
-    "Revitalize.Crafting.CraftingRecipeBooks.Anvil": "StardewValley.Tools.GoldHoe"
+    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil": "StardewValley.Tools.GoldHoe"
   },
-  "id": "Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.GoldHoe",
+  "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.GoldHoe",
   "name": "Blueprint: Gold Hoe",
   "description": "A blueprint used on how to craft a gold hoe at a anvil!",
   "categoryId": "StardewValley.Crafting",
@@ -29,7 +29,7 @@
   },
   "animationManager": {
     "modManifestId": "Omegasis.Revitalize",
-    "textureManagerId": "Revitalize.Items.Crafting",
+    "textureManagerId": "Omegasis.Revitalize.Items.Crafting",
     "textureId": "Blueprint",
     "defaultAnimationKey": "Default",
     "startingAnimationKey": "Default",

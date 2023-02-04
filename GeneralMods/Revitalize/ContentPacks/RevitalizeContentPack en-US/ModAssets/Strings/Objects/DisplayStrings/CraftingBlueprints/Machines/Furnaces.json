@@ -1,15 +1,15 @@
 {
-	"Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.ElectricFurnace":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.ElectricFurnace":
 	{
 		"displayName":"Electric Furnace",
 		"description":"A blueprint used on how to craft an electric furnace at a workbench!"
 	},
-	"Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.NuclearFurnace":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.NuclearFurnace":
 	{
 		"displayName":"Nuclear Furnace",
 		"description":"A blueprint used on how to craft a nuclear furnace at a workbench!"
 	},
-	"Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.MagicalFurnace":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.MagicalFurnace":
 	{
 		"displayName":"Magical Furnace",
 		"description":"A blueprint used on how to craft a magical furnace at a workbench!"

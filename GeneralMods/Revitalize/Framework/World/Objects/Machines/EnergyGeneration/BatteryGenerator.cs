@@ -23,7 +23,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
     /// <summary>
     ///Object type that takes in a fuel type and converts it into battery packs.
     /// </summary>
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.EnergyGeneration.BatteryGenerator")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration.BatteryGenerator")]
     public class BatteryGenerator : ItemRecipeDropInMachine
     {
 

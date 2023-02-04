@@ -1,5 +1,5 @@
 {
-	"Revitalize.Objects.Crafting.CraftingStations.Workbench":
+	"Omegasis.Revitalize.Objects.Crafting.CraftingStations.Workbench":
 	{
 		"displayName":"Workbench",
 		"description":"A workbench that can be used for crafting different objects."

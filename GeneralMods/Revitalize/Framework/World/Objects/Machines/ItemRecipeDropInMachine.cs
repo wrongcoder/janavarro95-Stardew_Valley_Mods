@@ -154,39 +154,42 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                         }
                     }
 
-                    foreach (Item inputItem in inputItems)
+                    if (inputItems != null)
                     {
-                        if (inputItem == null)
+                        foreach (Item inputItem in inputItems)
                         {
-                            continue;
-                        }
-                        //Since we already checked the Player's active object we don't want to check it twice.
-                        if (activeObjectChecked)
-                        {
-                            if (who.ActiveObject == inputItem)
+                            if (inputItem == null)
                             {
                                 continue;
                             }
-                        }
-
-                        if (neededDropInItem.canStackWith(inputItem) || requiredItem.itemEquals(inputItem))
-                        {
-                            //Check to make sure the player has enough, otherwise display an error!
-                            if (amountRequired > inputItem.Stack)
+                            //Since we already checked the Player's active object we don't want to check it twice.
+                            if (activeObjectChecked)
                             {
-                                if (ShowRedMessage)
+                                if (who.ActiveObject == inputItem)
                                 {
-                                    Game1.showRedMessage(this.getErrorString_NeedMoreInputItems(amountRequired, inputItem));
+                                    continue;
                                 }
-                                invalid = true;
+                            }
+
+                            if (neededDropInItem.canStackWith(inputItem) || requiredItem.itemEquals(inputItem))
+                            {
+                                //Check to make sure the player has enough, otherwise display an error!
+                                if (amountRequired > inputItem.Stack)
+                                {
+                                    if (ShowRedMessage)
+                                    {
+                                        Game1.showRedMessage(this.getErrorString_NeedMoreInputItems(amountRequired, inputItem));
+                                    }
+                                    invalid = true;
+                                    break;
+                                }
+                                consumedItems.Add(inputItem);
                                 break;
                             }
-                            consumedItems.Add(inputItem);
-                            break;
-                        }
-                        else
-                        {
-                            continue;
+                            else
+                            {
+                                continue;
+                            }
                         }
                     }
                 }

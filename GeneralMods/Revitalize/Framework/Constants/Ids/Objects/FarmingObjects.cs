@@ -9,13 +9,13 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
     public class FarmingObjects
     {
 
-        public const string AdvancedFarmingSystem = "Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem";
-        public const string IrrigatedGardenPot = "Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot";
+        public const string AdvancedFarmingSystem = "Omegasis.Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem";
+        public const string IrrigatedGardenPot = "Omegasis.Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot";
 
         /// <summary>
         /// Id for the hay maker. The formatting is legacy since if how I stuctured this already in code.
         /// </summary>
-        public const string HayMaker = "Revitalize.Objects.Machines.HayMaker";
-        public const string HayMaker_FeedShop = "Revitalize.Framework.World.Objects.Farming.HayMakerFeedShop";
+        public const string HayMaker = "Omegasis.Revitalize.Objects.Machines.HayMaker";
+        public const string HayMaker_FeedShop = "Omegasis.Revitalize.Framework.World.Objects.Farming.HayMakerFeedShop";
     }
 }

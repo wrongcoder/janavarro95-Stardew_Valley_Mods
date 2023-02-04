@@ -1,5 +1,5 @@
 {
-	"Revitalize.Objects.Machines.MagicalFurnace":
+	"Omegasis.Revitalize.Objects.Machines.MagicalFurnace":
 	{
 		"displayName":"Magical Furnace",
 		"description":"An advanced furnace that smelts objects twice as fast as a normal furnace and uses nuclear fuel."

@@ -1,10 +1,10 @@
 {
-	"Revitalize.Objects.Machines.HayMaker":
+	"Omegasis.Revitalize.Objects.Machines.HayMaker":
 	{
 		"displayName":"Hay Maker",
 		"description":"Used to turn different grains and grasses into animal feed."
 	},
-	"Revitalize.Framework.World.Objects.Farming.HayMakerFeedShop":
+	"Omegasis.Revitalize.Framework.World.Objects.Farming.HayMakerFeedShop":
 	{
 		"displayName":"Portable Hay Shop",
 		"description":"Used to buy hay at any time with a slightly increased price due to a convenience fee."

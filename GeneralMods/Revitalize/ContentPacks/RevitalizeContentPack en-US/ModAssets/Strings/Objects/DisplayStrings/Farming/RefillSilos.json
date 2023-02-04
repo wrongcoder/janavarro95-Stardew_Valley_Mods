@@ -1,5 +1,5 @@
 {
-	"Revitalize.Framework.World.Objects.Items.Farming.Shops.RefillSilosFakeObject":
+	"Omegasis.Revitalize.Framework.World.Objects.Items.Farming.Shops.RefillSilosFakeObject":
 	{
 		"displayName":"Refill Silos",
 		"description":"Buys as much hay as possible to fill silos on the farm."

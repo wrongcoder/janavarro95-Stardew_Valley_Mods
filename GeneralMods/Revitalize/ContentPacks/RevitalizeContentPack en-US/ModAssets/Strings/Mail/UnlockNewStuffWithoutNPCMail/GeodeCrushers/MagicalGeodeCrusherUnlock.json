@@ -1,10 +1,10 @@
 {
-	"mailTitle":"Revitalize.UnlockNewStuffWithoutNPCMail.MagicalGeodeCrusherUnlock",
+	"mailTitle":"Omegasis.Revitalize.UnlockNewStuffWithoutNPCMail.MagicalGeodeCrusherUnlock",
 	"message":"@, ^Congratulations on cracking 1000 geodes! We like to bestow upon you the iridium tier membership as well as these blueprints to create the most advanced geode crusher to date! Thank you for all of your effort and we wish you the best.^Happy Crushing!^-Geode Cracker's Association Gem Sea Branch",
 	"itemReference":{
 		"stardewValleyItemId": "NULL",
 		"stardewValleyBigCraftableId": "NULL",
-		"registeredObjectId": "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher",
+		"registeredObjectId": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher",
 		"amount": 1
 	},
 }

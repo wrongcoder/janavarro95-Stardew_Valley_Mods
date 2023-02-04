@@ -1,5 +1,5 @@
 {
-  "Revitalize.Objects.Machines.GeodeCrushers.GalaxyAdvancedGeodeCrusher": [
+  "Omegasis.Revitalize.Objects.Machines.GeodeCrushers.GalaxyAdvancedGeodeCrusher": [
     {
       "id": "Omegasis.Revitalize.Machines.GeodeCrusherOutputs.OmniGeode.Slate",
       "timeToProcess": {
@@ -36,6 +36,46 @@
               "outcomeValue": {
                 "min": 1,
                 "max": 1
+              }
+            },
+            {
+              "validRangeForChance": {
+                "min": 90.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 2,
+                "max": 2
+              }
+            },
+            {
+              "validRangeForChance": {
+                "min": 75.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 2,
+                "max": 2
+              }
+            },
+            {
+              "validRangeForChance": {
+                "min": 50.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 2,
+                "max": 2
+              }
+            },
+            {
+              "validRangeForChance": {
+                "min": 20.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 2,
+                "max": 2
               }
             },
             {

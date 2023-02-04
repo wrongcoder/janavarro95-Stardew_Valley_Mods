@@ -11,7 +11,7 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds
     /// </summary>
     public static class CraftingRecipeBooks
     {
-        public const string AnvilCraftingRecipes = "Revitalize.Crafting.CraftingRecipeBooks.Anvil";
-        public const string WorkbenchCraftingRecipies = "Revitalize.Crafting.CraftingRecipeBooks.Workbench";
+        public const string AnvilCraftingRecipes = "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil";
+        public const string WorkbenchCraftingRecipies = "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench";
     }
 }

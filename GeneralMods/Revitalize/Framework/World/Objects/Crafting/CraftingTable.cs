@@ -12,7 +12,7 @@ using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Crafting.CraftingTable")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Crafting.CraftingTable")]
     public class CraftingTable : CustomObject
     {
         public readonly NetString craftingBookName = new NetString();

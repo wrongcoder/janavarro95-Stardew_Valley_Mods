@@ -8,7 +8,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Buildings
 {
     public static class BuildingIds
     {
-        public const string ExtraCellar = "Revitalize.Buildings.ExtraCellar";
-        public const string DimensionalStorageUnit = "Revitalize.Buildings.DimensionalStorageUnit";
+        public const string ExtraCellar = "Omegasis.Revitalize.Buildings.ExtraCellar";
+        public const string DimensionalStorageUnit = "Omegasis.Revitalize.Buildings.DimensionalStorageUnit";
     }
 }

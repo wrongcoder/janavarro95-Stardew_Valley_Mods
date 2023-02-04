@@ -5,5 +5,5 @@
 	"MagicalFurnaceFuelError":"Magical furnace failure! Please contact Omegasis to address this issue!",
 	"NeedMoreInputItems":"Requires {0} {1}!",
 	"CantRunHere":"{0} can not run here!",
-	"NoValidRecipes":"{0} has no valid recipes!"
+	"NoValidRecipes":"{0} has no valid recipes using {1}!"
 }

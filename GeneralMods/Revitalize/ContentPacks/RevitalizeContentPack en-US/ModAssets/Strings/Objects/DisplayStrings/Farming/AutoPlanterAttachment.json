@@ -1,5 +1,5 @@
 {
-	"Revitalize.Framework.World.Objects.Items.Farming.AutoPlanterGardenPotAttachment":
+	"Omegasis.Revitalize.Framework.World.Objects.Items.Farming.AutoPlanterGardenPotAttachment":
 	{
 		"displayName":"Auto Planter Attachment",
 		"description":"An attachment that when used on a Delux Garden Pot, will allow a Farming System to plant seeds automatically into the pot!"

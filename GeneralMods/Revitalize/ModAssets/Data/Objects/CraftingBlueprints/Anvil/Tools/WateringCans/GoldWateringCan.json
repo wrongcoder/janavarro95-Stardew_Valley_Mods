@@ -6,9 +6,9 @@
     "amount": 1
   },
   "recipesToUnlock": {
-    "Revitalize.Crafting.CraftingRecipeBooks.Anvil": "StardewValley.Tools.GoldWateringCan"
+    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil": "StardewValley.Tools.GoldWateringCan"
   },
-  "id": "Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.GoldWateringCan",
+  "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.GoldWateringCan",
   "name": "Blueprint: Gold Watering Can",
   "description": "A blueprint used on how to craft a gold watering can at a anvil!",
   "categoryId": "StardewValley.Crafting",
@@ -29,7 +29,7 @@
   },
   "animationManager": {
     "modManifestId": "Omegasis.Revitalize",
-    "textureManagerId": "Revitalize.Items.Crafting",
+    "textureManagerId": "Omegasis.Revitalize.Items.Crafting",
     "textureId": "Blueprint",
     "defaultAnimationKey": "Default",
     "startingAnimationKey": "Default",

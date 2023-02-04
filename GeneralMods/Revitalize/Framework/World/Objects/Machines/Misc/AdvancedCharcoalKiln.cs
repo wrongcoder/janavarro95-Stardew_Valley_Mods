@@ -19,7 +19,7 @@ using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Misc.AdvancedCharcoalKiln")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Machines.Misc.AdvancedCharcoalKiln")]
     public class AdvancedCharcoalKiln : ItemRecipeDropInMachine
     {
         public AdvancedCharcoalKiln()

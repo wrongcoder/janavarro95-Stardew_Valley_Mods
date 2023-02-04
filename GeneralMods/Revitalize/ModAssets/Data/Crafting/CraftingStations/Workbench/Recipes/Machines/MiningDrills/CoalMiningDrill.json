@@ -2,7 +2,7 @@
   "whichTab": "Default",
   "isUnlocked": false,
   "recipe": {
-	"craftingRecipeId": "Revitalize.Workbench.Machines.MiningDrills.CoalMiningDrill",
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.Machines.MiningDrills.CoalMiningDrill",
     "outputName": "",
     "outputDescription": "",
     "MinutesToCraft": 0,
@@ -38,7 +38,7 @@
 			"item":{
 			"stardewValleyItemId": "NULL",
 			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Objects.Machines.CoalMiningDrill",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.CoalMiningDrill",
 			"amount": 1
 			}
 		},

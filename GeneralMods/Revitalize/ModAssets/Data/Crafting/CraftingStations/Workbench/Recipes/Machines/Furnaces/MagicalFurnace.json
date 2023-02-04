@@ -2,7 +2,7 @@
   "whichTab": "Default",
   "isUnlocked": false,
   "recipe": {
-	"craftingRecipeId": "Revitalize.Workbench.Machines.Furnaces.MagicalFurnace",
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.Machines.Furnaces.MagicalFurnace",
     "outputName": "",
     "outputDescription": "",
     "MinutesToCraft": 0,
@@ -11,7 +11,7 @@
 			"item":{
 			"stardewValleyItemId": "NULL",
 			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Objects.Machines.NuclearFurnace",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.NuclearFurnace",
 			"amount": 1
 			}
 		},
@@ -54,7 +54,7 @@
 			"item":{
 			"stardewValleyItemId": "NULL",
 			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Objects.Machines.MagicalFurnace",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.MagicalFurnace",
 			"amount": 1
 			}
 		},

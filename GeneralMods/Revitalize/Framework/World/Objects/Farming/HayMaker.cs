@@ -26,7 +26,7 @@ using StardewValley.Menus;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Farming.HayMaker")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Farming.HayMaker")]
     public class HayMaker : ItemRecipeDropInMachine
     {
         public readonly NetRef<ItemReference> feedType = new NetRef<ItemReference>(new ItemReference());

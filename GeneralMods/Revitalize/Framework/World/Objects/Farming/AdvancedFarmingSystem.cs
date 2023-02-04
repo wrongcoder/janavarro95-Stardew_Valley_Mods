@@ -18,7 +18,7 @@ using StardewValley.Objects;
 namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 {
     //TODO: CREATE OBJECT GRAPHIC OBJECT IN OBJECTMANAGER, AND FINISH PLANTING LOGIC.
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem")]
     /// <summary>
     /// Plants seeds, fertilizes, and harvests crops from irrigated watering pots that have the proper attachments!
     /// 

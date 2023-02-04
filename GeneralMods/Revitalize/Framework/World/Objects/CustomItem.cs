@@ -17,7 +17,7 @@ using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.CustomItem")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.CustomItem")]
     public class CustomItem : StardewValley.Object, ICustomModObject
     {
         public readonly NetRef<BasicItemInformation> netBasicItemInformation = new NetRef<BasicItemInformation>();

@@ -22,7 +22,7 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
     /// TODO: Need better inventory management here: Capacity, upgrading it etc.
     /// TODO: Need Automate Compatibility
     /// </summary>
-    [XmlType("Mods_Revitalize.Buildings.DimensionalStorageUnitBuilding")]
+    [XmlType("Mods_Omegasis.Revitalize.Buildings.DimensionalStorageUnitBuilding")]
     public class DimensionalStorageUnitBuilding : CustomBuilding
     {
         /// <summary>

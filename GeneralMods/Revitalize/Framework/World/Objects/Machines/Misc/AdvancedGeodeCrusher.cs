@@ -27,7 +27,7 @@ using StardewValley.Locations;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Misc.AdvancedGeodeCrusher")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Machines.Misc.AdvancedGeodeCrusher")]
     public class AdvancedGeodeCrusher : PoweredMachine
     {
 

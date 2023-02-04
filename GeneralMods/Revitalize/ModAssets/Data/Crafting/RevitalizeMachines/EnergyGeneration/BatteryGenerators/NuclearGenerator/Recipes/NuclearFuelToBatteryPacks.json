@@ -11,7 +11,7 @@
 			"item":{
 			"stardewValleyItemId": "NULL",
 			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Framework.World.Objects.Items.Misc.RadioactiveFuel",
+			"registeredObjectId": "Omegasis.Revitalize.Framework.World.Objects.Items.Misc.RadioactiveFuel",
 			"amount": 1
 			}
 		}

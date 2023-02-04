@@ -27,7 +27,7 @@ using StardewValley.Locations;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneration
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.ResourceGeneration.MiningDrill")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneration.MiningDrill")]
     public class MiningDrill : PoweredMachine
     {
         public const string MineEntranceLootTableSuffix = "_Mine";

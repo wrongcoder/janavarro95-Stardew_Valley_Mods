@@ -2,13 +2,13 @@
   "itemToDraw": {
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "Revitalize.Objects.Machines.CharcoalKilns.DeluxCharcoalKiln",
+    "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.CharcoalKilns.DeluxCharcoalKiln",
     "amount": 1
   },
   "recipesToUnlock": {
-    "Revitalize.Crafting.CraftingRecipeBooks.Workbench": "Revitalize.Workbench.Machines.CharcoalKilns.DeluxCharcoalKiln"
+    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench": "Omegasis.Revitalize.Workbench.Machines.CharcoalKilns.DeluxCharcoalKiln"
   },
-  "id": "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.DeluxCharcoalKiln",
+  "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.DeluxCharcoalKiln",
   "name": "",
   "description": "",
   "categoryId": "StardewValley.Crafting",
@@ -29,7 +29,7 @@
   },
   "animationManager": {
     "modManifestId": "Omegasis.Revitalize",
-    "textureManagerId": "Revitalize.Items.Crafting",
+    "textureManagerId": "Omegasis.Revitalize.Items.Crafting",
     "textureId": "Blueprint",
     "defaultAnimationKey": "Default",
     "startingAnimationKey": "Default",

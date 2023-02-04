@@ -15,7 +15,7 @@ using Omegasis.Revitalize.Framework.World.WorldUtilities;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.EnergyGeneration.AdvancedSolarPanel")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration.AdvancedSolarPanel")]
     public class AdvancedSolarPanel : Machine
     {
         public readonly NetInt daysRemainingToProduceBattery = new NetInt();

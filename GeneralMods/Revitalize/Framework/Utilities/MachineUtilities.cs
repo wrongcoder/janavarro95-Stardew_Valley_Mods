@@ -22,10 +22,10 @@ namespace Omegasis.Revitalize.Framework.Utilities
             ResourcesForMachines = new Dictionary<string, List<ResourceInformation>>()
             {
                 /*
-            {"Revitalize.Objects.Machines.BatteryBin" ,new List<ResourceInformation>(){
+            {"Omegasis.Revitalize.Objects.Machines.BatteryBin" ,new List<ResourceInformation>(){
                 new ResourceInformation(new StardewValley.Object((int)Enums.SDVObject.BatteryPack,1),1,1,1,1,1,1,0,0,0,0)
             } },
-            {"Revitalize.Objects.Machines.Sandbox",new List<ResourceInformation>(){
+            {"Omegasis.Revitalize.Objects.Machines.Sandbox",new List<ResourceInformation>(){
                 new ResourceInformation(ModCore.ObjectManager.GetItem(MiscEarthenResources.Sand,1),1,1,1,1,1,1,0,0,0,0)
             } }
                 */

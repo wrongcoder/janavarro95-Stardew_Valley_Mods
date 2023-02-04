@@ -270,6 +270,8 @@ namespace Omegasis.Revitalize
               ModContentManager.objectManager.getItem(Enums.SDVObject.Corn,100),
                             ModContentManager.objectManager.getItem(MachineIds.ElectricAdvancedGeodeCrusher),
                             ModContentManager.objectManager.getItem(Enums.SDVObject.OmniGeode,100),
+                            ModContentManager.objectManager.getItem(Enums.SDVObject.BatteryPack,100),
+                            ModContentManager.objectManager.getItem(Enums.SDVBigCraftable.Chest,10),
 
             });
             //Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AnvilCraftingRecipeBlueprint));

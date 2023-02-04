@@ -1,5 +1,5 @@
 {
-  "revitalizeBuildingId": "Revitalize.Buildings.ExtraCellar",
+  "revitalizeBuildingId": "Omegasis.Revitalize.Buildings.ExtraCellar",
   "buildingMaterials": [
 		{
 			"stardewValleyItemId": "Hardwood",
@@ -32,7 +32,7 @@
     "X": -1,
     "Y": -1
   },
-  "mapToWarpTo": "Revitalize.Buildings.ExtraCellar",
+  "mapToWarpTo": "Omegasis.Revitalize.Buildings.ExtraCellar",
   "upgradeForWhichBuildingType": "none",
   "buildingTextureDimensions": {
     "X": 32,

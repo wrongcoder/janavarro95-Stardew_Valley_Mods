@@ -1,5 +1,5 @@
 {
-  "Revitalize.Objects.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher": [
+  "Omegasis.Revitalize.Objects.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher": [
     {
       "id": "Omegasis.Revitalize.Machines.GeodeCrusherOutputs.OmniGeode.Clay",
       "timeToProcess": {
@@ -35,7 +35,7 @@
               },
               "outcomeValue": {
                 "min": 1,
-                "max": 2
+                "max": 10
               }
             },
             {
@@ -45,7 +45,7 @@
               },
               "outcomeValue": {
                 "min": 3,
-                "max": 6
+                "max": 20
               }
             },
             {
@@ -55,7 +55,7 @@
               },
               "outcomeValue": {
                 "min": 5,
-                "max": 10
+                "max": 30
               }
             },
             {
@@ -65,7 +65,7 @@
               },
               "outcomeValue": {
                 "min": 10,
-                "max": 20
+                "max": 62
               }
             },
             {
@@ -75,7 +75,7 @@
               },
               "outcomeValue": {
                 "min": 20,
-                "max": 40
+                "max": 128
               }
             }
           ],

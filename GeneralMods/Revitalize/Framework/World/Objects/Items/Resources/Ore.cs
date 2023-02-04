@@ -10,7 +10,7 @@ using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Items.Resources
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Items.Ore")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Items.Ore")]
     public class Ore : CustomObject
     {
         public Ore()

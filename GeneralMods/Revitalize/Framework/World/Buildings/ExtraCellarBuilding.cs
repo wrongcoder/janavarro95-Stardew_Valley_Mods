@@ -14,7 +14,7 @@ using StardewValley.Buildings;
 
 namespace Omegasis.Revitalize.Framework.World.Buildings
 {
-    [XmlType("Mods_Revitalize.Buildings.ExtraCellarBuilding")]
+    [XmlType("Mods_Omegasis.Revitalize.Buildings.ExtraCellarBuilding")]
     public class ExtraCellarBuilding : CustomBuilding
     {
         private static readonly BluePrint Blueprint = new(BuildingIds.ExtraCellar);

@@ -2,7 +2,7 @@
   "whichTab": "Default",
   "isUnlocked": false,
   "recipe": {
-	"craftingRecipeId": "Revitalize.Workbench.Machines.CharcoalKilns.DeluxCharcoalKiln",
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.Machines.CharcoalKilns.DeluxCharcoalKiln",
     "outputName": "",
     "outputDescription": "",
     "MinutesToCraft": 0,
@@ -27,7 +27,7 @@
         "item": {
           "stardewValleyItemId": "NULL",
           "stardewValleyBigCraftableId": "NULL",
-          "registeredObjectId": "Revitalize.Objects.Machines.CharcoalKilns.AdvancedCharcoalKiln",
+          "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.CharcoalKilns.AdvancedCharcoalKiln",
           "amount": 1
         }
       }
@@ -38,7 +38,7 @@
       "item": {
         "stardewValleyItemId": "NULL",
         "stardewValleyBigCraftableId": "NULL",
-        "registeredObjectId": "Revitalize.Objects.Machines.CharcoalKilns.DeluxCharcoalKiln",
+        "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.CharcoalKilns.DeluxCharcoalKiln",
         "amount": 1
       }
 		},

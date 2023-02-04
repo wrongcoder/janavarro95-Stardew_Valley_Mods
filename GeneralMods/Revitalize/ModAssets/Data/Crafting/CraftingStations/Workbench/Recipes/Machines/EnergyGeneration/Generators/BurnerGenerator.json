@@ -2,7 +2,7 @@
   "whichTab": "Default",
   "isUnlocked": false,
   "recipe": {
-	"craftingRecipeId": "Revitalize.Workbench.Machines.EnergyGeneration.BurnerGenerator",
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.BurnerGenerator",
     "outputName": "",
     "outputDescription": "",
     "MinutesToCraft": 0,
@@ -37,7 +37,7 @@
 			"item":{
 			"stardewValleyItemId": "NULL",
 			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Objects.Machines.EnergyGeneration.BurnerGenerator",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.EnergyGeneration.BurnerGenerator",
 			"amount": 1
 			}
 	},

@@ -143,7 +143,7 @@ namespace Omegasis.Revitalize.Framework.Player
             if (Who != null)
             {
 
-                if (Who.ActiveObject.ParentSheetIndex == ParentSheetIndex)
+                if (Who.ActiveObject!=null && Who.ActiveObject.ParentSheetIndex == ParentSheetIndex)
                 {
                     Who.ActiveObject.Stack -= StackSizeToReduce;
                     if (Who.ActiveObject.Stack <= 0) Who.ActiveObject = null;

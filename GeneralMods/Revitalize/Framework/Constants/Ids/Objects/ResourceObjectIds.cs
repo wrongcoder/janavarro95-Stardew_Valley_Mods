@@ -9,19 +9,19 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
     public class ResourceObjectIds
     {
 
-        public const string CoalBush = "Revitalize.Objects.Resources.CoalBush";
-        public const string CopperOreBush = "Revitalize.Objects.Resources.CopperOreBush";
-        public const string IronOreBush = "Revitalize.Objects.Resources.IronOreBush";
-        public const string GoldOreBush = "Revitalize.Objects.Resources.GoldOreBush";
-        public const string IridiumOreBush = "Revitalize.Objects.Resources.IridiumOreBush";
-        public const string RadioactiveOreBush = "Revitalize.Objects.Resources.RadioactiveOreBush";
+        public const string CoalBush = "Omegasis.Revitalize.Objects.Resources.CoalBush";
+        public const string CopperOreBush = "Omegasis.Revitalize.Objects.Resources.CopperOreBush";
+        public const string IronOreBush = "Omegasis.Revitalize.Objects.Resources.IronOreBush";
+        public const string GoldOreBush = "Omegasis.Revitalize.Objects.Resources.GoldOreBush";
+        public const string IridiumOreBush = "Omegasis.Revitalize.Objects.Resources.IridiumOreBush";
+        public const string RadioactiveOreBush = "Omegasis.Revitalize.Objects.Resources.RadioactiveOreBush";
 
-        public const string BauxiteOreVein = "Revitalize.Objects.Resources.OreVeins.Bauxite";
-        public const string TinOreVein = "Revitalize.Objects.Resources.OreVeins.Tin";
-        public const string LeadOreVein = "Revitalize.Objects.Resources.OreVeins.Lead";
-        public const string SilverOreVein = "Revitalize.Objects.Resources.OreVeins.Silver";
-        public const string TitaniumOreVein = "Revitalize.Objects.Resources.OreVeins.Titanium";
-        public const string PrismaticOreVein = "Revitalize.Objects.Resources.OreVeins.Prismatic";
+        public const string BauxiteOreVein = "Omegasis.Revitalize.Objects.Resources.OreVeins.Bauxite";
+        public const string TinOreVein = "Omegasis.Revitalize.Objects.Resources.OreVeins.Tin";
+        public const string LeadOreVein = "Omegasis.Revitalize.Objects.Resources.OreVeins.Lead";
+        public const string SilverOreVein = "Omegasis.Revitalize.Objects.Resources.OreVeins.Silver";
+        public const string TitaniumOreVein = "Omegasis.Revitalize.Objects.Resources.OreVeins.Titanium";
+        public const string PrismaticOreVein = "Omegasis.Revitalize.Objects.Resources.OreVeins.Prismatic";
 
     }
 }

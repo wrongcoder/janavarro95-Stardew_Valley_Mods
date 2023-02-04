@@ -22,7 +22,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops.RevitalizeSho
     /// </summary>
     public static class HayMakerShopUtilities
     {
-        public static string StoreContext = "Revitalize.Shops.HayMaker";
+        public static string StoreContext = "Omegasis.Revitalize.Shops.HayMaker";
 
         public static void AddItemsToShop(ShopMenu Menu)
         {

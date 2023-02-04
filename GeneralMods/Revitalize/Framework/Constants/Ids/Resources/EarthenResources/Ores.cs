@@ -9,10 +9,10 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Resources.EarthenResources
     public class Ores
     {
         public const string AluminumOre = BauxiteOre;
-        public const string BauxiteOre = "Revitalize.Items.Resources.Ore.BauxiteOre";
-        public const string LeadOre = "Revitalize.Items.Resources.Ore.LeadOre";
-        public const string SilverOre = "Revitalize.Items.Resources.Ore.SilverOre";
-        public const string TinOre = "Revitalize.Items.Resources.Ore.TinOre";
-        public const string TitaniumOre = "Revitalize.Items.Resources.Ore.TitaniumOre";
+        public const string BauxiteOre = "Omegasis.Revitalize.Items.Resources.Ore.BauxiteOre";
+        public const string LeadOre = "Omegasis.Revitalize.Items.Resources.Ore.LeadOre";
+        public const string SilverOre = "Omegasis.Revitalize.Items.Resources.Ore.SilverOre";
+        public const string TinOre = "Omegasis.Revitalize.Items.Resources.Ore.TinOre";
+        public const string TitaniumOre = "Omegasis.Revitalize.Items.Resources.Ore.TitaniumOre";
     }
 }

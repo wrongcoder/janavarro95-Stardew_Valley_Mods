@@ -26,7 +26,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
     /// Machines that are powered and used the machine tier system.
     /// </summary>
     ///
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.PoweredMachine")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Machines.PoweredMachine")]
     public class PoweredMachine : ItemRecipeDropInMachine
     {
         public enum PoweredMachineTier
@@ -103,11 +103,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
         public virtual bool tryToIncreaseFuelCharges(Farmer who, bool ShowRedMessage=true)
         {
-            if (this.getListOfValidRecipes(null, who, ShowRedMessage).Count == 0)
+            if (who != null && who.ActiveObject!=null)
             {
-                if (ShowRedMessage) Game1.showRedMessage(JsonContentPackUtilities.LoadErrorString(this.getErrorStringFile(), "NoValidRecipes", this.DisplayName));
-                return false; //Don't consume fuel when no valid recipes can be set.
+                IList<Item> items = new List<Item>() { who.ActiveObject };
+                if (this.getListOfValidRecipes(items, who, ShowRedMessage).Count == 0)
+                {
+                    if (ShowRedMessage) Game1.showRedMessage(JsonContentPackUtilities.LoadErrorString(this.getErrorStringFile(), "NoValidRecipes", this.DisplayName, who.ActiveObject.DisplayName));
+                    return false; //Don't consume fuel when no valid recipes can be set.
+                }
             }
+
+
 
             bool hasFuel = this.useFuelItemToIncreaseCharges(who, false, ShowRedMessage);
             return hasFuel;

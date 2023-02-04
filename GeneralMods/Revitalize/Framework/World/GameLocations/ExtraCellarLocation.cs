@@ -15,7 +15,7 @@ using StardewValley.Objects;
 
 namespace Omegasis.Revitalize.Framework.World.GameLocations
 {
-    [XmlType("Mods_Revitalize.GameLocations.Buildings.ExtraCellarBuilding")]
+    [XmlType("Mods_Omegasis.Revitalize.GameLocations.Buildings.ExtraCellarBuilding")]
     public class ExtraCellarLocation : Cellar
     {
         public ExtraCellarLocation()

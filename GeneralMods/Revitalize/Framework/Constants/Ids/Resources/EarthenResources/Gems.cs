@@ -8,6 +8,6 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Resources.EarthenResources
 {
     public class Gems
     {
-        public const string PrismaticNugget = "Revitalize.Items.Resources.Ore.PrismaticNugget";
+        public const string PrismaticNugget = "Omegasis.Revitalize.Items.Resources.Ore.PrismaticNugget";
     }
 }

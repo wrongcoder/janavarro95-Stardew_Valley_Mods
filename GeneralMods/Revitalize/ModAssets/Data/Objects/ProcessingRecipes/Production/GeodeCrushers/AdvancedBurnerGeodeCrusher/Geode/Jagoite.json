@@ -1,5 +1,5 @@
 {
-  "Revitalize.Objects.Machines.GeodeCrushers.CoalAdvancedGeodeCrusher": [
+  "Omegasis.Revitalize.Objects.Machines.GeodeCrushers.CoalAdvancedGeodeCrusher": [
     {
       "id": "Omegasis.Revitalize.Machines.GeodeCrusherOutputs.Geode.Jagoite",
       "timeToProcess": {

@@ -11,11 +11,11 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Items
     /// </summary>
     public class FarmingItems
     {
-        public const string AutoPlanterGardenPotAttachment = "Revitalize.Framework.World.Objects.Items.Farming.AutoPlanterGardenPotAttachment";
+        public const string AutoPlanterGardenPotAttachment = "Omegasis.Revitalize.Framework.World.Objects.Items.Farming.AutoPlanterGardenPotAttachment";
             
-        public const string AutoHarvesterGardenPotAttachment = "Revitalize.Framework.World.Objects.Items.Farming.AutoHarvesterGardenPotAttachment";
+        public const string AutoHarvesterGardenPotAttachment = "Omegasis.Revitalize.Framework.World.Objects.Items.Farming.AutoHarvesterGardenPotAttachment";
 
 
-        public const string RefillSilosFakeItem = "Revitalize.Framework.World.Objects.Items.Farming.Shops.RefillSilosFakeObject";
+        public const string RefillSilosFakeItem = "Omegasis.Revitalize.Framework.World.Objects.Items.Farming.Shops.RefillSilosFakeObject";
     }
 }

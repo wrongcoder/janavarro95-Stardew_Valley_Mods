@@ -14,7 +14,7 @@ using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Misc
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Misc.StatueOfStatistics")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Misc.StatueOfStatistics")]
     public class StatueOfStatistics : CustomObject
     {
 

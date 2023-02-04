@@ -6,10 +6,10 @@
     "amount": 1
   },
   "recipesToUnlock": {
-    "Revitalize.Crafting.CraftingRecipeBooks.Anvil": "StardewValley.Tools.WateringCan",
-	"Revitalize.Crafting.CraftingRecipeBooks.Workbench": "StardewValley.Tools.WateringCan"
+    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil": "StardewValley.Tools.WateringCan",
+	"Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench": "StardewValley.Tools.WateringCan"
   },
-  "id": "Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.WateringCan",
+  "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.WateringCan",
   "name": "Blueprint: Watering Can",
   "description": "A blueprint used on how to craft a watering can at a anvil!",
   "categoryId": "StardewValley.Crafting",
@@ -30,7 +30,7 @@
   },
   "animationManager": {
     "modManifestId": "Omegasis.Revitalize",
-    "textureManagerId": "Revitalize.Items.Crafting",
+    "textureManagerId": "Omegasis.Revitalize.Items.Crafting",
     "textureId": "Blueprint",
     "defaultAnimationKey": "Default",
     "startingAnimationKey": "Default",

@@ -1,10 +1,10 @@
 {
-	"mailTitle":"Revitalize.Blacksmith.AdvancedCharcoalKilnBlueprint",
+	"mailTitle":"Omegasis.Revitalize.Blacksmith.AdvancedCharcoalKilnBlueprint",
 	"message":"Um hi @, ^I wanted to share one of my blueprints with you that help me get a lot of coal when I don't want to have to go to the mines for it. It should help you get more value out of your wood, but please don't foget you can come see me if you ever need more coal as well ok? ^ -Clint",
   "itemReference": {
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.AdvancedCharcoalKiln",
+    "registeredObjectId": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.AdvancedCharcoalKiln",
     "amount": 1
   },
 }

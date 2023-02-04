@@ -8,7 +8,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Resources.EarthenResources
 {
     public class MiscEarthenResources
     {
-        public const string Sand = "Revitalize.Items.Resources.Misc.Sand";
-        public const string Glass = "Revitalize.Items.Resources.Misc.Glass";
+        public const string Sand = "Omegasis.Revitalize.Items.Resources.Misc.Sand";
+        public const string Glass = "Omegasis.Revitalize.Items.Resources.Misc.Glass";
     }
 }

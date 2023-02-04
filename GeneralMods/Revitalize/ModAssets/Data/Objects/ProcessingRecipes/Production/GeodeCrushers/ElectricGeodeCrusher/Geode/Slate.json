@@ -1,5 +1,5 @@
 {
-  "Revitalize.Objects.Machines.GeodeCrushers.ElectricAdvancedGeodeCrusher": [
+  "Omegasis.Revitalize.Objects.Machines.GeodeCrushers.ElectricAdvancedGeodeCrusher": [
     {
       "id": "Omegasis.Revitalize.Machines.GeodeCrusherOutputs.Geode.Slate",
       "timeToProcess": {

@@ -1,13 +1,13 @@
 {
-  "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.AdvancedCharcoalKiln": {
+  "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.AdvancedCharcoalKiln": {
     "displayName": "Advanced Charcoal Kiln",
     "description": "A blueprint used on how to craft an advanced charcoal kiln at a workbench!"
   },
-  "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.DeluxCharcoalKiln": {
+  "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.DeluxCharcoalKiln": {
     "displayName": "Delux Charcoal Kiln",
     "description": "A blueprint used on how to craft a delux charcoal kiln at a workbench!"
   },
-  "Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.SuperiorCharcoalKiln": {
+  "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.SuperiorCharcoalKiln": {
     "displayName": "Superior Charcoal Kiln",
     "description": "A blueprint used on how to craft a superior charcoal kiln at a workbench!"
   }

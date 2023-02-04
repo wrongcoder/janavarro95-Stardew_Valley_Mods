@@ -10,7 +10,7 @@ using StardewValley.Buildings;
 
 namespace Omegasis.Revitalize.Framework.World.Buildings
 {
-    [XmlType("Mods_Revitalize.Buildings.CustomBuilding")]
+    [XmlType("Mods_Omegasis.Revitalize.Buildings.CustomBuilding")]
     public class CustomBuilding:Building
     {
 

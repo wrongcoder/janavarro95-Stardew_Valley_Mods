@@ -2,7 +2,7 @@
   "whichTab": "Default",
   "isUnlocked": false,
   "recipe": {
-	"craftingRecipeId": "Revitalize.Workbench.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher",
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher",
     "outputName": "",
     "outputDescription": "",
     "MinutesToCraft": 0,
@@ -43,7 +43,7 @@
 			"item":{
 			"stardewValleyItemId": "NULL",
 			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "Revitalize.Objects.Machines.GeodeCrushers.NuclearAdvancedGeodeCrusher",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.GeodeCrushers.NuclearAdvancedGeodeCrusher",
 			"amount": 1
 			}
 		},
@@ -53,7 +53,7 @@
       "item": {
         "stardewValleyItemId": "NULL",
         "stardewValleyBigCraftableId": "NULL",
-        "registeredObjectId": "Revitalize.Objects.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher",
+        "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher",
         "amount": 1
       }
 		},

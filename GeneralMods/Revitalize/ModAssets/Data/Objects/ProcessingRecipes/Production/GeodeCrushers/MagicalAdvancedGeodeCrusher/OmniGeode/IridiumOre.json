@@ -1,5 +1,5 @@
 {
-  "Revitalize.Objects.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher": [
+  "Omegasis.Revitalize.Objects.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher": [
     {
       "id": "Omegasis.Revitalize.Machines.GeodeCrusherOutputs.OmniGeode.IridiumOre",
       "timeToProcess": {
@@ -35,7 +35,7 @@
               },
               "outcomeValue": {
                 "min": 1,
-                "max": 2
+                "max": 7
               }
             },
             {
@@ -45,7 +45,7 @@
               },
               "outcomeValue": {
                 "min": 2,
-                "max": 3
+                "max": 10
               }
             },
             {
@@ -55,7 +55,7 @@
               },
               "outcomeValue": {
                 "min": 3,
-                "max": 5
+                "max": 12
               }
             },
             {
@@ -65,7 +65,7 @@
               },
               "outcomeValue": {
                 "min": 6,
-                "max": 10
+                "max": 21
               }
             },
             {
@@ -75,7 +75,7 @@
               },
               "outcomeValue": {
                 "min": 11,
-                "max": 19
+                "max": 38
               }
             }
           ],

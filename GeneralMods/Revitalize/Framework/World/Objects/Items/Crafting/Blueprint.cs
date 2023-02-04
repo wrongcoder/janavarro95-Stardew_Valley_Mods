@@ -19,7 +19,7 @@ using StardewValley.Network;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Crafting.Blueprint")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Crafting.Blueprint")]
     public class Blueprint : CustomItem
     {
         /// <summary>

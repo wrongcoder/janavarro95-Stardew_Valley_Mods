@@ -25,7 +25,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
     /// <summary>
     /// A variation of the <see cref="StardewValley.Objects.IndoorPot"/> which keeps watered every day. Credits goes to the game for most of this code, modifications were made to accomidate it being always being irrigated and having a custom animation. 
     /// </summary>
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot")]
     public class IrrigatedGardenPot : CustomObject, ICustomModObject
     {
 

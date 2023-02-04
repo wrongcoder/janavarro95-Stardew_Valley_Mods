@@ -17,7 +17,7 @@ namespace Omegasis.Revitalize.Framework.Utilities
     /// <summary>
     /// Used to draw various items and objects at non tile locations such as in menus or even on other objects.
     /// </summary>
-    [XmlType("Mods_Revitalize.Framework.Utilities.Drawable")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.Utilities.Drawable")]
     public class Drawable: NetObject
     {
         public readonly NetRef<StardewValley.Item> item = new NetRef<StardewValley.Item>();

@@ -1,17 +1,17 @@
 {
-  "Revitalize.Objects.Machines.GeodeCrushers.CoalAdvancedGeodeCrusher": {
+  "Omegasis.Revitalize.Objects.Machines.GeodeCrushers.CoalAdvancedGeodeCrusher": {
     "displayName": "Advanced Burner Geode Crusher",
     "description": "Cracks geodes open automatically. Slightly faster than a normal geode crusher. Requires coal to run."
   },
-  "Revitalize.Objects.Machines.GeodeCrushers.ElectricAdvancedGeodeCrusher": {
+  "Omegasis.Revitalize.Objects.Machines.GeodeCrushers.ElectricAdvancedGeodeCrusher": {
     "displayName": "Electric Geode Crusher",
     "description": "Cracks geodes open automatically. Requires battery packs to run."
   },
-  "Revitalize.Objects.Machines.GeodeCrushers.NuclearAdvancedGeodeCrusher": {
+  "Omegasis.Revitalize.Objects.Machines.GeodeCrushers.NuclearAdvancedGeodeCrusher": {
     "displayName": "Nuclear Geode Crusher",
     "description": "Cracks geodes open automatically. Requires nuclear fuel cells to run."
   },
-  "Revitalize.Objects.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher": {
+  "Omegasis.Revitalize.Objects.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher": {
     "displayName": "Magical Geode Crusher",
     "description": "Cracks geodes, artifact troves, and golden coconuts open automatically. Does not require fuel to run due to it's magical reactor core."
   }

@@ -12,7 +12,7 @@ using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Resources
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Resources.OreVeins.OreVein")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Resources.OreVeins.OreVein")]
     public class OreVein : CustomObject
     {
         /// <summary>

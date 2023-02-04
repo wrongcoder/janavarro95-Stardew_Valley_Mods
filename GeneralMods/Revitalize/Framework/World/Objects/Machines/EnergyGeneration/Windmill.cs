@@ -16,7 +16,7 @@ using Omegasis.Revitalize.Framework.World.WorldUtilities;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.EnergyGeneration.Windmill")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Machines.EnergyGeneration.Windmill")]
     public class Windmill : Machine
     {
 

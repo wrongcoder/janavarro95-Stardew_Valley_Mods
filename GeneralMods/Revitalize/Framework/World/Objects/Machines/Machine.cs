@@ -23,7 +23,7 @@ using Newtonsoft.Json;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Machine")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Machines.Machine")]
     public class Machine : CustomObject, IInventoryManagerProvider
     {
 
@@ -111,7 +111,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
 
         protected virtual void createStatusBubble()
         {
-            this.machineStatusBubbleBox.Value = new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Revitalize.HUD", "MachineStatusBubble"), new SerializableDictionary<string, Animation>()
+            this.machineStatusBubbleBox.Value = new AnimationManager(TextureManager.GetExtendedTexture(RevitalizeModCore.Manifest, "Omegasis.Revitalize.HUD", "MachineStatusBubble"), new SerializableDictionary<string, Animation>()
             {
                 {MachineStatusBubble_DefaultAnimationKey,new Animation(0,0,20,24)},
                 {MachineStatusBubble_BlankBubbleAnimationKey,new Animation(20,0,20,24)},

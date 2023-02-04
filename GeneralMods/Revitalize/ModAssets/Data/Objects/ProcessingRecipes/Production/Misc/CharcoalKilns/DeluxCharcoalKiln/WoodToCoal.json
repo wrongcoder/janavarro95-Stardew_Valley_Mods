@@ -1,5 +1,5 @@
 {
-  "Revitalize.Objects.Machines.CharcoalKilns.DeluxCharcoalKiln": [
+  "Omegasis.Revitalize.Objects.Machines.CharcoalKilns.DeluxCharcoalKiln": [
     {
       "id": "Omegasis.Revitalize.Machines.Misc.DeluxCharcoalKiln.WoodToCoal",
       "timeToProcess": {

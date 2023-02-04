@@ -9,7 +9,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
     public class MiscObjectIds
     {
 
-        public const string StatueOfStatistics = "Revitalize.Objects.Misc.StatueOfStatistics";
-        public const string StatueOfPerfectionTracking = "Revitalize.Objects.Misc.StatueOfPerfectionTracking";
+        public const string StatueOfStatistics = "Omegasis.Revitalize.Objects.Misc.StatueOfStatistics";
+        public const string StatueOfPerfectionTracking = "Omegasis.Revitalize.Objects.Misc.StatueOfPerfectionTracking";
     }
 }

@@ -4,6 +4,12 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 2-2-2023 xx.xx P.M~~~~~~~~~~~~~~
+~Migrated all item ids that used Revitalize to use the standard accepted <ModAuthor>.<ModName> format, in this case Omegasis.Revitalize
+~Migrated all XML Serlaization Types to use the same convention of "Mod_Omegasis.Revitalize" instead of "Mod_Revitalize"
+~Fixed a bug with PoweredMachine input to properly display an error message when a lack of energy input (batteries, coal, etc) was not present.
+~Fixed a bug when interacting with a PoweredMachine while holding no active item in the Player's hand causing an error to occur.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 1-24-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Migrated all mining drill outputs to ProcessingRecipe format .json files.
 ~Machines should not process the next imput until it's entire output queue has been grabbed by the player (or automate).

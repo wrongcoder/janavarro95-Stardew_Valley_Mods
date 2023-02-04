@@ -1,5 +1,5 @@
 {
-	"Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem":
+	"Omegasis.Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem":
 	{
 		"displayName":"Advanced Farming System",
 		"description":"An advanced farming system that interfaces irrigated gardening pots and does various tasks depending if there are enrichers, auto harvesters, or auto planter attachments on them!"

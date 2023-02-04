@@ -8,7 +8,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.GameLocations
 {
     public static class GameLocationIds
     {
-        public const string ExtraCellar = "Revitalize.Locations.ExtraCellar";
+        public const string ExtraCellar = "Omegasis.Revitalize.Locations.ExtraCellar";
 
     }
 }

@@ -24,7 +24,7 @@ using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.Machines.Furnaces.ElectricFurnace")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces.ElectricFurnace")]
     public class ElectricFurnace : PoweredMachine
     {
         public const string ELECTRIC_WORKING_ANIMATION_KEY = "Electric_Working";

@@ -17,7 +17,7 @@ using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
 {
-    [XmlType("Mods_Revitalize.Framework.World.Objects.InformationFiles.BasicItemInformation")]
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.InformationFiles.BasicItemInformation")]
     public class BasicItemInformation : NetObject
     {
 

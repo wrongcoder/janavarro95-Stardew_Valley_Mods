@@ -1,13 +1,13 @@
 {
-  "Revitalize.Objects.Machines.CharcoalKilns.AdvancedCharcoalKiln": {
+  "Omegasis.Revitalize.Objects.Machines.CharcoalKilns.AdvancedCharcoalKiln": {
     "displayName": "Advanced Charcoal Kiln",
     "description": "Turns 8 pieces of wood into one piece of coal."
   },
-  "Revitalize.Objects.Machines.CharcoalKilns.DeluxCharcoalKiln": {
+  "Omegasis.Revitalize.Objects.Machines.CharcoalKilns.DeluxCharcoalKiln": {
     "displayName": "Delux Charcoal Kiln",
     "description": "Turns 6s pieces of wood into one piece of coal."
   },
-  "Revitalize.Objects.Machines.CharcoalKilns.SuperiorCharcoalKiln": {
+  "Omegasis.Revitalize.Objects.Machines.CharcoalKilns.SuperiorCharcoalKiln": {
     "displayName": "Superior Charcoal Kiln",
     "description": "Turns 4 pieces of wood into one piece of coal."
   }

@@ -1,5 +1,5 @@
 {
-  "Revitalize.Objects.Machines.EnergyGeneration.NuclearGenerator": [
+  "Omegasis.Revitalize.Objects.Machines.EnergyGeneration.NuclearGenerator": [
     {
       "id": "Omegasis.Revitalize.Machines.Misc.NuclearGenerator.SolarEssenceToBatteryPack",
       "timeToProcess": {

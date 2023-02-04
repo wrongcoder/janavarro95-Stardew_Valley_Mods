@@ -1,5 +1,5 @@
 {
-	"Revitalize.Objects.Machines.ElectricFurnace":
+	"Omegasis.Revitalize.Objects.Machines.ElectricFurnace":
 	{
 		"displayName":"Electric Furnace",
 		"description":"An advanced furnace that smelts objects 25 percent faster. Uses battery packs instead of coal to smelt and it can smelt 5 items per battery pack used."

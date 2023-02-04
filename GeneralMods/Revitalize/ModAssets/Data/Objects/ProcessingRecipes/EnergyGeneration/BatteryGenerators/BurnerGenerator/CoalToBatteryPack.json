@@ -1,5 +1,5 @@
 {
-  "Revitalize.Objects.Machines.EnergyGeneration.BurnerGenerator": [
+  "Omegasis.Revitalize.Objects.Machines.EnergyGeneration.BurnerGenerator": [
     {
       "id": "Omegasis.Revitalize.Machines.Misc.BurnerGenerator.CoalToBatteryPack",
       "timeToProcess": {
