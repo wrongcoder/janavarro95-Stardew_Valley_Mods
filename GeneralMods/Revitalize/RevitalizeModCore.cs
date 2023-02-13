@@ -266,6 +266,10 @@ namespace Omegasis.Revitalize
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
 
+              ModContentManager.objectManager.getItem(StorageIds.ItemVault),
+                            ModContentManager.objectManager.getItem(StorageIds.BigItemVault),
+                                          ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
+                                                        ModContentManager.objectManager.getItem(StorageIds.HugeItemVault),
               ModContentManager.objectManager.getItem(FarmingObjects.HayMaker),
               ModContentManager.objectManager.getItem(Enums.SDVObject.Corn,100),
                             ModContentManager.objectManager.getItem(MachineIds.ElectricAdvancedGeodeCrusher),

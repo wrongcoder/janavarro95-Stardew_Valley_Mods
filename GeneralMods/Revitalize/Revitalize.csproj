@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ContentPacks\RevitalizeContentPack en-US\ModAssets\Strings\Objects\DisplayStrings\Storage\" />
     <Folder Include="Framework\Constants\Ids\Objects\Resources\" />
   </ItemGroup>
   
@@ -49,6 +50,13 @@
     <None Remove="ModAssets\Data\Objects\CraftingBlueprints\Workbench\Machines\CharcoalKilns\AdvancedCharcoalKiln.json" />
     <None Remove="ModAssets\Data\Objects\CraftingBlueprints\Workbench\Machines\CharcoalKilns\DeluxCharcoalKiln.json" />
     <None Remove="ModAssets\Data\Objects\CraftingBlueprints\Workbench\Machines\CharcoalKilns\SuperiorCharcoalKiln.json" />
+    <None Remove="ModAssets\Data\Objects\CraftingBlueprints\Workbench\Storage\HugeItemVault.json" />
+    <None Remove="ModAssets\Data\Objects\CraftingBlueprints\Workbench\Storage\LargeItemVault.json" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="ContentPacks\RevitalizeContentPack en-US\ModAssets\Strings\Objects\DisplayStrings\CraftingBlueprints\Storage\HugeItemVault.json" />
+    <Content Include="ContentPacks\RevitalizeContentPack en-US\ModAssets\Strings\Objects\DisplayStrings\CraftingBlueprints\Storage\LargeItemVault.json" />
   </ItemGroup>
 
   <ItemGroup>

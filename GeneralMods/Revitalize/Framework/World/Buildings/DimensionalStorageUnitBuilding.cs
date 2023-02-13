@@ -92,12 +92,12 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
 
         public override bool doAction(Vector2 tileLocation, Farmer who)
         {
-            if (this.isInteractingWithBuilding(tileLocation, who))
+            if (this.isInteractingWithBuilding(tileLocation, who) && Game1.activeClickableMenu==null)
             {
 
                 if (who.ActiveObject != null)
                 {
-                    SoundUtilities.PlaySoundAt(Enums.StardewSound.throwDownITem, GetDimensionalStorageUnitBuildingGameLocation(), new Vector2(this.tileX + this.tilesWide / 2, this.tileY + this.tilesHigh / 2));
+                    SoundUtilities.PlaySoundAt(Enums.StardewSound.throwDownITem, GetDimensionalStorageUnitBuildingGameLocation(), new Vector2(this.tileX.Value + this.tilesWide.Value / 2, this.tileY.Value + this.tilesHigh.Value / 2));
                     AddItemToDimensionalStorageUnit(who.ActiveObject);
                     who.removeItemFromInventory(who.ActiveObject);
                     return true;
@@ -119,9 +119,9 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
             foreach (Item i in this.items)
             {
                 //building middle is about 40 pixels.
-                int randX = Game1.random.Next(40, this.tilesWide * Game1.tileSize + 1 - 40);
-                int randY = Game1.random.Next(40, this.tilesHigh * Game1.tileSize + 1 - 40);
-                Game1.createItemDebris(i, new Vector2(this.tileX * Game1.tileSize + randX, this.tileY * Game1.tileSize + randY), Game1.random.Next(1, 5), loc);
+                int randX = Game1.random.Next(40, this.tilesWide.Value * Game1.tileSize + 1 - 40);
+                int randY = Game1.random.Next(40, this.tilesHigh.Value * Game1.tileSize + 1 - 40);
+                Game1.createItemDebris(i, new Vector2(this.tileX.Value * Game1.tileSize + randX, this.tileY.Value * Game1.tileSize + randY), Game1.random.Next(1, 5), loc);
             }
             this.items.Clear();
         }

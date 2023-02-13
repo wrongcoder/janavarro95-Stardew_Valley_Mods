@@ -21,6 +21,7 @@ namespace Omegasis.Revitalize.Framework.Constants.PathConstants.Graphics
         public static string Misc = Path.Combine(Objects, "Misc");
 
         public static string Resources = Path.Combine(Objects, "Resources");
+        public static string Storage = Path.Combine(Objects, "Storage");
         public static string Resources_Ore = Path.Combine(Resources, "Ore");
         public static string Resources_ResourcePlants = Path.Combine(Resources, "ResourcePlants");
     }

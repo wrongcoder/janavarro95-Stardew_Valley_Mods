@@ -80,6 +80,17 @@ namespace Omegasis.Revitalize.Framework.Constants.ItemCategoryInformation
         }
 
         /// <summary>
+        /// The category name for resources.
+        /// </summary>
+        public static string Storage
+        {
+            get
+            {
+                return GetCategoryName("Storage", "Storage");
+            }
+        }
+
+        /// <summary>
         /// Gets a category name from a .json file.
         /// </summary>
         /// <param name="CategoryId">The id for the category to load the actual translated string from the file.</param>

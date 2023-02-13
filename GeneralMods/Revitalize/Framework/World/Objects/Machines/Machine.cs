@@ -119,12 +119,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             }, MachineStatusBubble_DefaultAnimationKey, MachineStatusBubble_DefaultAnimationKey, 0);
         }
 
-        public override void updateWhenCurrentLocation(GameTime time, GameLocation environment)
-        {
-            base.updateWhenCurrentLocation(time, environment);
-
-        }
-
 
         /// <summary>
         /// Used to process input for machines as well as providing an accessor to the Automate mod for this mod.
@@ -326,11 +320,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         /// <summary>What happens when the object is drawn at a tile location.</summary>
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1f)
         {
-            if (this.AnimationManager.getTexture() == null)
-            {
-                RevitalizeModCore.log("NULL TEXTURE FOR ID: " + this.Id);
-            }
-
             x = (int)this.TileLocation.X;
 
             y = (int)this.TileLocation.Y;

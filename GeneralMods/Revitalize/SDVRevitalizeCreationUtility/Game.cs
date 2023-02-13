@@ -11,7 +11,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
     /// TODO: Create a Mail/Letter creation scene.
     /// TODO: Create a seperate scene for just Display string creation.
     /// </summary>
-    public class Game : Control
+    public partial class Game : Control
     {
         public static Game Self;
 
@@ -20,8 +20,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
             Self = this;
             // OS.WindowFullscreen = true;
 
-            OS.WindowBorderless = false;
-            OS.WindowMaximized = true;
+            DisplayServer.WindowSetMode(DisplayServer.WindowMode.Maximized);
         }
 
         public static string GetPathToInputFields()
@@ -49,7 +48,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
         /// <summary>
         /// Gets the base project folder for Revitalize.
         /// </summary>
-        /// <param name="RemoveDriveLetter">Used to strip out the drive letter from the Path. Set to true to be removed since Godot has a hard time navigating the path for file system dialog.</param>
+        /// <param name="RemoveDriveLetter">Used to strip out the drive letter from the Path3D. Set to true to be removed since Godot has a hard time navigating the path for file system dialog.</param>
         /// <returns></returns>
         public static string GetRevitalizeBaseFolder(bool RemoveDriveLetter=true)
         {
@@ -64,7 +63,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
             if (RemoveDriveLetter)
             {
                 //Gross, but strips out the beginning disk drive lettering/name and forces it into a directory.
-                return "/" + (System.IO.Path.Combine(strs.ToArray()).Replace("\\", "/").Substring(2) + "/");
+                return (System.IO.Path.Combine(strs.ToArray()).Replace("\\", "/").Substring(2) + "/");
             }
             else
             {

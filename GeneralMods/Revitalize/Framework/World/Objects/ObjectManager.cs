@@ -34,6 +34,7 @@ using Omegasis.Revitalize.Framework.Constants.Ids.Items;
 using Omegasis.Revitalize.Framework.World.Objects.Misc;
 using static Omegasis.Revitalize.Framework.Constants.Enums;
 using Omegasis.Revitalize.Framework.Illuminate;
+using Omegasis.Revitalize.Framework.World.Objects.Storage;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -113,6 +114,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.loadInMachines();
             this.loadInMiscObjects();
             this.loadInAestheticsObjects();
+            this.addInStorageObjects();
 
             this.loadInResourcePlants();
 
@@ -431,6 +433,31 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }
                 }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
+        }
+
+        protected virtual void addInStorageObjects()
+        {
+            int chestCapacity = 36;
+            this.addItem(new ItemVault(new BasicItemInformation("", StorageIds.ItemVault, "", CategoryNames.Storage, CategoryColors.Misc, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Storage.createAnimationManager("ItemVaultSmall", new Dictionary<string, Animation>()
+                {
+                    {"Default",  new Animation(new Rectangle(0,0,16,32)) },
+                }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null),chestCapacity*2));
+
+
+            this.addItem(new ItemVault(new BasicItemInformation("", StorageIds.BigItemVault, "", CategoryNames.Storage, CategoryColors.Misc, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Storage.createAnimationManager("ItemVaultBig", new Dictionary<string, Animation>()
+                {
+                    {"Default",  new Animation(new Rectangle(0,0,16,32)) },
+                }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), chestCapacity * 3));
+
+            this.addItem(new ItemVault(new BasicItemInformation("", StorageIds.LargeItemVault, "", CategoryNames.Storage, CategoryColors.Misc, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Storage.createAnimationManager("ItemVaultLarge", new Dictionary<string, Animation>()
+                {
+                    {"Default",  new Animation(new Rectangle(0,0,16,32)) },
+                }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), chestCapacity * 4));
+
+            this.addItem(new ItemVault(new BasicItemInformation("", StorageIds.HugeItemVault, "", CategoryNames.Storage, CategoryColors.Misc, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Storage.createAnimationManager("ItemVaultHuge", new Dictionary<string, Animation>()
+                {
+                    {"Default",  new Animation(new Rectangle(0,0,16,32)) },
+                }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), chestCapacity * 5));
         }
 
         /// <summary>

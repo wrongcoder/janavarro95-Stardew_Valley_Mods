@@ -188,5 +188,21 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
             Location.debris.Add(new CustomObjectDebris(item, OriginTile *64, DestinationTile * 64));
         }
 
+        /// <summary>
+        /// Checks to see if minecarts have been unlocked for the world.
+        /// </summary>
+        /// <returns></returns>
+        public static bool AreMinecartsUnlocked()
+        {
+            if (Game1.MasterPlayer.mailReceived.Contains("ccBoilerRoom"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 }

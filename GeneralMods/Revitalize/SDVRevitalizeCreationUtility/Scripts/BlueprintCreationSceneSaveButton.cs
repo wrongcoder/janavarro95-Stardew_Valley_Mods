@@ -2,7 +2,7 @@ using Godot;
 using System;
 namespace SdvRevitalizeCreationUtility.Scripts
 {
-    public class BlueprintCreationSceneSaveButton : Button
+    public partial class BlueprintCreationSceneSaveButton : Button
     {
         // Declare member variables here. Examples:
         // private int a = 2;

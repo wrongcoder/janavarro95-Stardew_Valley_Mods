@@ -5,7 +5,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
     /// <summary>
     /// Class to populate a dropdown button with the options for potential code files to generate ids for.
     /// </summary>
-    public class IdFileSelectionButton : OptionButton
+    public partial class IdFileSelectionButton : OptionButton
     {
         // Declare member variables here. Examples:
         // private int a = 2;

@@ -16,6 +16,7 @@ using Omegasis.Revitalize.Framework.World.Buildings;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
@@ -74,6 +75,7 @@ namespace Omegasis.Revitalize.Framework.World.Mail
             {
                 Game1.mailbox.Add(MailTitles.MovieTheaterTicketSubscriptionTickets);
             }
+
 
         }
 

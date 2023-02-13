@@ -33,7 +33,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         public DimensionalStorageUnitBuilding dimensionalStorageUnit;
 
 
-        public DimensionalStorageUnitMenu(DimensionalStorageUnitBuilding dimensionalStorageUnitBuilding):base(new Color(Color.Purple.R/4,Color.Purple.G/4, Color.Purple.B/4),dimensionalStorageUnitBuilding.items,dimensionalStorageUnitBuilding.DimensionalStorageUnitMaxItems)
+        public DimensionalStorageUnitMenu(DimensionalStorageUnitBuilding dimensionalStorageUnitBuilding):base(new Color(Color.Purple.R/4,Color.Purple.G/4, Color.Purple.B/4),Color.White,dimensionalStorageUnitBuilding.items,dimensionalStorageUnitBuilding.DimensionalStorageUnitMaxItems)
         {
             this.upgradeItem = RevitalizeModCore.ModContentManager.objectManager.getItem(Enums.SDVObject.VoidEssence);
             this.upgradePromptUnformatted = JsonContentPackUtilities.LoadStringFromDictionaryFile(Path.Combine(Constants.PathConstants.StringsPaths.Menus, "DimensionalStorageUnit.json"), "UpgradePrompt");

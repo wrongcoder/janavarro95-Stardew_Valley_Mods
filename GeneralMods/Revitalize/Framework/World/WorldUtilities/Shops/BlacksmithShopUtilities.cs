@@ -50,6 +50,11 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AdvancedGenerator, objectManager.getItem(WorkbenchBlueprintIds.AdvancedGenerator), shopConfig.advancedBatteryGeneratorBlueprintPrice, 1, PlayerUtilities.HasObtainedItem(Enums.SDVObject.SolarEssence));
             ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.NuclearGenerator, objectManager.getItem(WorkbenchBlueprintIds.NuclearGenerator), shopConfig.nuclearBatteryGeneratorBlueprintPrice, 1, PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
 
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.ItemVault, objectManager.getItem(WorkbenchBlueprintIds.ItemVault), shopConfig.itemVaultBlueprintPrice, 1);
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.BigItemVault, objectManager.getItem(WorkbenchBlueprintIds.BigItemVault), shopConfig.bigItemVaultBlueprintPrice, 1, PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies,WorkbenchRecipeIds.ItemVault));
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.LargeItemVault, objectManager.getItem(WorkbenchBlueprintIds.LargeItemVault), shopConfig.largeItemVaultBlueprintPrice, 1, PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.BigItemVault));
+            ShopUtilities.AddToShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.HugeItemVault, objectManager.getItem(WorkbenchBlueprintIds.HugeItemVault), shopConfig.hugeItemVaultBlueprintPrice, 1, PlayerUtilities.KnowsCraftingRecipe(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.LargeItemVault));
+
             AddAxeBlueprintsToShop(Menu);
             AddHoeBlueprintsToShop(Menu);
             AddPickaxeBlueprintsToShop(Menu);

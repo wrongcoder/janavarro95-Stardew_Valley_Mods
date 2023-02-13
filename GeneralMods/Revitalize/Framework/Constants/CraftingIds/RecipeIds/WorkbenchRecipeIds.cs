@@ -48,5 +48,9 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds
         public const string NuclearGenerator = "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.NuclearGenerator";
 		public const string AdvancedSolarPanel = "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.AdvancedSolarPanel";
 		public const string SuperiorSolarPanel = "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.SuperiorSolarPanel";
+		public const string ItemVault = "Omegasis.Revitalize.Workbench.Storage.ItemVault";
+		public const string BigItemVault = "Omegasis.Revitalize.Objects.Storage.BigItemVault";
+		public const string LargeItemVault = "Omegasis.Revitalize.Objects.Storage.LargeItemVault";
+		public const string HugeItemVault = "Omegasis.Revitalize.Objects.Storage.HugeItemVault";
     }
 }

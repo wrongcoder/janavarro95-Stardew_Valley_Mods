@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace SdvRevitalizeCreationUtility.Scripts
 {
-    public class SelectFileDialog:FileDialog
+    public partial class SelectFileDialog:FileDialog
     {
         public TextEdit textEdit;
         string textToSet;
 
         public override void _Ready()
         {
-            this.Connect("file_selected", this, "_on_SelectFileDialog_file_selected");
-            this.Connect("dir_selected", this, "_on_SelectFileDialog_dir_selected");
-            this.Connect("confirmed", this, "_on_SelectFileDialog_confirmed");
+            this.Connect("file_selected",new Callable(this,"_on_SelectFileDialog_file_selected"));
+            this.Connect("dir_selected",new Callable(this,"_on_SelectFileDialog_dir_selected"));
+            this.Connect("confirmed",new Callable(this,"_on_SelectFileDialog_confirmed"));
         }
 
         public virtual void _on_SelectFileDialog_dir_selected(string input)

@@ -1,6 +1,6 @@
 using Godot;
-using SDVRevitalizeCreationUtility.Scripts.Constants.PathConstants;
-using SDVRevitalizeCreationUtility.Scripts.Constants.PathConstants.Data;
+using Omegasis.Revitalize.Framework.Constants.PathConstants;
+using Omegasis.Revitalize.Framework.Constants.PathConstants.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SdvRevitalizeCreationUtility.Scripts
 {
-    public class ButtonOpenFileDiaog : Button
+    public partial class ButtonOpenFileDiaog : Button
     {
 
         public enum DirectoryToBeginFrom
@@ -33,7 +33,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
             dialog.AddFilter("*.json");
 
             dialog.CurrentFile = ""; ;
-            dialog.Mode = FileDialog.ModeEnum.SaveFile;
+            dialog.FileMode = FileDialog.FileModeEnum.SaveFile;
             dialog.Access = FileDialog.AccessEnum.Filesystem;
 
             dialog.textEdit = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", this.TextFieldToFind);
@@ -51,7 +51,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
                 dialog.CurrentDir = System.IO.Path.Combine(Game.GetRevitalizeBaseFolder(), CraftingDataPaths.CraftingPath);
             }
 
-            dialog.Popup_();
+            dialog.Popup();
         }
     }
 }

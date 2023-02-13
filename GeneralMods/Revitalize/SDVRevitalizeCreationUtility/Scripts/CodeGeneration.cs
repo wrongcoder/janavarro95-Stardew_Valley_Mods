@@ -43,7 +43,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
         /// <param name="RevitalizeId"></param>
         public static void GenerateId(string RelativePathToFile, string CSharpVarName, string RevitalizeId)
         {
-            GenerateIdABSPath(Path.Combine(GetBaseIdsDirectory(), RelativePathToFile), CSharpVarName, RevitalizeId);
+            GenerateIdABSPath(Path.Combine(GetBaseIdsDirectory(true), RelativePathToFile), CSharpVarName, RevitalizeId);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
 
             string[] lines = System.IO.File.ReadAllLines(FilePath);
             Godot.GD.Print("Number of lines in file: "+lines.Length);
-            Godot.GD.Print("Rading File: " + FilePath);
+            Godot.GD.Print("Reading File: " + FilePath);
             StringBuilder updateFileContent = new StringBuilder();
             bool endOfClassFound = false;
             for(int lineCounter = 0; lineCounter < lines.Length; lineCounter++)

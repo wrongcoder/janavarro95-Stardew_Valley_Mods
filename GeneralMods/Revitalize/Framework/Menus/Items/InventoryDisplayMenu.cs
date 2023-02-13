@@ -72,6 +72,9 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
 
 
         public Color? itemBackgroundDisplayColor;
+        public Color? capacityDisplayTextColor;
+
+
         public IList<Item> itemsToAccess;
 
         public long inventoryMaxCapacity;
@@ -83,7 +86,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         /// <param name="season">The initial birthday season.</param>
         /// <param name="day">The initial birthday day.</param>
         /// <param name="onChanged">The callback to invoke when the birthday value changes.</param>
-        public InventoryDisplayMenu(Color? itemBackgroundDisplayColor, IList<Item> ItemsToAccess, long InventoryMaxCapacity)
+        public InventoryDisplayMenu(Color? ItemBackgroundDisplayColor, Color? CapacityDisplayTextColor ,IList<Item> ItemsToAccess, long InventoryMaxCapacity)
             : base((int)getAppropriateMenuPosition(menuWidth, menuHeight).X, (int)getAppropriateMenuPosition(menuWidth, menuHeight).Y, menuWidth, menuHeight)
         {
             this.searchBox = new ItemSearchTextBox(null, null, Game1.dialogueFont, Game1.textColor, new Rectangle(0, 0, 0, 0));
@@ -95,7 +98,8 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             this.defaultTitle = JsonContentPackUtilities.LoadStringFromDictionaryFile(Path.Combine(Constants.PathConstants.StringsPaths.Menus, "InventoryDisplayMenu.json"), "Capacity");
 
 
-            this.itemBackgroundDisplayColor = itemBackgroundDisplayColor;
+            this.itemBackgroundDisplayColor = ItemBackgroundDisplayColor;
+            this.capacityDisplayTextColor = CapacityDisplayTextColor ?? Game1.textColor;
             this.itemsToAccess = ItemsToAccess;
             this.inventoryMaxCapacity = InventoryMaxCapacity;
 
@@ -556,10 +560,9 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             }
 
             Color color = Color.Violet;
-            Utility.drawTextWithShadow(b, this.capacityDisplayComponent.name, Game1.smallFont, new Vector2(this.capacityDisplayComponent.bounds.X, this.capacityDisplayComponent.bounds.Y), color);
+            Utility.drawTextWithShadow(b, this.capacityDisplayComponent.name, Game1.smallFont, new Vector2(this.capacityDisplayComponent.bounds.X, this.capacityDisplayComponent.bounds.Y), Color.Violet);
             string text = "";
-            color = Color.White;
-            Utility.drawTextWithShadow(b, this.capacityDisplayComponent.name, Game1.smallFont, new Vector2(this.capacityDisplayComponent.bounds.X, this.capacityDisplayComponent.bounds.Y), color);
+            Utility.drawTextWithShadow(b, this.capacityDisplayComponent.name, Game1.smallFont, new Vector2(this.capacityDisplayComponent.bounds.X, this.capacityDisplayComponent.bounds.Y), this.capacityDisplayTextColor.Value);
             if (text.Length > 0)
                 Utility.drawTextWithShadow(b, text, Game1.smallFont, new Vector2(this.capacityDisplayComponent.bounds.X + Game1.tileSize / 3 - Game1.smallFont.MeasureString(text).X / 2f, this.capacityDisplayComponent.bounds.Y + Game1.tileSize / 2), color);
 
