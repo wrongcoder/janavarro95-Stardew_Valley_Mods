@@ -121,7 +121,7 @@ namespace Omegasis.Revitalize
             -Pendants
     */
 
-    public class RevitalizeModCore : Mod, IAssetEditor
+    public class RevitalizeModCore : Mod
     {
 
         public static RevitalizeModCore Instance;
@@ -182,9 +182,13 @@ namespace Omegasis.Revitalize
             ModHelper.Events.GameLoop.UpdateTicked += this.GameLoop_UpdateTicked;
 
 
+            ModHelper.Events.Content.AssetRequested += this.Content_AssetRequested;
+
             SaveDataManager = new SaveDataManager();
             playerInfo = new PlayerInfo();
         }
+
+
 
         ///~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~///
         ///                     Initialize Mod Content                     ///
@@ -352,22 +356,12 @@ namespace Omegasis.Revitalize
 
         }
 
-        public bool CanEdit<T>(IAssetInfo asset)
+        private void Content_AssetRequested(object sender, StardewModdingAPI.Events.AssetRequestedEventArgs e)
         {
             if (ModContentManager.mailManager != null)
             {
-                return ModContentManager.mailManager.canEditAsset(asset);
+                ModContentManager.mailManager.editMailAsset(e);
             }
-            return false;
-        }
-
-        public void Edit<T>(IAssetData asset)
-        {
-            if (ModContentManager.mailManager != null)
-            {
-                ModContentManager.mailManager.editMailAsset(asset);
-            }
-
         }
     }
 }

@@ -65,7 +65,7 @@ namespace Omegasis.Revitalize.Framework.World.Mail
             //Charcoal kilns available.
             this.addMailIfNotReceived(MailTitles.AdvancedCharcoalKilnBlueprintUnlock, Game1.player.ForagingLevel>=8);
             this.addMailIfNotReceived(MailTitles.DeluxCharcoalKilnForSale, Game1.player.ForagingLevel >= 8 && PlayerUtilities.GetNumberOfGoldenWalnutsFound()>=1);
-            this.addMailIfNotReceived(MailTitles.SuperiorCharcoalKilnForSale, Game1.player.ForagingLevel >= 8 && PlayerUtilities.GetNumberOfGoldenWalnutsFound() >= 100);
+            this.addMailIfNotReceived(MailTitles.SuperiorCharcoalKilnForSale,true);
 
             this.addMailIfNotReceived(MailTitles.BurnerBatteryGeneratorUnlock, Game1.player.deepestMineLevel >= 50);
             this.addMailIfNotReceived(MailTitles.NuclearBatteryGeneratorUnlock, GameLocationUtilities.AreTheHardMinesEnabled());
@@ -84,7 +84,7 @@ namespace Omegasis.Revitalize.Framework.World.Mail
         /// </summary>
         /// <param name="MailTitle"></param>
         /// <param name="AdditionalConditions"></param>
-        public virtual void addMailIfNotReceived(string MailTitle, bool AdditionalConditions)
+        public virtual void addMailIfNotReceived(string MailTitle, bool AdditionalConditions=true)
         {
             if (!this.hasOrWillPlayerReceivedThisMail(MailTitle) && AdditionalConditions)
             {
@@ -102,19 +102,19 @@ namespace Omegasis.Revitalize.Framework.World.Mail
             return Game1.player.mailReceived.Contains(MailTitle) || Game1.player.mailbox.Contains(MailTitle) || Game1.player.mailForTomorrow.Contains(MailTitle);
         }
 
-        public virtual bool canEditAsset(IAssetInfo asset)
+        public virtual void editMailAsset(StardewModdingAPI.Events.AssetRequestedEventArgs assetRequest)
         {
-            return asset.NameWithoutLocale.IsEquivalentTo("Data/mail");
+            if (assetRequest.NameWithoutLocale.BaseName.Equals("Data/mail"))
+            {
+                assetRequest.Edit(this.editMailAsset);
+            }
         }
 
         public virtual void editMailAsset(IAssetData asset)
         {
-            if (asset.NameWithoutLocale.IsEquivalentTo("Data/mail"))
-            {
-                IDictionary<string, string> data = asset.AsDictionary<string, string>().Data;
-                foreach (MailInfo mail in this.getMailInfo().Values)
-                    data[mail.mailTitle] = Game1.parseText(mail.message);
-            }
+            IAssetDataForDictionary<string, string> assetInformation = asset.AsDictionary<string, string>();
+            foreach (MailInfo mail in this.getMailInfo().Values)
+                assetInformation.Data[mail.mailTitle] = Game1.parseText(mail.message);
         }
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace Omegasis.Revitalize.Framework.World.Mail
             }
 
 
-            return MailMessageText.Replace("@", Game1.player.name.Value);
+            return MailMessageText.Replace("@", Game1.player.Name);
         }
 
         /// <summary>
