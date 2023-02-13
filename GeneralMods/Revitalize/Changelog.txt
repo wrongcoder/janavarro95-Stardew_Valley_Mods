@@ -7,6 +7,7 @@ Key:
 ~~~~~~~~~~~~0.0.1 Revitalize 2-12-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Added new storage options: Item vaults. Come in 4 sizes that can hold 2 to 5 chests worth of contents depending on the version. Sold by Clint.
 ~Updated SDVRevitalizeCreationTool to use Godot 4.0 and .Net 6.0.
++Added ItemVault compatibility to Automate+Revitalize mod.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 2-2-2023 xx.xx P.M~~~~~~~~~~~~~~
 ~Migrated all item ids that used Revitalize to use the standard accepted <ModAuthor>.<ModName> format, in this case Omegasis.Revitalize

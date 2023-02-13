@@ -11,6 +11,7 @@ using Omegasis.Revitalize.Framework.World.Objects.Machines;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Misc;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneration;
+using Omegasis.Revitalize.Framework.World.Objects.Storage;
 using Omegasis.RevitalizeAutomateCompatibility.Objects;
 using Omegasis.RevitalizeAutomateCompatibility.Objects.Machines;
 using Pathoschild.Stardew.Automate;
@@ -42,8 +43,14 @@ namespace Omegasis.RevitalizeAutomateCompatibility
                     return null;
                 }
 
+                //Add in item vaults as a type of storage accessor.
+                if (obj is ItemVault)
+                {
+                    return new ItemVaultWrapper((ItemVault)obj, location, tile);
+                }
+
                 //Add in generic processing wrapper types.
-                if(obj is PoweredMachine)
+                if (obj is PoweredMachine)
                 {
                     return new PoweredMachineWrapper<PoweredMachine>((PoweredMachine)obj, location, tile);
                 }
