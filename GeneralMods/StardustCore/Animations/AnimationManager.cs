@@ -24,7 +24,7 @@ namespace Omegasis.StardustCore.Animations
         {
             get
             {
-                if (this.netObjectTexture == null) return null;
+                if (this.netObjectTexture.Value == null) return null;
                 return this.netObjectTexture.Value;
             }
             set
@@ -134,7 +134,7 @@ namespace Omegasis.StardustCore.Animations
         /// <summary>Update the animation frame once after drawing the object.</summary>
         public void tickAnimation()
         {
-            if (!this.enabled || this.currentAnimationName.Equals(this.defaultAnimationKey))
+            if (!this.enabled.Value || this.currentAnimationName.Equals(this.defaultAnimationKey))
                 return; //This is if this is a default animation or the animation stops here.
             this.getCurrentAnimation().tickAnimation();
 
@@ -209,7 +209,7 @@ namespace Omegasis.StardustCore.Animations
         /// </summary>
         public void playDefaultAnimation()
         {
-            this.currentAnimationName.Value = this.defaultAnimationKey;
+            this.currentAnimationName.Value = this.defaultAnimationKey.Value;
         }
 
         /// <summary>Sets the animation manager to an on state, meaning that this animation will update on the draw frame.</summary>
@@ -335,15 +335,15 @@ namespace Omegasis.StardustCore.Animations
         /// <returns></returns>
         public virtual Animation getCurrentAnimation()
         {
-            if (string.IsNullOrEmpty(this.currentAnimationName)) return null;
+            if (string.IsNullOrEmpty(this.currentAnimationName.Value)) return null;
 
-            if (this.animations.ContainsKey(this.currentAnimationName))
+            if (this.animations.ContainsKey(this.currentAnimationName.Value))
             {
-                return this.animations[this.currentAnimationName];
+                return this.animations[this.currentAnimationName.Value];
             }
-            else if (this.animations.ContainsKey(this.defaultAnimationKey))
+            else if (this.animations.ContainsKey(this.defaultAnimationKey.Value))
             {
-                return this.animations[this.defaultAnimationKey];
+                return this.animations[this.defaultAnimationKey.Value];
             }
             else
             {
@@ -357,9 +357,9 @@ namespace Omegasis.StardustCore.Animations
         /// <returns></returns>
         public virtual Animation getDefaultAnimation()
         {
-            if (this.animations.ContainsKey(this.defaultAnimationKey))
+            if (this.animations.ContainsKey(this.defaultAnimationKey.Value))
             {
-                return this.animations[this.defaultAnimationKey];
+                return this.animations[this.defaultAnimationKey.Value];
             }
             return null;
         }
@@ -380,7 +380,7 @@ namespace Omegasis.StardustCore.Animations
                 animations.Add(v.Key, v.Value.Copy());
             }
 
-            return new AnimationManager(this.objectTexture, animations, this.defaultAnimationKey, this.startingAnimationKey, 0, this.enabled);
+            return new AnimationManager(this.objectTexture, animations, this.defaultAnimationKey.Value, this.startingAnimationKey.Value, 0, this.enabled.Value);
         }
     }
 }

@@ -15,6 +15,8 @@ using Omegasis.Revitalize.Framework.Managers;
 using Omegasis.Revitalize.Framework.Menus.MenuComponents;
 using Omegasis.Revitalize.Framework.Utilities.JsonContentLoading;
 using Omegasis.Revitalize.Framework.World.Buildings;
+using Omegasis.Revitalize.Framework.World.Objects;
+using Omegasis.Revitalize.Framework.World.Objects.Interfaces;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
 using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons;
 using StardewValley;
@@ -79,6 +81,9 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
 
         public long inventoryMaxCapacity;
 
+        public ObjectColorPicker objectColorPicker;
+        public StardewValley.Object customObjectForColoring;
+
         /*********
 ** Public methods
 *********/
@@ -105,7 +110,13 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
 
 
             this.setUpPositions();
+        }
 
+        public InventoryDisplayMenu(Color? ItemBackgroundDisplayColor, Color? CapacityDisplayTextColor, IList<Item> ItemsToAccess, long InventoryMaxCapacity, StardewValley.Object CustomModObjectForColoring)
+    : this(ItemBackgroundDisplayColor,CapacityDisplayTextColor,ItemsToAccess,InventoryMaxCapacity)
+        {
+            this.customObjectForColoring= CustomModObjectForColoring;
+            this.setUpPositions();
         }
 
         public virtual long getInventoryMaxCapacity()
@@ -152,7 +163,10 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
 
             this._searchModeButton = new ClickableTextureComponent("SearchMode", new Rectangle(this.searchBox.X - 96, this.searchBox.Y, 64, 64), "", "", TextureManagers.Menus_InventoryMenu.getExtendedTexture("SearchButton").getTexture(), new Rectangle(0, 0, 32, 32), 2f);
 
-           
+            if (this.customObjectForColoring != null)
+            {
+                this.objectColorPicker = new ObjectColorPicker(this.searchBox.X + this.searchBox.Width + 64, this.searchBox.Y, 0, this.customObjectForColoring);
+            }
 
             this.populateItemsToDisplay();
 
@@ -208,7 +222,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                 default:
                     break;
             }
-            SoundUtilities.PlaySound(Enums.StardewSound.coin);
+            //SoundUtilities.PlaySound(Enums.StardewSound.coin);
         }
 
         /// <summary>The method invoked when the player left-clicks on the menu.</summary>
@@ -231,7 +245,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                     {
                         continue;
                     }
-
+                    SoundUtilities.PlaySound(Enums.StardewSound.coin);
                     Game1.player.addItemToInventory(i);
                     this.itemsToAccess.Remove(i);
                     clickedItem = true;
@@ -296,9 +310,11 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                 this.searchBox.SelectMe();
             }
             else
+            {
                 this.searchBox.Selected = false;
+            }
 
-
+            this.objectColorPicker.receiveLeftClick(x, y);
         }
 
         /// <summary>The method invoked when the player right-clicks on the lookup UI.</summary>
@@ -344,6 +360,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                         clickedItem = true;
                         this.itemsToAccess.Remove(button.item);
                     }
+                    SoundUtilities.PlaySound(Enums.StardewSound.coin);
                     break;
                 }
             if (clickedItem)
@@ -551,6 +568,8 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
 
             this.searchBox.Draw(b, true);
             this._searchModeButton.draw(b);
+
+            this.objectColorPicker.draw(b);
 
             // draw season buttons
             foreach (ItemDisplayButton button in this.itemButtons)

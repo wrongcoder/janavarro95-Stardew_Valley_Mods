@@ -46,7 +46,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Storage
         {
             if (Game1.activeClickableMenu == null)
             {
-                Game1.activeClickableMenu = new InventoryDisplayMenu(null,null ,this.inventory, this.Capacity);
+                Game1.activeClickableMenu = new InventoryDisplayMenu(null,null ,this.inventory, this.Capacity, this);
                 return true;
             }
             return false;

@@ -23,7 +23,7 @@ namespace Omegasis.HappyBirthday.Framework
             if (HappyBirthdayModCore.Instance.birthdayManager.hasChosenBirthday() == false)
             {
                 HappyBirthdayModCore.Instance.Monitor.Log("Loading player's birthday on new day started.");
-                Load(Game1.player.uniqueMultiplayerID);
+                Load(Game1.player.UniqueMultiplayerID);
             }
         }
 
@@ -32,7 +32,7 @@ namespace Omegasis.HappyBirthday.Framework
         /// </summary>
         public static void OnDayEnded(object Sender, StardewModdingAPI.Events.DayEndingEventArgs args)
         {
-            Save(Game1.player.uniqueMultiplayerID);
+            Save(Game1.player.UniqueMultiplayerID);
         }
 
         /// <summary>

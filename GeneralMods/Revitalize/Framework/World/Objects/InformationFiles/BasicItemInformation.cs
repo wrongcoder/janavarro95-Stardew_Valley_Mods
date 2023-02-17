@@ -81,6 +81,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
             }
         }
 
+        /// <summary>
+        /// The value for the number of the selection value for the <see cref="ObjectColorPicker"/> menu.
+        /// </summary>
+        public readonly NetInt colorPickerSelectionNumber=new NetInt();
+
         public readonly NetBool ignoreBoundingBox = new NetBool();
 
         public NetRef<InventoryManager> netInventory = new();
@@ -286,7 +291,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
         /// <returns></returns>
         public BasicItemInformation Copy()
         {
-            return new BasicItemInformation(
+            BasicItemInformation itemInformation= new BasicItemInformation(
                 this.name.Value,
                 this.id.Value,
                 this.description.Value,
@@ -308,6 +313,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
                 this.lightManager.Copy(),
                 this.alwaysDrawAbovePlayer.Value,
                 this.dyedColor.getCopy());
+
+            itemInformation.colorPickerSelectionNumber.Value= this.colorPickerSelectionNumber.Value;
+
+            return itemInformation;
         }
 
 
@@ -357,9 +366,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles
                 );
 
             this.NetFields.AddField(this.netAnimationManager);
-            this.NetFields.AddFields(this.netInventory);
+            this.NetFields.AddField(this.netInventory);
             this.NetFields.AddField(this.netLightManager);
-            this.NetFields.AddFields(this.netDyedColor);
+            this.NetFields.AddField(this.netDyedColor);
+
+            this.NetFields.AddField(this.colorPickerSelectionNumber);
         }
 
     }
