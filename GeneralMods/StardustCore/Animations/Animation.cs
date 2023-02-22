@@ -30,12 +30,12 @@ namespace Omegasis.StardustCore.Animations
             this.animationFrames = new List<AnimationFrame>();
         }
 
-        public Animation(int sourceRectX, int sourceRectY, int sourceRectWidth, int sourceRectHeight):this(new Rectangle(sourceRectX,sourceRectY,sourceRectWidth, sourceRectHeight))
+        public Animation(int sourceRectX, int sourceRectY, int sourceRectWidth, int sourceRectHeight, float scale=1f):this(new Rectangle(sourceRectX,sourceRectY,sourceRectWidth, sourceRectHeight),scale)
         {
 
         }
 
-        public Animation(Rectangle SourceRectangleForStaticAnimation):this(new AnimationFrame(SourceRectangleForStaticAnimation))
+        public Animation(Rectangle SourceRectangleForStaticAnimation, float scale=1f):this(new AnimationFrame(SourceRectangleForStaticAnimation,scale))
         {
 
         }

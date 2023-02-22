@@ -120,14 +120,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         public CustomItem()
         {
             this.basicItemInformation = new BasicItemInformation();
-            this.initNetFieldsPostConstructor();
+            this.initializeNetFieldsPostConstructor();
 
         }
 
         public CustomItem(BasicItemInformation info) : base(Vector2.Zero, 0)
         {
             this.basicItemInformation = info;
-            this.initNetFieldsPostConstructor();
+            this.initializeNetFieldsPostConstructor();
 
         }
 
@@ -203,7 +203,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <summary>
         /// Initializes NetFields to send information for multiplayer after all of the constructor initialization for this object has taken place.
         /// </summary>
-        protected virtual void initNetFieldsPostConstructor()
+        protected virtual void initializeNetFieldsPostConstructor()
         {
             this.NetFields.AddFields(this.netBasicItemInformation);
 

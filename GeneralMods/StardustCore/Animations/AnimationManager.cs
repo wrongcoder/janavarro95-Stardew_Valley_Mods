@@ -238,7 +238,7 @@ namespace Omegasis.StardustCore.Animations
         public void draw(SpriteBatch spriteBatch, Texture2D texture, Vector2 Position, Rectangle? sourceRectangle, Color drawColor, float rotation, Vector2 origin, float scale, SpriteEffects spriteEffects, float LayerDepth)
         {
             //Log.AsyncC("Animation Manager is working!");
-            spriteBatch.Draw(texture, Position, sourceRectangle, drawColor, rotation, origin, scale, spriteEffects, LayerDepth);
+            spriteBatch.Draw(texture, Position, sourceRectangle, drawColor, rotation, origin, scale * this.getCurrentAnimation().getCurrentAnimationFrame().scale, spriteEffects, LayerDepth);
             this.tickAnimation();
         }
 
@@ -258,7 +258,7 @@ namespace Omegasis.StardustCore.Animations
         public void draw(SpriteBatch spriteBatch, Texture2D texture, Vector2 Position, Rectangle? sourceRectangle, Color drawColor, float rotation, Vector2 origin, Vector2 scale, SpriteEffects spriteEffects, float LayerDepth)
         {
             //Log.AsyncC("Animation Manager is working!");
-            spriteBatch.Draw(texture, Position, sourceRectangle, drawColor, rotation, origin, scale, spriteEffects, LayerDepth);
+            spriteBatch.Draw(texture, Position, sourceRectangle, drawColor, rotation, origin, scale * this.getCurrentAnimation().getCurrentAnimationFrame().scale, spriteEffects, LayerDepth);
             this.tickAnimation();
             // Log.AsyncC("Tick animation");
         }
@@ -274,13 +274,13 @@ namespace Omegasis.StardustCore.Animations
         /// <param name="depth"></param>
         public void draw(SpriteBatch b, Vector2 Position, Color drawColor, float scale, SpriteEffects flipped, float depth)
         {
-            b.Draw(this.objectTexture.texture, Position, this.getCurrentAnimation().getCurrentAnimationFrameRectangle(), drawColor, 0f, Vector2.Zero, scale, flipped, depth);
+            b.Draw(this.objectTexture.texture, Position, this.getCurrentAnimation().getCurrentAnimationFrameRectangle(), drawColor, 0f, Vector2.Zero, scale * this.getCurrentAnimation().getCurrentAnimationFrame().scale, flipped, depth);
             this.tickAnimation();
         }
 
         public void draw(SpriteBatch b, Vector2 Position, Color drawColor, float scale, float Rotation, SpriteEffects flipped, float depth)
         {
-            b.Draw(this.objectTexture.texture, Position, this.getCurrentAnimation().getCurrentAnimationFrameRectangle(), drawColor, Rotation, Vector2.Zero, scale, flipped, depth);
+            b.Draw(this.objectTexture.texture, Position, this.getCurrentAnimation().getCurrentAnimationFrameRectangle(), drawColor, Rotation, Vector2.Zero, scale * this.getCurrentAnimation().getCurrentAnimationFrame().scale, flipped, depth);
             this.tickAnimation();
         }
 
@@ -295,13 +295,13 @@ namespace Omegasis.StardustCore.Animations
         /// <param name="depth">The depth of the sprite.</param>
         public void draw(SpriteBatch b, Vector2 Position, Color drawColor, Vector2 scale, SpriteEffects flipped, float depth)
         {
-            b.Draw(this.objectTexture.texture, Position, this.getCurrentAnimation().getCurrentAnimationFrameRectangle(), drawColor, 0f, Vector2.Zero, scale, flipped, depth);
+            b.Draw(this.objectTexture.texture, Position, this.getCurrentAnimation().getCurrentAnimationFrameRectangle(), drawColor, 0f, Vector2.Zero, scale * this.getCurrentAnimation().getCurrentAnimationFrame().scale, flipped, depth);
             this.tickAnimation();
         }
 
         public void draw(SpriteBatch b, Vector2 Position, Color drawColor, Vector2 scale, float Rotation, SpriteEffects flipped, float depth)
         {
-            b.Draw(this.objectTexture.texture, Position, this.getCurrentAnimation().getCurrentAnimationFrameRectangle(), drawColor, Rotation, Vector2.Zero, scale, flipped, depth);
+            b.Draw(this.objectTexture.texture, Position, this.getCurrentAnimation().getCurrentAnimationFrameRectangle(), drawColor, Rotation, Vector2.Zero, scale * this.getCurrentAnimation().getCurrentAnimationFrame().scale, flipped, depth);
             this.tickAnimation();
         }
 

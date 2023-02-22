@@ -12,5 +12,8 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
         public const string BigItemVault = "Omegasis.Revitalize.Objects.Storage.BigItemVault";
         public const string LargeItemVault = "Omegasis.Revitalize.Objects.Storage.LargeItemVault";
         public const string HugeItemVault = "Omegasis.Revitalize.Objects.Storage.HugeItemVault";
+
+        public const string SmallItemBag = "Omegasis.Revitalize.Objects.Storage.SmallItemBag";
+        public const string BigItemBag = "Omegasis.Revitalize.Objects.Storage.BigItemBag";
     }
 }

@@ -4,6 +4,10 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 2-21-2023 xx.xx P.M~~~~~~~~~~~~~~
++Added in StorageBags, which are portable, yet smaller ItemVaults. Can be bought from the Adventure's Guild once certain backpack upgrades have been obtained.
++Added a code feature to allow for scaling animation frames, allowing for higher-res textures for certain objects.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 2-15-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Added ColorPicking to ItemVaults so that way they can be dyed in the exact same manner as chests can.
 

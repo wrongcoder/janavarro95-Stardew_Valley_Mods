@@ -78,12 +78,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
             this.craftingRecipesToUnlock.Add(CraftingBookName, CraftingRecipeName);
         }
 
-        protected override void initNetFieldsPostConstructor()
+        protected override void initializeNetFieldsPostConstructor()
         {
-            base.initNetFieldsPostConstructor();
+            base.initializeNetFieldsPostConstructor();
             this.NetFields.AddFields(this.craftingRecipesToUnlock,this.itemToDraw);
         }
 
+        /// <summary>
+        /// Used to use the item while still in the farmer's hands.
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
         public override bool performUseAction(GameLocation location)
         {
             return this.learnRecipes();

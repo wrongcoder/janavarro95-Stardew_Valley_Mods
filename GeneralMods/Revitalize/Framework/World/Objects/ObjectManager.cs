@@ -458,6 +458,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 {
                     {"Default",  new Animation(new Rectangle(0,0,16,32)) },
                 }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), chestCapacity * 5));
+
+
+            this.addItem(new StorageBag(new BasicItemInformation("", StorageIds.SmallItemBag, "", CategoryNames.Storage, CategoryColors.Misc, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Storage.createAnimationManager("SmallItemBag", new Dictionary<string, Animation>()
+                {
+                    {"Default",  new Animation(new Rectangle(0,0,16,16)) },
+                }, "Default", "Default"), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null), 5));
+
+            this.addItem(new StorageBag(new BasicItemInformation("", StorageIds.BigItemBag, "", CategoryNames.Storage, CategoryColors.Misc, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Storage.createAnimationManager("BigItemBag", new Dictionary<string, Animation>()
+                {
+                    {"Default",  new Animation(new Rectangle(0,0,32,32),.5f) },
+                }, "Default", "Default"), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null), 5));
         }
 
         /// <summary>

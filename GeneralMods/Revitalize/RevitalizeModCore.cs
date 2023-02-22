@@ -270,7 +270,9 @@ namespace Omegasis.Revitalize
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
 
-              ModContentManager.objectManager.getItem(StorageIds.ItemVault),
+              ModContentManager.objectManager.getItem(StorageIds.SmallItemBag),
+              ModContentManager.objectManager.getItem(StorageIds.BigItemBag),
+              /*
                             ModContentManager.objectManager.getItem(StorageIds.BigItemVault),
                                           ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
                                                         ModContentManager.objectManager.getItem(StorageIds.HugeItemVault),
@@ -280,6 +282,7 @@ namespace Omegasis.Revitalize
                             ModContentManager.objectManager.getItem(Enums.SDVObject.OmniGeode,100),
                             ModContentManager.objectManager.getItem(Enums.SDVObject.BatteryPack,100),
                             ModContentManager.objectManager.getItem(Enums.SDVBigCraftable.Chest,10),
+              */
 
             });
             //Game1.player.addItemToInventoryBool(ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.Workbench_AnvilCraftingRecipeBlueprint));

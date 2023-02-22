@@ -14,6 +14,9 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
 
         public int StatueOfStatisticsPrice = 2_500;
 
+        public int SmallItemBagPrice = 7500;
+        public int BigItemBagPrice = 18000;
+
         public AdventureGuildShopConfig()
         {
 

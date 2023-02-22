@@ -272,6 +272,12 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                     {
                         continue;
                     }
+                    if(item== this.customObjectForColoring)
+                    {
+                        //Prevent putting the storage container into itself, effectively destroying the container.
+                        //But just for fun, allow putting storage containers into storage containers.
+                        continue;
+                    }
                     SoundUtilities.PlaySound(Enums.StardewSound.coin);
                     bool added = this.addItemToInventory(item);
                     if (!added) break;
