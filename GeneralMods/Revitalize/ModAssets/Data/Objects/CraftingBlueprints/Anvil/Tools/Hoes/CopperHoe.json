@@ -1,13 +1,17 @@
 {
   "itemToDraw": {
+    "amount": 1,
+    "registeredObjectId": "StardewValley.Tools.CopperHoe",
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "StardewValley.Tools.CopperHoe",
-    "amount": 1
+    "artisanGoodItemReference": null
   },
-  "recipesToUnlock": {
-    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil": "StardewValley.Tools.CopperHoe"
-  },
+  "recipesToUnlock": [
+    {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil",
+      "RecipeId": "StardewValley.Tools.CopperHoe"
+    }
+  ],
   "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.CopperHoe",
   "name": "Blueprint: Copper Hoe",
   "description": "A blueprint used on how to craft a copper hoe at a anvil!",

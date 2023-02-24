@@ -1,13 +1,17 @@
 {
   "itemToDraw": {
+    "amount": 1,
+    "registeredObjectId": "StardewValley.Tools.CopperPickaxe",
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "StardewValley.Tools.CopperPickaxe",
-    "amount": 1
+    "artisanGoodItemReference": null
   },
-  "recipesToUnlock": {
-    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil": "StardewValley.Tools.CopperPickaxe"
-  },
+  "recipesToUnlock": [
+    {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil",
+      "RecipeId": "StardewValley.Tools.CopperPickaxe"
+    }
+  ],
   "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.CopperPickaxe",
   "name": "Blueprint: Copper Pickaxe",
   "description": "A blueprint used on how to craft a copper pickaxe at a anvil!",

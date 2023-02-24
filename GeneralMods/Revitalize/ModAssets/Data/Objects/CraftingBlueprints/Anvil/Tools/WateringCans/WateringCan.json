@@ -1,14 +1,21 @@
 {
   "itemToDraw": {
+    "amount": 1,
+    "registeredObjectId": "StardewValley.Tools.WateringCan",
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "StardewValley.Tools.WateringCan",
-    "amount": 1
+    "artisanGoodItemReference": null
   },
-  "recipesToUnlock": {
-    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil": "StardewValley.Tools.WateringCan",
-	"Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench": "StardewValley.Tools.WateringCan"
-  },
+  "recipesToUnlock": [
+    {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil",
+      "RecipeId": "StardewValley.Tools.WateringCan"
+    },
+    {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench",
+      "RecipeId": "StardewValley.Tools.WateringCan"
+    }
+  ],
   "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.WateringCan",
   "name": "Blueprint: Watering Can",
   "description": "A blueprint used on how to craft a watering can at a anvil!",

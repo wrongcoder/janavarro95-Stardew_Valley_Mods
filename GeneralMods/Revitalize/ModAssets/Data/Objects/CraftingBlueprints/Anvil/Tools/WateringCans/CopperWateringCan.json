@@ -1,13 +1,17 @@
 {
   "itemToDraw": {
+    "amount": 1,
+    "registeredObjectId": "StardewValley.Tools.CopperWateringCan",
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "StardewValley.Tools.CopperWateringCan",
-    "amount": 1
+    "artisanGoodItemReference": null
   },
-  "recipesToUnlock": {
-    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil": "StardewValley.Tools.CopperWateringCan"
-  },
+  "recipesToUnlock": [
+    {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil",
+      "RecipeId": "StardewValley.Tools.CopperWateringCan"
+    }
+  ],
   "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.CopperWateringCan",
   "name": "Blueprint: Copper Watering Can",
   "description": "A blueprint used on how to craft a copper watering can at a anvil!",

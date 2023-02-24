@@ -1,13 +1,17 @@
 {
   "itemToDraw": {
+    "amount": 1,
+    "registeredObjectId": "Omegasis.Revitalize.Objects.Crafting.CraftingStations.Anvil",
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "Omegasis.Revitalize.Objects.Crafting.CraftingStations.Anvil",
-    "amount": 1
+    "artisanGoodItemReference": null
   },
-  "recipesToUnlock": {
-    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench": "Omegasis.Revitalize.Anvil"
-  },
+  "recipesToUnlock": [
+    {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench",
+      "RecipeId": "Omegasis.Revitalize.Anvil"
+    }
+  ],
   "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Anvil",
   "name": "Blueprint: Anvil",
   "description": "A blueprint used on how to craft an anvil at a workbench!",

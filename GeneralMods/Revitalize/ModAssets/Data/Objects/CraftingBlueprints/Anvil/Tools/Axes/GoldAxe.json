@@ -1,13 +1,17 @@
 {
   "itemToDraw": {
+    "amount": 1,
+    "registeredObjectId": "StardewValley.Tools.GoldAxe",
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "StardewValley.Tools.GoldAxe",
-    "amount": 1
+    "artisanGoodItemReference": null
   },
-  "recipesToUnlock": {
-    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil": "StardewValley.Tools.GoldAxe"
-  },
+  "recipesToUnlock": [
+    {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil",
+      "RecipeId": "StardewValley.Tools.GoldAxe"
+    }
+  ],
   "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.GoldAxe",
   "name": "Blueprint: Gold Axe",
   "description": "A blueprint used on how to craft a gold axe at a anvil!",

@@ -1,14 +1,21 @@
 {
   "itemToDraw": {
+    "amount": 1,
+    "registeredObjectId": "StardewValley.Tools.Pickaxe",
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "StardewValley.Tools.Pickaxe",
-    "amount": 1
+    "artisanGoodItemReference": null
   },
-  "recipesToUnlock": {
-    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil": "StardewValley.Tools.Pickaxe",
-	"Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench": "StardewValley.Tools.Pickaxe"
-  },
+  "recipesToUnlock": [
+    {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Anvil",
+      "RecipeId": "StardewValley.Tools.Pickaxe"
+    },
+    {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench",
+      "RecipeId": "StardewValley.Tools.Pickaxe"
+    }
+  ],
   "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.Pickaxe",
   "name": "Blueprint: Pickaxe",
   "description": "A blueprint used on how to craft a pickaxe at a anvil!",

@@ -16,6 +16,9 @@ using Omegasis.Revitalize.Framework.Managers;
 using Omegasis.Revitalize.Framework.Crafting.JsonContent;
 using System.IO;
 using Omegasis.Revitalize.Framework.Constants.Ids.Resources.EarthenResources;
+using Omegasis.Revitalize.Framework.Constants.Ids.Objects;
+using Omegasis.Revitalize.Framework.HUD;
+using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.Crafting
 {
@@ -82,37 +85,34 @@ namespace Omegasis.Revitalize.Framework.Crafting
 
         }
 
-        /// <summary>
-        /// Learns all of the passed in recipies.
-        /// </summary>
-        /// <param name="CraftingRecipeBooksToRecipeNameMapping"></param>
-        /// <returns>A dictionary mapping with a keyvalue pair as the key representing the crafting book name and recipe, and a value representing if the recipe was learned or not.</returns>
-        public virtual Dictionary<KeyValuePair<string, string>, bool> learnCraftingRecipes(NetStringDictionary<string, NetString> CraftingRecipeBooksToRecipeNameMapping)
+
+        public virtual List<CraftingBookIdToRecipeId> learnCraftingRecipes(NetObjectList<CraftingBookIdToRecipeId> PotentialRecipesToLearn, bool ShowAlreadyLearnedPrompt)
         {
-            Dictionary<KeyValuePair<string, string>, bool> recipesLearned = new Dictionary<KeyValuePair<string, string>, bool>();
-            foreach (var craftingBookToRecipes in CraftingRecipeBooksToRecipeNameMapping)
+            List<CraftingBookIdToRecipeId> unlockedRecipes = new List<CraftingBookIdToRecipeId>();
+            foreach (CraftingBookIdToRecipeId recipe in PotentialRecipesToLearn)
             {
-                Dictionary<KeyValuePair<string, string>, bool> learnedRecipes = this.learnCraftingRecipes(craftingBookToRecipes);
-                foreach (var learnedRecipe in learnedRecipes)
-                    recipesLearned.Add(learnedRecipe.Key, learnedRecipe.Value);
+
+                //TODO: Try to de-dupe output message when learning mutliple recipes for the same output object!
+                if (this.learnCraftingRecipe(recipe.CraftingBookId, recipe.RecipeId, true))
+                {
+                    unlockedRecipes.Add(recipe);
+                }
             }
-            return recipesLearned;
+            return unlockedRecipes;
         }
 
-        /// <summary>
-        /// Learns all of the passed in recipies.
-        /// </summary>
-        /// <param name="CraftingRecipeBooksToRecipeNameMapping"></param>
-        /// <returns>A dictionary mapping with a keyvalue pair as the key representing the crafting book name and recipe, and a value representing if the recipe was learned or not.</returns>
-        public virtual Dictionary<KeyValuePair<string, string>, bool> learnCraftingRecipes(Dictionary<string, string> CraftingRecipeBooksToRecipeNameMapping)
+        public virtual List<CraftingBookIdToRecipeId> learnCraftingRecipes(List<CraftingBookIdToRecipeId> PotentialRecipesToLearn, bool ShowAlreadyLearnedPrompt)
         {
-            Dictionary<KeyValuePair<string, string>, bool> recipesLearned = new Dictionary<KeyValuePair<string, string>, bool>();
-            foreach (KeyValuePair<string, string> craftingBookToRecipes in CraftingRecipeBooksToRecipeNameMapping)
+
+            List<CraftingBookIdToRecipeId> unlockedRecipes = new List<CraftingBookIdToRecipeId>();
+            foreach (CraftingBookIdToRecipeId recipe in PotentialRecipesToLearn)
             {
-                bool learned = this.learnCraftingRecipe(craftingBookToRecipes.Key, craftingBookToRecipes.Value);
-                recipesLearned.Add(craftingBookToRecipes, learned);
+                if (this.learnCraftingRecipe(recipe.CraftingBookId, recipe.RecipeId, ShowAlreadyLearnedPrompt))
+                {
+                    unlockedRecipes.Add(recipe);
+                }
             }
-            return recipesLearned;
+            return unlockedRecipes;
         }
 
         /// <summary>
@@ -121,12 +121,27 @@ namespace Omegasis.Revitalize.Framework.Crafting
         /// <param name="CraftingBookName"></param>
         /// <param name="CraftingRecipeName"></param>
         /// <returns></returns>
-        public virtual bool learnCraftingRecipe(string CraftingBookName, string CraftingRecipeName)
+        public virtual bool learnCraftingRecipe(string CraftingBookName, string CraftingRecipeName, bool ShowPrompts)
         {
             if (!this.craftingRecipeBookExists(CraftingBookName)) return false;
             CraftingRecipeBook craftingBook = this.getCraftingRecipeBook(CraftingBookName);
             if (!craftingBook.containsCraftingRecipe(CraftingRecipeName)) return false;
-            if (craftingBook.craftingRecipes[CraftingRecipeName].hasUnlocked) return false;
+
+
+
+            string itemToCraftOutputName = craftingBook.getCraftingRecipe(CraftingRecipeName).recipe.outputName;
+            string craftingStationName = CraftingStations.GetCraftingStationNameFromRecipeBookId(CraftingBookName);
+            bool isPlural = itemToCraftOutputName.ToLowerInvariant().StartsWith("a") || itemToCraftOutputName.ToLowerInvariant().StartsWith("e") || itemToCraftOutputName.ToLowerInvariant().StartsWith("i") || itemToCraftOutputName.ToLowerInvariant().StartsWith("o") || itemToCraftOutputName.ToLowerInvariant().StartsWith("u");
+
+
+            if (craftingBook.craftingRecipes[CraftingRecipeName].hasUnlocked)
+            {
+                if (ShowPrompts)
+                {
+                    HudUtilities.AddDialogueBoxMessagesToShow(string.Format("You already know how to make {2} {0} on {2} {1}. ", itemToCraftOutputName, craftingStationName, isPlural ? "an" : "a"));
+                }
+                return false;
+            }
             craftingBook.unlockRecipe(CraftingRecipeName);
 
             //The player save data will only be null when loading from a .json file when starting up the game.
@@ -134,7 +149,14 @@ namespace Omegasis.Revitalize.Framework.Crafting
             {
                 RevitalizeModCore.SaveDataManager.playerSaveData.addUnlockedCraftingRecipe(CraftingBookName, CraftingRecipeName);
             }
+
+            if (ShowPrompts)
+            {
+                HudUtilities.AddDialogueBoxMessagesToShow(string.Format("You learned how to make {2} {0}! You can make it on {2} {1}. ", itemToCraftOutputName, craftingStationName, isPlural ? "an" : "a"));
+            }
             return true;
+
+
         }
 
 
@@ -143,12 +165,12 @@ namespace Omegasis.Revitalize.Framework.Crafting
         /// </summary>
         /// <param name="CraftingRecipeBooksToRecipeNameMapping"></param>
         /// <returns></returns>
-        public virtual bool knowsCraftingRecipes(NetStringDictionary<string, NetString> CraftingRecipeBooksToRecipeNameMapping)
+        public virtual bool knowsCraftingRecipes(NetObjectList<CraftingBookIdToRecipeId> CraftingRecipeBooksToRecipeNameMapping)
         {
             bool allRecipesLearned = true;
             foreach (var craftingBookToRecipes in CraftingRecipeBooksToRecipeNameMapping)
             {
-                bool learned = this.knowsCraftingRecipes(craftingBookToRecipes);
+                bool learned = this.knowsCraftingRecipe(craftingBookToRecipes.CraftingBookId, craftingBookToRecipes.RecipeId);
                 if (learned == false)
                 {
                     allRecipesLearned = false;
@@ -163,12 +185,12 @@ namespace Omegasis.Revitalize.Framework.Crafting
         /// </summary>
         /// <param name="CraftingRecipeBooksToRecipeNameMapping"></param>
         /// <returns></returns>
-        public virtual bool knowsCraftingRecipes(Dictionary<string, string> CraftingRecipeBooksToRecipeNameMapping)
+        public virtual bool knowsCraftingRecipes(List<CraftingBookIdToRecipeId> CraftingRecipeBooksToRecipeNameMapping)
         {
             bool allRecipesLearned = true;
-            foreach (KeyValuePair<string, string> craftingBookToRecipes in CraftingRecipeBooksToRecipeNameMapping)
+            foreach (CraftingBookIdToRecipeId craftingBookToRecipes in CraftingRecipeBooksToRecipeNameMapping)
             {
-                bool learned = this.knowsCraftingRecipe(craftingBookToRecipes.Key, craftingBookToRecipes.Value);
+                bool learned = this.knowsCraftingRecipe(craftingBookToRecipes.CraftingBookId, craftingBookToRecipes.RecipeId);
                 if (learned == false)
                 {
                     allRecipesLearned = false;
@@ -311,11 +333,11 @@ namespace Omegasis.Revitalize.Framework.Crafting
         /// <summary>
         /// Adds in crafting recipes from json files for all crafting stations. Also has recurrisve functionality to seach deeply nested directories.
         /// </summary>
-        protected virtual void addInCraftingRecipesForRevitalizeMachinesFromJsonFiles(string SubDirectory="", string RelativeSubDirectory="")
+        protected virtual void addInCraftingRecipesForRevitalizeMachinesFromJsonFiles(string SubDirectory = "", string RelativeSubDirectory = "")
         {
 
-            string craftingDirectoryPath = string.IsNullOrEmpty(SubDirectory)? Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, Constants.PathConstants.Data.CraftingDataPaths.RevitalizeMachinesPath):SubDirectory;
-            string relativeCraftingDirectoryPath = string.IsNullOrEmpty(RelativeSubDirectory)? Constants.PathConstants.Data.CraftingDataPaths.RevitalizeMachinesPath:RelativeSubDirectory;
+            string craftingDirectoryPath = string.IsNullOrEmpty(SubDirectory) ? Path.Combine(RevitalizeModCore.ModHelper.DirectoryPath, Constants.PathConstants.Data.CraftingDataPaths.RevitalizeMachinesPath) : SubDirectory;
+            string relativeCraftingDirectoryPath = string.IsNullOrEmpty(RelativeSubDirectory) ? Constants.PathConstants.Data.CraftingDataPaths.RevitalizeMachinesPath : RelativeSubDirectory;
             foreach (string craftingStationPath in Directory.GetDirectories(craftingDirectoryPath))
             {
                 if (Path.GetFileName(craftingStationPath).Equals("_Templates") || Path.GetFileName(craftingStationPath).Equals("Templates"))
@@ -325,7 +347,8 @@ namespace Omegasis.Revitalize.Framework.Crafting
                 }
 
                 string relativeCraftingStationPath = Path.Combine(relativeCraftingDirectoryPath, Path.GetFileName(craftingStationPath));
-                if (!File.Exists(Path.Combine(craftingStationPath, "RecipeBookDefinition.json"))){
+                if (!File.Exists(Path.Combine(craftingStationPath, "RecipeBookDefinition.json")))
+                {
                     this.addInCraftingRecipesForRevitalizeMachinesFromJsonFiles(craftingStationPath, relativeCraftingStationPath);
                 }
 

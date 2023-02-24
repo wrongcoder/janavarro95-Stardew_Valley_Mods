@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants.Ids.Objects;
 using Omegasis.Revitalize.Framework.Crafting;
+using Omegasis.Revitalize.Framework.HUD;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json.Crafting;
@@ -25,7 +26,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
         /// <summary>
         /// A mapping from the name of the crafting book to the name of the crafting recipe to unlock.
         /// </summary>
-        public readonly NetStringDictionary<string, NetString> craftingRecipesToUnlock = new();
+        public readonly NetObjectList<CraftingBookIdToRecipeId> craftingRecipesToUnlock = new();
         public NetRef<Drawable> itemToDraw = new NetRef<Drawable>();
 
 
@@ -34,19 +35,19 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
 
         }
 
-        public Blueprint(BasicItemInformation Info, string CraftingRecipeBookName, string CraftingRecipe, Drawable itemToDraw =null ) : base(Info)
+        public Blueprint(BasicItemInformation Info, CraftingBookIdToRecipeId recipeToUnlock, Drawable itemToDraw =null ) : base(Info)
         {
-            this.addCraftingRecipe(CraftingRecipeBookName, CraftingRecipe);
+            this.addCraftingRecipe(recipeToUnlock);
             this.itemToDraw.Value = itemToDraw;
         }
 
-        public Blueprint(BasicItemInformation Info, Dictionary<string,string> CraftingRecipesToUnlock, Drawable itemToDraw = null) : base(Info)
+        public Blueprint(BasicItemInformation Info, List<CraftingBookIdToRecipeId> recipesToUnlock, Drawable itemToDraw = null) : base(Info)
         {
-            this.addCraftingRecipe(CraftingRecipesToUnlock);
+            this.addCraftingRecipe(recipesToUnlock.ToArray());
             this.itemToDraw.Value = itemToDraw;
         }
 
-        public Blueprint(BasicItemInformation Info, NetStringDictionary<string, NetString> CraftingRecipesToUnlock, Drawable itemToDraw = null) : base(Info)
+        public Blueprint(BasicItemInformation Info, NetObjectList<CraftingBookIdToRecipeId> CraftingRecipesToUnlock, Drawable itemToDraw = null) : base(Info)
         {
             foreach (var craftingBookNameToCraftingRecipeName in CraftingRecipesToUnlock)
             {
@@ -60,22 +61,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
 
         }
 
-        protected virtual void addCraftingRecipe(Dictionary<string,string> CraftingRecipes)
+        protected virtual void addCraftingRecipe(params CraftingBookIdToRecipeId[] recipesToUnlock)
         {
-            foreach (KeyValuePair<string, string> craftingBookNameToCraftingRecipeName in CraftingRecipes)
+            foreach (CraftingBookIdToRecipeId craftingBookNameToCraftingRecipeName in recipesToUnlock)
             {
-                this.addCraftingRecipe(craftingBookNameToCraftingRecipeName.Key, craftingBookNameToCraftingRecipeName.Value);
+                this.craftingRecipesToUnlock.Add(craftingBookNameToCraftingRecipeName);
             }
-        }
-
-        /// <summary>
-        /// Adds a single crafting recipe to this blueprint when used.
-        /// </summary>
-        /// <param name="CraftingBookName"></param>
-        /// <param name="CraftingRecipeName"></param>
-        protected virtual void addCraftingRecipe(string CraftingBookName, string CraftingRecipeName)
-        {
-            this.craftingRecipesToUnlock.Add(CraftingBookName, CraftingRecipeName);
         }
 
         protected override void initializeNetFieldsPostConstructor()
@@ -97,30 +88,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
 
         protected virtual bool learnRecipes()
         {
-            bool anyUnlocked = false;
-            Dictionary<KeyValuePair<string, string>, bool> recipesLearned = RevitalizeModCore.ModContentManager.craftingManager.learnCraftingRecipes(this.craftingRecipesToUnlock);
-
-            foreach(var bookRecipePairToLearnedValues in recipesLearned) {
-
-                string itemToCraftOutputName = RevitalizeModCore.ModContentManager.craftingManager.getCraftingRecipeBook(bookRecipePairToLearnedValues.Key.Key).getCraftingRecipe(bookRecipePairToLearnedValues.Key.Value).recipe.outputName;
-                string craftingStationName = CraftingStations.GetCraftingStationNameFromRecipeBookId(bookRecipePairToLearnedValues.Key.Key);
-
-                bool isPlural = itemToCraftOutputName.ToLowerInvariant().StartsWith("a") || itemToCraftOutputName.ToLowerInvariant().StartsWith("e") || itemToCraftOutputName.ToLowerInvariant().StartsWith("i") || itemToCraftOutputName.ToLowerInvariant().StartsWith("o") || itemToCraftOutputName.ToLowerInvariant().StartsWith("u");
-
-                if (bookRecipePairToLearnedValues.Value == true)
-                {
-                    anyUnlocked = true;
-
-                    Game1.drawObjectDialogue(string.Format("You learned how to make {2} {0}! You can make it on {2} {1}. ",itemToCraftOutputName, craftingStationName, isPlural? "an":"a"));
-
-                }
-                else
-                {
-                    Game1.drawObjectDialogue(string.Format("You already know how to make {2} {0} on {2} {1}. ", itemToCraftOutputName, craftingStationName, isPlural ? "an" : "a"));
-                }
-            }
-
-            return anyUnlocked;
+            return RevitalizeModCore.ModContentManager.craftingManager.learnCraftingRecipes(this.craftingRecipesToUnlock, true).Count() > 0;
         }
 
 

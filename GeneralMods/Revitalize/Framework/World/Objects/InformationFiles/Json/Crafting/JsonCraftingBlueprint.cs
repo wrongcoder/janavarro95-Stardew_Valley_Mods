@@ -1,8 +1,7 @@
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.World.Objects.Crafting;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 
@@ -15,15 +14,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects.InformationFiles.Json.Craf
     {
         public ItemReference itemToDraw;
 
-        public Dictionary<string, string> recipesToUnlock;
+        public List<CraftingBookIdToRecipeId> recipesToUnlock;
 
         public JsonCraftingBlueprint()
         {
             this.itemToDraw = new ItemReference();
-            this.recipesToUnlock = new Dictionary<string, string>()
-            {
-                { "BookIdHere","RecipeIdHere" }
-            };
+            this.recipesToUnlock = new List<CraftingBookIdToRecipeId>();
         }
 
         public virtual Blueprint toBlueprint()

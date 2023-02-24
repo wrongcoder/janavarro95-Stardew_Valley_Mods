@@ -1,13 +1,17 @@
 {
   "itemToDraw": {
+    "amount": 1,
+    "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.MagicalFurnace",
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.MagicalFurnace",
-    "amount": 1
+    "artisanGoodItemReference": null
   },
-  "recipesToUnlock": {
-    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench": "Omegasis.Revitalize.Workbench.Machines.Furnaces.MagicalFurnace"
-  },
+  "recipesToUnlock": [
+    {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench",
+      "RecipeId": "Omegasis.Revitalize.Workbench.Machines.Furnaces.MagicalFurnace"
+    }
+  ],
   "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Revitalize.Workbench.Machines.Furnaces.MagicalFurnace",
   "name": "Blueprint: Nuclear Furnace",
   "description": "A blueprint used on how to craft a magical furnace at a workbench!",

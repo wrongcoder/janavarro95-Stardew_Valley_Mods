@@ -1,13 +1,17 @@
 {
   "itemToDraw": {
+    "amount": 1,
+    "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.EnergyGeneration.SuperiorSolarPanel",
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.EnergyGeneration.SuperiorSolarPanel",
-    "amount": 1
+    "artisanGoodItemReference": null
   },
-  "recipesToUnlock": {
-	  "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench": "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.SuperiorSolarPanel"
-  },
+  "recipesToUnlock": [
+    {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench",
+      "RecipeId": "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.SuperiorSolarPanel"
+    }
+  ],
   "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Machines.EnergyGeneration.SuperiorSolarPanel",
   "name": "",
   "description": "",

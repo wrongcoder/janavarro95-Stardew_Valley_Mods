@@ -35,6 +35,7 @@ using Omegasis.Revitalize.Framework.World.Objects.Misc;
 using static Omegasis.Revitalize.Framework.Constants.Enums;
 using Omegasis.Revitalize.Framework.Illuminate;
 using Omegasis.Revitalize.Framework.World.Objects.Storage;
+using Omegasis.Revitalize.Framework.Crafting;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -217,9 +218,18 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         {
 
             //Make sure that all blueprints registered here have a id reference in Blueprints.cs for easier access via code.
-            foreach (JsonCraftingBlueprint jsonBlueprint in JsonUtilities.LoadJsonFilesFromDirectories<JsonCraftingBlueprint>(ObjectsDataPaths.CraftingBlueprintsPath))
+            foreach (KeyValuePair<string,JsonCraftingBlueprint> jsonBlueprintPair in JsonUtilities.LoadJsonFilesFromDirectoriesWithPaths<JsonCraftingBlueprint>(ObjectsDataPaths.CraftingBlueprintsPath))
             {
-                this.addItem(jsonBlueprint.id, jsonBlueprint.toBlueprint());
+                /*
+                foreach (CraftingBookIdToRecipeId recipeId in jsonBlueprintPair.Value.recipesToUnlockV2)
+                {
+                    jsonBlueprintPair.Value.recipesToUnlock.Add(recipeId);
+                }
+                */
+                this.addItem(jsonBlueprintPair.Value.id, jsonBlueprintPair.Value.toBlueprint());
+
+                JsonUtilities.WriteJsonFile(jsonBlueprintPair.Value, jsonBlueprintPair.Key);
+
             }
 
         }

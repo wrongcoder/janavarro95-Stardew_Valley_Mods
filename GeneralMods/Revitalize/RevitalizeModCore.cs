@@ -28,6 +28,8 @@ using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
 using Netcode;
 using Omegasis.Revitalize.Framework.World.Objects.Machines.Furnaces;
 using Omegasis.Revitalize.Framework.World.Buildings;
+using Omegasis.Revitalize.Framework.HUD;
+using Omegasis.Revitalize.Framework.Constants.Ids.Items.BlueprintIds;
 
 namespace Omegasis.Revitalize
 {
@@ -271,7 +273,8 @@ namespace Omegasis.Revitalize
             {
 
               ModContentManager.objectManager.getItem(StorageIds.SmallItemBag),
-              ModContentManager.objectManager.getItem(StorageIds.BigItemBag),
+              ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.ItemVault),
+                            ModContentManager.objectManager.getItem(CraftingStations.WorkBench_Id),
               /*
                             ModContentManager.objectManager.getItem(StorageIds.BigItemVault),
                                           ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
@@ -306,6 +309,7 @@ namespace Omegasis.Revitalize
         {
             DarkerNight.SetDarkerColor();
             playerInfo.update();
+            HudUtilities.OnGameUpdateTicked();
         }
 
         private void GameLoop_TimeChanged(object sender, StardewModdingAPI.Events.TimeChangedEventArgs e)

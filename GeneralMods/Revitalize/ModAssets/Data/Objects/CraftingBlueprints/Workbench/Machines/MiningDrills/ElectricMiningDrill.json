@@ -1,13 +1,17 @@
 {
   "itemToDraw": {
+    "amount": 1,
+    "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.ElectricMiningDrill",
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.ElectricMiningDrill",
-    "amount": 1
+    "artisanGoodItemReference": null
   },
-  "recipesToUnlock": {
-    "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench": "Omegasis.Revitalize.Workbench.Machines.MiningDrills.ElectricMiningDrill"
-  },
+  "recipesToUnlock": [
+    {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench",
+      "RecipeId": "Omegasis.Revitalize.Workbench.Machines.MiningDrills.ElectricMiningDrill"
+    }
+  ],
   "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.MiningDrills.ElectricMiningDrill",
   "name": "",
   "description": "",

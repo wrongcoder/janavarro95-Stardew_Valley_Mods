@@ -33,7 +33,7 @@ namespace Omegasis.Revitalize.Framework.SaveData.Player
         {
             foreach(KeyValuePair<string,string> recipe in this.unlockedCraftingRecipes)
             {
-                RevitalizeModCore.ModContentManager.craftingManager.learnCraftingRecipe(recipe.Key, recipe.Value);
+                RevitalizeModCore.ModContentManager.craftingManager.learnCraftingRecipe(recipe.Key, recipe.Value,false);
             }
         }
 
