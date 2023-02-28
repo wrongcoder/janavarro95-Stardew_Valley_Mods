@@ -53,6 +53,7 @@ namespace Omegasis.Revitalize.Framework.Player
         {
             if (Who != null)
             {
+                //Game1.showRedMessage("Attempt to add?");
                 int emptyIndex = -1;
                 for (int i = 0; i < Who.MaxItems; i++)
                 {

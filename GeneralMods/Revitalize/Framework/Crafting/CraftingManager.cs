@@ -86,28 +86,63 @@ namespace Omegasis.Revitalize.Framework.Crafting
         }
 
 
-        public virtual List<CraftingBookIdToRecipeId> learnCraftingRecipes(NetObjectList<CraftingBookIdToRecipeId> PotentialRecipesToLearn, bool ShowAlreadyLearnedPrompt)
+        public virtual List<CraftingBookIdToRecipeId> learnCraftingRecipes(NetObjectList<CraftingBookIdToRecipeId> PotentialRecipesToLearn, bool ShowPrompts)
         {
             List<CraftingBookIdToRecipeId> unlockedRecipes = new List<CraftingBookIdToRecipeId>();
-            foreach (CraftingBookIdToRecipeId recipe in PotentialRecipesToLearn)
+            HashSet<KeyValuePair<string, string>> objectOutputIds = new HashSet<KeyValuePair<string, string>>();
+            foreach (CraftingBookIdToRecipeId pair in PotentialRecipesToLearn)
             {
 
-                //TODO: Try to de-dupe output message when learning mutliple recipes for the same output object!
-                if (this.learnCraftingRecipe(recipe.CraftingBookId, recipe.RecipeId, true))
+                if (!this.craftingRecipeBookExists(pair.CraftingBookId)) continue;
+                CraftingRecipeBook craftingBook = this.getCraftingRecipeBook(pair.CraftingBookId);
+                if (!craftingBook.containsCraftingRecipe(pair.RecipeId)) continue;
+
+
+
+                string itemToCraftOutputName = craftingBook.getCraftingRecipe(pair.RecipeId).recipe.DisplayItem.DisplayName;
+                string craftingStationName = CraftingStations.GetCraftingStationNameFromRecipeBookId(pair.CraftingBookId);
+                bool isPlural = itemToCraftOutputName.ToLowerInvariant().StartsWith("a") || itemToCraftOutputName.ToLowerInvariant().StartsWith("e") || itemToCraftOutputName.ToLowerInvariant().StartsWith("i") || itemToCraftOutputName.ToLowerInvariant().StartsWith("o") || itemToCraftOutputName.ToLowerInvariant().StartsWith("u");
+
+
+                if (craftingBook.craftingRecipes[pair.RecipeId].hasUnlocked)
                 {
-                    unlockedRecipes.Add(recipe);
+                    continue;
+                }
+
+                KeyValuePair<string, string> objectStationAndDisplayName = new KeyValuePair<string, string>(itemToCraftOutputName, craftingStationName);
+
+                if (ShowPrompts && !objectOutputIds.Contains(objectStationAndDisplayName))
+                {
+                    HudUtilities.AddDialogueBoxMessagesToShow(string.Format("You learned how to make {2} {0}! You can make it on {2} {1}. ", itemToCraftOutputName, craftingStationName, isPlural ? "an" : "a"));
+                }
+                craftingBook.unlockRecipe(pair.RecipeId);
+                //The player save data will only be null when loading from a .json file when starting up the game.
+                if (RevitalizeModCore.SaveDataManager.playerSaveData != null)
+                {
+                    RevitalizeModCore.SaveDataManager.playerSaveData.addUnlockedCraftingRecipe(pair.CraftingBookId, pair.RecipeId);
+                }
+                unlockedRecipes.Add(pair);
+                objectOutputIds.Add(objectStationAndDisplayName);
+            }
+
+            if (unlockedRecipes.Count == 0)
+            {
+                if (ShowPrompts)
+                {
+                    HudUtilities.AddDialogueBoxMessagesToShow(string.Format("You already know how to make all the recipes from this blueprint."));
                 }
             }
+
             return unlockedRecipes;
         }
 
-        public virtual List<CraftingBookIdToRecipeId> learnCraftingRecipes(List<CraftingBookIdToRecipeId> PotentialRecipesToLearn, bool ShowAlreadyLearnedPrompt)
+        public virtual List<CraftingBookIdToRecipeId> learnCraftingRecipes(List<CraftingBookIdToRecipeId> PotentialRecipesToLearn, bool ShowPrompts)
         {
 
             List<CraftingBookIdToRecipeId> unlockedRecipes = new List<CraftingBookIdToRecipeId>();
             foreach (CraftingBookIdToRecipeId recipe in PotentialRecipesToLearn)
             {
-                if (this.learnCraftingRecipe(recipe.CraftingBookId, recipe.RecipeId, ShowAlreadyLearnedPrompt))
+                if (this.learnCraftingRecipe(recipe.CraftingBookId, recipe.RecipeId, ShowPrompts))
                 {
                     unlockedRecipes.Add(recipe);
                 }

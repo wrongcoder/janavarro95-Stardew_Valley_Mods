@@ -115,34 +115,34 @@ namespace Omegasis.Revitalize.Framework.Crafting
         /// <summary>
         /// Gets the crafting recipe by it's name.
         /// </summary>
-        /// <param name="CraftingRecipeName"></param>
+        /// <param name="CraftingRecipeId"></param>
         /// <returns></returns>
-        public UnlockableCraftingRecipe getCraftingRecipe(string CraftingRecipeName)
+        public UnlockableCraftingRecipe getCraftingRecipe(string CraftingRecipeId)
         {
-            if (this.containsCraftingRecipe(CraftingRecipeName))
-                return this.craftingRecipes[CraftingRecipeName];
+            if (this.containsCraftingRecipe(CraftingRecipeId))
+                return this.craftingRecipes[CraftingRecipeId];
             else return null;
         }
 
         /// <summary>
         /// Checks to see if this crafting recipe book contains a given recipe.
         /// </summary>
-        /// <param name="CraftingRecipeName"></param>
+        /// <param name="CraftingRecipeId"></param>
         /// <returns></returns>
-        public virtual bool containsCraftingRecipe(string CraftingRecipeName)
+        public virtual bool containsCraftingRecipe(string CraftingRecipeId)
         {
 
-            return this.craftingRecipes.ContainsKey(CraftingRecipeName);
+            return this.craftingRecipes.ContainsKey(CraftingRecipeId);
         }
 
         /// <summary>
         /// Checks to see if a crafting recipe has been unlocked.
         /// </summary>
-        /// <param name="Name"></param>
+        /// <param name="Id"></param>
         /// <returns></returns>
-        public bool hasUnlockedCraftingRecipe(string Name)
+        public bool hasUnlockedCraftingRecipe(string Id)
         {
-            UnlockableCraftingRecipe recipe = this.getCraftingRecipe(Name);
+            UnlockableCraftingRecipe recipe = this.getCraftingRecipe(Id);
             if (recipe == null) return false;
             else return recipe.hasUnlocked;
         }
@@ -150,10 +150,10 @@ namespace Omegasis.Revitalize.Framework.Crafting
         /// <summary>
         /// Unlocks the crating recipe so that it can be shown in the menu.
         /// </summary>
-        /// <param name="Name"></param>
-        public void unlockRecipe(string Name)
+        /// <param name="Id"></param>
+        public void unlockRecipe(string Id)
         {
-            UnlockableCraftingRecipe recipe = this.getCraftingRecipe(Name);
+            UnlockableCraftingRecipe recipe = this.getCraftingRecipe(Id);
             if (recipe == null) return;
             else recipe.unlock();
         }

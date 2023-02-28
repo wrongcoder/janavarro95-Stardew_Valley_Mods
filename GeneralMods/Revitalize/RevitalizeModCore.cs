@@ -279,9 +279,11 @@ namespace Omegasis.Revitalize
                             ModContentManager.objectManager.getItem(StorageIds.BigItemVault),
                                           ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
                                                         ModContentManager.objectManager.getItem(StorageIds.HugeItemVault),
-              ModContentManager.objectManager.getItem(FarmingObjects.HayMaker),
+                                                        
+                ModContentManager.objectManager.getItem(FarmingObjects.HayMaker),
               ModContentManager.objectManager.getItem(Enums.SDVObject.Corn,100),
                             ModContentManager.objectManager.getItem(MachineIds.ElectricAdvancedGeodeCrusher),
+                            
                             ModContentManager.objectManager.getItem(Enums.SDVObject.OmniGeode,100),
                             ModContentManager.objectManager.getItem(Enums.SDVObject.BatteryPack,100),
                             ModContentManager.objectManager.getItem(Enums.SDVBigCraftable.Chest,10),

@@ -818,8 +818,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             this.performRemoveAction(tileLocation, environment);
 
-
-            bool pickedUp=PlayerUtilities.AddItemToInventory(who, this);
+            bool pickedUp=Game1.player.addItemToInventoryBool(this);
+            //bool pickedUp=PlayerUtilities.AddItemToInventory(who, this);
 
             if (pickedUp && who!=null)
             {
