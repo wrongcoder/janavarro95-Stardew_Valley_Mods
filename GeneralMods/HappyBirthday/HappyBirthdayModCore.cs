@@ -105,7 +105,7 @@ namespace Omegasis.HappyBirthday
 
         private void Content_AssetRequested(object sender, AssetRequestedEventArgs e)
         {
-            if (e.NameWithoutLocale.BaseName.Equals(@"Data\mail"))
+            if (e.NameWithoutLocale.BaseName.Equals(@"Data/mail"))
             {
                 e.Edit(MailUtilities.EditMailAsset);
             }
