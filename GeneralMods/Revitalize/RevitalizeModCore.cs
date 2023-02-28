@@ -274,6 +274,7 @@ namespace Omegasis.Revitalize
 
               ModContentManager.objectManager.getItem(StorageIds.SmallItemBag),
               ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.ItemVault),
+                            ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.HayMakerBlueprint),
                             ModContentManager.objectManager.getItem(CraftingStations.WorkBench_Id),
               /*
                             ModContentManager.objectManager.getItem(StorageIds.BigItemVault),
