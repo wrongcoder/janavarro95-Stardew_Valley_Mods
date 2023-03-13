@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using Force.DeepCloner;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -102,11 +103,50 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             defaultOutputs.AddRange(GetMagmaGeodeOutputs());
             defaultOutputs.AddRange(GetOmniGeodeOutputs());
 
+            defaultOutputs.Clear();
+
+            defaultOutputs.AddRange(GetNormalGeodeOutputs());
+            defaultOutputs.AddRange(GetFrozenGeodeOutputs());
+            defaultOutputs.AddRange(GetMagmaGeodeOutputs());
+            defaultOutputs.AddRange(GetOmniGeodeOutputs());
+
             GenerateGeodeCrusherOutputsJsonFiles(MachineIds.AdvancedBurnerGeodeCrusher, "AdvancedBurnerGeodeCrusher", defaultOutputs, 50, .25f, .1f, 10, 1);
-            GenerateGeodeCrusherOutputsJsonFiles(MachineIds.ElectricAdvancedGeodeCrusher, "ElectricGeodeCrusher", defaultOutputs, 75, .50f, .25f, 25, 5);
-            GenerateGeodeCrusherOutputsJsonFiles(MachineIds.NuclearAdvancedGeodeCrusher, "NuclearAdvancedGeodeCrusher", defaultOutputs, 100, .75f, .50f, 50, 15);
-            GenerateGeodeCrusherOutputsJsonFiles(MachineIds.MagicalAdvancedGeodeCrusher, "MagicalAdvancedGeodeCrusher", defaultOutputs, 100, 1f, .75f, 80, 25);
-            GenerateGeodeCrusherOutputsJsonFiles(MachineIds.GalaxyAdvancedGeodeCrusher, "GalaxyAdvancedGeodeCrusher", defaultOutputs, 100, 1.25f, 1f, 100, 50); //If for some reason I ever add in Galaxy Geode Crushers, 
+
+            defaultOutputs.Clear();
+
+            defaultOutputs.AddRange(GetNormalGeodeOutputs());
+            defaultOutputs.AddRange(GetFrozenGeodeOutputs());
+            defaultOutputs.AddRange(GetMagmaGeodeOutputs());
+            defaultOutputs.AddRange(GetOmniGeodeOutputs());
+
+            GenerateGeodeCrusherOutputsJsonFiles(MachineIds.ElectricAdvancedGeodeCrusher, "ElectricGeodeCrusher", defaultOutputs.DeepClone(), 75, .50f, .25f, 25, 5);
+
+            defaultOutputs.Clear();
+
+            defaultOutputs.AddRange(GetNormalGeodeOutputs());
+            defaultOutputs.AddRange(GetFrozenGeodeOutputs());
+            defaultOutputs.AddRange(GetMagmaGeodeOutputs());
+            defaultOutputs.AddRange(GetOmniGeodeOutputs());
+
+            GenerateGeodeCrusherOutputsJsonFiles(MachineIds.NuclearAdvancedGeodeCrusher, "NuclearAdvancedGeodeCrusher", defaultOutputs.DeepClone(), 100, .75f, .50f, 50, 15);
+
+            defaultOutputs.Clear();
+
+            defaultOutputs.AddRange(GetNormalGeodeOutputs());
+            defaultOutputs.AddRange(GetFrozenGeodeOutputs());
+            defaultOutputs.AddRange(GetMagmaGeodeOutputs());
+            defaultOutputs.AddRange(GetOmniGeodeOutputs());
+
+            GenerateGeodeCrusherOutputsJsonFiles(MachineIds.MagicalAdvancedGeodeCrusher, "MagicalAdvancedGeodeCrusher", defaultOutputs.DeepClone(), 100, 1f, .75f, 80, 25);
+
+            defaultOutputs.Clear();
+
+            defaultOutputs.AddRange(GetNormalGeodeOutputs());
+            defaultOutputs.AddRange(GetFrozenGeodeOutputs());
+            defaultOutputs.AddRange(GetMagmaGeodeOutputs());
+            defaultOutputs.AddRange(GetOmniGeodeOutputs());
+
+            GenerateGeodeCrusherOutputsJsonFiles(MachineIds.GalaxyAdvancedGeodeCrusher, "GalaxyAdvancedGeodeCrusher", defaultOutputs.DeepClone(), 100, 1.25f, 1f, 100, 50); //If for some reason I ever add in Galaxy Geode Crushers, 
         }
 
         
@@ -142,6 +182,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
                         foreach (var stackSizeOutputDeterminer in output.stackSizeDeterminer)
                         {
                             int bonus = Math.Max(1, (int)(stackSizeOutputDeterminer.outcomeValue.Max * oreResourceMultiplier)); //Give up to 50% more ore
+
+                            RevitalizeModCore.log("Base ore value:" + (stackSizeOutputDeterminer.outcomeValue.Max).ToString());
+                            RevitalizeModCore.log("Multipled ore value:" + (stackSizeOutputDeterminer.outcomeValue.Max * oreResourceMultiplier).ToString());
+
                             stackSizeOutputDeterminer.outcomeValue.Max += bonus;
                         }
                     }

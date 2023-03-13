@@ -35,7 +35,7 @@
               },
               "outcomeValue": {
                 "min": 1,
-                "max": 5
+                "max": 2
               }
             },
             {
@@ -45,7 +45,7 @@
               },
               "outcomeValue": {
                 "min": 3,
-                "max": 10
+                "max": 5
               }
             },
             {
@@ -55,7 +55,7 @@
               },
               "outcomeValue": {
                 "min": 5,
-                "max": 15
+                "max": 8
               }
             },
             {
@@ -65,7 +65,7 @@
               },
               "outcomeValue": {
                 "min": 10,
-                "max": 31
+                "max": 17
               }
             },
             {
@@ -75,7 +75,7 @@
               },
               "outcomeValue": {
                 "min": 20,
-                "max": 64
+                "max": 35
               }
             }
           ],

@@ -40,26 +40,6 @@
             },
             {
               "validRangeForChance": {
-                "min": 99.0,
-                "max": 100.0
-              },
-              "outcomeValue": {
-                "min": 2,
-                "max": 2
-              }
-            },
-            {
-              "validRangeForChance": {
-                "min": 95.0,
-                "max": 100.0
-              },
-              "outcomeValue": {
-                "min": 2,
-                "max": 2
-              }
-            },
-            {
-              "validRangeForChance": {
                 "min": 85.0,
                 "max": 100.0
               },
