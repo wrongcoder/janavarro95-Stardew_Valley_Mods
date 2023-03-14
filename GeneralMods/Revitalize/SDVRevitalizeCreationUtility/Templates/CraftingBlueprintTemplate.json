@@ -5,9 +5,9 @@
     "registeredObjectId": "{0}",
     "amount": 1
   },
-  "recipesToUnlock": {
+  "recipesToUnlock": [
 	  {1}
-  },
+  ],
   "id": "{2}",
   "name": "",
   "description": "",
