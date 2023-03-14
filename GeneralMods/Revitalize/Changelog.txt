@@ -6,6 +6,7 @@ Key:
 
 ~~~~~~~~~~~~0.0.1 Revitalize 2-23-2023 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed geode crusher outputs scaling too high.
+!Fixed a typo with Delux->Deluxe
 
 ~~~~~~~~~~~~0.0.1 Revitalize 2-23-2023 xx.xx P.M~~~~~~~~~~~~~~
 ~Fix displaying crafting recipe output multiple time for same object crafting in many ways.

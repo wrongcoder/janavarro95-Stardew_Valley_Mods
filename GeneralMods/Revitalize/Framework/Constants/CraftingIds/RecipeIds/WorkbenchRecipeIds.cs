@@ -31,7 +31,7 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds
 
         //Charcoal Kilns
         public const string AdvancedCharcoalKiln = "Omegasis.Revitalize.Workbench.Machines.CharcoalKilns.AdvancedCharcoalKiln";
-        public const string DeluxCharcoalKiln = "Omegasis.Revitalize.Workbench.Machines.CharcoalKilns.DeluxCharcoalKiln";
+        public const string DeluxeCharcoalKiln = "Omegasis.Revitalize.Workbench.Machines.CharcoalKilns.DeluxeCharcoalKiln";
         public const string SuperiorCharcoalKiln = "Omegasis.Revitalize.Workbench.Machines.CharcoalKilns.SuperiorCharcoalKiln";
 
         public const string IrrigatedWateringPotRecipeId = "Omegasis.Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot";

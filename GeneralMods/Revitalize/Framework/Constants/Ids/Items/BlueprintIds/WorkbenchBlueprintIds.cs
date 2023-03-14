@@ -33,7 +33,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Items.BlueprintIds
 
         //Charocal Kilns
         public const string AdvancedCharcoalKiln = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.AdvancedCharcoalKiln";
-        public const string DeluxCharcoalKiln = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.DeluxCharcoalKiln";
+        public const string DeluxeCharcoalKiln = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.DeluxeCharcoalKiln";
         public const string SuperiorCharcoalKiln = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.SuperiorCharcoalKiln";
 
         //Auto farming system.

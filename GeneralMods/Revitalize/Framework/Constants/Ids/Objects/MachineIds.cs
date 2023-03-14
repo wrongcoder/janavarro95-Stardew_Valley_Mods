@@ -33,7 +33,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
 
         //Charcoal Kilns
         public const string AdvancedCharcoalKiln = PREFIX + "CharcoalKilns.AdvancedCharcoalKiln";
-        public const string DeluxCharcoalKiln = PREFIX + "CharcoalKilns.DeluxCharcoalKiln";
+        public const string DeluxeCharcoalKiln = PREFIX + "CharcoalKilns.DeluxeCharcoalKiln";
         public const string SuperiorCharcoalKiln = PREFIX + "CharcoalKilns.SuperiorCharcoalKiln";
 
         //Furnaces
