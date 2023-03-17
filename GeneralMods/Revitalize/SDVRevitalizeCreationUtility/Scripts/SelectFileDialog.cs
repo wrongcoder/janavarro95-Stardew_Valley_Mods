@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,19 @@ namespace SdvRevitalizeCreationUtility.Scripts
             this.Connect("file_selected",new Callable(this,"_on_SelectFileDialog_file_selected"));
             this.Connect("dir_selected",new Callable(this,"_on_SelectFileDialog_dir_selected"));
             this.Connect("confirmed",new Callable(this,"_on_SelectFileDialog_confirmed"));
+
+            this.GetLineEdit().TextChanged += this.SelectFileDialog_TextChanged;
+            this.GetLineEdit().TextSubmitted += this.SelectFileDialog_TextSubmitted;
+        }
+
+        private void SelectFileDialog_TextSubmitted(string newText)
+        {
+            this.textEdit.Text = Path.Combine(this.CurrentPath, this.GetLineEdit().Text);
+        }
+
+        private void SelectFileDialog_TextChanged(string newText)
+        {
+            this.textToSet= newText;
         }
 
         public virtual void _on_SelectFileDialog_dir_selected(string input)
@@ -34,17 +48,17 @@ namespace SdvRevitalizeCreationUtility.Scripts
                     throw new Exception("Bad file path extension!");
                 }
             }
-            this.textToSet = input;
+            this.textEdit.Text = Path.Combine(this.CurrentPath, input);
         }
 
         public virtual void _on_SelectFileDialog_file_selected(string input)
         {
-            this.textToSet = input;
+            this.textEdit.Text = Path.Combine(this.CurrentPath, input);
         }
 
         public virtual void _on_SelectFileDialog_confirmed()
         {
-            this.textEdit.Text = this.textToSet;
+            this.textEdit.Text = this.GetLineEdit().Text;
         }
     }
 }

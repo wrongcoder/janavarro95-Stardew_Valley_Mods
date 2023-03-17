@@ -35,7 +35,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
             string recipesToUnlock = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "RecipesToUnlockText").Text;
             string recipeTabId = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "RecipeTabIdText").Text;
             string[] recipeIdSplitArray = recipesToUnlock.Split(new string[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
-            string recipeId = recipeIdSplitArray[recipeIdSplitArray.Length - 1].Replace("\"", "").Replace(" ", ""); //Get the recipe id and remove all unnecessary whitespace.
+            string recipeId = recipeIdSplitArray[recipeIdSplitArray.Length - 1].Replace("\"", "").Replace(" ", "").Replace("}","").Replace("\n",""); //Get the recipe id and remove all unnecessary whitespace.
             string recipeInputs= NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "RecipeInputsText").Text;
             string recipeOutputs = NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "RecipeOutputsText").Text;
             string recipeOutputFilePath= NodeExtensions.GetChild<TextEdit>(Game.Self, "ScrollContainer", "VBoxContainer", "RecipeFilePathText").Text;

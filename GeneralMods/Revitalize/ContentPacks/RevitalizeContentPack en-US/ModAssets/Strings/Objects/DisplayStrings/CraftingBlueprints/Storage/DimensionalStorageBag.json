@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Storage.DimensionalStorageBag":
+	{
+		"displayName":"Dimensional Storage Bag",
+		"description":"Allows crafting of a dimensional storage bag.",
+		"category":"StardewValley.Crafting"
+	},
+}

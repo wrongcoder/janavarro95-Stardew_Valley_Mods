@@ -124,6 +124,8 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
                 Game1.createItemDebris(i, new Vector2(this.tileX.Value * Game1.tileSize + randX, this.tileY.Value * Game1.tileSize + randY), Game1.random.Next(1, 5), loc);
             }
             this.items.Clear();
+
+            CachedDimensionalStorageUnitBuilding = null;
         }
 
         /// <summary>
@@ -142,14 +144,17 @@ namespace Omegasis.Revitalize.Framework.World.Buildings
                 return CachedDimensionalStorageUnitBuilding;
             }
 
-            foreach (BuildableGameLocation loc in Game1.locations)
+            foreach (GameLocation loc in Game1.locations)
             {
-                foreach (Building b in loc.buildings)
+                if (loc is BuildableGameLocation)
                 {
-                    if (b is DimensionalStorageUnitBuilding)
+                    foreach (Building b in (loc as BuildableGameLocation).buildings)
                     {
-                        CachedDimensionalStorageUnitBuilding = (b as DimensionalStorageUnitBuilding);
-                        return (b as DimensionalStorageUnitBuilding);
+                        if (b is DimensionalStorageUnitBuilding)
+                        {
+                            CachedDimensionalStorageUnitBuilding = (b as DimensionalStorageUnitBuilding);
+                            return (b as DimensionalStorageUnitBuilding);
+                        }
                     }
                 }
             }

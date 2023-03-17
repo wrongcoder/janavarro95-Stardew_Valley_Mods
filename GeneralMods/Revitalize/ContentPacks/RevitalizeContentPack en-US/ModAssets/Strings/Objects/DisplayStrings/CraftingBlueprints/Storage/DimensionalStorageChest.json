@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Storage.DimensionalStorageChest":
+	{
+		"displayName":"Dimensional Storage Chest",
+		"description":"A blueprint on how to craft a dimensional storage chest which is used to access the contents of a dimensional storage unit from anywhere!",
+		"category":"StardewValley.Crafting"
+	},
+}

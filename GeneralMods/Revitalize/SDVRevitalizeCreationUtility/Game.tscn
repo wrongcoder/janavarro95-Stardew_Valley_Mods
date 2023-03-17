@@ -77,7 +77,7 @@ text = "Omegasis.Revitalize.Objects.<ItemIdHere>"
 
 [node name="BlueprintObjectFilePathLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "Blueprint Object File Path3D:"
+text = "Blueprint Object File Path:"
 
 [node name="BlueprintObjectFilePathText" type="TextEdit" parent="ScrollContainer/VBoxContainer"]
 custom_minimum_size = Vector2(64, 64)
@@ -85,9 +85,9 @@ layout_mode = 2
 
 [node name="BlueprintObjectFilePathButton" type="Button" parent="ScrollContainer/VBoxContainer"]
 layout_mode = 2
-text = "Select File Path3D For Blueprint Object .json file"
+text = "Select File Path For Blueprint Object .json file"
 script = ExtResource("4")
-startingDir = 2
+startingDir = 3
 TextFieldToFind = "BlueprintObjectFilePathText"
 
 [node name="BlueprintDisplayStringFilePathLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
@@ -102,7 +102,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Select File Path For Blueprint Object Display Strings .json file."
 script = ExtResource("4")
-startingDir = 1
+startingDir = 2
 TextFieldToFind = "BlueprintDisplayStringFilePathText"
 
 [node name="RecipeTabIdLabel" type="Label" parent="ScrollContainer/VBoxContainer"]
@@ -158,7 +158,7 @@ layout_mode = 2
 layout_mode = 2
 text = "Select File Path For Recipe .json file"
 script = ExtResource("4")
-startingDir = 3
+startingDir = 4
 TextFieldToFind = "RecipeFilePathText"
 
 [node name="NewItemDisplayNameLabel" type="Label" parent="ScrollContainer/VBoxContainer"]

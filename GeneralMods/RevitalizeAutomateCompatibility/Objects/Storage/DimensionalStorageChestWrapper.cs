@@ -5,20 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Omegasis.Revitalize.Framework.World.Objects;
+using Omegasis.Revitalize.Framework.World.Buildings;
 using Omegasis.Revitalize.Framework.World.Objects.Storage;
 using Pathoschild.Stardew.Automate;
 using StardewValley;
-using StardewValley.Objects;
 
-namespace Omegasis.RevitalizeAutomateCompatibility.Objects
+namespace Omegasis.RevitalizeAutomateCompatibility.Objects.Storage
 {
-    /// <summary>
-    /// Wrapper around <see cref="ItemVault"/>s from Revitalize mod. Credits go to PathosChild for pretty much all of the below code since this is essentially 1-1 from their chest container implemenation from automate. https://github.com/Pathoschild/StardewMods/blob/develop/Automate/Framework/Storage/ChestContainer.cs
-    /// </summary>
-    public class ItemVaultWrapper : IContainer
+    public class DimensionalStorageChestWrapper: IContainer
     {
-        public ItemVault revitalizeObject;
+        public DimensionalStorageChest revitalizeObject;
 
         public string Name => this.revitalizeObject.Name;
 
@@ -28,10 +24,10 @@ namespace Omegasis.RevitalizeAutomateCompatibility.Objects
 
         public GameLocation Location => this.revitalizeObject.getCurrentLocation();
 
-        public Rectangle TileArea {get;}
+        public Rectangle TileArea { get; }
 
 
-        public ItemVaultWrapper(ItemVault revitalizeObject, GameLocation location ,Vector2 tile)
+        public DimensionalStorageChestWrapper(DimensionalStorageChest revitalizeObject, GameLocation location, Vector2 tile)
         {
             this.revitalizeObject = revitalizeObject;
             this.TileArea = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
@@ -51,12 +47,13 @@ namespace Omegasis.RevitalizeAutomateCompatibility.Objects
         /// <remarks>If there aren't enough items in the pipe, it should return those it has.</remarks>
         private IEnumerable<ITrackedStack> GetImpl(Func<Item, bool> predicate, int count)
         {
+            if (this.getDimensionalStorageUnitBuilding() == null) yield break;
+
             int countFound = 0;
-            foreach (Item? item in this.revitalizeObject.inventory)
-            {
+            foreach (Item item in this.getDimensionalStorageUnitBuilding().items)
                 if (item != null && predicate(item))
                 {
-                    ITrackedStack? stack = this.GetTrackedItem(item);
+                    ITrackedStack stack = this.GetTrackedItem(item);
                     if (stack == null)
                         continue;
 
@@ -65,19 +62,22 @@ namespace Omegasis.RevitalizeAutomateCompatibility.Objects
                     if (countFound >= count)
                         yield break;
                 }
-            }
         }
 
         public int GetCapacity()
         {
-            return this.revitalizeObject.Capacity;
+            if (this.getDimensionalStorageUnitBuilding() == null) return 0;
+
+            return (int)this.getDimensionalStorageUnitBuilding().DimensionalStorageUnitMaxItems;
         }
 
         public IEnumerator<ITrackedStack> GetEnumerator()
         {
-            foreach (Item? item in this.revitalizeObject.inventory.ToArray())
+            if (this.getDimensionalStorageUnitBuilding() == null) yield break;
+
+            foreach (Item item in this.getDimensionalStorageUnitBuilding().items.ToArray())
             {
-                ITrackedStack? stack = this.GetTrackedItem(item);
+                ITrackedStack stack = this.GetTrackedItem(item);
                 if (stack != null)
                     yield return stack;
             }
@@ -85,17 +85,19 @@ namespace Omegasis.RevitalizeAutomateCompatibility.Objects
 
         public int GetFilled()
         {
-            return this.revitalizeObject.inventory.Count(p => p != null);
+            if (this.getDimensionalStorageUnitBuilding() == null) return 0;
+
+            return this.getDimensionalStorageUnitBuilding().items.Count(p => p != null);
         }
 
         public void Store(ITrackedStack stack)
         {
+            if (this.getDimensionalStorageUnitBuilding() == null) return;
 
-            IList<Item?> inventory = this.revitalizeObject.inventory;
+            IList<Item> inventory = this.getDimensionalStorageUnitBuilding().items;
 
             // try stack into existing slot
-            foreach (Item? slot in inventory)
-            {
+            foreach (Item slot in inventory)
                 if (slot != null && stack.Sample.canStackWith(slot))
                 {
                     Item sample = stack.Sample.getOne();
@@ -105,18 +107,15 @@ namespace Omegasis.RevitalizeAutomateCompatibility.Objects
                     if (stack.Count <= 0)
                         return;
                 }
-            }
 
             // try add to empty slot
-            int capacity = this.revitalizeObject.Capacity;
+            long capacity = this.getDimensionalStorageUnitBuilding().DimensionalStorageUnitMaxItems;
             for (int i = 0; i < capacity && i < inventory.Count; i++)
-            {
                 if (inventory[i] == null)
                 {
                     inventory[i] = stack.Take(stack.Count);
                     return;
                 }
-            }
 
             // try add new slot
             if (inventory.Count < capacity)
@@ -125,14 +124,16 @@ namespace Omegasis.RevitalizeAutomateCompatibility.Objects
 
         /// <summary>Get a tracked item synced with the chest inventory.</summary>
         /// <param name="item">The item to track.</param>
-        private ITrackedStack? GetTrackedItem(Item? item)
+        private ITrackedStack GetTrackedItem(Item item)
         {
             if (item == null || item.Stack <= 0)
                 return null;
 
+            if (this.getDimensionalStorageUnitBuilding() == null) return null;
+
             try
             {
-                return new TrackedItem(item, onEmpty: i => this.revitalizeObject.inventory.Remove(i));
+                return new TrackedItem(item, onEmpty: i => this.getDimensionalStorageUnitBuilding().items.Remove(i));
             }
             catch (KeyNotFoundException)
             {
@@ -152,6 +153,11 @@ namespace Omegasis.RevitalizeAutomateCompatibility.Objects
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+        public DimensionalStorageUnitBuilding getDimensionalStorageUnitBuilding()
+        {
+            return DimensionalStorageUnitBuilding.GetDimensionalStorageUnitBuilding();
         }
     }
 }

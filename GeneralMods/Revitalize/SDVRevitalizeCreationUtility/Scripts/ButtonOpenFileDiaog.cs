@@ -16,6 +16,7 @@ namespace SdvRevitalizeCreationUtility.Scripts
         {
             NULL,
             DisplayStrings,
+            CraftingBlueprintDisplayStrings,
             BlueprintObjects,
             CraftingPath,
         }
@@ -45,6 +46,10 @@ namespace SdvRevitalizeCreationUtility.Scripts
             if (this.startingDir == DirectoryToBeginFrom.DisplayStrings)
             {
                 dialog.CurrentDir = System.IO.Path.Combine(Game.GetRevitalizeEnglishContentPackFolder(), StringsPaths.ObjectDisplayStrings);
+            }
+            if (this.startingDir == DirectoryToBeginFrom.CraftingBlueprintDisplayStrings)
+            {
+                dialog.CurrentDir = System.IO.Path.Combine(Game.GetRevitalizeEnglishContentPackFolder(), StringsPaths.ObjectDisplayStrings, "CraftingBlueprints");
             }
             if (this.startingDir == DirectoryToBeginFrom.CraftingPath)
             {

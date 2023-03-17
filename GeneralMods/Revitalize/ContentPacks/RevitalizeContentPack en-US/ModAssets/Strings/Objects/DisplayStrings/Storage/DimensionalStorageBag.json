@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Storage.DimensionalStorageBag":
+	{
+		"displayName":"Dimensional Storage Bag",
+		"description":"A peek into the pocket dimension. Allows access to items stored into the dimensional storage unit from anywhere!",
+		"category":"Storage"
+	},
+}

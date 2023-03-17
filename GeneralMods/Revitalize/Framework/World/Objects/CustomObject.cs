@@ -368,6 +368,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             {
                 return false;
             }
+
+
+            if (l.getObjectAtTile((int)tile.X, (int)tile.Y) != null)
+            {
+                return false;
+            }
             return true;
         }
 

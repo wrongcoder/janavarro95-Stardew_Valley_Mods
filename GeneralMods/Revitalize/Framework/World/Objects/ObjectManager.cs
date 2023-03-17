@@ -36,6 +36,7 @@ using static Omegasis.Revitalize.Framework.Constants.Enums;
 using Omegasis.Revitalize.Framework.Illuminate;
 using Omegasis.Revitalize.Framework.World.Objects.Storage;
 using Omegasis.Revitalize.Framework.Crafting;
+using Omegasis.Revitalize.Framework.Content.JsonContent.Crafting;
 
 namespace Omegasis.Revitalize.Framework.World.Objects
 {
@@ -226,7 +227,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     jsonBlueprintPair.Value.recipesToUnlock.Add(recipeId);
                 }
                 */
-                this.addItem(jsonBlueprintPair.Value.id, jsonBlueprintPair.Value.toBlueprint());
+                try
+                {
+                    this.addItem(jsonBlueprintPair.Value.id, jsonBlueprintPair.Value.toBlueprint());
+                }
+                catch(Exception e)
+                {
+                    throw new InvalidJsonBlueprintException(string.Format("There was an error loading the json crafting blueprint from disk with path {0}. Please see the following error message for more details. \n {1}", jsonBlueprintPair.Key, e.ToString()));
+                }
 
                 JsonUtilities.WriteJsonFile(jsonBlueprintPair.Value, jsonBlueprintPair.Key);
 
@@ -447,6 +455,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         protected virtual void addInStorageObjects()
         {
+
+            //New chest types
             int chestCapacity = 36;
             this.addItem(new ItemVault(new BasicItemInformation("", StorageIds.ItemVault, "", CategoryNames.Storage, CategoryColors.Misc, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Storage.createAnimationManager("ItemVault", new Dictionary<string, Animation>()
                 {
@@ -469,7 +479,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     {"Default",  new Animation(new Rectangle(0,0,16,32)) },
                 }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), chestCapacity * 5));
 
+            this.addItem(new DimensionalStorageChest(new BasicItemInformation("", StorageIds.DimensionalStorageChest, "", CategoryNames.Storage, CategoryColors.Misc, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Storage.createAnimationManager("DimensionalStorageChest", new Dictionary<string, Animation>()
+                {
+                    {"Default",  new Animation(new Rectangle(0,0,16,32)) },
+                }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
 
+
+            //Storage Bags
             this.addItem(new StorageBag(new BasicItemInformation("", StorageIds.SmallItemBag, "", CategoryNames.Storage, CategoryColors.Misc, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Storage.createAnimationManager("SmallPouch", new Dictionary<string, Animation>()
                 {
                     {"Default",  new Animation(new Rectangle(0,0,16,16)) },
@@ -479,6 +495,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 {
                     {"Default",  new Animation(new Rectangle(0,0,32,32),.5f) },
                 }, "Default", "Default"), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null), 5));
+
+            this.addItem(new DimensionalStorageBag(new BasicItemInformation("", StorageIds.DimensionalStorageBag, "", CategoryNames.Storage, CategoryColors.Misc, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Storage.createAnimationManager("DimensionalStorageBag", new Dictionary<string, Animation>()
+                {
+                    {"Default",  new Animation(new Rectangle(0,0,32,32),.5f) },
+                }, "Default", "Default"), Color.White, false, new Vector2(1, 1), Vector2.Zero, null, null)));
+
         }
 
         /// <summary>

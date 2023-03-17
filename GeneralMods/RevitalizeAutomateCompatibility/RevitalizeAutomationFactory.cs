@@ -14,6 +14,7 @@ using Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneration;
 using Omegasis.Revitalize.Framework.World.Objects.Storage;
 using Omegasis.RevitalizeAutomateCompatibility.Objects;
 using Omegasis.RevitalizeAutomateCompatibility.Objects.Machines;
+using Omegasis.RevitalizeAutomateCompatibility.Objects.Storage;
 using Pathoschild.Stardew.Automate;
 using StardewValley;
 using StardewValley.Buildings;
@@ -47,6 +48,11 @@ namespace Omegasis.RevitalizeAutomateCompatibility
                 if (obj is ItemVault)
                 {
                     return new ItemVaultWrapper((ItemVault)obj, location, tile);
+                }
+
+                if (obj is DimensionalStorageChest)
+                {
+                    return new DimensionalStorageChestWrapper((DimensionalStorageChest)obj, location, tile);
                 }
 
                 //Add in generic processing wrapper types.

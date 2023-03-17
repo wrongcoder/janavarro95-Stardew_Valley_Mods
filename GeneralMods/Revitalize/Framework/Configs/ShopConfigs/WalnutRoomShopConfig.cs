@@ -28,7 +28,10 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         public int IridiumOreResoureceBushQiGemPrice = 20;
         public int RadioactiveOreResoureceBushQiGemPrice = 25;
 
-        public int StatueOfPerfectionTracking = 10;
+        public int StatueOfPerfectionTrackingPrice = 10;
+
+        public int DimensionalStorageBagPrice = 100;
+        public int DimensionalStorageBagBlueprintsPrice = 35;
 
         public WalnutRoomShopConfig()
         {

@@ -1,18 +1,17 @@
 {
   "itemToDraw": {
-    "amount": 1,
-    "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.CharcoalKilns.DeluxCharcoalKiln",
     "stardewValleyItemId": "NULL",
     "stardewValleyBigCraftableId": "NULL",
-    "artisanGoodItemReference": null
+    "registeredObjectId": "Omegasis.Revitalize.Objects.Storage.DimensionalStorageBag",
+    "amount": 1
   },
   "recipesToUnlock": [
-    {
-      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench",
-      "RecipeId": "Omegasis.Revitalize.Workbench.Machines.CharcoalKilns.DeluxCharcoalKiln"
+	      {
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.Workbench",
+      "RecipeId": "Omegasis.Revitalize.CraftingStation.Storage.DimensionalStorageBag"
     }
   ],
-  "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CharcoalKilns.DeluxCharcoalKiln",
+  "id": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Storage.DimensionalStorageBag",
   "name": "",
   "description": "",
   "categoryId": "StardewValley.Crafting",

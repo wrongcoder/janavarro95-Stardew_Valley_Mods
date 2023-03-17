@@ -272,12 +272,14 @@ namespace Omegasis.Revitalize
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
 
-              ModContentManager.objectManager.getItem(StorageIds.SmallItemBag),
+              ModContentManager.objectManager.getItem(Enums.SDVBigCraftable.PreservesJar),
               ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.ItemVault),
                             ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.HayMakerBlueprint),
                             ModContentManager.objectManager.getItem(CraftingStations.WorkBench_Id),
+                                                        ModContentManager.objectManager.getItem(StorageIds.DimensionalStorageBag,1),
+                                                                                                                ModContentManager.objectManager.getItem(FarmingObjects.HayMaker,10),
               /*
-                            ModContentManager.objectManager.getItem(StorageIds.BigItemVault),
+
                                           ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
                                                         ModContentManager.objectManager.getItem(StorageIds.HugeItemVault),
                                                         

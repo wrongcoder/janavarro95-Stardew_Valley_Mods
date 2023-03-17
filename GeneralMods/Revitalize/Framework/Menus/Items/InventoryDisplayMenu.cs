@@ -320,7 +320,10 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
                 this.searchBox.Selected = false;
             }
 
-            this.objectColorPicker.receiveLeftClick(x, y);
+            if (this.objectColorPicker != null)
+            {
+                this.objectColorPicker.receiveLeftClick(x, y);
+            }
         }
 
         /// <summary>The method invoked when the player right-clicks on the lookup UI.</summary>
@@ -564,7 +567,7 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
         public override void draw(SpriteBatch b)
         {
             // draw menu box
-            Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true, r: this.itemBackgroundDisplayColor.HasValue? this.itemBackgroundDisplayColor.Value.R : -1, g: this.itemBackgroundDisplayColor.HasValue? this.itemBackgroundDisplayColor.Value.G : -1, b: this.itemBackgroundDisplayColor.HasValue ? this.itemBackgroundDisplayColor.Value.B : -1);
+            Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true, r: this.itemBackgroundDisplayColor.HasValue ? this.itemBackgroundDisplayColor.Value.R : -1, g: this.itemBackgroundDisplayColor.HasValue ? this.itemBackgroundDisplayColor.Value.G : -1, b: this.itemBackgroundDisplayColor.HasValue ? this.itemBackgroundDisplayColor.Value.B : -1);
 
             //Why does this have really weird positioning? Once again, not sure, but for some reason, this is what works.
             Game1.drawDialogueBox(this.playersInventory.xPositionOnScreen - 32, this.playersInventory.yPositionOnScreen - 136, (int)(this.playersInventory.width * 1.1f), (int)(this.playersInventory.height * 1.8f), false, true);
@@ -575,7 +578,10 @@ namespace Omegasis.Revitalize.Framework.Menus.Items
             this.searchBox.Draw(b, true);
             this._searchModeButton.draw(b);
 
-            this.objectColorPicker.draw(b);
+            if (this.objectColorPicker != null)
+            {
+                this.objectColorPicker.draw(b);
+            }
 
             // draw season buttons
             foreach (ItemDisplayButton button in this.itemButtons)

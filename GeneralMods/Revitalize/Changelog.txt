@@ -4,11 +4,25 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
-~~~~~~~~~~~~0.0.1 Revitalize 2-23-2023 xx.xx P.M~~~~~~~~~~~~~~
+~~~~~~~~~~~~0.0.1 Revitalize 3-16-2023 xx.xx P.M~~~~~~~~~~~~~~
++Added in the Dimensional Storage Bag, which allows accessing items from anywhere!
+  +Can be bought from the Walnut room for 100qi gems
+  +Alternatively the blueprints can be bought from the Walnut room for 35 qi gems.
+
+~~~~~~~~~~~~0.0.1 Revitalize 3-14-2023 xx.xx P.M~~~~~~~~~~~~~~
++Added in Dimensional Storage Chest
+    +Allows accessing the Dimensional Storage Unit's contents from anywhere.
+    +Added Automate compatibility for this as well, which would allow for mass automating of operations from a single storage source.
+~Fixed a glitch where objects would be consumed when holding and dragging left click.
+~Fixed more naming conventions for Deluxe Charcoal Kiln
+~Added a more helpful error message when crafting blueprints fail to load.
+~Updated SDVRevitalizeCreationTool to set the paths properly.
+
+~~~~~~~~~~~~0.0.1 Revitalize 3-13-2023 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed geode crusher outputs scaling too high.
 !Fixed a typo with Delux->Deluxe
 
-~~~~~~~~~~~~0.0.1 Revitalize 2-23-2023 xx.xx P.M~~~~~~~~~~~~~~
+~~~~~~~~~~~~0.0.1 Revitalize 2-24-2023 xx.xx P.M~~~~~~~~~~~~~~
 ~Fix displaying crafting recipe output multiple time for same object crafting in many ways.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 2-23-2023 xx.xx P.M~~~~~~~~~~~~~~

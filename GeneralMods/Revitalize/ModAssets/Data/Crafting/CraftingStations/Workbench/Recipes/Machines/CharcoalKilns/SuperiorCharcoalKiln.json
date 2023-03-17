@@ -27,7 +27,7 @@
         "item": {
           "stardewValleyItemId": "NULL",
           "stardewValleyBigCraftableId": "NULL",
-          "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.CharcoalKilns.DeluxCharcoalKiln",
+          "registeredObjectId": "Omegasis.Revitalize.Objects.Machines.CharcoalKilns.DeluxeCharcoalKiln",
           "amount": 1
         }
       }
