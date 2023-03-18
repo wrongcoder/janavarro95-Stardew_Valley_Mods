@@ -82,7 +82,15 @@ namespace Omegasis.HappyBirthday.Framework
             try
             {
                 playerData = HappyBirthdayModCore.Instance.Helper.Data.ReadJsonFile<PlayerData>(dataFilePath);
-                //If the player's data is still null, just create it.
+
+                //If loading the legacy way doesn't work, try to load the new way using just the unique multiplayer id.
+                if (playerData == null)
+                {
+                    dataDirectory = Path.Combine("data", uniqueSaveName);
+                    dataFilePath = Path.Combine(dataDirectory, uniqueSaveName + ".json");
+                    villagerQueuePath = Path.Combine(dataDirectory, uniqueSaveName + "_VillagerBirthdayGiftsQueue.json");
+                    playerData = HappyBirthdayModCore.Instance.Helper.Data.ReadJsonFile<PlayerData>(dataFilePath);
+                }
                 if (playerData == null)
                 {
                     playerData = new PlayerData();
