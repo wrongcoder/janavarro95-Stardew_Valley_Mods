@@ -10,6 +10,7 @@ using Omegasis.Revitalize.Framework.Constants.Ids.GameLocations;
 using Omegasis.Revitalize.Framework.Constants.PathConstants;
 using Omegasis.Revitalize.Framework.Constants.PathConstants.Data;
 using Omegasis.Revitalize.Framework.Managers;
+using Omegasis.Revitalize.Framework.Player;
 using Omegasis.Revitalize.Framework.Utilities;
 using Omegasis.Revitalize.Framework.World.Buildings;
 using Omegasis.Revitalize.Framework.World.Buildings.Utilities.cs;
@@ -117,7 +118,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
             }
 
             //Find a way to maybe automate loading maps as well?? Depends on how many of these I need to make.
-            //Need to check both ids here since I accidentally changed this afterwards so this is to prevent losing a save file....
+            //Need to check both ids foer the extra celler here since I accidentally changed this afterwards so this is to prevent losing a save file....
             if (e.NameWithoutLocale.IsEquivalentTo(GetMapsAssetName(BuildingIds.ExtraCellar)) || e.NameWithoutLocale.IsEquivalentTo(GetMapsAssetName(GameLocationIds.ExtraCellar)))
                 e.LoadFromModFile<xTile.Map>(this.getMapFileFromName("ExtraCellar.tbin"), AssetLoadPriority.Exclusive);
         }
@@ -238,25 +239,18 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
                 var blueprints = Revitalize.RevitalizeModCore.ModHelper.Reflection.GetField<List<BluePrint>>(carpenterMenu, "blueprints").GetValue();
                 foreach(string s in Blueprints.Keys)
                 {
-                    //Can add special conditional logic for hinding specific blueprints.
-                    if (s.Equals(BuildingIds.DimensionalStorageUnit))
-                    {
-                        if (!BuildingUtilities.HasBuiltDimensionalStorageUnitOnFarm())
-                        {
-                            blueprints.Add(new BluePrint(s));
-                        }
-                    }
-                    else if(s.Equals(BuildingIds.ExtraCellar))
-                    {
-                        if (Game1.player.HouseUpgradeLevel >= 2)
-                        {
-                            blueprints.Add(new BluePrint(s));
-                        }
-                    }
-                    else
+                    //Can add special conditional logic for hiding specific blueprints.
+                    if (s.Equals(BuildingIds.DimensionalStorageUnit) && !BuildingUtilities.HasBuiltDimensionalStorageUnitOnFarm() && PlayerUtilities.GetNumberOfGoldenWalnutsFound()>=100)
                     {
                         blueprints.Add(new BluePrint(s));
+                        continue;
                     }
+                    if(s.Equals(BuildingIds.ExtraCellar) && Game1.player.HouseUpgradeLevel >= 2)
+                    {
+                        blueprints.Add(new BluePrint(s));
+                        continue;
+                    }
+                    blueprints.Add(new BluePrint(s));
                 }
             }
         }

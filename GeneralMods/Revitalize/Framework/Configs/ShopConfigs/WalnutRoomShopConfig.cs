@@ -30,6 +30,7 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
 
         public int StatueOfPerfectionTrackingPrice = 10;
 
+        public int DimensionalStorageChestBlueprintsPrice = 40;
         public int DimensionalStorageBagPrice = 100;
         public int DimensionalStorageBagBlueprintsPrice = 35;
 

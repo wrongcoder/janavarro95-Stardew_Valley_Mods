@@ -49,7 +49,7 @@
   "namesOfOkBuildingLocationsList": [
     "Farm"
   ],
-  "moneyRequired": 10000,
-  "isMagical": false,
-  "daysToConstruct": 2
+  "moneyRequired": 0,
+  "isMagical": true,
+  "daysToConstruct": 0
 }
