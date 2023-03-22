@@ -6,6 +6,8 @@ Key:
 
 ~~~~~~~~~~~~0.0.1 Revitalize 3-22-2023 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed some code so now dropping in items into machines functions with holding right click like normal gameplay.
++Added manual powered machine type that runs on stamina. Currently only used for Anvils.
++Added artifact trove and golden coconut processing recipes to magical and (unimplemented) galaxy geode crushers.
 
 ~~~~~~~~~~~~0.0.1 Revitalize 3-21-2023 xx.xx P.M~~~~~~~~~~~~~~
 ~Anvils no longer are used to craft objects due to not being able to think of many use cases.

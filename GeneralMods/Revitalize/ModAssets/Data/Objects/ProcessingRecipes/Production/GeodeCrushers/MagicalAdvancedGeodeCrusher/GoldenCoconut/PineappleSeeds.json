@@ -1,0 +1,50 @@
+{
+  "Omegasis.Revitalize.Objects.Machines.GeodeCrushers.MagicalAdvancedGeodeCrusher": [
+    {
+      "id": "Omegasis.Revitalize.Machines.GeodeCrusherOutputs.GoldenCoconut.PineappleSeeds",
+      "timeToProcess": {
+        "years": 0,
+        "seasons": 0,
+        "days": 0,
+        "hours": 1,
+        "minutes": 0
+      },
+      "inputs": [
+        {
+          "amount": 1,
+          "registeredObjectId": "(O)791",
+          "stardewValleyItemId": "GoldenCoconut",
+          "stardewValleyBigCraftableId": "NULL",
+          "artisanGoodItemReference": null
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "amount": 1,
+            "registeredObjectId": "(O)833",
+            "stardewValleyItemId": "PineappleSeeds",
+            "stardewValleyBigCraftableId": "NULL",
+            "artisanGoodItemReference": null
+          },
+          "stackSizeDeterminer": [
+            {
+              "validRangeForChance": {
+                "min": 0.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 5,
+                "max": 5
+              }
+            }
+          ],
+          "chanceToObtain": {
+            "min": 0.0,
+            "max": 100.0
+          }
+        }
+      ]
+    }
+  ]
+}
