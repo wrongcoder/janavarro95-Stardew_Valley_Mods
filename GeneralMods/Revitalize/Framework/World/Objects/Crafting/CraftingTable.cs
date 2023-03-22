@@ -38,7 +38,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
         /// </summary>
         /// <param name="who"></param>
         /// <returns></returns>
-        public override bool rightClicked(Farmer who)
+        public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
             if (RevitalizeModCore.ModContentManager.craftingManager.modCraftingRecipesByGroup.ContainsKey(this.craftingBookName))
             {

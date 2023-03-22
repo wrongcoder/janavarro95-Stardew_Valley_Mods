@@ -98,7 +98,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             return base.canBeRemoved(who);
         }
 
-        public override bool rightClicked(Farmer who)
+        public override bool checkForAction(Farmer who, bool justCheckingForActivity)
         {
 
             if (this.isUsedForBuyingHayAtAnyTime.Value == true)
@@ -119,7 +119,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 if (who.IsLocalPlayer)
                     this.cleanOutHayMaker(true);
 
-            return base.rightClicked(who);
+            return base.checkForAction(who, justCheckingForActivity);
         }
 
         /// <summary>

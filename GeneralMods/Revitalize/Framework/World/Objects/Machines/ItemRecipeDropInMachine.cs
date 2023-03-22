@@ -77,7 +77,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             return added;
         }
 
-        public override bool rightClicked(Farmer who)
+        public override bool checkForAction(Farmer who, bool justCheckingForActivity)
         {
             if (who != null && this.finishedProduction())
             {
@@ -88,7 +88,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 }
                 return true;
             }
-            return false;
+            return base.checkForAction(who,justCheckingForActivity);
         }
 
         /// <summary>

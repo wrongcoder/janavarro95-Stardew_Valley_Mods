@@ -104,14 +104,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
             return this.itemToDraw.Value != null && this.itemToDraw2.Value != null && this.itemToDraw3.Value != null;
         }
 
-        public override bool rightClicked(Farmer who)
+        public override bool checkForAction(Farmer who, bool justCheckingForActivity)
         {
 
             if (this.isReadyForHarvest())
                 if (who.IsLocalPlayer)
                     this.harvest(true);
 
-            return base.rightClicked(who);
+            return base.checkForAction(who,justCheckingForActivity);
         }
 
 

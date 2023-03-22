@@ -33,7 +33,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Misc
 
         }
 
-        public override bool rightClicked(Farmer who)
+        public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
             if (Game1.menuUp || Game1.currentMinigame != null) return false;
 

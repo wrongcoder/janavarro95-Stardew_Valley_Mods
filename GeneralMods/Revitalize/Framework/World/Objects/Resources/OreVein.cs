@@ -187,7 +187,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Resources
             return false;
         }
 
-        public override bool rightClicked(Farmer who)
+        public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
             return false;
         }

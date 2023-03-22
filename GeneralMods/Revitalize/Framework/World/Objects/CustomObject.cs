@@ -475,6 +475,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             return base.CanBuyItem(who);
         }
 
+        
         /// <summary>
         /// Checks to see if the object is being interacted with. Seems to only happen when right clicked.
         /// </summary>
@@ -488,30 +489,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 //basically on item hover.
                 return true;
             }
-
-            MouseState mState = Mouse.GetState();
-            KeyboardState keyboardState = Game1.GetKeyboardState();
-
-            if (mState.RightButton == ButtonState.Pressed && keyboardState.IsKeyDown(Keys.LeftShift) == false && keyboardState.IsKeyDown(Keys.RightShift) == false)
-            {
-                return this.rightClicked(who);
-            }
-
-            if (mState.RightButton == ButtonState.Pressed && (keyboardState.IsKeyDown(Keys.LeftShift) == true || keyboardState.IsKeyDown(Keys.RightShift) == true))
-                return this.shiftRightClicked(who);
-
-            if (mState.LeftButton == ButtonState.Pressed)
-            {
-                return true;
-            }
-            else
-            {
-                return true;
-            }
+            return base.checkForAction(who, justCheckingForActivity);
 
             //True should be retruned when something meaningful has happened.
             //False should be returned when things like error messages have occurd.
         }
+        
 
         public override string checkForSpecialItemHoldUpMeessage()
         {
@@ -1113,15 +1096,6 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
         }
 
-
-
-        /// <summary>What happens when the player right clicks the object.</summary>
-        public virtual bool rightClicked(Farmer who)
-        {
-
-
-            return false;
-        }
 
         /// <summary>What happens when the player shift-right clicks this object.</summary>
         public virtual bool shiftRightClicked(Farmer who)

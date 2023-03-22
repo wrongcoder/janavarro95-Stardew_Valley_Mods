@@ -211,7 +211,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             base.performRemoveAction(tileLocation, environment);
         }
 
-        public override bool rightClicked(Farmer who)
+        public override bool checkForAction(Farmer who, bool justCheckingForActivity)
         {
             if (Game1.menuUp || Game1.currentMinigame != null) return false;
             if (this.finishedProduction() && who.IsLocalPlayer)
@@ -219,7 +219,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 this.getMachineOutputs(true, false, true);
             }
 
-            return base.rightClicked(who);
+            return base.checkForAction(who);
         }
 
 

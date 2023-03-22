@@ -42,7 +42,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Storage
             this.NetFields.AddFields(this.capacity, this.inventory);
         }
 
-        public override bool rightClicked(Farmer who)
+        public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
             if (Game1.activeClickableMenu == null)
             {

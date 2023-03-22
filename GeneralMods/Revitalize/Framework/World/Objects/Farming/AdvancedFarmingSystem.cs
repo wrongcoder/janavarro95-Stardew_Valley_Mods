@@ -46,7 +46,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         /// </summary>
         /// <param name="who"></param>
         /// <returns></returns>
-        public override bool rightClicked(Farmer who)
+        public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         {
             this.doWorkOnIrrigatedWaterPots(who);
             SoundUtilities.PlaySound(Enums.StardewSound.Ship);
