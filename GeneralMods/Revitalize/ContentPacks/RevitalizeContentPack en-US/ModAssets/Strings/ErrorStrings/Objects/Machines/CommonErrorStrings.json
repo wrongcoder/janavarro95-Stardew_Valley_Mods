@@ -1,4 +1,5 @@
 {
+	"NeedStamina":"Not enough stamina to operate! Need {0} to do so.",
 	"NeedCoal":"Needs coal to operate!",
 	"NeedBatteryPack":"Needs a battery pack to operate!",
 	"NeedNuclearFuel":"Needs nuclear fuel to operate!",

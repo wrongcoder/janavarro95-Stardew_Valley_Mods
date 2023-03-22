@@ -4,6 +4,10 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 3-21-2023 xx.xx P.M~~~~~~~~~~~~~~
+~Anvils no longer are used to craft objects due to not being able to think of many use cases.
++Anvils now can manually crack geodes, artifact troves, and golden coconuts.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 3-16-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Added in the Dimensional Storage Bag, which allows accessing items from anywhere!
   +Can be bought from the Walnut room for 100qi gems

@@ -29,6 +29,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
         public const string NuclearAdvancedGeodeCrusher = PREFIX + "GeodeCrushers.NuclearAdvancedGeodeCrusher";
         public const string MagicalAdvancedGeodeCrusher = PREFIX + "GeodeCrushers.MagicalAdvancedGeodeCrusher";
         public const string GalaxyAdvancedGeodeCrusher = PREFIX + "GeodeCrushers.GalaxyAdvancedGeodeCrusher";
+        public const string Anvil = CraftingStations.Anvil_Id;
 
 
         //Charcoal Kilns

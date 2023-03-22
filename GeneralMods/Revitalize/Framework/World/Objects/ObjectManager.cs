@@ -245,10 +245,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         private void loadInCraftingTables()
         {
             CraftingTable WorkStationObject = new CraftingTable(new BasicItemInformation("", CraftingStations.WorkBench_Id, "", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Crafting.createAnimationManager("Workbench", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), Vector2.Zero, null, null), CraftingRecipeBooks.WorkbenchCraftingRecipies);
-            CraftingTable AnvilObj = new CraftingTable(new BasicItemInformation("", CraftingStations.Anvil_Id, "", CategoryNames.Crafting, Color.Brown, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Crafting.createAnimationManager("Anvil", new Animation(0, 0, 32, 32)), Color.White, false, new Vector2(2, 2), Vector2.Zero, null, null), CraftingRecipeBooks.AnvilCraftingRecipes);
-
             this.addItem(CraftingStations.WorkBench_Id, WorkStationObject);
-            this.addItem(CraftingStations.Anvil_Id, AnvilObj);
         }
 
         private void loadInMachines()
@@ -407,6 +404,12 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }
                 }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), PoweredMachine.PoweredMachineTier.Magical));
 
+
+            this.addItem(CraftingStations.Anvil_Id, new AdvancedGeodeCrusher(new BasicItemInformation("", CraftingStations.Anvil_Id, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Crafting.createAnimationManager("Anvil", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,32,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,32,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(2, 2), Vector2.Zero, null, null), PoweredMachine.PoweredMachineTier.Manual));
         }
 
         protected virtual void addInMiningDrills()

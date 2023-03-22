@@ -69,7 +69,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             CraftingResult result = base.onSuccessfulRecipeFound(dropInItem, craftingRecipe, who);
             if (result.successful)
             {
-                if (who != null)
+                if (who != null && this.MachineTier!=PoweredMachineTier.Manual)
                 {
                     Utility.addSmokePuff(who.currentLocation, this.TileLocation * 64f + new Vector2(4f, -48f), 200);
                     Utility.addSmokePuff(who.currentLocation, this.TileLocation * 64f + new Vector2(-16f, -56f), 300);
@@ -85,7 +85,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
         {
             SoundUtilities.PlaySound(Enums.StardewSound.drumkit4);
             SoundUtilities.PlaySound(Enums.StardewSound.stoneCrack);
-            SoundUtilities.PlaySoundWithDelay(Enums.StardewSound.steam, 200);
+            if (this.MachineTier != PoweredMachineTier.Manual)
+            {
+                SoundUtilities.PlaySoundWithDelay(Enums.StardewSound.steam, 200);
+            }
         }
 
 
@@ -136,6 +139,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             defaultOutputs.AddRange(GetFrozenGeodeOutputs());
             defaultOutputs.AddRange(GetMagmaGeodeOutputs());
             defaultOutputs.AddRange(GetOmniGeodeOutputs());
+            defaultOutputs.AddRange(GetArtifactTroveOutputs());
+            defaultOutputs.AddRange(GetGoldenCoconutOutputs());
 
             GenerateGeodeCrusherOutputsJsonFiles(MachineIds.MagicalAdvancedGeodeCrusher, "MagicalAdvancedGeodeCrusher", defaultOutputs.DeepClone(), 100, 1f, .75f, 80, 25);
 
@@ -145,8 +150,22 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             defaultOutputs.AddRange(GetFrozenGeodeOutputs());
             defaultOutputs.AddRange(GetMagmaGeodeOutputs());
             defaultOutputs.AddRange(GetOmniGeodeOutputs());
+            defaultOutputs.AddRange(GetArtifactTroveOutputs());
+            defaultOutputs.AddRange(GetGoldenCoconutOutputs());
 
-            GenerateGeodeCrusherOutputsJsonFiles(MachineIds.GalaxyAdvancedGeodeCrusher, "GalaxyAdvancedGeodeCrusher", defaultOutputs.DeepClone(), 100, 1.25f, 1f, 100, 50); //If for some reason I ever add in Galaxy Geode Crushers, 
+            GenerateGeodeCrusherOutputsJsonFiles(MachineIds.GalaxyAdvancedGeodeCrusher, "GalaxyAdvancedGeodeCrusher", defaultOutputs.DeepClone(), 100, 1.25f, 1f, 100, 50); //If for some reason I ever add in Galaxy Geode Crushers,
+
+
+            defaultOutputs.Clear();
+
+            defaultOutputs.AddRange(GetNormalGeodeOutputs());
+            defaultOutputs.AddRange(GetFrozenGeodeOutputs());
+            defaultOutputs.AddRange(GetMagmaGeodeOutputs());
+            defaultOutputs.AddRange(GetOmniGeodeOutputs());
+            defaultOutputs.AddRange(GetArtifactTroveOutputs());
+            defaultOutputs.AddRange(GetGoldenCoconutOutputs());
+
+            GenerateGeodeCrusherOutputsJsonFiles(MachineIds.Anvil, "Anvil", defaultOutputs.DeepClone(), 0, 0, 0, 0, 0); //If for some reason I ever add in Galaxy Geode Crushers, 
         }
 
         
@@ -159,7 +178,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
                 foreach (var output in v.Value.outputs)
                 {
                     //Artifacts
-                    if ((output.item.getItem() as StardewValley.Object).Type.Equals("Arch"))
+                    if ((output.item.getItem() as StardewValley.Object).Type.Equals("Arch") && chanceToObtainDoubleArtifacts>0)
                     {
                         //50% chance to be able to get double artifacts, which is fair considering how useless they quickly become.
                         output.stackSizeDeterminer.First().validRangeForChance = new DoubleRange(0, 100 - chanceToObtainDoubleArtifacts);
@@ -167,7 +186,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
                     }
 
                     //Stone, clay
-                    if ((output.item.getItem() as StardewValley.Object).Category == StardewValley.Object.buildingResources)
+                    if ((output.item.getItem() as StardewValley.Object).Category == StardewValley.Object.buildingResources && buildingResourceMultiplier>0)
                     {
                         foreach (var stackSizeOutputDeterminer in output.stackSizeDeterminer)
                         {
@@ -177,21 +196,18 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
                     }
 
                     //Ores
-                    if ((output.item.getItem() as StardewValley.Object).Category == StardewValley.Object.metalResources)
+                    if ((output.item.getItem() as StardewValley.Object).Category == StardewValley.Object.metalResources && oreResourceMultiplier >0)
                     {
                         foreach (var stackSizeOutputDeterminer in output.stackSizeDeterminer)
                         {
                             int bonus = Math.Max(1, (int)(stackSizeOutputDeterminer.outcomeValue.Max * oreResourceMultiplier)); //Give up to 50% more ore
-
-                            RevitalizeModCore.log("Base ore value:" + (stackSizeOutputDeterminer.outcomeValue.Max).ToString());
-                            RevitalizeModCore.log("Multipled ore value:" + (stackSizeOutputDeterminer.outcomeValue.Max * oreResourceMultiplier).ToString());
 
                             stackSizeOutputDeterminer.outcomeValue.Max += bonus;
                         }
                     }
 
                     //Gems/Minerals
-                    if ((output.item.getItem() as StardewValley.Object).Category == StardewValley.Object.GemCategory)
+                    if ((output.item.getItem() as StardewValley.Object).Category == StardewValley.Object.GemCategory && chanceToObtainDoubleGems>0)
                     {
                         //50% chance to be able to get double artifacts, which is fair considering how useless they quickly become.
                         output.stackSizeDeterminer.First().validRangeForChance = new DoubleRange(0, 100 - chanceToObtainDoubleGems);
@@ -199,7 +215,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
                     }
 
                     //Gems/Minerals
-                    if ((output.item.getItem() as StardewValley.Object).Category == StardewValley.Object.mineralsCategory)
+                    if ((output.item.getItem() as StardewValley.Object).Category == StardewValley.Object.mineralsCategory && chanceToObtainDoubleMinerals >0)
                     {
                         //50% chance to be able to get double artifacts, which is fair considering how useless they quickly become.
                         output.stackSizeDeterminer.First().validRangeForChance = new DoubleRange(0, 100 - chanceToObtainDoubleMinerals);
@@ -370,6 +386,63 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 
                 geodeOutputs.Add(ProcessingRecipe.GenerateLootTableEntry(id, relativePath, Enums.SDVObject.OmniGeode, pair.Value.outputs.First().item, pair.Value.outputs.First().stackSizeDeterminer));
             }
+
+            return geodeOutputs;
+        }
+
+        public static List<KeyValuePair<string, ProcessingRecipe>> GetArtifactTroveOutputs()
+        {
+            string baseId = "Omegasis.Revitalize.Machines.GeodeCrusherOutputs.";
+            List<KeyValuePair<string, ProcessingRecipe>> geodeOutputs = new()
+            {
+                //Geodes
+
+                //Artifacts
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.Anchor, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.AncientDoll, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.AncientDrum, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.AncientSeed, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.AncientSword, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.Arrowhead, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.BoneFlute, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.ChewingStick, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.ChickenStatue, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.ChippedAmphora, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.DriedStarfish, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.DwarfGadget, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.DwarvishHelm, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.ElvishJewelry, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.GlassShards, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.GoldenMask, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.GoldenPumpkin, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.GoldenRelic, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.OrnamentalFan, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.Pearl, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.PrehistoricHandaxe, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.PrehistoricTool, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.RareDisc, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.RustyCog, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.RustySpoon, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.RustySpur, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.ArtifactTrove, Enums.SDVObject.TreasureChest, 1),
+            };
+
+            return geodeOutputs;
+        }
+
+        public static List<KeyValuePair<string, ProcessingRecipe>> GetGoldenCoconutOutputs()
+        {
+            string baseId = "Omegasis.Revitalize.Machines.GeodeCrusherOutputs.";
+            List<KeyValuePair<string, ProcessingRecipe>> geodeOutputs = new()
+            {
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.GoldenCoconut, Enums.SDVObject.BananaSapling, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.GoldenCoconut, Enums.SDVObject.MangoSapling, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.GoldenCoconut, Enums.SDVObject.PineappleSeeds, 5),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.GoldenCoconut, Enums.SDVObject.TaroTuber, 5),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.GoldenCoconut, Enums.SDVObject.MahoganySeed, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.GoldenCoconut, Enums.SDVObject.FossilizedSkull, 1),
+                ProcessingRecipe.GenerateLootTableEntry(baseId, Enums.SDVObject.GoldenCoconut, Enums.SDVObject.IridiumOre, 5),
+            };
 
             return geodeOutputs;
         }

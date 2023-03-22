@@ -9,7 +9,10 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
 {
     public class CraftingStations
     {
+        //Actually used to crush geodes instead of crafting.
         public const string Anvil_Id = "Omegasis.Revitalize.Objects.Crafting.CraftingStations.Anvil";
+
+
         public const string WorkBench_Id = "Omegasis.Revitalize.Objects.Crafting.CraftingStations.Workbench";
 
         public static string GetCraftingStationNameFromRecipeBookId(string RecipeBookId)

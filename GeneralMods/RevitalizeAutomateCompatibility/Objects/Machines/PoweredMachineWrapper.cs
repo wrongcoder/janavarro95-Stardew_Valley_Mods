@@ -38,8 +38,8 @@ namespace Omegasis.RevitalizeAutomateCompatibility.Objects.Machines
         /// <returns></returns>
         public override bool SetInput(IStorage input)
         {
-            //Optimize to ensure that we don't do unnecessary logic for setting inputs.
-            if (this.customObject.isWorking() || this.customObject.finishedProduction()) return false;
+            //Optimize to ensure that we don't do unnecessary logic for setting inputs or for manual machines.
+            if (this.customObject.isWorking() || this.customObject.finishedProduction() || this.customObject.MachineTier== PoweredMachineTier.Manual) return false;
 
             this.TryGetFuelItem(input, out IConsumable fuelType);
             if (this.customObject.fuelChargesRemaining.Value <= 0 && fuelType != null)

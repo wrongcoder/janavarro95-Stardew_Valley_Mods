@@ -31,6 +31,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
     {
         public enum PoweredMachineTier
         {
+            /// <summary>
+            /// For machines that can be powered via stamina.
+            /// </summary>
+            Manual,
             Coal,
             Electric,
             Nuclear,
@@ -155,12 +159,26 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             return int.MaxValue;
         }
 
+        public virtual int getManualUseStaminaCost()
+        {
+            return 10;
+        }
+
+        public virtual int getManualWorkFuelChargeIncreaseAmount()
+        {
+            return 1;
+        }
+
 
         /// <summary>
         /// Increases the fuel type for the furnace. Public for automate compatibility
         /// </summary>
         public virtual void increaseFuelCharges()
         {
+            if(this.machineTier.Value== PoweredMachineTier.Manual)
+            {
+                this.FuelChargesRemaining = this.getManualWorkFuelChargeIncreaseAmount();
+            }
             if (this.machineTier.Value == PoweredMachineTier.Coal)
             {
                 this.FuelChargesRemaining = this.getCoalFuelChargeIncreaseAmount();
@@ -195,10 +213,25 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             {
                 return true; //Used for automate compatibility
             }
-            if (this.machineTier.Value == PoweredMachineTier.Magical)
+            if (this.machineTier.Value == PoweredMachineTier.Magical || this.machineTier.Value== PoweredMachineTier.Galaxy)
             {
                 return true;
             }
+            if(this.machineTier.Value== PoweredMachineTier.Manual)
+            {
+                if(who.Stamina>=this.getManualUseStaminaCost())
+                {
+                    who.Stamina-=this.getManualUseStaminaCost();
+                    return true;
+                }
+                else
+                {
+                    this.showRedMessageForMissingFuel(who);
+                    return false;
+                }
+            }
+
+
             if (this.machineTier.Value == PoweredMachineTier.Coal)
             {
                 if (RequireFuelToBeActiveObject)
@@ -261,11 +294,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 //Make sure enough fuel is present for the furnace to operate (if necessary!)
                 bool playerHasItemInInventory = this.consumeFuelItemFromFarmersInventory(who, RequireFuelToBeActiveObject);
 
-                if (playerHasItemInInventory == false && ShowRedMessage)
+                if (playerHasItemInInventory == false)
                 {
                     if (ShowRedMessage)
                     {
-                        this.showRedMessageForMissingFuel();
+                        this.showRedMessageForMissingFuel(who);
                     }
                     return false;
                 }
@@ -289,6 +322,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             {
                 this.consumeFuelCharge();
             }
+            if(this.MachineTier== PoweredMachineTier.Manual)
+            {
+                this.MinutesUntilReady = 0;
+            }
+
             return result;
         }
 
@@ -301,8 +339,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         /// <summary>
         /// Shows an error message if there is no correct fuel present for the furnace.
         /// </summary>
-        protected virtual void showRedMessageForMissingFuel()
+        protected virtual void showRedMessageForMissingFuel(Farmer who)
         {
+            if(this.machineTier.Value== PoweredMachineTier.Manual)
+            {
+                Game1.showRedMessage(JsonContentPackUtilities.LoadErrorString(this.getErrorStringFile(), "NeedStamina",this.getManualUseStaminaCost()));
+                return;
+            }
             if (this.machineTier.Value == PoweredMachineTier.Coal)
             {
                 Game1.showRedMessage(JsonContentPackUtilities.LoadErrorString(this.getErrorStringFile(), "NeedCoal"));

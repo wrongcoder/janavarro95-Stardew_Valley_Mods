@@ -139,7 +139,9 @@ namespace Omegasis.Revitalize.Framework.Utilities.JsonContentLoading
                     return string.Format(baseString, StringParamaters);
                 }
             }
-            throw new JsonContentLoadingException("The given file path {0} or key {1} do not exist for any Revitalize content pack! A file can be created under the ModAssets/Strings/ErrorStrings/Objects directory with the given info.");
+            string fileToLoadFrom = Path.Combine(Constants.PathConstants.StringsPaths.ErrorStrings, RelativePathToFile);
+
+            throw new JsonContentLoadingException(string.Format("The given file path {0} or key {1} do not exist for any Revitalize content pack! A file can be created under the ModAssets/Strings/ErrorStrings/Objects directory with the given info.",fileToLoadFrom,Key));
         }
 
         /// <summary>

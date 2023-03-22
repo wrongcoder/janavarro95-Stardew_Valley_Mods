@@ -299,6 +299,10 @@ namespace Omegasis.Revitalize.Framework.Utilities
             {
                 return dictFile[Key];
             }
+            else
+            {
+                //throw new JsonContentLoadingException(string.Format("The given key {0} was not found in the string dictionary file loaded from {1} for content pack {2}", Key, RelativePathToFile, ContentPack.UniqueId));
+            }
             return null;
         }
 
