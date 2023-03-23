@@ -36,7 +36,7 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         /// <summary>
         /// How much the anvil blueprints sell for in clint's shop.
         /// </summary>
-        public int anvilBlueprintsPrice;
+        public int anvilBlueprintsPrice = 2500;
 
         public int coalMiningDrillBlueprintPrice = 5000;
         public int electricMiningDrillBlueprintPrice = 20000;
@@ -98,8 +98,6 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
             this.leadOrePrice = 200;
             this.silverOrePrice = 250;
             this.titaniumOrePrice = 300;
-
-            this.anvilBlueprintsPrice = 2500;
 
             int defaultStoneToolBlueprintPrice = 500;
             int defaultCopperToolBlueprintPrice = 1000;

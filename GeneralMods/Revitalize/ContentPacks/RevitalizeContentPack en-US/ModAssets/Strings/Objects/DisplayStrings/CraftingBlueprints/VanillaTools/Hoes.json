@@ -1,27 +1,27 @@
 {
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.Hoe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.Hoe":
 	{
 		"displayName":"Blueprint: Hoe",
-		"description":"A blueprint used on how to craft a Hoe at an anvil!"
+		"description":"A blueprint used on how to craft a hoe!"
 	},
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.CopperHoe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.CopperHoe":
 	{
 		"displayName":"Blueprint: Copper Hoe",
-		"description":"A blueprint used on how to craft a copper hoe at an anvil!"
+		"description":"A blueprint used on how to craft a copper hoe!"
 	},
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.SteelHoe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.SteelHoe":
 	{
 		"displayName":"Blueprint: Steel Hoe",
-		"description":"A blueprint used on how to craft a steel hoe at an anvil!"
+		"description":"A blueprint used on how to craft a steel hoe!"
 	},
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.GoldHoe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.GoldHoe":
 	{
 		"displayName":"Blueprint: Gold Hoe",
-		"description":"A blueprint used on how to craft a gold hoe at an anvil!"
+		"description":"A blueprint used on how to craft a gold hoe!"
 	},
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.IridiumHoe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.IridiumHoe":
 	{
 		"displayName":"Blueprint: Iridium Hoe",
-		"description":"A blueprint used on how to craft an iridium hoe at an anvil!"
+		"description":"A blueprint used on how to craft an iridium hoe!"
 	},
 }

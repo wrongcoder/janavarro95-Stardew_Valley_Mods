@@ -1,27 +1,27 @@
 {
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.Axe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.Axe":
 	{
 		"displayName":"Blueprint: Axe",
-		"description":"A blueprint used on how to craft an axe at an anvil!"
+		"description":"A blueprint used on how to craft an axe!"
 	},
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.CopperAxe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.CopperAxe":
 	{
 		"displayName":"Blueprint: Copper Axe",
-		"description":"A blueprint used on how to craft a copper axe at an anvil!"
+		"description":"A blueprint used on how to craft a copper axe!"
 	},
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.SteelAxe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.SteelAxe":
 	{
 		"displayName":"Blueprint: Steel Axe",
-		"description":"A blueprint used on how to craft a steel axe at an anvil!"
+		"description":"A blueprint used on how to craft a steel axe!"
 	},
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.GoldAxe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.GoldAxe":
 	{
 		"displayName":"Blueprint: Gold Axe",
-		"description":"A blueprint used on how to craft a gold axe at an anvil!"
+		"description":"A blueprint used on how to craft a gold axe!"
 	},
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.IridiumAxe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.IridiumAxe":
 	{
 		"displayName":"Blueprint: Iridium Axe",
-		"description":"A blueprint used on how to craft an iridium axe at an anvil!"
+		"description":"A blueprint used on how to craft an iridium axe!"
 	},
 }

@@ -1,27 +1,27 @@
 {
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.Pickaxe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.Pickaxe":
 	{
 		"displayName":"Blueprint: Pickaxe",
-		"description":"A blueprint used on how to craft a pickaxe at an anvil!"
+		"description":"A blueprint used on how to craft a pickaxe!"
 	},
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.CopperPickaxe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.CopperPickaxe":
 	{
 		"displayName":"Blueprint: Copper Pickaxe",
-		"description":"A blueprint used on how to craft a copper pickaxe at an anvil!"
+		"description":"A blueprint used on how to craft a copper pickaxe!"
 	},
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.SteelPickaxe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.SteelPickaxe":
 	{
 		"displayName":"Blueprint: Steel Pickaxe",
-		"description":"A blueprint used on how to craft a steel pickaxe at an anvil!"
+		"description":"A blueprint used on how to craft a steel pickaxe!"
 	},
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.GoldPickaxe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.GoldPickaxe":
 	{
 		"displayName":"Blueprint: Gold Pickaxe",
-		"description":"A blueprint used on how to craft a gold pickaxe at an anvil!"
+		"description":"A blueprint used on how to craft a gold pickaxe!"
 	},
-	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Anvil.Tools.StardewValley.Tools.IridiumPickaxe":
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.IridiumPickaxe":
 	{
 		"displayName":"Blueprint: Iridium Pickaxe",
-		"description":"A blueprint used on how to craft an iridium pickaxe at an anvil!"
+		"description":"A blueprint used on how to craft an iridium pickaxe!"
 	},
 }
