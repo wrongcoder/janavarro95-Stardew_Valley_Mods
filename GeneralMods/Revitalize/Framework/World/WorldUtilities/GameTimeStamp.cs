@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.World.WorldUtilities
 {
@@ -63,6 +64,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
         public virtual int toInGameMinutes()
         {
             int output = this.years * MinutesPerYear;
+
             output += this.seasons * MinutesPerSeason;
             output += this.days * MinutesPerDay;
             output += this.hours * MinutesPerHour;

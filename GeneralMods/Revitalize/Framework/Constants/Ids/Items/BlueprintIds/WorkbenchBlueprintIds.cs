@@ -83,6 +83,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Items.BlueprintIds
 		public const string LargeItemVault = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Storage.LargeItemVault";
 		public const string HugeItemVault = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Storage.HugeItemVault";
 		public const string DimensionalStorageChest = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Storage.DimensionalStorageChest";
-		public const string DImensionalStorageBag = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Storage.DimensionalStorageBag";
+		public const string DimensionalStorageBag = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Storage.DimensionalStorageBag";
+		public const string CrystalRefiner = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CrystalRefiner";
     }
 }

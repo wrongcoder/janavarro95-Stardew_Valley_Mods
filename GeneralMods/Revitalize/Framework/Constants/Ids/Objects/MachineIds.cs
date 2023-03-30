@@ -48,5 +48,6 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
         public const string NuclearGenerator = "Omegasis.Revitalize.Objects.Machines.EnergyGeneration.NuclearGenerator";
 		public const string AdvancedSolarPanel = "Omegasis.Revitalize.Objects.Machines.EnergyGeneration.AdvancedSolarPanel";
 		public const string SuperiorSolarPanel = "Omegasis.Revitalize.Objects.Machines.EnergyGeneration.SuperiorSolarPanel";
+		public const string CrystalRefiner = "Omegasis.Revitalize.Objects.Machines.CrystalRefiner";
     }
 }

@@ -1872,5 +1872,16 @@ namespace Omegasis.Revitalize.Framework.Constants
             AgedRoe = StardewValley.Object.PreserveType.AgedRoe,
             Honey = 6 //TODO: Update this once SDV 1.6 is released.
         }
+
+        /// <summary>
+        /// The quality value for a given <see cref="StardewValley.Object"/>
+        /// </summary>
+        public enum SDVQuality
+        {
+            None = 0,
+            Silver = 1,
+            Gold= 2,
+            Iridium=3,
+        }
     }
 }

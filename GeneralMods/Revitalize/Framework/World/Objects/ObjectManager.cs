@@ -348,6 +348,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }
                 }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null),Color.GreenYellow));
+
+
+            this.addItem(MachineIds.CrystalRefiner, new CrystalRefiner(new BasicItemInformation("", MachineIds.CrystalRefiner, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Machines.createAnimationManager("CrystalRefiner", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
         }
 
 
@@ -550,9 +557,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <param name="Key"></param>
         /// <param name="Stack"></param>
         /// <returns></returns>
-        public virtual Item getItem(string Key, int Stack = 1)
+        public virtual Item getItem(string Key, int Stack = 1, int Quality=0)
         {
-            return this.GetItem<Item>(Key, Stack);
+            return this.getItem<Item>(Key, Stack,Quality);
         }
 
         /// <summary>
@@ -562,13 +569,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <param name="Key"></param>
         /// <param name="Stack"></param>
         /// <returns></returns>
-        public virtual T GetItem<T>(string Key, int Stack = 1) where T : Item
+        public virtual T getItem<T>(string Key, int Stack = 1, int Quality=0) where T : Item
         {
 
             if (this.itemsById.ContainsKey(Key))
             {
                 Item I = this.itemsById[Key].getOne();
                 I.Stack = Stack;
+                if(I is StardewValley.Object)
+                {
+                    (I as StardewValley.Object).Quality= Quality;
+                }
                 return (T)I;
             }
             else
@@ -577,17 +588,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         }
 
 
-        public virtual T getObject<T>(string Key, int Stack = 1) where T : StardewValley.Object
+        public virtual T getObject<T>(string Key, int Stack = 1, int Quality = 0) where T : StardewValley.Object
         {
 
-            if (this.itemsById.ContainsKey(Key))
-            {
-                Item I = this.itemsById[Key].getOne();
-                I.Stack = Stack;
-                return (T)I;
-            }
-            else
-                return null;
+            return this.getItem<T>(Key, Stack, Quality);
 
         }
 

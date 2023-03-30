@@ -274,6 +274,8 @@ namespace Omegasis.Revitalize
 
               ModContentManager.objectManager.getItem(Enums.SDVObject.Geode,100),
               ModContentManager.objectManager.getItem(MachineIds.Anvil),
+
+                            ModContentManager.objectManager.getItem(MachineIds.CrystalRefiner),
               /*
 
                                           ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),

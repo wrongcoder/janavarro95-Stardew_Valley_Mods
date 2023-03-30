@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CrystalRefiner":
+	{
+		"displayName":"Crystal Refiner",
+		"description":"Teaches a crafting recipe on how to build a crystal refiner, allowing quality increases for gems and mineals.",
+		"category":"StardewValley.Crafting"
+	},
+}

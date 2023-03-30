@@ -54,5 +54,6 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds
 		public const string HugeItemVault = "Omegasis.Revitalize.Objects.Storage.HugeItemVault";
 		public const string DimensionalStorageChest = "Omegasis.Revitalize.Workbench.Storage.DimensionalStorageChest";
 		public const string DimensionalStorageBag = "Omegasis.Revitalize.CraftingStation.Storage.DimensionalStorageBag";
+		public const string CrystalRefiner = "Omegasis.Revitalize.Workbench.Machines.CrystalRefiner";
     }
 }

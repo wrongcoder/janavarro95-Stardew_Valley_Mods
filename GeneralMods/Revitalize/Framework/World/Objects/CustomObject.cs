@@ -700,7 +700,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
-            this.MinutesUntilReady -= minutes;
+            this.MinutesUntilReady -= minutes/2;
             if (this.MinutesUntilReady < 0) this.MinutesUntilReady = 0;
             return false;
         }
@@ -1223,7 +1223,21 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             WorldUtilities.WorldUtility.CreateItemDebrisAtTileLocation(location,this ,origin / Game1.tileSize, destination / Game1.tileSize);
         }
 
-        
+        /// <summary>
+        /// Drops the held object for this item to the ground.
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="origin"></param>
+        /// <param name="destination"></param>
+        public virtual void dropHeldObject(GameLocation location, Vector2 origin, Vector2 destination)
+        {
+            if (this.heldObject.Value != null)
+            {
+                WorldUtilities.WorldUtility.CreateItemDebrisAtTileLocation(location, this.heldObject.Value, origin / Game1.tileSize, destination / Game1.tileSize);
+                this.heldObject.Value = null;
+            }
+        }
+
 
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//

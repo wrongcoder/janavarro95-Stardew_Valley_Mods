@@ -115,11 +115,16 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             return new CraftingResult(false);
         }
 
+        public virtual List<ProcessingRecipe> getListOfPotentialRecipes(IList<Item> inputItems)
+        {
+            return RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId());
+        }
+
         public virtual List<KeyValuePair<IList<Item>,ProcessingRecipe>> getListOfValidRecipes(IList<Item> inputItems, Farmer who, bool ShowRedMessage = true)
         {
             List<KeyValuePair<IList<Item>, ProcessingRecipe>> validRecipes = new List<KeyValuePair<IList<Item>, ProcessingRecipe>>();
 
-            foreach (ProcessingRecipe craftingRecipe in RevitalizeModCore.ModContentManager.objectProcessingRecipesManager.getProcessingRecipesForObject(this.getCraftingRecipeBookId()))
+            foreach (ProcessingRecipe craftingRecipe in this.getListOfPotentialRecipes(inputItems))
             {
                 IList<Item> consumedItems = new List<Item>();
                 bool activeObjectChecked = false;
