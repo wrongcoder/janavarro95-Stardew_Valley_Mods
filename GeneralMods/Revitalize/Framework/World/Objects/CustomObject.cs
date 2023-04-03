@@ -260,6 +260,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public override bool performDropDownAction(Farmer who)
         {
+            Game1.showRedMessage("Drop object into game world?");
             return false;
         }
 
@@ -764,14 +765,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             }
             this.RemoveLightGlow(environment);
 
-
-            this.TileLocation = Vector2.Zero;
             this.basicItemInformation.locationName.Value = "";
             this.boundingBox.Value = this.getBoundingBox(Vector2.Zero);
 
             this.sittingFarmers.Clear();
 
             this.removeFromGameWorld(tileLocation, environment);
+
+            this.TileLocation = Vector2.Zero;
         }
 
 
@@ -998,9 +999,16 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             }
             obj.TileLocation = placementTile;
 
+            //HERE????
+
 
             location.furniture.Add(obj);
             location.objects.Add(placementTile, obj);
+
+            //location.setObject(placementTile, obj);
+            //location.fur
+
+
             if (who != null)
             {
                 SoundUtilities.PlaySound(location, Enums.StardewSound.woodyStep);

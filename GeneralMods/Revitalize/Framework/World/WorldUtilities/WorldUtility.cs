@@ -21,14 +21,19 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
             CleanUpGameWorldOnLoad();
         }
 
+
+        //TODO: REDO???? THIS CODE TO SEE IF THERE IS DUPLICATE ENTRIES FOR OBJECTS PLACED INTO THE WORLD????
+
         /// <summary>
         /// Cleans up an object's references on loading a game save. Necessary due to the hack that CustomObjects are considered furniture and StardewValley.Objects...
         /// </summary>
         public static void CleanUpGameWorldOnLoad()
         {
+
             foreach (GameLocation location in Game1.locations)
             {
                 List<CustomObject> objectsToCleanUp = new List<CustomObject>();
+                List<CustomObject> furnitureToCleanUp = new List<CustomObject>();
                 foreach (StardewValley.Object obj in location.objects.Values)
                 {
 
@@ -39,12 +44,48 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
                         if (location.objects.ContainsKey(customObj.TileLocation))
                         {
                             //RevitalizeModCore.log("Clean up from loading: {0}", true, customObj.basicItemInformation.id);
-                            objectsToCleanUp.Add(customObj);
-                            customObj.removeFromGameWorld(customObj.TileLocation, location);
 
+                            objectsToCleanUp.Add(customObj);
+
+
+                            //customObj.removeFromGameWorld(customObj.TileLocation, location);
+
+                            //Furniture f = GetFurnitureEquivalentPieceAtLocation(location, customObj);
+                            //location.furniture.Remove(f);
                         }
                     }
                 }
+                foreach (Furniture f in location.furniture)
+                {
+                    if (f is CustomObject)
+                    {
+                        furnitureToCleanUp.Add((f as CustomObject));
+                    }
+                }
+
+                foreach (CustomObject obj in objectsToCleanUp)
+                {
+                    location.objects.Remove(obj.TileLocation);
+                    //location.objects.Add(obj.TileLocation,obj);
+                }
+                foreach (CustomObject obj in furnitureToCleanUp)
+                {
+                    location.furniture.Remove(obj);
+                    //location.furniture.Add(obj);
+                }
+
+                foreach (CustomObject obj in furnitureToCleanUp)
+                {
+                    obj.reAddToGameWorld(obj.TileLocation, location);
+                }
+
+
+                //READD FURNITURE AND CUSTOM OBJECTS
+
+                /*
+
+
+
                 foreach (CustomObject obj in objectsToCleanUp)
                 {
                     Furniture f = GetFurnitureEquivalentPieceAtLocation(location, obj);
@@ -92,7 +133,9 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
 
                     }
                 }
+                */
             }
+
         }
 
 
@@ -133,7 +176,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
                 }
             }
 
-            foreach(Furniture f in furnitureToRemove)
+            foreach (Furniture f in furnitureToRemove)
             {
                 environment.furniture.Remove(f);
             }
@@ -149,7 +192,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
 
                     CustomObject customObject = (CustomObject)f;
 
-                   bool contains= customObject.boundingBox.Value.Contains(TileLocation * 64);
+                    bool contains = customObject.boundingBox.Value.Contains(TileLocation * 64);
 
                     if (contains)
                     {
@@ -185,7 +228,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
         /// <param name="DestinationTile"></param>
         public static void CreateItemDebrisAtTileLocation(this GameLocation Location, Item item, Vector2 OriginTile, Vector2 DestinationTile)
         {
-            Location.debris.Add(new CustomObjectDebris(item, OriginTile *64, DestinationTile * 64));
+            Location.debris.Add(new CustomObjectDebris(item, OriginTile * 64, DestinationTile * 64));
         }
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace Omegasis.Revitalize.Framework.Player
         /// <returns></returns>
         public static bool HasReachedBottomOfHardMines(this Farmer who)
         {
-           return who.hasOrWillReceiveMail("reachedBottomOfHardMines");
+            return who.hasOrWillReceiveMail("reachedBottomOfHardMines");
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Omegasis.Revitalize.Framework.Player
             if (Who != null)
             {
 
-                if (Who.ActiveObject!=null && Who.ActiveObject.ParentSheetIndex == ParentSheetIndex)
+                if (Who.ActiveObject != null && Who.ActiveObject.ParentSheetIndex == ParentSheetIndex)
                 {
                     Who.ActiveObject.Stack -= StackSizeToReduce;
                     if (Who.ActiveObject.Stack <= 0) Who.ActiveObject = null;
@@ -267,34 +267,54 @@ namespace Omegasis.Revitalize.Framework.Player
             if (StackSizeToReduce == 0) return false;
             if (Who != null)
             {
-                ReduceInventoryItemStackSize(Who.Items, itemToReduce, StackSizeToReduce);
+                ReduceInventoryItemStackSize(Who.Items, itemToReduce, StackSizeToReduce, Who);
             }
             return false;
         }
 
-        public static bool ReduceInventoryItemStackSize(IList<Item> Items, Item itemToReduce, int StackSizeToReduce = 1)
+        public static bool ReduceInventoryItemStackSize(IList<Item> ItemsToPullFrom, Item itemToReduce, int StackSizeToReduce = 1, Farmer who = null)
         {
             if (StackSizeToReduce == 0) return false;
-            for (int i = 0; i < Items.Count; i++)
+
+
+            //Check for held object from the farmer.
+            if (who != null)
+            {
+                if (who.ActiveObject != null)
+                {
+                    if ((who.ActiveObject == itemToReduce || who.ActiveObject.canStackWith(itemToReduce)))
+                    {
+                        if (itemToReduce.Stack == who.ActiveObject.Stack)
+                        {
+                            who.ActiveObject = null;
+                            return true;
+                        }
+                        who.ActiveObject.Stack -= StackSizeToReduce;
+                        return true;
+                    }
+                }
+            }
+
+            for (int i = 0; i < ItemsToPullFrom.Count; i++)
             {
 
                 //Find the first empty index in the player's inventory.
-                if (Items[i] == null)
+                if (ItemsToPullFrom[i] == null)
                 {
                     continue;
                 }
-                Item item = Items[i];
+                Item item = ItemsToPullFrom[i];
+
                 if (item == itemToReduce || itemToReduce.canStackWith(item))
                 {
-                    if (Items[i].Stack == StackSizeToReduce)
+                    if (ItemsToPullFrom[i].Stack == StackSizeToReduce)
                     {
-                        Items[i] = null;
+                        ItemsToPullFrom[i] = null;
                         return true;
                     }
 
-                    Items[i].Stack -= StackSizeToReduce;
-
-                    if (Items[i].Stack <= 0) Items[i] = null;
+                    ItemsToPullFrom[i].Stack -= StackSizeToReduce;
+                    if (ItemsToPullFrom[i].Stack <= 0) ItemsToPullFrom[i] = null; //This never runs technically since Stack always floors to a 1 value after reductions.
                     return true;
                 }
             }
@@ -458,6 +478,8 @@ namespace Omegasis.Revitalize.Framework.Player
         /// <returns></returns>
         public static bool HasObtainedItem(string ItemId)
         {
+            if (RevitalizeModCore.SaveDataManager.playerObtainedItems == null) return false;
+
             return RevitalizeModCore.SaveDataManager.playerObtainedItems.obtainedItems.Contains(ItemId);
         }
 

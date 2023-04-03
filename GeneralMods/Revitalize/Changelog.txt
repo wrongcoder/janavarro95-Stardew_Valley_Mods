@@ -4,6 +4,10 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 3-31-2023 xx.xx P.M~~~~~~~~~~~~~~
++Fixed a lot of code regarding object placement and object interaction.
++Continued working on the Crystal Refiner.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 3-22-2023 xx.xx P.M~~~~~~~~~~~~~~
 ~Fixed some code so now dropping in items into machines functions with holding right click like normal gameplay.
 +Added manual powered machine type that runs on stamina. Currently only used for Anvils.

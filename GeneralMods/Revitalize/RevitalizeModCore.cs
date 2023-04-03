@@ -276,9 +276,10 @@ namespace Omegasis.Revitalize
               ModContentManager.objectManager.getItem(MachineIds.Anvil),
 
                             ModContentManager.objectManager.getItem(MachineIds.CrystalRefiner),
+                                                                      ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
               /*
 
-                                          ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
+
                                                         ModContentManager.objectManager.getItem(StorageIds.HugeItemVault),
                                                         
                 ModContentManager.objectManager.getItem(FarmingObjects.HayMaker),

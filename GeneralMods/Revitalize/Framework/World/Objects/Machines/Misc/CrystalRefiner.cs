@@ -16,6 +16,7 @@ using StardewValley.Tools;
 using Microsoft.Xna.Framework.Graphics;
 using xTile.Dimensions;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using Omegasis.Revitalize.Framework.Utilities.Extensions;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 {
@@ -35,6 +36,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 
         public override bool performToolAction(Tool t, GameLocation location)
         {
+            Game1.showRedMessage("AJHHH");
             if((t is Pickaxe || t is Axe) && this.heldObject.Value!=null)
             {
                 this.dropHeldObject(location,this.TileLocation,Game1.player.getTileLocation());
@@ -54,9 +56,8 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
         public override bool minutesElapsed(int minutes, GameLocation environment)
         {
             int originalMinutesUntilReady = this.MinutesUntilReady;
-            Game1.showRedMessage("Before: " + originalMinutesUntilReady.ToString());
             base.minutesElapsed(minutes, environment);
-            Game1.showRedMessage("After: " + this.MinutesUntilReady.ToString());
+
             if (this.heldObject.Value != null)
             {
                 if(this.heldObject.Value.Quality<this.getMaxQualityLevelForItems() && this.MinutesUntilReady == 0)
@@ -81,6 +82,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
             if (this.isIdle())
             {
                 this.basicItemInformation.DrawColor = Color.White;
+            }
+            else if (this.isWorking())
+            {
+                try
+                {
+                    this.basicItemInformation.DrawColor = Texture2DExtensions.GetMiddlePixelFromParentSheetIndex(Game1.objectSpriteSheet, this.heldObject.Value.ParentSheetIndex, 16, 16);
+                }
+                catch(Exception) {
+                    this.basicItemInformation.DrawColor = Color.White;
+                    StardewValley.Menus.TailoringMenu.GetDyeColor(this.heldObject.Value);
+                }
             }
             else
             {
@@ -158,15 +170,30 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 
         public override void draw(SpriteBatch spriteBatch, int x, int y, float alpha = 1)
         {
+            x = (int)this.TileLocation.X;
+
+            y = (int)this.TileLocation.Y;
+
             if (base.heldObject.Value != null && (int)base.heldObject.Value.quality > 0)
             {
                 Vector2 scaleFactor = (((int)base.minutesUntilReady > 0) ? new Vector2(Math.Abs(base.scale.X - 5f), Math.Abs(base.scale.Y - 5f)) : Vector2.Zero);
                 scaleFactor *= 4f;
-                Vector2 position = Game1.GlobalToLocal(Game1.viewport, new Vector2(x * 64, y * 64 - 64));
+                Vector2 position = Game1.GlobalToLocal(Game1.viewport, (this.TileLocation*64)-new Vector2(0,32f));
                 Microsoft.Xna.Framework.Rectangle destination = new Microsoft.Xna.Framework.Rectangle((int)(position.X + 32f - 8f - scaleFactor.X / 2f) + ((base.shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), (int)(position.Y + 64f + 8f - scaleFactor.Y / 2f) + ((base.shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), (int)(16f + scaleFactor.X), (int)(16f + scaleFactor.Y / 2f));
                 spriteBatch.Draw(Game1.mouseCursors, destination, ((int)base.heldObject.Value.quality < 4) ? new Microsoft.Xna.Framework.Rectangle(338 + ((int)base.heldObject.Value.quality - 1) * 8, 400, 8, 8) : new Rectangle(346, 392, 8, 8), Microsoft.Xna.Framework.Color.White * 0.95f, 0f, Vector2.Zero, SpriteEffects.None, Math.Max(0f, (this.TileLocation.Y + 1 + /*Added depth*/0f) * Game1.tileSize / 10000f) + .0002f);
             }
-            base.draw(spriteBatch, x, y, alpha);
+
+            if (this.isWorking())
+            {
+                Vector2 origin = new Vector2(this.AnimationManager.getCurrentAnimationFrameRectangle().Width / 2, this.AnimationManager.getCurrentAnimationFrameRectangle().Height);
+
+                this.basicItemInformation.animationManager.draw(spriteBatch, this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((x + this.basicItemInformation.drawOffset.X) * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset() + Game1.tileSize * origin.X / this.AnimationManager.getCurrentAnimationFrameRectangle().Width, (y + this.basicItemInformation.drawOffset.Y) * Game1.tileSize + this.basicItemInformation.shakeTimerOffset() + Game1.tileSize * (origin.Y / this.AnimationManager.getCurrentAnimationFrameRectangle().Height + 1))), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, origin, this.getScaleSizeForWorkingMachine(), this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.TileLocation.Y - this.basicItemInformation.drawOffset.Y) * Game1.tileSize / 10000f) + .00001f);
+            }
+            else
+                this.basicItemInformation.animationManager.draw(spriteBatch, this.basicItemInformation.animationManager.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2((float)((x + this.basicItemInformation.drawOffset.X) * Game1.tileSize) + this.basicItemInformation.shakeTimerOffset(), (y + this.basicItemInformation.drawOffset.Y) * Game1.tileSize + this.basicItemInformation.shakeTimerOffset())), new Rectangle?(this.AnimationManager.getCurrentAnimation().getCurrentAnimationFrameRectangle()), this.basicItemInformation.DrawColor * alpha, 0f, Vector2.Zero, Game1.pixelZoom, this.Flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, Math.Max(0f, (this.TileLocation.Y - this.basicItemInformation.drawOffset.Y) * Game1.tileSize / 10000f) + .00001f);
+
+            if (this.finishedProduction())
+                this.drawStatusBubble(spriteBatch, x + (int)this.basicItemInformation.drawOffset.X, y + (int)this.basicItemInformation.drawOffset.Y, alpha);
         }
 
 
@@ -187,7 +214,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
         /// <returns></returns>
         public virtual GameTimeStamp getTimeToProcessForQuality(int QualityLevel)
         {
-            return new GameTimeStamp(0,0, Math.Max(1, QualityLevel * 2),0,0);
+            return new GameTimeStamp(0,0, Math.Max(1, QualityLevel+1),0,0);
         }
 
         public override void playDropInSound()

@@ -60,7 +60,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         protected override void initializeNetFieldsPostConstructor()
         {
             base.initializeNetFieldsPostConstructor();
-            this.NetFields.AddFields(this.machineStatusBubbleBox, this.lerpScaleIncreasing,this.heldItems);
+            this.NetFields.AddFields(this.machineStatusBubbleBox, this.lerpScaleIncreasing, this.heldItems);
         }
 
         public override bool minutesElapsed(int minutes, GameLocation environment)
@@ -141,11 +141,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         public virtual List<Item> getMachineOutputs(bool AddToPlayersInventory, bool DropAsItemDebris, bool ShowInventoryFullError)
         {
             List<Item> items = this.getMachineOutputItems(true);
+            List<Item> itemsToRequeue = new List<Item>();
             bool anyAdded = false;
             bool shouldShowInventoryFullError = false;
+
             foreach (Item item in items)
             {
-                if(item==null) continue;
+                if (item == null) continue;
                 if (AddToPlayersInventory)
                 {
 
@@ -153,23 +155,36 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                     if (added == false && DropAsItemDebris)
                     {
                         WorldUtility.CreateItemDebrisAtTileLocation(this.getCurrentLocation(), item, this.TileLocation);
+                        SoundUtilities.PlaySound(Enums.StardewSound.coin);
+                        continue;
                     }
                     else if (added == false && DropAsItemDebris == false)
                     {
                         shouldShowInventoryFullError = true;
+                        itemsToRequeue.Add(item);
+                        continue;
+                    }
+                    else if(added==false && DropAsItemDebris == true)
+                    {
+                        WorldUtility.CreateItemDebrisAtTileLocation(this.getCurrentLocation(), item, this.TileLocation);
+                        SoundUtilities.PlaySound(Enums.StardewSound.coin);
+                        continue;
+                    }
+                }
+                else
+                {
+                    if(DropAsItemDebris)
+                    {
+                        WorldUtility.CreateItemDebrisAtTileLocation(this.getCurrentLocation(), item, this.TileLocation);
+                        SoundUtilities.PlaySound(Enums.StardewSound.coin);
+                        continue;
                     }
                     else
                     {
-                        anyAdded = true;
+                        shouldShowInventoryFullError = true;
+                        itemsToRequeue.Add(item);
+                        continue;
                     }
-                    if (anyAdded)
-                    {
-                        SoundUtilities.PlaySound(Enums.StardewSound.coin);
-                    }
-                }
-                if (DropAsItemDebris)
-                {
-                    WorldUtility.CreateItemDebrisAtTileLocation(this.getCurrentLocation(), item, this.TileLocation);
                 }
             }
 
@@ -177,6 +192,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             {
                 //Show inventory full error.
                 HudUtilities.ShowInventoryFullErrorMessage();
+            }
+
+            foreach(Item item in itemsToRequeue)
+            {
+                this.addItemToHeldItemQueue(item);
             }
 
             return items;
@@ -311,6 +331,17 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             this.AnimationManager.playDefaultAnimation();
         }
 
+        public override bool canBeRemoved(Farmer who = null)
+        {
+            
+            //Prevent the player from accidentally picking up this machine if it is working.
+            if (this.isWorking()) return false;
+            if (this.heldObject.Value != null) return false;
+
+            
+            return base.canBeRemoved(who);
+        }
+
         public override Item getOne()
         {
             Machine component = new Machine(this.basicItemInformation.Copy());
@@ -345,7 +376,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 y--;
                 float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.UtcNow.TimeOfDay.TotalMilliseconds / 250.0), 2));
                 this.machineStatusBubbleBox.Value.playAnimation(MachineStatusBubble_BlankBubbleAnimationKey);
-                this.machineStatusBubbleBox.Value.draw(b, this.machineStatusBubbleBox.Value.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2(x * Game1.tileSize, y * Game1.tileSize + num)), new Rectangle?(this.machineStatusBubbleBox.Value.getCurrentAnimationFrameRectangle()), Color.White*.75f, 0f, Vector2.Zero, Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (y + 3) * Game1.tileSize / 10000f) + .00002f);
+                this.machineStatusBubbleBox.Value.draw(b, this.machineStatusBubbleBox.Value.getTexture(), Game1.GlobalToLocal(Game1.viewport, new Vector2(x * Game1.tileSize, y * Game1.tileSize + num)), new Rectangle?(this.machineStatusBubbleBox.Value.getCurrentAnimationFrameRectangle()), Color.White * .75f, 0f, Vector2.Zero, Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (y + 3) * Game1.tileSize / 10000f) + .00002f);
 
                 this.drawStatusBubbleItemOutput(b, x, y, Alpha);
             }
@@ -356,7 +387,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             if (this.heldObject.Value == null) return;
             float num = (float)(4.0 * Math.Round(Math.Sin(DateTime.UtcNow.TimeOfDay.TotalMilliseconds / 250.0), 2));
             Rectangle itemSourceRectangle = GameLocation.getSourceRectForObject(this.heldObject.Value.ParentSheetIndex);
-            this.machineStatusBubbleBox.Value.draw(b, Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + 8, y * Game1.tileSize + num + 16)), new Rectangle?(itemSourceRectangle), Color.White *.75f, 0f, Vector2.Zero, Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (y + 3) * Game1.tileSize / 10000f) + .00003f);
+            this.machineStatusBubbleBox.Value.draw(b, Game1.objectSpriteSheet, Game1.GlobalToLocal(Game1.viewport, new Vector2((float)(x * Game1.tileSize) + 8, y * Game1.tileSize + num + 16)), new Rectangle?(itemSourceRectangle), Color.White * .75f, 0f, Vector2.Zero, Game1.pixelZoom, SpriteEffects.None, Math.Max(0f, (y + 3) * Game1.tileSize / 10000f) + .00003f);
         }
     }
 }

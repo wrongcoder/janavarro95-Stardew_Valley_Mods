@@ -231,7 +231,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             {
                 if (requiredItem.isNotNull())
                 {
-                    PlayerUtilities.ReduceInventoryItemStackSize(consumedItems, requiredItem.getItem(), requiredItem.StackSize);
+                    PlayerUtilities.ReduceInventoryItemStackSize(consumedItems, requiredItem.getItem(), requiredItem.StackSize,who);
                 }
             }
 
