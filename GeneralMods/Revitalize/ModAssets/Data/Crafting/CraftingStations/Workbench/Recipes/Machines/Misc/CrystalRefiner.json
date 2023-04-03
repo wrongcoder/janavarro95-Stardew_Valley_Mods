@@ -12,25 +12,31 @@
 			"stardewValleyItemId": "IronBar",
 			"stardewValleyBigCraftableId": "NULL",
 			"registeredObjectId": "",
-			"amount": 10
-			},
-			"item":{
-			"stardewValleyItemId": "Stone",
-			"stardewValleyBigCraftableId": "NULL",
-			"registeredObjectId": "",
-			"amount": 50
+			"amount": 2
 			},
 			"item":{
 			"stardewValleyItemId": "CopperBar",
 			"stardewValleyBigCraftableId": "NULL",
 			"registeredObjectId": "",
-			"amount": 5
+			"amount": 2
 			},
 			"item":{
-			"stardewValleyItemId": "BatteryPack",
+			"stardewValleyItemId": "Slime",
 			"stardewValleyBigCraftableId": "NULL",
 			"registeredObjectId": "",
-			"amount": 2
+			"amount": 25
+			},
+			"item":{
+			"stardewValleyItemId": "Stone",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 40
+			},
+			"item":{
+			"stardewValleyItemId": "SolarEssence",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 10
 			}
 	},
 	],

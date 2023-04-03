@@ -1239,9 +1239,14 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <param name="destination"></param>
         public virtual void dropHeldObject(GameLocation location, Vector2 origin, Vector2 destination)
         {
+            this.dropHeldObjectAtTileLocation(location, origin / Game1.tileSize, destination / Game1.tileSize);
+        }
+
+        public virtual void dropHeldObjectAtTileLocation(GameLocation location, Vector2 origin, Vector2 destination)
+        {
             if (this.heldObject.Value != null)
             {
-                WorldUtilities.WorldUtility.CreateItemDebrisAtTileLocation(location, this.heldObject.Value, origin / Game1.tileSize, destination / Game1.tileSize);
+                WorldUtilities.WorldUtility.CreateItemDebrisAtTileLocation(location, this.heldObject.Value, origin, destination);
                 this.heldObject.Value = null;
             }
         }

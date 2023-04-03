@@ -277,6 +277,7 @@ namespace Omegasis.Revitalize
 
                             ModContentManager.objectManager.getItem(MachineIds.CrystalRefiner),
                                                                       ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
+                                                                      ModContentManager.objectManager.getItem(Enums.SDVObject.PrismaticShard,100),
               /*
 
 

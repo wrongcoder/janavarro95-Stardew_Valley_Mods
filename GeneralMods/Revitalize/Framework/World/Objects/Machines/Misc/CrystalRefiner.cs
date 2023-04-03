@@ -20,6 +20,9 @@ using Omegasis.Revitalize.Framework.Utilities.Extensions;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 {
+    //Game1.netWorldState.Value.MuseumPieces =>gets total musuem pices donated. Key is position, value is parent sheet index.
+    //
+
     [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Machines.Misc.CrystalRefiner")]
     public class CrystalRefiner : ItemRecipeDropInMachine
     {
@@ -36,12 +39,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 
         public override bool performToolAction(Tool t, GameLocation location)
         {
-            Game1.showRedMessage("AJHHH");
             if((t is Pickaxe || t is Axe) && this.heldObject.Value!=null)
             {
-                this.dropHeldObject(location,this.TileLocation,Game1.player.getTileLocation());
+                this.dropHeldObject(location,this.TileLocation*Game1.tileSize,Game1.player.getTileLocation()*Game1.tileSize);
                 SoundUtilities.PlaySoundAt(Enums.StardewSound.woodyStep, location, this.TileLocation);
                 this.MinutesUntilReady = 0;
+                this.updateAnimation();
+
 
                 this.shakeTimer = 200;
                 this.basicItemInformation.shakeTimer.Value = 200;
@@ -174,13 +178,22 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
 
             y = (int)this.TileLocation.Y;
 
-            if (base.heldObject.Value != null && (int)base.heldObject.Value.quality > 0)
+            if (base.heldObject.Value != null)
             {
-                Vector2 scaleFactor = (((int)base.minutesUntilReady > 0) ? new Vector2(Math.Abs(base.scale.X - 5f), Math.Abs(base.scale.Y - 5f)) : Vector2.Zero);
-                scaleFactor *= 4f;
-                Vector2 position = Game1.GlobalToLocal(Game1.viewport, (this.TileLocation*64)-new Vector2(0,32f));
-                Microsoft.Xna.Framework.Rectangle destination = new Microsoft.Xna.Framework.Rectangle((int)(position.X + 32f - 8f - scaleFactor.X / 2f) + ((base.shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), (int)(position.Y + 64f + 8f - scaleFactor.Y / 2f) + ((base.shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), (int)(16f + scaleFactor.X), (int)(16f + scaleFactor.Y / 2f));
-                spriteBatch.Draw(Game1.mouseCursors, destination, ((int)base.heldObject.Value.quality < 4) ? new Microsoft.Xna.Framework.Rectangle(338 + ((int)base.heldObject.Value.quality - 1) * 8, 400, 8, 8) : new Rectangle(346, 392, 8, 8), Microsoft.Xna.Framework.Color.White * 0.95f, 0f, Vector2.Zero, SpriteEffects.None, Math.Max(0f, (this.TileLocation.Y + 1 + /*Added depth*/0f) * Game1.tileSize / 10000f) + .0002f);
+
+                if(this.heldObject.Value.ParentSheetIndex== (int)Enums.SDVObject.PrismaticShard)
+                {
+                    this.basicItemInformation.DrawColor = Utility.GetPrismaticColor();
+                }
+
+                if ((int)base.heldObject.Value.Quality > 0)
+                {
+                    Vector2 scaleFactor = (((int)base.MinutesUntilReady > 0) ? new Vector2(Math.Abs(base.scale.X - 5f), Math.Abs(base.scale.Y - 5f)) : Vector2.Zero);
+                    scaleFactor *= 4f;
+                    Vector2 position = Game1.GlobalToLocal(Game1.viewport, (this.TileLocation * 64) - new Vector2(0, 32f));
+                    Microsoft.Xna.Framework.Rectangle destination = new Microsoft.Xna.Framework.Rectangle((int)(position.X + 32f - 8f - scaleFactor.X / 2f) + ((base.shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), (int)(position.Y + 64f + 8f - scaleFactor.Y / 2f) + ((base.shakeTimer > 0) ? Game1.random.Next(-1, 2) : 0), (int)(16f + scaleFactor.X), (int)(16f + scaleFactor.Y / 2f));
+                    spriteBatch.Draw(Game1.mouseCursors, destination, ((int)base.heldObject.Value.Quality < 4) ? new Microsoft.Xna.Framework.Rectangle(338 + ((int)base.heldObject.Value.Quality - 1) * 8, 400, 8, 8) : new Rectangle(346, 392, 8, 8), Microsoft.Xna.Framework.Color.White * 0.95f, 0f, Vector2.Zero, SpriteEffects.None, Math.Max(0f, (this.TileLocation.Y + 1 + /*Added depth*/0f) * Game1.tileSize / 10000f) + .0002f);
+                }
             }
 
             if (this.isWorking())
