@@ -37,8 +37,7 @@ namespace Omegasis.Revitalize.Framework.World.Mail
         public const string newPageForMessage = "\n";
 
         public MailManager()
-        {
-
+        { 
 
         }
 
@@ -69,6 +68,8 @@ namespace Omegasis.Revitalize.Framework.World.Mail
 
             this.addMailIfNotReceived(MailTitles.BurnerBatteryGeneratorUnlock, Game1.player.deepestMineLevel >= 50);
             this.addMailIfNotReceived(MailTitles.NuclearBatteryGeneratorUnlock, GameLocationUtilities.AreTheHardMinesEnabled());
+
+            this.addMailIfNotReceived(MailTitles.CrystalRefinerUnlock, WorldUtility.GetNumberOfMineralsDonatedToMuseum()>=40);
 
             //Special cases where mail needs to repeat over and over again.
             if (!Game1.player.mailbox.Contains(MailTitles.MovieTheaterTicketSubscriptionTickets) && Game1.dayOfMonth == 1 && RevitalizeModCore.SaveDataManager.playerSaveData.hasMovieTheaterTicketSubscription)

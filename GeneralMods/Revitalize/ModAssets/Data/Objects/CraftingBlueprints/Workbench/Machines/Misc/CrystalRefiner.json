@@ -7,7 +7,7 @@
   },
   "recipesToUnlock": [
 	      {
-      "CraftingBookId": "Omegasis.Revitalize.Crafting.Workbench",
+      "CraftingBookId": "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.Workbench",
       "RecipeId": "Omegasis.Revitalize.Workbench.Machines.CrystalRefiner"
     }
   ],

@@ -5,6 +5,12 @@ Key:
 ! Broken/Alert
 
 ~~~~~~~~~~~~0.0.1 Revitalize 3-31-2023 xx.xx P.M~~~~~~~~~~~~~~
++Fixed some code regarding held object dropping location for the crystal refiner.
++Crystal Refiners now change colors when processing prismatic shards
++Added Crystal Refiner Unlock at donating 40 minerals to the musuem.
+~Changed the Crystal Refiner Recipe to require more variety of resources, but less of them.
+
+~~~~~~~~~~~~0.0.1 Revitalize 3-31-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Fixed a lot of code regarding object placement and object interaction.
 +Continued working on the Crystal Refiner.
 

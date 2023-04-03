@@ -22,7 +22,12 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
 
             AdventureGuildShopConfig shopConfig = RevitalizeModCore.Configs.shopsConfigManager.adventureGuildShopConfig;
 
-            ShopUtilities.AddItemToShop(Menu,objectManager.getItem(MiscObjectIds.StatueOfStatistics), shopConfig.StatueOfStatisticsPrice, 1);
+            ShopUtilities.AddItemToShop(Menu, objectManager.getItem(MiscObjectIds.StatueOfStatistics), shopConfig.StatueOfStatisticsPrice, 1);
+
+            if (WorldUtility.GetNumberOfMineralsDonatedToMuseum() >= 40)
+            {
+                ShopUtilities.AddItemToShop(Menu, objectManager.getItem(Constants.Ids.Items.BlueprintIds.WorkbenchBlueprintIds.CrystalRefiner), shopConfig.CrystalRefinerBlueprintPrice, 1);
+            }
 
             //Require first backback upgrade.
             if (Game1.player.MaxItems > 12)

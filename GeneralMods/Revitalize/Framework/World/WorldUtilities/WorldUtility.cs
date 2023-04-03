@@ -247,5 +247,28 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities
             }
         }
 
+        /// <summary>
+        /// Gets the number of minerals donated to the museum.
+        /// </summary>
+        /// <returns></returns>
+        public static int GetNumberOfMineralsDonatedToMuseum()
+        {
+            return NumberOfMuseumItemsOfType("Minerals");
+        }
+
+        public static int NumberOfMuseumItemsOfType(string type)
+        {
+            int num = 0;
+            foreach (KeyValuePair<Vector2, int> pair in Game1.netWorldState.Value.MuseumPieces.Pairs)
+            {
+                if (Game1.objectInformation[pair.Value].Split('/')[3].Contains(type))
+                {
+                    num++;
+                }
+            }
+
+            return num;
+        }
+
     }
 }

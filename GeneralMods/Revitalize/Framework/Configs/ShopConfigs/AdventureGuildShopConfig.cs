@@ -17,6 +17,8 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         public int SmallItemBagPrice = 7500;
         public int BigItemBagPrice = 18000;
 
+        public int CrystalRefinerBlueprintPrice = 5000;
+
         public AdventureGuildShopConfig()
         {
 

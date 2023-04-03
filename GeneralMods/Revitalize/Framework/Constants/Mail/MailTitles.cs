@@ -37,5 +37,6 @@ namespace Omegasis.Revitalize.Framework.Constants.Mail
         public const string BurnerBatteryGeneratorUnlock = "Omegasis.Revitalize.UnlockNewStuffWithoutNPCMail.Machines.BurnerBatteryGenerator";
         public const string NuclearBatteryGeneratorUnlock = "Omegasis.Revitalize.UnlockNewStuffWithoutNPCMail.Machines.NuclearBatteryGenerator";
 
+        public const string CrystalRefinerUnlock = "Omegasis.Revitalize.Museum.Machines.CrystalRefiner";
     }
 }
