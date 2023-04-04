@@ -4,6 +4,10 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 4-4-2023 xx.xx P.M~~~~~~~~~~~~~~
++Added darkwood, midnight, and abyss casks which all provide bonuses to processing goods anywhere.
+~Fixed an issue where the Crystal refiner would take twice as long to convert a gold quality mineral to an iridium quality one.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 3-31-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Fixed some code regarding held object dropping location for the crystal refiner.
 +Crystal Refiners now change colors when processing prismatic shards

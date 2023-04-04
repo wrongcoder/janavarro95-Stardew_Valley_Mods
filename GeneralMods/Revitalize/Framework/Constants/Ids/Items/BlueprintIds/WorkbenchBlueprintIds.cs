@@ -85,5 +85,8 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Items.BlueprintIds
 		public const string DimensionalStorageChest = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Storage.DimensionalStorageChest";
 		public const string DimensionalStorageBag = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Storage.DimensionalStorageBag";
 		public const string CrystalRefiner = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CrystalRefiner";
+		public const string DarkwoodCask = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.DarkwoodCask";
+		public const string MidnightCask = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.MidnightCask";
+		public const string AbyssCask = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.AbyssCask";
     }
 }

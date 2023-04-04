@@ -42,18 +42,27 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds
 
         public const string RadioactiveFuelCellRecipeId = "Omegasis.Revitalize.Workbench.Items.Misc.RadioactiveFuel";
 
-        //Generated code below this point.
         public const string BurnerGenerator = "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.BurnerGenerator";
         public const string AdvancedGenerator = "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.AdvancedGenerator";
         public const string NuclearGenerator = "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.NuclearGenerator";
-		public const string AdvancedSolarPanel = "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.AdvancedSolarPanel";
-		public const string SuperiorSolarPanel = "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.SuperiorSolarPanel";
-		public const string ItemVault = "Omegasis.Revitalize.Workbench.Storage.ItemVault";
-		public const string BigItemVault = "Omegasis.Revitalize.Objects.Storage.BigItemVault";
-		public const string LargeItemVault = "Omegasis.Revitalize.Objects.Storage.LargeItemVault";
-		public const string HugeItemVault = "Omegasis.Revitalize.Objects.Storage.HugeItemVault";
-		public const string DimensionalStorageChest = "Omegasis.Revitalize.Workbench.Storage.DimensionalStorageChest";
-		public const string DimensionalStorageBag = "Omegasis.Revitalize.CraftingStation.Storage.DimensionalStorageBag";
-		public const string CrystalRefiner = "Omegasis.Revitalize.Workbench.Machines.CrystalRefiner";
+
+        public const string AdvancedSolarPanel = "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.AdvancedSolarPanel";
+        public const string SuperiorSolarPanel = "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.SuperiorSolarPanel";
+
+        public const string ItemVault = "Omegasis.Revitalize.Workbench.Storage.ItemVault";
+        public const string BigItemVault = "Omegasis.Revitalize.Objects.Storage.BigItemVault";
+        public const string LargeItemVault = "Omegasis.Revitalize.Objects.Storage.LargeItemVault";
+        public const string HugeItemVault = "Omegasis.Revitalize.Objects.Storage.HugeItemVault";
+        public const string DimensionalStorageChest = "Omegasis.Revitalize.Workbench.Storage.DimensionalStorageChest";
+        public const string DimensionalStorageBag = "Omegasis.Revitalize.CraftingStation.Storage.DimensionalStorageBag";
+
+        public const string CrystalRefiner = "Omegasis.Revitalize.Workbench.Machines.CrystalRefiner";
+
+        public const string DarkwoodCask = "Omegasis.Revitalize.Workbench.Farming.DarkwoodCask";
+        public const string MidnightCask = "Omegasis.Revitalize.Workbench.Farming.MidnightCask";
+        public const string AbyssCask = "Omegasis.Revitalize.Workbench.Farming.AbyssCask";
+
+        //Generated code below this point.
+
     }
 }

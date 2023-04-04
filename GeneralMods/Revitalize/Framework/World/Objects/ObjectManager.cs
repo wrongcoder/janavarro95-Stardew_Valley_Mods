@@ -355,6 +355,24 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
                 }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
+
+            this.addItem(FarmingObjects.DarkwoodCask, new AdvancedCask(new BasicItemInformation("", FarmingObjects.DarkwoodCask, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("DarkwoodCask", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null),.75,1));
+
+            this.addItem(FarmingObjects.MidnightCask, new AdvancedCask(new BasicItemInformation("", FarmingObjects.MidnightCask, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("MidnightCask", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), .5, .75));
+
+            this.addItem(FarmingObjects.AbyssCask, new AdvancedCask(new BasicItemInformation("", FarmingObjects.AbyssCask, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("AbyssCask", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), .25, .5));
         }
 
 

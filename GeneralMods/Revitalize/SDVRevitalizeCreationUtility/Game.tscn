@@ -62,7 +62,7 @@ text = "Recipes To Unlock:"
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 text = "    {
-      \"CraftingBookId\": \"Omegasis.Revitalize.Crafting.CraftingBookId\",
+      \"CraftingBookId\": \"Omegasis.Revitalize.Crafting.CraftingRecipeBooks.CraftingBookId\",
       \"RecipeId\": \"Omegasis.Revitalize.CraftingStation.CraftingRecipeId\"
     }"
 

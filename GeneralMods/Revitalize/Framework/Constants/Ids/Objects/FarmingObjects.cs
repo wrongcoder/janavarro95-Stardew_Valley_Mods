@@ -17,5 +17,10 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
         /// </summary>
         public const string HayMaker = "Omegasis.Revitalize.Objects.Machines.HayMaker";
         public const string HayMaker_FeedShop = "Omegasis.Revitalize.Framework.World.Objects.Farming.HayMakerFeedShop";
+
+
+		public const string DarkwoodCask = "Omegasis.Revitalize.Objects.Farming.DarkwoodCask";
+		public const string MidnightCask = "Omegasis.Revitalize.Objects.Farming.MidnightCask";
+		public const string AbyssCask = "Omegasis.Revitalize.Objects.Farming.AbyssCask";
     }
 }

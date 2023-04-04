@@ -278,6 +278,10 @@ namespace Omegasis.Revitalize
                             ModContentManager.objectManager.getItem(MachineIds.CrystalRefiner),
                                                                       ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
                                                                       ModContentManager.objectManager.getItem(Enums.SDVObject.PrismaticShard,100),
+                                                                      ModContentManager.objectManager.getItem(FarmingObjects.DarkwoodCask,10),
+                                                                      ModContentManager.objectManager.getItem(FarmingObjects.MidnightCask,10),
+                                                                      ModContentManager.objectManager.getItem(FarmingObjects.AbyssCask,10),
+                                                                      ModContentManager.objectManager.getItem(Enums.SDVObject.Cheese,100),
               /*
 
 

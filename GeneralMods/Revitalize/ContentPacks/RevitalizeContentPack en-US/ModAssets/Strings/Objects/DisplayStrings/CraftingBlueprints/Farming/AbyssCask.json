@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.AbyssCask":
+	{
+		"displayName":"Abyss Cask",
+		"description":"A recipe for a cask that can process goods anywhere, but can process goods at half the time when placed in a cellar.",
+		"category":"StardewValley.Crafting"
+	},
+}

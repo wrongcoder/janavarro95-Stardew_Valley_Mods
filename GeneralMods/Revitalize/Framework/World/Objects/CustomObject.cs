@@ -534,7 +534,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <returns></returns>
         public virtual bool shouldDoDayUpdate()
         {
-            return this.dayUpdateCounter.Value >= 1;
+            return this.dayUpdateCounter.Value >= 2;
         }
 
         /// <summary>

@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.MidnightCask":
+	{
+		"displayName":"Midnight Cask",
+		"description":"A recipe for a magical cask that can process goods anywhere, but receives production bonuses when placed in a cellar.",
+		"category":"StardewValley.Crafting"
+	},
+}
