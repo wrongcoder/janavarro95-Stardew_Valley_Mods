@@ -34,6 +34,8 @@ namespace Omegasis.Revitalize.Framework.Configs.ShopConfigs
         public int DimensionalStorageBagPrice = 100;
         public int DimensionalStorageBagBlueprintsPrice = 35;
 
+        public int AbyssCaskBlueprintPrice = 50;
+
         public WalnutRoomShopConfig()
         {
 

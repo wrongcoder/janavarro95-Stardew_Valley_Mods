@@ -174,6 +174,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.Misc
         /// <returns></returns>
         public virtual GameTimeStamp getTimeToProcessForQuality(int QualityLevel)
         {
+            if (QualityLevel == StardewValley.Object.highQuality)
+            {
+                QualityLevel = 3; //Make it so that gold->iridium quality takes 4 days.
+            }
+
             return new GameTimeStamp(0,0, Math.Max(1, QualityLevel+1),0,0);
         }
 

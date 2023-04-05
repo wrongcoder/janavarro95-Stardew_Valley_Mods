@@ -243,7 +243,7 @@ namespace Omegasis.Revitalize
         /// </summary>
         private void warpToWalnutRoom()
         {
-            if (false)
+            if (true)
             {
                 Game1.warpFarmer("QiNutRoom", 7, 8, 0);
                 Game1.player.QiGems = 100;
@@ -282,6 +282,7 @@ namespace Omegasis.Revitalize
                                                                       ModContentManager.objectManager.getItem(FarmingObjects.MidnightCask,10),
                                                                       ModContentManager.objectManager.getItem(FarmingObjects.AbyssCask,10),
                                                                       ModContentManager.objectManager.getItem(Enums.SDVObject.Cheese,100),
+                                                                      new ArtisanGoodItemReference(Enums.SDVObject.Apple, StardewValley.Object.PreserveType.Wine).getItem(20)
               /*
 
 

@@ -56,22 +56,22 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
 
         }
 
-        public ArtisanGoodItemReference(SDVObject ObjectId, PreserveType PreserveType) : this(Revitalize.RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(ObjectId), Enum.Parse<SDVPreserveType>(((int)PreserveType).ToString()))
+        public ArtisanGoodItemReference(SDVObject PreservedRegisteredObjectId, PreserveType PreserveType) : this(Revitalize.RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(PreservedRegisteredObjectId), Enum.Parse<SDVPreserveType>(((int)PreserveType).ToString()))
         {
 
         }
 
-        public ArtisanGoodItemReference(SDVObject ObjectId, SDVPreserveType PreserveType) : this(Revitalize.RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(ObjectId), PreserveType)
+        public ArtisanGoodItemReference(SDVObject PreservedRegisteredObjectId, SDVPreserveType PreserveType) : this(Revitalize.RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(PreservedRegisteredObjectId), PreserveType)
         {
 
         }
 
-        public ArtisanGoodItemReference(int ObjectId, PreserveType PreserveType) : this(Revitalize.RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(ObjectId),Enum.Parse<SDVPreserveType>(((int)PreserveType).ToString()))
+        public ArtisanGoodItemReference(int PreservedRegisteredObjectId, PreserveType PreserveType) : this(Revitalize.RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(PreservedRegisteredObjectId),Enum.Parse<SDVPreserveType>(((int)PreserveType).ToString()))
         {
 
         }
 
-        public ArtisanGoodItemReference(string ObjectId, PreserveType PreserveType):this(ObjectId,Enum.Parse<SDVPreserveType>(((int)PreserveType).ToString()))
+        public ArtisanGoodItemReference(string PreservedRegisteredObjectId, PreserveType PreserveType):this(PreservedRegisteredObjectId, Enum.Parse<SDVPreserveType>(((int)PreserveType).ToString()))
         {
 
         }

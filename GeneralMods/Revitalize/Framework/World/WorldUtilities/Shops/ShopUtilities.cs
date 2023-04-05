@@ -90,6 +90,26 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                     {
                         HayMakerShopUtilities.AddItemsToShop(menu);
                     }
+                    else if (menu.storeContext.Equals("IslandNorth"))
+                    {
+                        IslandTraderShopUtilities.AddStockToShop(menu);
+                    }
+                    else if (menu.storeContext.Equals("Desert"))
+                    {
+                        DesertTraderShopUtilities.AddStockToShop(menu);
+                    }
+                    else if (menu.storeContext.Equals("VolcanoShop"))
+                    {
+                        //More late game shopping, but not as hard as walnut room.
+                        VolcanoShopUtilities.AddStockToShop(menu);
+                    }
+                    //Add support for Casino, Oasis, and Krobus for selling things.
+                    //Krobus is mid early game, Oasis is mid-early game, and Casino can have more fun things there.
+
+                    else
+                    {
+                        Game1.showRedMessage("ShopContext: " + menu.storeContext);
+                    }
                 }
             }
         }
@@ -145,6 +165,24 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
         {
             Menu.forSale.Add(Item);
             Menu.itemPriceAndStock.Add(Item, new int[4] { 0, Stock, (int)ObjectRequiredAsCurrency, Price });
+        }
+        /// <summary>
+        /// Adds an item to a shop's stock, but requires another item as the currency to buy that item only if the crafting recipe isn't known.
+        /// </summary>
+        /// <param name="Menu"></param>
+        /// <param name="CraftingBookName"></param>
+        /// <param name="CraftingRecipe"></param>
+        /// <param name="Item"></param>
+        /// <param name="Price"></param>
+        /// <param name="ObjectRequiredAsCurrency"></param>
+        /// <param name="Stock"></param>
+        /// <param name="AdditionalConditions"></param>
+        public static void AddItemToShopIfCraftingRecipeNotKnown(ShopMenu Menu, string CraftingBookName, string CraftingRecipe, ISalable Item, int Price, Enums.SDVObject ObjectRequiredAsCurrency, int Stock = int.MaxValue, bool AdditionalConditions=true)
+        {
+            if (!PlayerUtilities.KnowsCraftingRecipe(CraftingBookName, CraftingRecipe) && AdditionalConditions)
+            {
+                ShopUtilities.AddItemToShop(Menu, Item, Price,ObjectRequiredAsCurrency,Stock);
+            }
         }
 
         /// <summary>

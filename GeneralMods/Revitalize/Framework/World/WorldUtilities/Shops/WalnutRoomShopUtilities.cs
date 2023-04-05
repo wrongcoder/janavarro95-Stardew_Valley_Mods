@@ -60,6 +60,8 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             ShopUtilities.AddToWalnutShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.DimensionalStorageChest, objectManager.getItem(StorageIds.DimensionalStorageBag), shopConfig.DimensionalStorageBagBlueprintsPrice);
             ShopUtilities.AddItemToWalnutRoomShop(Menu, objectManager.getItem(StorageIds.DimensionalStorageBag), shopConfig.DimensionalStorageBagBlueprintsPrice);
             ShopUtilities.AddToWalnutShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.DimensionalStorageBag ,objectManager.getItem(StorageIds.DimensionalStorageBag), shopConfig.DimensionalStorageBagBlueprintsPrice);
+
+            ShopUtilities.AddToWalnutShopIfCraftingRecipeNotKnown(Menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AbyssCask, objectManager.getItem(WorkbenchBlueprintIds.AbyssCask), shopConfig.AbyssCaskBlueprintPrice, 1);
         }
 
     }

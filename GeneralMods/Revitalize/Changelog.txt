@@ -4,6 +4,12 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 4-5-2023 xx.xx P.M~~~~~~~~~~~~~~
++Desert Trader sells the blueprints for Darkwood Casks for 20 wine.
++The Island Trader sells the blueprints for Midnight Casks for 50 wine.
++Qi's Walnut room sells the blueprints for Abyss Casks for 50 Qi gems
++The Island Trader now also sells the blueprints for Advanced Solar Panels for 250 Solar Essence.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 4-4-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Added darkwood, midnight, and abyss casks which all provide bonuses to processing goods anywhere.
 ~Fixed an issue where the Crystal refiner would take twice as long to convert a gold quality mineral to an iridium quality one.
