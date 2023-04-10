@@ -213,5 +213,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             }
             return "";
         }
+
+        public virtual bool equalsOtherArtisinalGood(ArtisanGoodItemReference other)
+        {
+            return this.PreservedRegisteredObjectId.Equals(other.PreservedRegisteredObjectId) && this.PreserveType == other.PreserveType;
+        }
     }
 }

@@ -146,19 +146,19 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
 
         }
 
-        public ItemReference(string ObjectId, int StackSize = 1)
+        public ItemReference(string ObjectId, int StackSize = 1, int Quality=0)
         {
-            this.setItemReference(ObjectId, StackSize);
+            this.setItemReference(ObjectId, StackSize,Quality);
         }
 
-        public ItemReference(Enums.SDVObject ObjectId, int StackSize = 1)
+        public ItemReference(Enums.SDVObject ObjectId, int StackSize = 1, int Quality=0)
         {
-            this.setItemReference(ObjectId, StackSize);
+            this.setItemReference(ObjectId, StackSize,Quality);
         }
 
-        public ItemReference(Enums.SDVBigCraftable ObjectId, int StackSize = 1)
+        public ItemReference(Enums.SDVBigCraftable ObjectId, int StackSize = 1, int Quality=0)
         {
-            this.setItemReference(ObjectId, StackSize);
+            this.setItemReference(ObjectId, StackSize,Quality);
         }
 
         /// <summary>
@@ -193,10 +193,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             }
         }
 
-        public ItemReference(ArtisanGoodItemReference artisanGoodItemReference, int Stack)
+        public ItemReference(ArtisanGoodItemReference artisanGoodItemReference, int Stack=1, int Quality=0)
         {
             this.ArtisanGoodItemReference = artisanGoodItemReference;
             this.StackSize = Stack;
+            this.Quality = Quality;
         }
 
         protected override void initializeNetFields()

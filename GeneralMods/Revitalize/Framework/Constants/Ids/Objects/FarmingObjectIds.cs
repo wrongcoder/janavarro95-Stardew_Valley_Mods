@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
 {
-    public class FarmingObjects
+    public class FarmingObjectIds
     {
 
         public const string AdvancedFarmingSystem = "Omegasis.Revitalize.Framework.World.Objects.Farming.AdvancedFarmingSystem";
@@ -22,5 +22,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
 		public const string DarkwoodCask = "Omegasis.Revitalize.Objects.Farming.DarkwoodCask";
 		public const string MidnightCask = "Omegasis.Revitalize.Objects.Farming.MidnightCask";
 		public const string AbyssCask = "Omegasis.Revitalize.Objects.Farming.AbyssCask";
+		public const string HardwoodPreservesJar = "Omegasis.Revitalize.Objects.Farming.HardwoodPreservesJar";
+		public const string AncientPreservesJar = "Omegasis.Revitalize.Objects.Farming.AncientPreservesJar";
     }
 }

@@ -50,7 +50,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                     shopInventoryProbes.Add(AddItemToStockAfterHay(WorkbenchBlueprintIds.HayMakerBlueprint, RevitalizeModCore.Configs.shopsConfigManager.animalShopStockConfig.HayMakerBlueprintsPrice));
                 }
 
-                shopInventoryProbes.Add(AddItemToStockAfterHay(FarmingObjects.HayMaker_FeedShop, RevitalizeModCore.Configs.shopsConfigManager.animalShopStockConfig.HayMakerFeedShopPrice));
+                shopInventoryProbes.Add(AddItemToStockAfterHay(FarmingObjectIds.HayMaker_FeedShop, RevitalizeModCore.Configs.shopsConfigManager.animalShopStockConfig.HayMakerFeedShopPrice));
             }
 
             ShopUtilities.UpdateShopStockAndPriceInSortedOrder(shopMenu, shopInventoryProbes);

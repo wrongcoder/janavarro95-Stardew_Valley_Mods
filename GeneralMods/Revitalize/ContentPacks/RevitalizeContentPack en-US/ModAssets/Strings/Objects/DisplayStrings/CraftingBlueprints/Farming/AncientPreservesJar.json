@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.AncientPreservesJar":
+	{
+		"displayName":"Ancient Preserves Jar",
+		"description":"A bleuprint to craft an advanced preserves jar that processes goods in half the time.",
+		"category":"StardewValley.Crafting"
+	},
+}

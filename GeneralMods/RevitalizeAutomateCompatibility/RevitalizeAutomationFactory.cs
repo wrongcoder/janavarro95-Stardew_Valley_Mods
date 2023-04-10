@@ -38,7 +38,7 @@ namespace Omegasis.RevitalizeAutomateCompatibility
 
                 //Can add more specific wrapper types here where we check by modObj.Id, but the below cases should catch the majority of the logic.
 
-                if (modObj.Id.Equals(FarmingObjects.IrrigatedGardenPot))
+                if (modObj.Id.Equals(FarmingObjectIds.IrrigatedGardenPot))
                 {
                     //Irrigated garden pots are disabled for automate compatibility since they are balanaced out with the automatic farming system and it's attachments.
                     return null;

@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Farming.HardwoodPreservesJar":
+	{
+		"displayName":"Hardwood Preserves Jar",
+		"description":"An advanced preserves jar that processes goods faster than a normal preserves jar.",
+		"category":"Farming"
+	},
+}

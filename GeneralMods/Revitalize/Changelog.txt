@@ -4,6 +4,10 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 4-9-2023 xx.xx P.M~~~~~~~~~~~~~~
++Added Harwood Preserves Jar. Processes 25% faster than a normal preserve jar. Sold by the Desert or Island Traders.
++Added Ancient Preserves Jar. Processes 50% faster than a normal preserve jar. Sold by the Desert or Island Traders.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 4-5-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Desert Trader sells the blueprints for Darkwood Casks for 20 wine.
 +The Island Trader sells the blueprints for Midnight Casks for 50 wine.

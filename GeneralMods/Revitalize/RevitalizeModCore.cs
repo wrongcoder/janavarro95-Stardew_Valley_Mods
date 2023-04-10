@@ -243,7 +243,7 @@ namespace Omegasis.Revitalize
         /// </summary>
         private void warpToWalnutRoom()
         {
-            if (true)
+            if (false)
             {
                 Game1.warpFarmer("QiNutRoom", 7, 8, 0);
                 Game1.player.QiGems = 100;
@@ -271,25 +271,17 @@ namespace Omegasis.Revitalize
 
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
-
-              ModContentManager.objectManager.getItem(Enums.SDVObject.Geode,100),
-              ModContentManager.objectManager.getItem(MachineIds.Anvil),
-
-                            ModContentManager.objectManager.getItem(MachineIds.CrystalRefiner),
-                                                                      ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
-                                                                      ModContentManager.objectManager.getItem(Enums.SDVObject.PrismaticShard,100),
-                                                                      ModContentManager.objectManager.getItem(FarmingObjects.DarkwoodCask,10),
-                                                                      ModContentManager.objectManager.getItem(FarmingObjects.MidnightCask,10),
-                                                                      ModContentManager.objectManager.getItem(FarmingObjects.AbyssCask,10),
-                                                                      ModContentManager.objectManager.getItem(Enums.SDVObject.Cheese,100),
-                                                                      new ArtisanGoodItemReference(Enums.SDVObject.Apple, StardewValley.Object.PreserveType.Wine).getItem(20)
+                ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
+                ModContentManager.objectManager.getItem(Enums.SDVObject.Corn,100),
+                ModContentManager.objectManager.getItem(FarmingObjectIds.HardwoodPreservesJar),
+                ModContentManager.objectManager.getItem(FarmingObjectIds.AncientPreservesJar),
               /*
 
 
                                                         ModContentManager.objectManager.getItem(StorageIds.HugeItemVault),
                                                         
                 ModContentManager.objectManager.getItem(FarmingObjects.HayMaker),
-              ModContentManager.objectManager.getItem(Enums.SDVObject.Corn,100),
+
                             ModContentManager.objectManager.getItem(MachineIds.ElectricAdvancedGeodeCrusher),
                             
                             ModContentManager.objectManager.getItem(Enums.SDVObject.OmniGeode,100),

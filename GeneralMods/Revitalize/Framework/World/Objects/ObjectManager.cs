@@ -266,7 +266,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             this.addItem(MachineIds.WindmillV1, windMillV1_0_0);
 
-            this.addItem(FarmingObjects.HayMaker, new HayMaker(new BasicItemInformation("", FarmingObjects.HayMaker, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
+            this.addItem(FarmingObjectIds.HayMaker, new HayMaker(new BasicItemInformation("", FarmingObjectIds.HayMaker, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
             {
                 {Machine.DEFAULT_ANINMATION_KEY,new Animation( new AnimationFrame(0,0,16,32)) },
                     {HayMaker.HayAnimation,new Animation(new List<AnimationFrame>(){
@@ -289,11 +289,11 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     }
             }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, /* Bounding box is the number of pixels taken up */ new Vector2(1, 1),/*Shift by whitespace*/ new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager())));
 
-            this.addItem(FarmingObjects.HayMaker_FeedShop, new HayMaker(new BasicItemInformation("", FarmingObjects.HayMaker_FeedShop, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new Animation(16, 0, 16, 32)), Color.White, false, /* Bounding box is the number of pixels taken up */ new Vector2(1, 1),/*Shift by whitespace*/ new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager()), true));
+            this.addItem(FarmingObjectIds.HayMaker_FeedShop, new HayMaker(new BasicItemInformation("", FarmingObjectIds.HayMaker_FeedShop, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new Animation(16, 0, 16, 32)), Color.White, false, /* Bounding box is the number of pixels taken up */ new Vector2(1, 1),/*Shift by whitespace*/ new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager()), true));
 
 
 
-            this.addItem(FarmingObjects.IrrigatedGardenPot, new IrrigatedGardenPot(new BasicItemInformation("", FarmingObjects.IrrigatedGardenPot, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, true, true, TextureManagers.Objects_Farming.createAnimationManager("IrrigatedGardenPot", new SerializableDictionary<string, Animation>()
+            this.addItem(FarmingObjectIds.IrrigatedGardenPot, new IrrigatedGardenPot(new BasicItemInformation("", FarmingObjectIds.IrrigatedGardenPot, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 5000, true, true, TextureManagers.Objects_Farming.createAnimationManager("IrrigatedGardenPot", new SerializableDictionary<string, Animation>()
             {
                 {IrrigatedGardenPot.DEFAULT_ANIMATION_KEY,new Animation( new AnimationFrame(0,0,16,32)) },
                 {IrrigatedGardenPot.DRIPPING_ANIMATION_KEY,Animation.CreateAnimationFromTextureSequence(0,0,16,32,13, 6)},
@@ -323,7 +323,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
 
             }, IrrigatedGardenPot.DEFAULT_ANIMATION_KEY, IrrigatedGardenPot.DRIPPING_ANIMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), new InventoryManager(), new Illuminate.LightManager())));
-            this.addItem(FarmingObjects.AdvancedFarmingSystem, new AdvancedFarmingSystem(new BasicItemInformation("", FarmingObjects.AdvancedFarmingSystem, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Farming.createAnimationManager("AdvancedFarmingSystem", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
+            this.addItem(FarmingObjectIds.AdvancedFarmingSystem, new AdvancedFarmingSystem(new BasicItemInformation("", FarmingObjectIds.AdvancedFarmingSystem, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 10000, true, true, TextureManagers.Objects_Farming.createAnimationManager("AdvancedFarmingSystem", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
 
 
             this.addInFurnaces();
@@ -356,23 +356,36 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
                 }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
 
-            this.addItem(FarmingObjects.DarkwoodCask, new AdvancedCask(new BasicItemInformation("", FarmingObjects.DarkwoodCask, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("DarkwoodCask", new Dictionary<string, Animation>()
+            this.addItem(FarmingObjectIds.DarkwoodCask, new AdvancedCask(new BasicItemInformation("", FarmingObjectIds.DarkwoodCask, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("DarkwoodCask", new Dictionary<string, Animation>()
                 {
                     {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
                 }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null),.75,1));
 
-            this.addItem(FarmingObjects.MidnightCask, new AdvancedCask(new BasicItemInformation("", FarmingObjects.MidnightCask, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("MidnightCask", new Dictionary<string, Animation>()
+            this.addItem(FarmingObjectIds.MidnightCask, new AdvancedCask(new BasicItemInformation("", FarmingObjectIds.MidnightCask, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("MidnightCask", new Dictionary<string, Animation>()
                 {
                     {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
                 }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), .5, .75));
 
-            this.addItem(FarmingObjects.AbyssCask, new AdvancedCask(new BasicItemInformation("", FarmingObjects.AbyssCask, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("AbyssCask", new Dictionary<string, Animation>()
+            this.addItem(FarmingObjectIds.AbyssCask, new AdvancedCask(new BasicItemInformation("", FarmingObjectIds.AbyssCask, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("AbyssCask", new Dictionary<string, Animation>()
                 {
                     {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
                 }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), .25, .5));
+
+
+            this.addItem(new AdvancedPreservesJar(new BasicItemInformation("", FarmingObjectIds.HardwoodPreservesJar, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("HardwoodPreservesJar", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null),.75));
+
+            this.addItem(new AdvancedPreservesJar(new BasicItemInformation("", FarmingObjectIds.AncientPreservesJar, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("AncientPreservesJar", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), .5));
         }
 
 

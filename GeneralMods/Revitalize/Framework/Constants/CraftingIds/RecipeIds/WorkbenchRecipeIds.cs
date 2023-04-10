@@ -64,5 +64,7 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds
 
         //Generated code below this point.
 
+		public const string HardwoodPreservesJar = "Omegasis.Revitalize.Workbench.Farming.HardwoodPreservesJar";
+		public const string AncientPreservesJar = "Omegasis.Revitalize.Workbench.Farming.AncientPreservesJar";
     }
 }

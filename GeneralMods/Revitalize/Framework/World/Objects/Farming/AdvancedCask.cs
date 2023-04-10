@@ -44,7 +44,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
         }
 
-        public AdvancedCask(BasicItemInformation Info, Vector2 TilePosition, double PreferredLocationMultiplierBonus, double OtherGameLocationProcessingMultiplierBonus) : base(Info, Vector2.Zero)
+        public AdvancedCask(BasicItemInformation Info, Vector2 TilePosition, double PreferredLocationMultiplierBonus, double OtherGameLocationProcessingMultiplierBonus) : base(Info, TilePosition)
         {
             this.cellarProcessingMultiplierBonus.Value = PreferredLocationMultiplierBonus;
             this.otherGameLocationProcessingMultiplierBonus.Value = OtherGameLocationProcessingMultiplierBonus;
