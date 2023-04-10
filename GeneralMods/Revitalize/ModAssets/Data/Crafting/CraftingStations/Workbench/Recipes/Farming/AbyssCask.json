@@ -23,6 +23,14 @@
           "amount": 25
         }
       },
+	  {
+        "item": {
+          "stardewValleyItemId": "IridiumBar",
+          "stardewValleyBigCraftableId": "NULL",
+          "registeredObjectId": "",
+          "amount": 5
+        }
+      },
       {
         "item": {
           "stardewValleyItemId": "NULL",
