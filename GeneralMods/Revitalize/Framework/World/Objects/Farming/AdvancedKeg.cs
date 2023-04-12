@@ -3,44 +3,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using Omegasis.Revitalize.Framework.Constants;
 using Omegasis.Revitalize.Framework.Crafting;
 using Omegasis.Revitalize.Framework.World.Objects.InformationFiles;
 using Omegasis.Revitalize.Framework.World.Objects.Items.Utilities;
+using Omegasis.Revitalize.Framework.World.Objects.Machines;
 using Omegasis.Revitalize.Framework.World.WorldUtilities.Items;
 using Omegasis.Revitalize.Framework.World.WorldUtilities;
-using StardewValley.Tools;
 using StardewValley;
-using Omegasis.Revitalize.Framework.World.Objects.Machines;
-using Microsoft.Xna.Framework;
 using System.Xml.Serialization;
+using Microsoft.Xna.Framework;
 
 namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 {
     /// <summary>
-    /// An advanced preserves jar that can process goods faster than a normal preserves jar.
+    /// An advanced keg that can process goods faster than a normal preserves jar.
     /// </summary>
-    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Farming.AdvancedPreservesJar")]
-    public class AdvancedPreservesJar :ItemRecipeDropInMachine
+    [XmlType("Mods_Omegasis.Revitalize.Framework.World.Objects.Farming.AdvancedKeg")]
+    public class AdvancedKeg : ItemRecipeDropInMachine
     {
         /// <summary>
         /// Used to determine how fast the speed bonus this preserve jar should have when processing goods.
         /// </summary>
         public readonly NetDouble processingSpeedMultiplierBonus = new NetDouble(1);
 
-        public AdvancedPreservesJar()
+        public AdvancedKeg()
         {
 
         }
 
-        public AdvancedPreservesJar(BasicItemInformation Info, double ProcessingSpeedMultiplier) : this(Info, Vector2.Zero, ProcessingSpeedMultiplier)
+        public AdvancedKeg(BasicItemInformation Info, double ProcessingSpeedMultiplier) : this(Info, Vector2.Zero, ProcessingSpeedMultiplier)
         {
 
         }
 
-        public AdvancedPreservesJar(BasicItemInformation Info, Vector2 TilePosition, double ProcessingSpeedMultiplier) : base(Info, TilePosition)
+        public AdvancedKeg(BasicItemInformation Info, Vector2 TilePosition, double ProcessingSpeedMultiplier) : base(Info, TilePosition)
         {
             this.processingSpeedMultiplierBonus.Value = ProcessingSpeedMultiplier;
         }
@@ -83,7 +81,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
             {
                 if (item == null) continue;
 
-                ProcessingRecipe recipe= this.createProcessingRecipeFromItem(item);
+                ProcessingRecipe recipe = this.createProcessingRecipeFromItem(item);
                 if (recipe != null)
                 {
                     possibleRecipes.Add(recipe);
@@ -109,34 +107,49 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
                 return null;
             }
 
-            if (RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(item.ParentSheetIndex).Equals(RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(Enums.SDVObject.Ginger)) || item.Category == StardewValley.Object.VegetableCategory)
+            string objectId = RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(item.ParentSheetIndex);
+
+            if (objectId.Equals(RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(Enums.SDVObject.Wheat)))
             {
-                return new ProcessingRecipe(input.RegisteredObjectId, new GameTimeStamp((int)(4000 * this.processingSpeedMultiplierBonus.Value)), input, new LootTableEntry(new ItemReference(new ArtisanGoodItemReference(item.DisplayName,price, Enums.SDVPreserveType.Pickle), 1, quality)));
+                return new ProcessingRecipe(input.RegisteredObjectId, new GameTimeStamp((int)(1750 * this.processingSpeedMultiplierBonus.Value)), input, new LootTableEntry(new ItemReference(Enums.SDVObject.Beer, 1, quality)));
+            }
+
+            if (objectId.Equals(RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(Enums.SDVObject.CoffeeBean)))
+            {
+                input.StackSize = 5;
+                return new ProcessingRecipe(input.RegisteredObjectId, new GameTimeStamp((int)(120 * this.processingSpeedMultiplierBonus.Value)), input, new LootTableEntry(new ItemReference(Enums.SDVObject.Coffee, 1, quality)));
+            }
+
+            if (objectId.Equals(RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(Enums.SDVObject.TeaLeaves)))
+            {
+                return new ProcessingRecipe(input.RegisteredObjectId, new GameTimeStamp((int)(180 * this.processingSpeedMultiplierBonus.Value)), input, new LootTableEntry(new ItemReference(Enums.SDVObject.GreenTea, 1, quality)));
+            }
+
+            if (objectId.Equals(RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(Enums.SDVObject.Honey)))
+            {
+                return new ProcessingRecipe(input.RegisteredObjectId, new GameTimeStamp((int)(600 * this.processingSpeedMultiplierBonus.Value)), input, new LootTableEntry(new ItemReference(Enums.SDVObject.Mead, 1, quality)));
+            }
+
+            if (objectId.Equals(RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(Enums.SDVObject.Hops)))
+            {
+                return new ProcessingRecipe(input.RegisteredObjectId, new GameTimeStamp((int)(600 * this.processingSpeedMultiplierBonus.Value)), input, new LootTableEntry(new ItemReference(Enums.SDVObject.PaleAle, 1, quality)));
+            }
+
+
+            if (item.Category == StardewValley.Object.VegetableCategory)
+            {
+                return new ProcessingRecipe(input.RegisteredObjectId, new GameTimeStamp((int)(6000 * this.processingSpeedMultiplierBonus.Value)), input, new LootTableEntry(new ItemReference(new ArtisanGoodItemReference(item.DisplayName,price,Enums.SDVPreserveType.Juice), 1, quality)));
             }
 
             if (item.Category == StardewValley.Object.FruitsCategory)
             {
-                return new ProcessingRecipe(input.RegisteredObjectId, new GameTimeStamp((int)(4000 * this.processingSpeedMultiplierBonus.Value)), input, new LootTableEntry(new ItemReference(new ArtisanGoodItemReference(item.DisplayName,price, Enums.SDVPreserveType.Jelly), 1, quality)));
-            }
-
-            //It's odd but Roe is considered a type of preserve good, while aged roe is what you get by processing it.
-            ArtisanGoodItemReference typeOfRoeToCheck = new ArtisanGoodItemReference(item.ParentSheetIndex, PreserveType.Roe);
-            ArtisanGoodItemReference sturgeonRoe = new ArtisanGoodItemReference(Enums.SDVObject.Sturgeon, PreserveType.Roe);
-
-
-            if (typeOfRoeToCheck.equalsOtherArtisinalGood(sturgeonRoe))
-            {
-                return new ProcessingRecipe(input.RegisteredObjectId, new GameTimeStamp((int)(6000 * this.processingSpeedMultiplierBonus.Value)), input, new LootTableEntry(new ItemReference(Enums.SDVObject.Caviar,1,quality)));
-            }
-            if (item is StardewValley.Object && (item as StardewValley.Object).preserve.Value==StardewValley.Object.PreserveType.Roe)
-            {
-                return new ProcessingRecipe(input.RegisteredObjectId, new GameTimeStamp((int)(4000 * this.processingSpeedMultiplierBonus.Value)), input, new LootTableEntry(new ItemReference(new ArtisanGoodItemReference(item.DisplayName,price, Enums.SDVPreserveType.AgedRoe), 1, quality)));
+                return new ProcessingRecipe(input.RegisteredObjectId, new GameTimeStamp((int)(10_000 * this.processingSpeedMultiplierBonus.Value)), input, new LootTableEntry(new ItemReference(new ArtisanGoodItemReference(item.DisplayName, price, Enums.SDVPreserveType.Wine), 1, quality)));
             }
 
             return null;
         }
 
-        
+
 
         public override void playDropInSound()
         {
@@ -145,7 +158,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
 
         public override Item getOne()
         {
-            return new AdvancedPreservesJar(this.basicItemInformation.Copy(), this.processingSpeedMultiplierBonus.Value);
+            return new AdvancedKeg(this.basicItemInformation.Copy(), this.processingSpeedMultiplierBonus.Value);
         }
     }
 }

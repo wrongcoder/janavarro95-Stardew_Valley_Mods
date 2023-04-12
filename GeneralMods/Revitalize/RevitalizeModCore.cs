@@ -272,9 +272,12 @@ namespace Omegasis.Revitalize
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
                 ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
+                ModContentManager.objectManager.getItem(Enums.SDVObject.Wheat,100),
                 ModContentManager.objectManager.getItem(Enums.SDVObject.Corn,100),
-                ModContentManager.objectManager.getItem(FarmingObjectIds.HardwoodPreservesJar),
-                ModContentManager.objectManager.getItem(FarmingObjectIds.AncientPreservesJar),
+                                ModContentManager.objectManager.getItem(FarmingObjectIds.HardwoodPreservesJar),
+                                 ModContentManager.objectManager.getItem(FarmingObjectIds.AncientPreservesJar),
+                ModContentManager.objectManager.getItem(FarmingObjectIds.HardwoodKeg),
+                ModContentManager.objectManager.getItem(FarmingObjectIds.IndustrialKeg),
               /*
 
 

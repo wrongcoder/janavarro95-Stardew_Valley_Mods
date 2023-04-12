@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Farming.HardwoodKeg":
+	{
+		"displayName":"Hardwood Keg",
+		"description":"An advanced keg that can process goods faster than a normal keg.",
+		"category":"Farming"
+	},
+}

@@ -90,5 +90,7 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Items.BlueprintIds
 		public const string AbyssCask = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.AbyssCask";
 		public const string HardwoodPreservesJar = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.HardwoodPreservesJar	";
 		public const string AncientPreservesJar = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.AncientPreservesJar";
+		public const string IndustrialKeg = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.IndustrialKeg";
+		public const string HardwoodKeg = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.HardwoodKeg";
     }
 }

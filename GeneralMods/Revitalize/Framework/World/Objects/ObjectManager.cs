@@ -386,6 +386,21 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
                 }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), .5));
+
+
+            this.addItem(new AdvancedKeg(new BasicItemInformation("", FarmingObjectIds.HardwoodKeg, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("HardwoodKeg", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), .75));
+
+            this.addItem(new AdvancedKeg(new BasicItemInformation("", FarmingObjectIds.IndustrialKeg, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("IndustrialKeg", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
+                    {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), .5));
+
+
         }
 
 

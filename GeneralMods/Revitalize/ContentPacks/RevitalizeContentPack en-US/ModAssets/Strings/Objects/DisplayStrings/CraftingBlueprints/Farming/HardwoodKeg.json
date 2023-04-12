@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.HardwoodKeg":
+	{
+		"displayName":"Hardwood Keg",
+		"description":"A blueprint for an advanced keg that can process goods faster than a normal keg.",
+		"category":"StardewValley.Crafting"
+	},
+}

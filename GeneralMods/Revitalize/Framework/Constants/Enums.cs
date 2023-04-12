@@ -479,6 +479,8 @@ namespace Omegasis.Revitalize.Framework.Constants
 
             Kale = 250,
 
+            TeaSappling = 251,
+
             Rhubarb = 252,
 
             Melon = 254,
@@ -1040,6 +1042,8 @@ namespace Omegasis.Revitalize.Framework.Constants
             CranberryCandy = 612,
 
             Apple = 613,
+
+            GreenTea = 614,
 
             Bruschetta = 618,
 

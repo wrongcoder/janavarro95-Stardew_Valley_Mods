@@ -51,6 +51,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
             }
         }
 
+        [JsonIgnore]
+        public bool dynamicallyGenerated;
+        [JsonIgnore]
+        public string objectDisplayName;
+        [JsonIgnore]
+        public int basePrice;
+        [JsonIgnore]
+        public string preserveTypeObjectId;
+
         public ArtisanGoodItemReference()
         {
 
@@ -61,17 +70,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
 
         }
 
-        public ArtisanGoodItemReference(SDVObject PreservedRegisteredObjectId, SDVPreserveType PreserveType) : this(Revitalize.RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(PreservedRegisteredObjectId), PreserveType)
-        {
-
-        }
-
         public ArtisanGoodItemReference(int PreservedRegisteredObjectId, PreserveType PreserveType) : this(Revitalize.RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(PreservedRegisteredObjectId),Enum.Parse<SDVPreserveType>(((int)PreserveType).ToString()))
-        {
-
-        }
-
-        public ArtisanGoodItemReference(string PreservedRegisteredObjectId, PreserveType PreserveType):this(PreservedRegisteredObjectId, Enum.Parse<SDVPreserveType>(((int)PreserveType).ToString()))
         {
 
         }
@@ -80,6 +79,28 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         {
             this.PreservedRegisteredObjectId = ObjectId;
             this.PreserveType = PreserveType;
+        }
+
+        public ArtisanGoodItemReference(string ObjectDisplayName, int BaseOrFinalizedPrice, SDVPreserveType PreserveType):this(ObjectDisplayName,BaseOrFinalizedPrice, GetPreservedObjectTypeRegisteredObjectId(PreserveType))
+        {
+            this.dynamicallyGenerated= true;
+
+            this.objectDisplayName= ObjectDisplayName;
+            this.basePrice= BaseOrFinalizedPrice;
+
+            this.PreservedRegisteredObjectId = "";
+            this.PreserveType = PreserveType;
+        }
+
+        public ArtisanGoodItemReference(string ObjectDisplayName, int BaseOrFinalizedPrice, string PreserveTypeObjectId)
+        {
+            this.dynamicallyGenerated = true;
+
+            this.objectDisplayName = ObjectDisplayName;
+            this.basePrice = BaseOrFinalizedPrice;
+
+            this.PreservedRegisteredObjectId = "";
+            this.preserveTypeObjectId = PreserveTypeObjectId;
         }
 
 
@@ -98,6 +119,10 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
 
         public virtual bool isNotNull()
         {
+            if (this.dynamicallyGenerated)
+            {
+                return true;
+            }
             return !string.IsNullOrEmpty(this.PreservedRegisteredObjectId) && this.PreserveType != SDVPreserveType.NULL;
         }
 
@@ -109,69 +134,98 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         public virtual Item getItem(int Stack=1)
         {
 
-            if (this.PreserveType == SDVPreserveType.NULL)
+            if (this.PreserveType == SDVPreserveType.NULL && string.IsNullOrEmpty(this.preserveTypeObjectId))
             {
                 throw new Exception("Preserve type can not be null for Artisan Good Item Reference!");
                 return null;
             }
 
+            return this.getPreserveItemBase();
+        }
+
+        public virtual Item getPreserveItemBase()
+        {
             StardewValley.Object obj = null;
-            StardewValley.Object preservedObjectType = (RevitalizeModCore.ModContentManager.objectManager.getObject<StardewValley.Object>(this.PreservedRegisteredObjectId));
+            StardewValley.Object preservedObjectType = null;
+            int preserveObjectPrice = 0;
+            string displayName = "";
+
+            if (this.dynamicallyGenerated)
+            {
+                preserveObjectPrice = this.basePrice;
+                displayName = this.objectDisplayName;
+            }
+            else
+            {
+                preservedObjectType= RevitalizeModCore.ModContentManager.objectManager.getObject<StardewValley.Object>(this.PreservedRegisteredObjectId);
+                preserveObjectPrice= preservedObjectType.Price;
+                displayName = preservedObjectType.DisplayName;
+            }
 
             if (this.PreserveType == SDVPreserveType.AgedRoe)
             {
-                obj = new ColoredObject((int)SDVObject.AgedRoe, Stack, StardewValley.Menus.TailoringMenu.GetDyeColor(preservedObjectType) ?? Color.Orange);
-                obj.Price = 60 + preservedObjectType.Price;
+                obj = new ColoredObject((int)SDVObject.AgedRoe, 1, Color.Orange);
+                obj.Price = 60 + preserveObjectPrice;
             }
             if (this.PreserveType == SDVPreserveType.Honey)
             {
-                obj = (StardewValley.Object)new ItemReference(SDVObject.Honey, Stack).getItem();
-                if (this.PreservedRegisteredObjectId == "-1")
+                obj = (StardewValley.Object)new ItemReference(SDVObject.Honey, 1).getItem();
+                if (this.PreservedRegisteredObjectId.Equals("-1") || string.IsNullOrEmpty(this.PreservedRegisteredObjectId))
                 {
                     if (obj.Name == "Honey")
                     {
                         obj.Name = "Wild Honey";
                     }
-                    obj.Name= Game1.content.LoadString("Strings\\StringsFromCSFiles:Object.cs.12750");
+                    obj.Name = Game1.content.LoadString("Strings\\StringsFromCSFiles:Object.cs.12750");
                     return obj;
                 }
 
                 //Base honey sell price + flower sell price * 2;
-                obj.Price = obj.Price + preservedObjectType.Price * 2;
-                obj.DisplayName = preservedObjectType.DisplayName + " " + obj.DisplayName;
-                obj.Name = preservedObjectType.DisplayName + " " + obj.DisplayName;
+                obj.Price = obj.Price + preserveObjectPrice * 2;
+                obj.DisplayName = displayName + " " + obj.DisplayName;
+                obj.Name = displayName + " " + obj.Name;
             }
             if (this.PreserveType == SDVPreserveType.Jelly)
             {
-                obj = (StardewValley.Object)new ItemReference(SDVObject.Jelly, Stack).getItem();
-                obj.Price = 50 + preservedObjectType.Price * 2;
+                obj = (StardewValley.Object)new ItemReference(SDVObject.Jelly, 1).getItem();
+                obj.Price = 50 + preserveObjectPrice * 2;
             }
             if (this.PreserveType == SDVPreserveType.Juice)
             {
-                obj = (StardewValley.Object)new ItemReference(SDVObject.Juice, Stack).getItem();
-                obj.Price = (int)(preservedObjectType.Price * 2.25f);
+                obj = (StardewValley.Object)new ItemReference(SDVObject.Juice, 1).getItem();
+                obj.Price = (int)(preserveObjectPrice * 2.25f);
             }
             if (this.PreserveType == SDVPreserveType.Pickle)
             {
-                obj = (StardewValley.Object)new ItemReference(SDVObject.Pickles, Stack).getItem();
-                obj.Price = 50 + (preservedObjectType.Price * 2);
+                obj = (StardewValley.Object)new ItemReference(SDVObject.Pickles, 1).getItem();
+                obj.Price = 50 + (preserveObjectPrice * 2);
             }
             if (this.PreserveType == SDVPreserveType.Roe)
             {
-                obj = new ColoredObject((int)SDVObject.Roe, Stack, StardewValley.Menus.TailoringMenu.GetDyeColor(preservedObjectType) ?? Color.Orange);
-                obj.Price = 30+(preservedObjectType.Price /2);
+                obj = new ColoredObject((int)SDVObject.Roe, 1, preservedObjectType!=null? StardewValley.Menus.TailoringMenu.GetDyeColor(preservedObjectType) ?? Color.Orange:Color.Orange);
+                obj.Price = 30 + (preserveObjectPrice / 2);
             }
             if (this.PreserveType == SDVPreserveType.Wine)
             {
-                obj = (StardewValley.Object)new ItemReference(SDVObject.Wine, Stack).getItem();
-                obj.Price = preservedObjectType.Price * 3;
+                obj = (StardewValley.Object)new ItemReference(SDVObject.Wine, 1).getItem();
+                obj.Price = preserveObjectPrice * 3;
+            }
+            if (!string.IsNullOrEmpty(this.getPreservedObjectTypeRegisteredObjectId()))
+            {
+                obj = RevitalizeModCore.ModContentManager.objectManager.getObject<StardewValley.Object>(this.getPreservedObjectTypeRegisteredObjectId());
+                obj.Price = preserveObjectPrice;
             }
 
-            //Note that this will break in SDV 1.6 so will need to skip the conversion from string back to int.
             obj.preservedParentSheetIndex.Value = RevitalizeModCore.ModContentManager.objectManager.convertSDVStringObjectIdToIntObjectId(this.PreservedRegisteredObjectId);
             (obj as StardewValley.Object).preserve.Value = (PreserveType?)(int)this.PreserveType;
+
+            obj.DisplayName = displayName + " " + obj.DisplayName;
+            obj.Name = displayName + " " + obj.Name;
+
+
             return obj;
         }
+
 
         /// <summary>
         /// Gets the ObjectId for the type of object that is preserved. I.E honey or wine.
@@ -179,44 +233,65 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Items.Utilities
         /// <returns></returns>
         public virtual string getPreservedObjectTypeRegisteredObjectId()
         {
-            if (this.PreserveType == SDVPreserveType.NULL)
+            if (!string.IsNullOrEmpty(this.preserveTypeObjectId))
             {
-                return null;
+                return this.preserveTypeObjectId;
             }
-            if (this.PreserveType == SDVPreserveType.AgedRoe)
+            string preserveObjectTypeId = GetPreservedObjectTypeRegisteredObjectId(this.PreserveType);
+            if(!string.IsNullOrEmpty(preserveObjectTypeId))
             {
-               return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.AgedRoe);
-            }
-            if (this.PreserveType == SDVPreserveType.Honey)
-            {
-                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.Honey);
-            }
-            if (this.PreserveType == SDVPreserveType.Jelly)
-            {
-                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.Jelly);
-            }
-            if (this.PreserveType == SDVPreserveType.Juice)
-            {
-                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.Juice);
-            }
-            if (this.PreserveType == SDVPreserveType.Pickle)
-            {
-                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.Pickles);
-            }
-            if (this.PreserveType == SDVPreserveType.Roe)
-            {
-                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.Roe);
-            }
-            if (this.PreserveType == SDVPreserveType.Wine)
-            {
-                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.Wine);
+                return preserveObjectTypeId;
             }
             return "";
         }
 
+
+
         public virtual bool equalsOtherArtisinalGood(ArtisanGoodItemReference other)
         {
+            if (this.dynamicallyGenerated)
+            {
+                return this.objectDisplayName.Equals(other.objectDisplayName) && this.basePrice.Equals(other.basePrice);
+            }
+
             return this.PreservedRegisteredObjectId.Equals(other.PreservedRegisteredObjectId) && this.PreserveType == other.PreserveType;
+        }
+
+        public static string GetPreservedObjectTypeRegisteredObjectId(SDVPreserveType PreserveType)
+        {
+            if (PreserveType == SDVPreserveType.NULL)
+            {
+                return null;
+            }
+            if (PreserveType == SDVPreserveType.AgedRoe)
+            {
+                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.AgedRoe);
+            }
+            if (PreserveType == SDVPreserveType.Honey)
+            {
+                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.Honey);
+            }
+            if (PreserveType == SDVPreserveType.Jelly)
+            {
+                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.Jelly);
+            }
+            if (PreserveType == SDVPreserveType.Juice)
+            {
+                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.Juice);
+            }
+            if (PreserveType == SDVPreserveType.Pickle)
+            {
+                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.Pickles);
+            }
+            if (PreserveType == SDVPreserveType.Roe)
+            {
+                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.Roe);
+            }
+            if (PreserveType == SDVPreserveType.Wine)
+            {
+                return RevitalizeModCore.ModContentManager.objectManager.createVanillaObjectId(SDVObject.Wine);
+            }
+            return "";
         }
     }
 }
