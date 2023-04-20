@@ -255,7 +255,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.addItem(new AdvancedSolarPanel(new BasicItemInformation("", MachineIds.SuperiorSolarPanel, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 1000, true, true, TextureManagers.Objects_Machines.createAnimationManager("SuperiorSolarPanel", new Animation(0, 0, 16, 32)), Color.White, false, new Vector2(1, 2), Vector2.Zero, null, null), AdvancedSolarPanel.SolarPanelTier.Superior));
 
 
-            Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("", MachineIds.WindmillV1, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Machines.createAnimationManager("Windmill", new SerializableDictionary<string, Animation>() {
+            Windmill windMillV1_0_0 = new Windmill(new BasicItemInformation("", MachineIds.Windmill, "", CategoryNames.Machine, Color.SteelBlue, -300, -300, 0, false, 500, true, true, TextureManagers.Objects_Machines.createAnimationManager("Windmill", new SerializableDictionary<string, Animation>() {
 
                 {Machine.DEFAULT_ANINMATION_KEY,new Animation( new AnimationFrame(0,0,16,32)) },
                 {Machine.WORKING_ANIMATION_KEY,new Animation(new List<AnimationFrame>(){
@@ -264,7 +264,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 }
             }, Machine.DEFAULT_ANINMATION_KEY, Machine.WORKING_ANIMATION_KEY), Color.White, false, new Vector2(1, 2), Vector2.Zero, null, null, false, null), Vector2.Zero);
 
-            this.addItem(MachineIds.WindmillV1, windMillV1_0_0);
+            this.addItem(MachineIds.Windmill, windMillV1_0_0);
 
             this.addItem(FarmingObjectIds.HayMaker, new HayMaker(new BasicItemInformation("", FarmingObjectIds.HayMaker, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 2000, true, true, TextureManagers.Objects_Farming.createAnimationManager("HayMaker", new SerializableDictionary<string, Animation>()
             {

@@ -133,5 +133,15 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Crafting
             }
             return base.getDescription();
         }
+
+        public override bool canBeTrashed()
+        {
+            return false;
+        }
+
+        public override bool canBeDropped()
+        {
+            return false;
+        }
     }
 }

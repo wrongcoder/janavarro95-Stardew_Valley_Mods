@@ -269,15 +269,12 @@ namespace Omegasis.Revitalize
             //HACKS
             //Game1.player.Money = 100_000;
 
+            Game1.player.ForagingLevel = 5;
+
             Game1.player.addItemsByMenuIfNecessary(new List<Item>()
             {
                 ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
-                ModContentManager.objectManager.getItem(Enums.SDVObject.Wheat,100),
-                ModContentManager.objectManager.getItem(Enums.SDVObject.Corn,100),
-                                ModContentManager.objectManager.getItem(FarmingObjectIds.HardwoodPreservesJar),
-                                 ModContentManager.objectManager.getItem(FarmingObjectIds.AncientPreservesJar),
-                ModContentManager.objectManager.getItem(FarmingObjectIds.HardwoodKeg),
-                ModContentManager.objectManager.getItem(FarmingObjectIds.IndustrialKeg),
+                                ModContentManager.objectManager.getItem(MachineIds.Windmill),
               /*
 
 

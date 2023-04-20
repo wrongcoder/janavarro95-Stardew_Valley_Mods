@@ -4,6 +4,13 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 4-19-2023 xx.xx P.M~~~~~~~~~~~~~~
++Started work on Automatic Tree Farms.
+
+~~~~~~~~~~~~0.0.1 Revitalize 4-18-2023 xx.xx P.M~~~~~~~~~~~~~~
++Added windmills to the game. Sold by Robin once the player has achieved foraging level 5.
+~Blueprints can no longer be dropped or trashed, preventing them from being accidentally lost.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 4-11-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Added Hardwood Kegs. Processes goods 25% faster than a normal keg.
 +Added Industrial Kegs. Processes goods 50% faster than a normal keg.

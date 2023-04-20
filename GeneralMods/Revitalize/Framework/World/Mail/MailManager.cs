@@ -71,6 +71,8 @@ namespace Omegasis.Revitalize.Framework.World.Mail
 
             this.addMailIfNotReceived(MailTitles.CrystalRefinerUnlock, WorldUtility.GetNumberOfMineralsDonatedToMuseum()>=40);
 
+            this.addMailIfNotReceived(MailTitles.WindmillBlueprintsFromLeah, Game1.player.ForagingLevel >= 5);
+
             //Special cases where mail needs to repeat over and over again.
             if (!Game1.player.mailbox.Contains(MailTitles.MovieTheaterTicketSubscriptionTickets) && Game1.dayOfMonth == 1 && RevitalizeModCore.SaveDataManager.playerSaveData.hasMovieTheaterTicketSubscription)
             {

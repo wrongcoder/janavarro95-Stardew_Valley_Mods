@@ -128,7 +128,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Farming
         /// </summary>
         /// <param name="inputItems"></param>
         /// <returns></returns>
-        public override List<ProcessingRecipe> getListOfPotentialRecipes(IList<Item> inputItems)
+        public override List<ProcessingRecipe> getListOfPotentialRecipes(IList<Item> inputItems, Farmer who=null)
         {
             List<ProcessingRecipe> possibleRecipes = new List<ProcessingRecipe>();
             possibleRecipes.AddRange(base.getListOfPotentialRecipes(inputItems)); //Still allow getting recipes from recipe books and prefer those first.

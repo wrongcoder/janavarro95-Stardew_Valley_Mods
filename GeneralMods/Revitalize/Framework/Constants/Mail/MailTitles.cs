@@ -14,7 +14,9 @@ namespace Omegasis.Revitalize.Framework.Constants.Mail
 
         public const string AutomaticFarmingSystemAvailableForPurchase = "Omegasis.Revitalize.CarpentersShop.AutomaticFarmingSystemAndIrrigatedGardenPotCanBePurchased";
 
-        public const string ElectricFurnaceCanBePurchased= "Omegasis.Revitalize.CarpentersShop.ElectricFurnaceCanBePurchased";
+        public const string ElectricFurnaceCanBePurchased = "Omegasis.Revitalize.CarpentersShop.ElectricFurnaceCanBePurchased";
+
+        public const string WindmillBlueprintsFromLeah = "Omegasis.Revitalize.UnlockNewStuffWithNPC.WindmillBlueprintsAvailable";
 
         //Blacksmith mail
         public const string MiningDrillsAvailableInClintsShop = "Omegasis.Revitalize.Blacksmith.MiningDrillsAvailableForPurchase";

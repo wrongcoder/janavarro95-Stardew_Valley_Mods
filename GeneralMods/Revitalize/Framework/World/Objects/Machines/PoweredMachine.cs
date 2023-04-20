@@ -40,7 +40,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             Nuclear,
             Magical,
             /// <summary>
-            /// If ever implemented, this will have machines process instantly.
+            /// If ever implemented, this will have machines process instantly or provide game breaking benefits.   
             /// </summary>
             Galaxy
         }

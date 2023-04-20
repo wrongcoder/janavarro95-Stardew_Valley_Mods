@@ -1,0 +1,10 @@
+{
+	"mailTitle":"Omegasis.Revitalize.UnlockNewStuffWithNPC.WindmillBlueprintsAvailable",
+	"message":"Hi @, ^How's your farm doing, these days? I know that running a farm can take a lot of power so I wanted to share some of my old carpentry blueprints with you so that you can craft your own windmills to help ease some of your burden. Hopefully you can get some good use out of them!  ^ -Leah",
+	"itemReference":{
+		"stardewValleyItemId": "NULL",
+		"stardewValleyBigCraftableId": "NULL",
+		"registeredObjectId": "Omegasis.Revitalize.Objects.Crafting.Blueprint.EnergyGeneration.Windmill",
+		"amount": 1
+	},
+}

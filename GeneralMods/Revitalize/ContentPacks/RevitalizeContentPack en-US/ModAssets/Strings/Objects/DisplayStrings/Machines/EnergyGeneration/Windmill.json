@@ -1,7 +1,8 @@
 {
-	"Omegasis.Revitalize.Objects.Machines.WindmillV1":
+	"Omegasis.Revitalize.Objects.EnergyGeneration.Windmill":
 	{
 		"displayName":"Windmill",
-		"description":"Generates power from the wind. Produces a battery pack every few days depending on the weather."
+		"description":"A windmill that generates battery packs every 10 days. Works faster on rainy or windy days.",
+		"category":"Machine"
 	},
 }

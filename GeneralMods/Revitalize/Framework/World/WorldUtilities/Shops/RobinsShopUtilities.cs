@@ -34,7 +34,7 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
         /// <param name="args"></param>
         public static void OnNewDay(object sender, StardewModdingAPI.Events.DayStartedEventArgs args)
         {
-            RobinsShop_NumberOfHardwoodToSellToday = RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.SellsInfiniteHardWood? -1 : Game1.random.Next(RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodMinStockAmount, RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodMaxStockAmount + 1);
+            RobinsShop_NumberOfHardwoodToSellToday = RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.SellsInfiniteHardWood ? -1 : Game1.random.Next(RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodMinStockAmount, RevitalizeModCore.Configs.shopsConfigManager.robinsShopConfig.HardwoodMaxStockAmount + 1);
         }
 
 
@@ -84,6 +84,11 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
                 blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutomatedFarmingSystemRecipeId, WorkbenchBlueprintIds.AutomaticFarmingSystemBlueprint, shopConfig.AutomaticFarmingSystemBlueprintPrice));
                 blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutoHarvesterIrrigatedWateringPotAttachmentRecipeId, WorkbenchBlueprintIds.AutoHarvesterGardenPotAttachmentBlueprint, shopConfig.AutoHarvesterIrrigatedGardenPotAttachmentBlueprintPrice));
                 blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutoPlanterIrrigatedWateringPotAttachmentRecipeId, WorkbenchBlueprintIds.AutoPlanterGardenPotBlueprint, shopConfig.AutoPlanterIrrigatedWateringPotAttachmentBlueprintPrice));
+            }
+
+            if (Game1.player.ForagingLevel >= 5)
+            {
+                blueprintsToAdd.Add(AddBlueprintToShop(CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.Windmill, WorkbenchBlueprintIds.Windmill, shopConfig.IrrigatedWateringPotBlueprintPrice));
             }
 
             //Filter out all blueprints that would already be known.

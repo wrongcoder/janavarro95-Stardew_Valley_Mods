@@ -2,6 +2,6 @@
 	"Omegasis.Revitalize.Framework.World.Objects.Farming.IrrigatedGardenPot":
 	{
 		"displayName":"Irrigated Garden Pot",
-		"description":"A garden pot with an irrigation system attached. Waters your crops for you!"
+		"description":"A garden pot with an irrigation system attached. Waters your crops for you and can be upgraded with different attachments."
 	},	
 }
