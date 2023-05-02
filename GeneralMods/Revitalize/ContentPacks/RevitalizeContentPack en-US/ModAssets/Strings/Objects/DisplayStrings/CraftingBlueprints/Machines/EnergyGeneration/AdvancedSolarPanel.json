@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Machines.EnergyGeneration.AdvancedSolarPanel":
+	{
+		"displayName":"Advanced Solar Panel",
+		"description":"A blueprint on how to craft an advanced solar panel at the workbench.",
+		"category":"StardewValley.Crafting"
+	},
+}

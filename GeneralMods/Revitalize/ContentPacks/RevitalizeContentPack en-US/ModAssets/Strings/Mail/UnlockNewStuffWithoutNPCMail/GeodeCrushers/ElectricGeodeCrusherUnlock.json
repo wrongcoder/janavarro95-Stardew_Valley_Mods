@@ -1,0 +1,10 @@
+{
+	"mailTitle":"Omegasis.Revitalize.UnlockNewStuffWithoutNPCMail.ElectricGeodeCrusherUnlock",
+	"message":"@, ^Congratulations on cracking 500 geodes! We like to bestow upon you the iron tier membership. Here is an electric geode crusher blueprint which uses battery packs to run instead of coal. We enjoy your enthusiasm and hope you continue your endeavor. ^ -Geode Cracker's Association Gem Sea Branch",
+	"itemReference":{
+		"stardewValleyItemId": "NULL",
+		"stardewValleyBigCraftableId": "NULL",
+		"registeredObjectId": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.GeodeCrushers.ElectricAdvancedGeodeCrusher",
+		"amount": 1
+	},
+}

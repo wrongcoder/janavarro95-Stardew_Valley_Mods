@@ -1,0 +1,60 @@
+{
+  "whichTab": "Default",
+  "isUnlocked": false,
+  "recipe": {
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.EnergyGeneration.Windmill",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 0,
+    "inputs": [
+      {
+        "item": {
+          "stardewValleyItemId": "Wood",
+          "stardewValleyBigCraftableId": "NULL",
+          "registeredObjectId": "",
+          "amount": 50
+        },
+      },
+      {
+        "item": {
+          "stardewValleyItemId": "Hardwood",
+          "stardewValleyBigCraftableId": "NULL",
+          "registeredObjectId": "",
+          "amount": 10
+        }
+      },
+      {
+        "item": {
+          "stardewValleyItemId": "IronBar",
+          "stardewValleyBigCraftableId": "NULL",
+          "registeredObjectId": "",
+          "amount": 2
+        }
+      },
+      {
+        "item": {
+          "stardewValleyItemId": "Cloth",
+          "stardewValleyBigCraftableId": "NULL",
+          "registeredObjectId": "",
+          "amount": 4
+        }
+      }
+	],
+    "outputs": [
+			{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.EnergyGeneration.Windmill",
+			"amount": 1
+			}
+	},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}

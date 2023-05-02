@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Storage.BigItemBag":
+	{
+		"displayName":"Big Pouch",
+		"description":"A big pouch which can hold a handful of items.",
+		"category":"Storage"
+	},
+}

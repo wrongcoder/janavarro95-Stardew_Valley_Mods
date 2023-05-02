@@ -1,0 +1,69 @@
+{
+  "whichTab": "Default",
+  "isUnlocked": false,
+  "recipe": {
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.Machines.Furnaces.MagicalFurnace",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 0,
+    "inputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.NuclearFurnace",
+			"amount": 1
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "IridiumBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 10
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "FairyDust",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 10
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "CinderShard",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 25
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "PrismaticShard",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 1
+			}
+		}
+	
+	],
+    "outputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.MagicalFurnace",
+			"amount": 1
+			}
+		},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}

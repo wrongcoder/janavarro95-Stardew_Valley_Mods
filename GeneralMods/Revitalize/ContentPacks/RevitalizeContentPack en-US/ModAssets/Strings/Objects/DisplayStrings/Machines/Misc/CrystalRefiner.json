@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Machines.CrystalRefiner":
+	{
+		"displayName":"Crystal Refiner",
+		"description":"An advanced machine that can improve the quality of minerals and gems put inside of it.",
+		"category":"Machine"
+	},
+}

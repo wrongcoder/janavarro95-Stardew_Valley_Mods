@@ -1,0 +1,55 @@
+{
+  "revitalizeBuildingId": "Omegasis.Revitalize.Buildings.DimensionalStorageUnit",
+  "buildingMaterials": [
+		{
+			"stardewValleyItemId": "GalaxySoul",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 1
+		},
+		{
+			"stardewValleyItemId": "VoidEssence",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 250
+		},
+		{
+			"stardewValleyItemId": "PrismaticShard",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 7
+		},
+		{
+			"stardewValleyItemId": "SquidInk",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 10
+		},	
+	],
+  "tileDimensions": {
+    "X": 5,
+    "Y": 5
+  },
+  "humanDoorPosition": {
+    "X": -1,
+    "Y": -1
+  },
+  "animalDoorPosition": {
+    "X": -1,
+    "Y": -1
+  },
+  "mapToWarpTo": "",
+  "upgradeForWhichBuildingType": "none",
+  "buildingTextureDimensions": {
+    "X": 80,
+    "Y": 80
+  },
+  "maxOccupants": 20,
+  "actionBehavior": "null",
+  "namesOfOkBuildingLocationsList": [
+    "Farm"
+  ],
+  "moneyRequired": 0,
+  "isMagical": true,
+  "daysToConstruct": 0
+}

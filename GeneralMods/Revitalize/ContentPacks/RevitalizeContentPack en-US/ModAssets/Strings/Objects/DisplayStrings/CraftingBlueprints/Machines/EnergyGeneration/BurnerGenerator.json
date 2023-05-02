@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.EnergyGeneration.BurnerGenerator":
+	{
+		"displayName":"Burner Generator",
+		"description":"A blueprint on how to craft a burner generator at a workbench!",
+		"category":"StardewValley.Crafting"
+	},
+}

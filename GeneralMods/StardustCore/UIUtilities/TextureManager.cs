@@ -17,14 +17,16 @@ namespace Omegasis.StardustCore.UIUtilities
         public Dictionary<string, Texture2DExtended> extendedTextures;
 
         public string textureManagerId;
+        public IManifest manifest;
 
         public string directory;
 
-        public TextureManager(string directory,string Name)
+        public TextureManager(string BaseDirectory, string Name, IManifest manifest)
         {
             this.textureManagerId = Name;
             this.extendedTextures = new Dictionary<string, Texture2DExtended>();
-            this.directory = directory;
+            this.directory = BaseDirectory;
+            this.manifest = manifest;
         }
 
 
@@ -33,6 +35,7 @@ namespace Omegasis.StardustCore.UIUtilities
             this.textureManagerId = Name;
             this.extendedTextures = new Dictionary<string, Texture2DExtended>();
             this.directory = BaseDirectory;
+            this.manifest = ContentPack.Manifest;
         }
 
         public void addTexture(string name, Texture2DExtended texture)
@@ -106,13 +109,13 @@ namespace Omegasis.StardustCore.UIUtilities
         {
             if (string.IsNullOrEmpty(RelativePath))
             {
-                string path = ModCore.ModHelper.DirectoryPath;
-                this.searchDirectories(path, "", ModCore.Manifest);
+                string path = this.directory;
+                this.searchDirectories(path, "", this.manifest);
             }
             else
             {
-                string path = Path.Combine(ModCore.ModHelper.DirectoryPath, RelativePath);
-                this.searchDirectories(path, RelativePath, ModCore.Manifest);
+                string path = Path.Combine(this.directory, RelativePath);
+                this.searchDirectories(path, RelativePath, this.manifest);
             }
         }
 
@@ -245,13 +248,13 @@ namespace Omegasis.StardustCore.UIUtilities
 
         private void processFoundTexture(string file, string relativePath)
         {
-            Texture2DExtended textureExtended = new Texture2DExtended(ModCore.Manifest, Path.Combine(relativePath, Path.GetFileName(file)),this.textureManagerId);
+            Texture2DExtended textureExtended = new Texture2DExtended(this.manifest, Path.Combine(relativePath, Path.GetFileName(file)),this.textureManagerId);
 
             //ModCore.log("Found texture: " + textureExtended.Name);
             
-            textureExtended.texture.Name = ModCore.Manifest.UniqueID + "_" + this.textureManagerId + "_" + textureExtended.name;
+            textureExtended.texture.Name = this.manifest.UniqueID + "_" + this.textureManagerId + "_" + textureExtended.Name;
 
-            this.addTexture(textureExtended.name, textureExtended);
+            this.addTexture(textureExtended.Name, textureExtended);
         }
 
         private void processFoundTexture(string file,string relativePath , IManifest Manifest)
@@ -260,16 +263,16 @@ namespace Omegasis.StardustCore.UIUtilities
 
             //ModCore.log("Found texture: " + textureExtended.Name);
 
-            textureExtended.texture.Name = Manifest.UniqueID + "_" + this.textureManagerId + "_" + textureExtended.name;
+            textureExtended.texture.Name = Manifest.UniqueID + "_" + this.textureManagerId + "_" + textureExtended.Name;
 
-            this.addTexture(textureExtended.name, textureExtended);
+            this.addTexture(textureExtended.Name, textureExtended);
         }
 
         private void processFoundTexture(string file, string relativePath, IContentPack ContentPack)
         {
             Texture2DExtended textureExtended = new Texture2DExtended(ContentPack, Path.Combine(relativePath, Path.GetFileName(file)),this.textureManagerId);
 
-            textureExtended.texture.Name = ContentPack.Manifest.UniqueID + "_" + this.textureManagerId + "_" + textureExtended.name;
+            textureExtended.texture.Name = ContentPack.Manifest.UniqueID + "_" + this.textureManagerId + "_" + textureExtended.Name;
             //ModCore.log("Found texture: " + textureExtended.Name);
 
             //this.addTexture(textureExtended.Name, textureExtended);
@@ -292,9 +295,9 @@ namespace Omegasis.StardustCore.UIUtilities
                 if (existingTexture != null)
                 {
                     existingTexture.setTexture(tex);
-                    if (this.extendedTextures.ContainsKey(existingTexture.name) == false)
+                    if (this.extendedTextures.ContainsKey(existingTexture.Name) == false)
                     {
-                        this.addTexture(existingTexture.name, existingTexture);
+                        this.addTexture(existingTexture.Name, existingTexture);
                     }
                 }
 
@@ -344,12 +347,12 @@ namespace Omegasis.StardustCore.UIUtilities
         {
             if (TextureManager.TextureManagers.ContainsKey(ModManifest.UniqueID))
             {
-                TextureManagers[ModManifest.UniqueID].Add(Name, new TextureManager(BasePath,Name));
+                TextureManagers[ModManifest.UniqueID].Add(Name, new TextureManager(BasePath,Name,ModManifest));
             }
             else
             {
                 TextureManager.TextureManagers.Add(ModManifest.UniqueID, new Dictionary<string, TextureManager>());
-                TextureManagers[ModManifest.UniqueID].Add(Name, new TextureManager(BasePath,Name));
+                TextureManagers[ModManifest.UniqueID].Add(Name, new TextureManager(BasePath,Name,ModManifest));
             }
 
         }

@@ -1,0 +1,53 @@
+{
+  "whichTab": "Default",
+  "isUnlocked": false,
+  "recipe": {
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.Farming.Revitalize.Framework.World.Objects.Farming.HayMaker",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 0,
+    "inputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "Wood",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 100
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "CopperBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 2
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "Sap",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 20
+			}
+		},
+	
+	],
+    "outputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.HayMaker",
+			"amount": 1
+			}
+		},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}

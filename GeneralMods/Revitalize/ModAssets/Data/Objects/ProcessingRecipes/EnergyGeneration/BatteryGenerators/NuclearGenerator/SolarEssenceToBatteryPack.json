@@ -1,0 +1,50 @@
+{
+  "Omegasis.Revitalize.Objects.Machines.EnergyGeneration.NuclearGenerator": [
+    {
+      "id": "Omegasis.Revitalize.Machines.Misc.NuclearGenerator.SolarEssenceToBatteryPack",
+      "timeToProcess": {
+        "minutes": 0,
+        "hours": 1,
+        "days": 0,
+        "seasons": 0,
+        "years": 0
+      },
+      "inputs": [
+        {
+          "amount": 8,
+          "registeredObjectId": "(O)768",
+          "stardewValleyItemId": "SolarEssence",
+          "stardewValleyBigCraftableId": "NULL",
+          "artisanGoodItemReference": null
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "amount": 1,
+            "registeredObjectId": "(O)787",
+            "stardewValleyItemId": "BatteryPack",
+            "stardewValleyBigCraftableId": "NULL",
+            "artisanGoodItemReference": null
+          },
+          "stackSizeDeterminer": [
+            {
+              "validRangeForChance": {
+                "min": 0.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ],
+          "chanceToObtain": {
+            "min": 0.0,
+            "max": 100.0
+          }
+        }
+      ]
+    }
+  ]
+}

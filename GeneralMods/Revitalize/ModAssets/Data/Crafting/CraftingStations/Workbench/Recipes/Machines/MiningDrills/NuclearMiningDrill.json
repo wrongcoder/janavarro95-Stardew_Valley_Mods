@@ -1,0 +1,53 @@
+{
+  "whichTab": "Default",
+  "isUnlocked": false,
+  "recipe": {
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.Machines.MiningDrills.NuclearMiningDrill",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 0,
+    "inputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "IridiumBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 5
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "CinderShard",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 10
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.ElectricMiningDrill",
+			"amount": 1
+			}
+		}
+	
+	],
+    "outputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.NuclearMiningDrill",
+			"amount": 1
+			}
+		},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}

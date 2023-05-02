@@ -1,0 +1,49 @@
+{
+  "revitalizeBuildingId": "Omegasis.Revitalize.Buildings.ExtraCellar",
+  "buildingMaterials": [
+		{
+			"stardewValleyItemId": "Hardwood",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 100
+		},
+		{
+			"stardewValleyItemId": "Stone",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 200
+		},
+		{
+			"stardewValleyItemId": "IronBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 10
+		},	
+	],
+  "tileDimensions": {
+    "X": 2,
+    "Y": 2
+  },
+  "humanDoorPosition": {
+    "X": 1,
+    "Y": 1
+  },
+  "animalDoorPosition": {
+    "X": -1,
+    "Y": -1
+  },
+  "mapToWarpTo": "Omegasis.Revitalize.Buildings.ExtraCellar",
+  "upgradeForWhichBuildingType": "none",
+  "buildingTextureDimensions": {
+    "X": 32,
+    "Y": 32
+  },
+  "maxOccupants": 20,
+  "actionBehavior": "null",
+  "namesOfOkBuildingLocationsList": [
+    "Farm"
+  ],
+  "moneyRequired": 10000,
+  "isMagical": false,
+  "daysToConstruct": 2
+}

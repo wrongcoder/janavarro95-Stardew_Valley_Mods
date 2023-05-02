@@ -1,0 +1,7 @@
+{
+	"Omegasis.Revitalize.Framework.World.Objects.Items.Farming.AutoHarvesterGardenPotAttachment":
+	{
+		"displayName":"Auto Harvester Attachment",
+		"description":"An attachment that when used on a Irrigated Garden Pot, will allow an Automatic Farming System to automatically harvest crops from the pot!"
+	},
+}

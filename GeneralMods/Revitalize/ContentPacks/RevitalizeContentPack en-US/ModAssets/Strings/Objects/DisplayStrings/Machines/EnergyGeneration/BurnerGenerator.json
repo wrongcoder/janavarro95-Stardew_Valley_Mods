@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Machines.EnergyGeneration.BurnerGenerator":
+	{
+		"displayName":"Burner Generator",
+		"description":"Burns coal to generate electricity to store into a battery pack. Takes 4 coal per operation.",
+		"category":"Machine"
+	},
+}

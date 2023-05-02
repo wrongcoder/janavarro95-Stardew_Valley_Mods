@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Farming.IndustrialKeg":
+	{
+		"displayName":"Industrial Keg",
+		"description":"An industrial keg that can process goods in half the time as a normal keg.",
+		"category":"Farming"
+	},
+}

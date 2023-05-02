@@ -1,0 +1,42 @@
+{
+  "whichTab": "Default",
+  "isUnlocked": false,
+  "recipe": {
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.Farming.HardwoodPreservesJar",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 0,
+    "inputs": [
+			{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "PreservesJar",
+			"registeredObjectId": "",
+			"amount": 1
+			},
+			"item":{
+			"stardewValleyItemId": "Hardwood",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 20
+			}
+	},
+	],
+    "outputs": [
+			{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Farming.HardwoodPreservesJar",
+			"amount": 1
+			}
+	},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}

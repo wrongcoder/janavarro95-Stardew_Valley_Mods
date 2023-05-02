@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Storage.DimensionalStorageChest":
+	{
+		"displayName":"Dimensional Storage Chest",
+		"description":"A magical chest that can access the contents of a dimensional storage unit from anywhere!",
+		"category":"Storage"
+	},
+}

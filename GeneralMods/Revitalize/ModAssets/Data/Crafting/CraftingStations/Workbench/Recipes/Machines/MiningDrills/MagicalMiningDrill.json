@@ -1,0 +1,69 @@
+{
+  "whichTab": "Default",
+  "isUnlocked": false,
+  "recipe": {
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.Machines.MiningDrills.MagicalMiningDrill",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 0,
+    "inputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "PrismaticShard",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 2
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "Diamond",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 1
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "RadioactiveBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 2
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "FairyDust",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 1
+			}
+		},
+		{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.NuclearMiningDrill",
+			"amount": 1
+			}
+		}
+	
+	],
+    "outputs": [
+		{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.MagicalMiningDrill",
+			"amount": 1
+			}
+		},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}

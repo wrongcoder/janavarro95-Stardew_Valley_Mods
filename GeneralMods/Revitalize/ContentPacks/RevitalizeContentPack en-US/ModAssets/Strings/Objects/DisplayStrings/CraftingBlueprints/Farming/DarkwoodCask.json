@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.DarkwoodCask":
+	{
+		"displayName":"Darkwood Cask",
+		"description":"A recipe for an advanced cask that can process goods anywhere, but receives production bonuses when placed in a cellar.",
+		"category":"StardewValley.Crafting"
+	},
+}

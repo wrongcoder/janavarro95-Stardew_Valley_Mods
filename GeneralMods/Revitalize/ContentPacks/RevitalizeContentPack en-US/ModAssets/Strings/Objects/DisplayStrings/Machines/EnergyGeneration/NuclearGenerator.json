@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Machines.EnergyGeneration.NuclearGenerator":
+	{
+		"displayName":"Nuclear Generator",
+		"description":"A generator that can turn radioactive fuel cells into battery packs.",
+		"category":"Machine"
+	},
+}

@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Machines.EnergyGeneration.AdvancedGenerator":
+	{
+		"displayName":"Advanced Generator",
+		"description":"Burns coal or solar essences to generate electricity to store into a battery pack.",
+		"category":"Machine"
+	},
+}

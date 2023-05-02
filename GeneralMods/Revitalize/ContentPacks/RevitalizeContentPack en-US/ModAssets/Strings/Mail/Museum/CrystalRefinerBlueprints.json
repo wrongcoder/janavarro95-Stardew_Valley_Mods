@@ -1,0 +1,10 @@
+{
+	"mailTitle":"Omegasis.Revitalize.Museum.Machines.CrystalRefiner",
+	"message":"@, ^I found something tucked between some geology books on the shelves in the archives. Hopefully you can get more use out of it here than it did at the museum. - Gunther",
+	"itemReference":{
+		"stardewValleyItemId": "NULL",
+		"stardewValleyBigCraftableId": "NULL",
+		"registeredObjectId": "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.CrystalRefiner",
+		"amount": 1
+	},
+}

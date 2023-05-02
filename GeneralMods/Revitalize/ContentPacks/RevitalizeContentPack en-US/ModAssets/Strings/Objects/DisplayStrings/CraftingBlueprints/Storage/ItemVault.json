@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Storage.ItemVault":
+	{
+		"displayName":"Item Vault",
+		"description":"A blueprint with information on how to craft an item vault which can hold two chests worth of content.",
+		"category":"StardewValley.Crafting"
+	},
+}

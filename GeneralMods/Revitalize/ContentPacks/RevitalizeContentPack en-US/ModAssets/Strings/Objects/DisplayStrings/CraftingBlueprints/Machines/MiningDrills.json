@@ -1,0 +1,22 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.MiningDrills.CoalMiningDrill":
+	{
+		"displayName":"Burner Mining Drill",
+		"description":"A blueprint used on how to craft a burner mining drill at a workbench!"
+	},
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.MiningDrills.ElectricMiningDrill":
+	{
+		"displayName":"Electric Mining Drill",
+		"description":"A blueprint used on how to craft an electric mining drill at a workbench!"
+	},
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.MiningDrills.NuclearMiningDrill":
+	{
+		"displayName":"Nuclear Mining Drill",
+		"description":"A blueprint used on how to craft a nuclear mining drill at a workbench!"
+	},
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Machines.MiningDrills.MagicalMiningDrill":
+	{
+		"displayName":"Magical Mining Drill",
+		"description":"A blueprint used on how to craft a magical mining drill at a workbench!"
+	},
+}

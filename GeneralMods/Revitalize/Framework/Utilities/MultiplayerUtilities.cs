@@ -13,8 +13,10 @@ namespace Omegasis.Revitalize.Framework.Utilities
     /// </summary>
     public static class MultiplayerUtilities
     {
-
-        public static Multiplayer GameMultiplayer;
+        /// <summary>
+        /// The multiplayer instance for the game.
+        /// </summary>
+        private static Multiplayer GameMultiplayer;
 
         /// <summary>
         /// Handles receiving mod messages.
@@ -25,7 +27,10 @@ namespace Omegasis.Revitalize.Framework.Utilities
         {
         }
 
-
+        /// <summary>
+        /// Gets the multiplayer instance for the game so that we can access multiplayer functionality calls such as broadcasting sprites for a given action.
+        /// </summary>
+        /// <returns></returns>
         public static Multiplayer GetMultiplayer()
         {
             if (GameMultiplayer == null)

@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Machines.EnergyGeneration.SuperiorSolarPanel":
+	{
+		"displayName":"Superior Solar Panel",
+		"description":"An upgraded solar panel that can generate a battery pack every 3 days.",
+		"category":"Machine"
+	},
+}

@@ -1,0 +1,7 @@
+{
+	"Omegasis.Revitalize.Objects.Machines.NuclearFurnace":
+	{
+		"displayName":"Nuclear Furnace",
+		"description":"An advanced furnace that smelts objects in the quarter of the time compared to a normal furnace. Thanks to magical reactor technology, it requires no fuel to operate."
+	},
+}

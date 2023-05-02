@@ -1,0 +1,52 @@
+{
+  "whichTab": "Default",
+  "isUnlocked": false,
+  "recipe": {
+	"craftingRecipeId": "Omegasis.Revitalize.Workbench.Machines.EnergyGeneration.BurnerGenerator",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": 0,
+    "inputs": [
+			{
+			"item":{
+			"stardewValleyItemId": "CopperBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 5
+			}
+	},
+	{
+			"item":{
+			"stardewValleyItemId": "IronBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 3
+			}
+	},
+	{
+			"item":{
+			"stardewValleyItemId": "GoldBar",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "",
+			"amount": 1
+			}
+	},
+	],
+    "outputs": [
+			{
+			"item":{
+			"stardewValleyItemId": "NULL",
+			"stardewValleyBigCraftableId": "NULL",
+			"registeredObjectId": "Omegasis.Revitalize.Objects.Machines.EnergyGeneration.BurnerGenerator",
+			"amount": 1
+			}
+	},
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Storage.BigItemVault":
+	{
+		"displayName":"Big Item Vault",
+		"description":"A bigger item vault that can hold three chests worth of contents.",
+		"category":"Storage"
+	},
+}

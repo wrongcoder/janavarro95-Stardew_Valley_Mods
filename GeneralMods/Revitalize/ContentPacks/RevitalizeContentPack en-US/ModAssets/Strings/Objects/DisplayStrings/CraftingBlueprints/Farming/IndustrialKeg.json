@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.IndustrialKeg":
+	{
+		"displayName":"Industrial Keg",
+		"description":"A blueprint for an industrial keg that can process goods in half the time as a normal keg.",
+		"category":"StardewValley.Crafting"
+	},
+}

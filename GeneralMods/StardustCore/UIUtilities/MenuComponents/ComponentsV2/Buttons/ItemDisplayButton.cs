@@ -6,23 +6,15 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
 {
     /// <summary>
     /// A simple menu component for displaying SDV Items as well as being able to click them.
     /// </summary>
-    public class ItemDisplayButton
+    public class ItemDisplayButton:ClickableComponent
     {
-
-        /// <summary>
-        /// The position for the button.
-        /// </summary>
-        private Vector2 position;
-        /// <summary>
-        /// The item owned by the button.
-        /// </summary>
-        public StardewValley.Item item;
 
         private Rectangle defaultBounds;
 
@@ -33,13 +25,12 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         {
             get
             {
-                return new Rectangle((int)this.Position.X, (int)this.Position.Y, (int)(this.defaultBounds.Width * this.scale), (int)(this.defaultBounds.Height * this.scale));
+                return new Rectangle((int)this.defaultBounds.X, (int)this.defaultBounds.Y, (int)(this.defaultBounds.Width * this.scale), (int)(this.defaultBounds.Height * this.scale));
             }
         }
-        /// <summary>
-        /// The scale of the button.
-        /// </summary>
-        public float scale;
+
+        public float baseScale;
+
         /// <summary>
         /// Should the stack number be drawn?
         /// </summary>
@@ -60,17 +51,16 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         {
             get
             {
-                return this.position;
+                return new Vector2(this.defaultBounds.X,this.defaultBounds.Y);
             }
             set
             {
-                this.position = value;
-                this.defaultBounds.X =(int)this.position.X;
-                this.defaultBounds.Y =(int)this.position.Y;
+                this.defaultBounds.X =(int)value.X;
+                this.defaultBounds.Y =(int)value.Y;
             }
         }
 
-        public ItemDisplayButton()
+        public ItemDisplayButton():base(new Rectangle(0,0,0,0),"","")
         {
 
         }
@@ -84,8 +74,9 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         /// <param name="Scale"></param>
         /// <param name="DrawStackNumber"></param>
         /// <param name="DrawColor"></param>
-        public ItemDisplayButton(Item I, Omegasis.StardustCore.Animations.AnimatedSprite Background,Vector2 Position, Rectangle BoundingBox, float Scale, bool DrawStackNumber, Color DrawColor)
+        public ItemDisplayButton(Item I, Omegasis.StardustCore.Animations.AnimatedSprite Background,Vector2 Position, Rectangle BoundingBox, float Scale, bool DrawStackNumber, Color DrawColor) : base(BoundingBox,I)
         {
+            this.name = I.DisplayName;
             this.item = I;
             this.defaultBounds = BoundingBox;
             this.Position = Position;
@@ -93,6 +84,19 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
             this.drawStackNumber = DrawStackNumber;
             this.drawColor = DrawColor;
             this.background = Background;
+            this.baseScale = Scale;
+        }
+
+        public ItemDisplayButton(string Name,Item I, Omegasis.StardustCore.Animations.AnimatedSprite Background, Rectangle BoundingBox, float Scale, bool DrawStackNumber, Color DrawColor) : base(BoundingBox, I)
+        {
+            this.name = Name;
+            this.item = I;
+            this.defaultBounds = BoundingBox;
+            this.scale = Scale;
+            this.drawStackNumber = DrawStackNumber;
+            this.drawColor = DrawColor;
+            this.background = Background;
+            this.baseScale = Scale;
         }
 
         public void update(GameTime time)
@@ -124,7 +128,7 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
             if(this.background!=null)this.background.draw(b, this.scale, Depth,Alpha);
             if (this.item != null)
             {
-                this.item.drawInMenu(b, this.position, 1f, Alpha, Depth, StackDrawType.Draw, this.drawColor, DrawShadow);
+                this.item.drawInMenu(b, this.Position, 1f, Alpha, Depth, StackDrawType.Draw, this.drawColor, DrawShadow);
             }
         }
 
@@ -148,7 +152,7 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         public void draw(SpriteBatch b,float ItemScale ,float Depth, float Alpha, bool DrawShadow)
         {
             this.background.draw(b, this.scale, Depth, Alpha);
-            if (this.item != null) this.item.drawInMenu(b, this.position, ItemScale, Alpha, Depth, StackDrawType.Draw, this.drawColor, DrawShadow);
+            if (this.item != null) this.item.drawInMenu(b, this.Position, ItemScale, Alpha, Depth, StackDrawType.Draw, this.drawColor, DrawShadow);
         }
 
         /// <summary>
@@ -161,7 +165,7 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         /// <param name="DrawShadow">Should the shadow be drawn for the item?</param>
         public void drawJustItem(SpriteBatch b,float Scale,float Depth, float Alpha, bool DrawShadow)
         {
-            if (this.item != null) this.item.drawInMenu(b, this.position, Scale, Alpha, Depth, StackDrawType.Draw, this.drawColor, DrawShadow);
+            if (this.item != null) this.item.drawInMenu(b, this.Position, Scale, Alpha, Depth, StackDrawType.Draw, this.drawColor, DrawShadow);
         }
 
         public bool receiveLeftClick(int x, int y)
@@ -175,6 +179,11 @@ namespace Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV2.Buttons
         }
 
         public bool ContainsPoint(int x, int y)
+        {
+            return this.boundingBox.Contains(new Point(x, y));
+        }
+
+        public override bool containsPoint(int x, int y)
         {
             return this.boundingBox.Contains(new Point(x, y));
         }

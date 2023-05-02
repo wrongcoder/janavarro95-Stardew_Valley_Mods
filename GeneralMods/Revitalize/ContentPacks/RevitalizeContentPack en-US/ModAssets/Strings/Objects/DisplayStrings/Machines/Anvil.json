@@ -1,0 +1,7 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.CraftingStations.Anvil":
+	{
+		"displayName":"Anvil",
+		"description":"An anvil that can be used for cracking geodes, artifact troves, and golden coconuts."
+	},
+}

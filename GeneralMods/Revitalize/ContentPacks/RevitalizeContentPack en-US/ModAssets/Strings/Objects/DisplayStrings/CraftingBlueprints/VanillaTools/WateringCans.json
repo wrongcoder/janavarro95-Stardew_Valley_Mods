@@ -1,0 +1,27 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.WateringCan":
+	{
+		"displayName":"Blueprint: Watering Can",
+		"description":"A blueprint used on how to craft a watering can!"
+	},
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.CopperWateringCan":
+	{
+		"displayName":"Blueprint: Copper Watering Can",
+		"description":"A blueprint used on how to craft a copper watering can!"
+	},
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.SteelWateringCan":
+	{
+		"displayName":"Blueprint: Steel Watering Can",
+		"description":"A blueprint used on how to craft a steel watering can!"
+	},
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.GoldWateringCan":
+	{
+		"displayName":"Blueprint: Gold Watering Can",
+		"description":"A blueprint used on how to craft a gold watering can!"
+	},
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.Tools.StardewValley.Tools.IridiumWateringCan":
+	{
+		"displayName":"Blueprint: Iridium Watering Can",
+		"description":"A blueprint used on how to craft an iridium watering can!"
+	},
+}

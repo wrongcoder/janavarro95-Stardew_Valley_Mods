@@ -1,0 +1,7 @@
+{
+	"Omegasis.Revitalize.Objects.Machines.MagicalMiningDrill":
+	{
+		"displayName":"Magical Mining Drill",
+		"description":"Digs up different resources depending on where it is placed. Works best when placed in a place with many ores such as the mines. Does not require fuel to run."
+	},
+}

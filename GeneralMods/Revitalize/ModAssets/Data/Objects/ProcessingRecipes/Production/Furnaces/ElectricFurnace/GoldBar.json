@@ -1,0 +1,50 @@
+{
+  "Omegasis.Revitalize.Crafting.CraftingRecipeBooks.RevitalizeMachines.ElectricFurnace": [
+    {
+      "id": "StardewValley.Object.GoldBar",
+      "timeToProcess": {
+        "minutes": 0,
+        "hours": 5,
+        "days": 0,
+        "seasons": 0,
+        "years": 0
+      },
+      "inputs": [
+        {
+          "amount": 5,
+          "registeredObjectId": "(O)384",
+          "stardewValleyItemId": "GoldOre",
+          "stardewValleyBigCraftableId": "NULL",
+          "artisanGoodItemReference": null
+        }
+      ],
+      "outputs": [
+        {
+          "item": {
+            "amount": 1,
+            "registeredObjectId": "(O)336",
+            "stardewValleyItemId": "GoldBar",
+            "stardewValleyBigCraftableId": "NULL",
+            "artisanGoodItemReference": null
+          },
+          "stackSizeDeterminer": [
+            {
+              "validRangeForChance": {
+                "min": 0.0,
+                "max": 100.0
+              },
+              "outcomeValue": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ],
+          "chanceToObtain": {
+            "min": 0.0,
+            "max": 100.0
+          }
+        }
+      ]
+    }
+  ]
+}

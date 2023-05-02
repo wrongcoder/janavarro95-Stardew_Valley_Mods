@@ -1,0 +1,22 @@
+{
+  "whichTab": "{0}",
+  "isUnlocked": false,
+  "recipe": {
+	"craftingRecipeId": "{1}",
+    "outputName": "",
+    "outputDescription": "",
+    "MinutesToCraft": {2},
+    "inputs": [
+		{3}
+	],
+    "outputs": [
+		{4}
+	],
+    "statCost": {
+      "health": 0,
+      "stamina": 0,
+      "magic": 0,
+      "gold": 0
+    }
+  }
+}
