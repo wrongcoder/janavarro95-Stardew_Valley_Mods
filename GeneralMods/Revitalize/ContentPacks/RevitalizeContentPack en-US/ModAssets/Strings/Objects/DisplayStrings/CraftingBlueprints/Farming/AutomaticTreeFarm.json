@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.AutomaticTreeFarm":
+	{
+		"displayName":"Automatic Tree Farm",
+		"description":"A blueprint to build a device that grows trees automatically over the course of a few days.",
+		"category":"StardewValley.Crafting"
+	},
+}

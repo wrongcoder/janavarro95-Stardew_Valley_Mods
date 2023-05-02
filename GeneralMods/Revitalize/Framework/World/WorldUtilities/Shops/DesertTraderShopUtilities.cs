@@ -29,6 +29,12 @@ namespace Omegasis.Revitalize.Framework.World.WorldUtilities.Shops
             ShopUtilities.AddItemToShopIfCraftingRecipeNotKnown(menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.HardwoodKeg, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.HardwoodKeg), 40, Enums.SDVObject.Beer);
             ShopUtilities.AddItemToShopIfCraftingRecipeNotKnown(menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.HardwoodKeg, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.HardwoodKeg), 30, Enums.SDVObject.PaleAle);
             ShopUtilities.AddItemToShopIfCraftingRecipeNotKnown(menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.HardwoodKeg, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.HardwoodKeg), 75, Enums.SDVObject.Coffee);
+
+            ShopUtilities.AddItemToShopIfCraftingRecipeNotKnown(menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutomaticTreeFarm, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.AutomaticTreeFarm), 25, Enums.SDVObject.MapleSeed);
+            ShopUtilities.AddItemToShopIfCraftingRecipeNotKnown(menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutomaticTreeFarm, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.AutomaticTreeFarm), 25, Enums.SDVObject.Acorn);
+            ShopUtilities.AddItemToShopIfCraftingRecipeNotKnown(menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutomaticTreeFarm, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.AutomaticTreeFarm), 25, Enums.SDVObject.PineCone);
+            ShopUtilities.AddItemToShopIfCraftingRecipeNotKnown(menu, CraftingRecipeBooks.WorkbenchCraftingRecipies, WorkbenchRecipeIds.AutomaticTreeFarm, RevitalizeModCore.ModContentManager.objectManager.getItem(WorkbenchBlueprintIds.AutomaticTreeFarm), 5, Enums.SDVObject.MahoganySeed);
+
         }
     }
 }

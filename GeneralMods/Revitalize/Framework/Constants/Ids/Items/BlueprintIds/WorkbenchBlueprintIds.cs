@@ -93,5 +93,6 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Items.BlueprintIds
 		public const string IndustrialKeg = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.IndustrialKeg";
 		public const string HardwoodKeg = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Farming.HardwoodKeg";
 		public const string Windmill = "Omegasis.Revitalize.Objects.Crafting.Blueprint.EnergyGeneration.Windmill";
+		public const string AutomaticTreeFarm = "Omegasis.Revitalize.Objects.Crafting.Blueprint.Workbench.AutomaticTreeFarm";
     }
 }

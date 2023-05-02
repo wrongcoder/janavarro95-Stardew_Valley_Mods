@@ -26,5 +26,6 @@ namespace Omegasis.Revitalize.Framework.Constants.Ids.Objects
 		public const string AncientPreservesJar = "Omegasis.Revitalize.Objects.Farming.AncientPreservesJar";
 		public const string IndustrialKeg = "Omegasis.Revitalize.Objects.Farming.IndustrialKeg";
 		public const string HardwoodKeg = "Omegasis.Revitalize.Objects.Farming.HardwoodKeg";
+		public const string AutomaticTreeFarm = "Omegasis.Revitalize.Objects.Farming.AutomaticTreeFarm";
     }
 }

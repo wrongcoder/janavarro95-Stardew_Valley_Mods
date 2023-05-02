@@ -1,0 +1,8 @@
+{
+	"Omegasis.Revitalize.Objects.Farming.AutomaticTreeFarm":
+	{
+		"displayName":"Automatic Tree Farm",
+		"description":"A small arboretum that grows trees from seeds every few days and harvests the products for you!",
+		"category":"Farming"
+	},
+}

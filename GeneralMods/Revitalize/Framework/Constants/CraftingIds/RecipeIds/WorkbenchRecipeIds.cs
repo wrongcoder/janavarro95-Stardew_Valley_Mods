@@ -69,5 +69,6 @@ namespace Omegasis.Revitalize.Framework.Constants.CraftingIds.RecipeIds
 		public const string IndustrialKeg = "Omegasis.Revitalize.Workbench.Farming.IndustrialKeg";
 		public const string HardwoodKeg = "Omegasis.Revitalize.Workbench.Farming.HardwoodKeg";
 		public const string Windmill = "Omegasis.Revitalize.Workbench.EnergyGeneration.Windmill";
+		public const string AutomaticTreeFarm = "Omegasis.Revitalize.Workbench.Farming.AutomaticTreeFarm";
     }
 }

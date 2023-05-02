@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Netcode;
 using Newtonsoft.Json;
 using Omegasis.StardustCore.Networking;
+using StardewValley;
 
 namespace Omegasis.Revitalize.Framework.Utilities.Ranges
 {

@@ -59,9 +59,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines.ResourceGeneratio
         /// Attempts to run the mining drill again after the player get's the item fronm it and the queue is freed.
         /// </summary>
         /// <returns></returns>
-        public override bool tryToAddHeldItemToFarmersInventory()
+        public override bool tryToAddHeldItemsToFarmersInventory()
         {
-            bool added=base.tryToAddHeldItemToFarmersInventory();
+            bool added=base.tryToAddHeldItemsToFarmersInventory();
             if (added && this.heldObject.Value==null)
             {
                 this.tryToRunMiningDrill();

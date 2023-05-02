@@ -43,7 +43,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             //Prevent overriding and destroying the previous operation.
             if (who != null && this.finishedProduction())
             {
-                bool added = this.tryToAddHeldItemToFarmersInventory();
+                bool added = this.tryToAddHeldItemsToFarmersInventory();
                 //Either player's inventory is full or not all outputs were gathered.
                 if (!added || this.heldObject.Value!=null)
                 {
@@ -61,27 +61,22 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
             return result.successful;
         }
 
-        public virtual bool tryToAddHeldItemToFarmersInventory()
+        public virtual bool tryToAddHeldItemsToFarmersInventory()
         {
-            bool added = Game1.player.addItemToInventoryBool(this.heldObject.Value);
-            if (!added)
-            {
-                HudUtilities.ShowInventoryFullErrorMessage();
-                return false;
-            }
-            else
+            List<Item> addedItems= this.getMachineOutputs(true, false, true);
+            if(addedItems.Count>0)
             {
                 SoundUtilities.PlaySound(Enums.StardewSound.coin);
-                this.heldObject.Value = (StardewValley.Object)this.getItemFromHeldItemQueue();
+                return true;
             }
-            return added;
+            return false;
         }
 
         public override bool checkForAction(Farmer who, bool justCheckingForActivity)
         {
             if (who != null && this.finishedProduction())
             {
-                bool added = this.tryToAddHeldItemToFarmersInventory();
+                bool added = this.tryToAddHeldItemsToFarmersInventory();
                 if (!added || this.heldObject.Value!=null)
                 {
                     return false;

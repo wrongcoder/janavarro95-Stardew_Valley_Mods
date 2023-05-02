@@ -140,18 +140,25 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         /// <returns>The items produced by this machine.</returns>
         public virtual List<Item> getMachineOutputs(bool AddToPlayersInventory, bool DropAsItemDebris, bool ShowInventoryFullError)
         {
-            List<Item> items = this.getMachineOutputItems(true);
+            List<Item> outputItems = this.getMachineOutputItems(false);
             List<Item> itemsToRequeue = new List<Item>();
+            List<Item> itemsAdded=new List<Item>();
             bool anyAdded = false;
             bool shouldShowInventoryFullError = false;
 
-            foreach (Item item in items)
+            foreach (Item item in outputItems)
             {
                 if (item == null) continue;
                 if (AddToPlayersInventory)
                 {
 
                     bool added = Game1.player.addItemToInventoryBool(item);
+                    if (added)
+                    {
+                        itemsAdded.Add(item);
+                        continue;
+                    }
+
                     if (added == false && DropAsItemDebris)
                     {
                         WorldUtility.CreateItemDebrisAtTileLocation(this.getCurrentLocation(), item, this.TileLocation);
@@ -194,12 +201,32 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
                 HudUtilities.ShowInventoryFullErrorMessage();
             }
 
-            foreach(Item item in itemsToRequeue)
+            if (itemsAdded.Count > 0)
             {
-                this.addItemToHeldItemQueue(item);
+                this.heldItems.Clear();
+                this.heldObject.Value = null;
+                foreach (Item item in itemsToRequeue)
+                {
+                    this.addItemToHeldItemQueue(item);
+                }
+
+                //Update animations according to if there are still held objects that need to be processed or not.
+                if (!this.hasItemsInHeldItemQueue())
+                {
+                    this.heldObject.Value = null;
+                    this.updateAnimation();
+                }
+                else
+                {
+                    this.heldObject.Value =(StardewValley.Object) this.getItemFromHeldItemQueue();
+                }
             }
 
-            return items;
+
+
+
+
+            return itemsAdded;
         }
 
         /// <summary>
@@ -222,7 +249,13 @@ namespace Omegasis.Revitalize.Framework.World.Objects.Machines
         public virtual List<Item> getMachineOutputItems(bool ClearValue = false)
         {
             if (this.heldObject.Value == null) return new List<Item>();
-            return new List<Item>() { this.getMachineOutputItem(ClearValue) };
+            List<Item> items= new List<Item>() { this.getMachineOutputItem(ClearValue) };
+            items.AddRange(this.heldItems);
+            if (ClearValue)
+            {
+                this.heldItems.Clear();
+            }
+            return items;
         }
 
         public override void performRemoveAction(Vector2 tileLocation, GameLocation environment)

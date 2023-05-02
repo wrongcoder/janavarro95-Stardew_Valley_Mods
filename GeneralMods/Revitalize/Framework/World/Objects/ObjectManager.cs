@@ -158,7 +158,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.addItem("StardewValley.Tools.IridiumHoe", new StardewValley.Tools.Hoe() { UpgradeLevel = Tool.iridium });
 
             //Start migrating conent to new 1.6 format.
-            foreach(SDVObject obj in Enum.GetValues<Enums.SDVObject>())
+            foreach (SDVObject obj in Enum.GetValues<Enums.SDVObject>())
             {
                 this.addItem(this.createVanillaObjectId(obj), new StardewValley.Object((int)obj, 1));
             }
@@ -219,7 +219,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         {
 
             //Make sure that all blueprints registered here have a id reference in Blueprints.cs for easier access via code.
-            foreach (KeyValuePair<string,JsonCraftingBlueprint> jsonBlueprintPair in JsonUtilities.LoadJsonFilesFromDirectoriesWithPaths<JsonCraftingBlueprint>(ObjectsDataPaths.CraftingBlueprintsPath))
+            foreach (KeyValuePair<string, JsonCraftingBlueprint> jsonBlueprintPair in JsonUtilities.LoadJsonFilesFromDirectoriesWithPaths<JsonCraftingBlueprint>(ObjectsDataPaths.CraftingBlueprintsPath))
             {
                 /*
                 foreach (CraftingBookIdToRecipeId recipeId in jsonBlueprintPair.Value.recipesToUnlockV2)
@@ -231,7 +231,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 {
                     this.addItem(jsonBlueprintPair.Value.id, jsonBlueprintPair.Value.toBlueprint());
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     throw new InvalidJsonBlueprintException(string.Format("There was an error loading the json crafting blueprint from disk with path {0}. Please see the following error message for more details. \n {1}", jsonBlueprintPair.Key, e.ToString()));
                 }
@@ -347,7 +347,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 {
                     {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(16,0,16,32)) }
-                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null),Color.GreenYellow));
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), Color.GreenYellow));
 
 
             this.addItem(MachineIds.CrystalRefiner, new CrystalRefiner(new BasicItemInformation("", MachineIds.CrystalRefiner, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Machines.createAnimationManager("CrystalRefiner", new Dictionary<string, Animation>()
@@ -360,7 +360,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 {
                     {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
-                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null),.75,1));
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), .75, 1));
 
             this.addItem(FarmingObjectIds.MidnightCask, new AdvancedCask(new BasicItemInformation("", FarmingObjectIds.MidnightCask, "", CategoryNames.Machine, CategoryColors.Machines, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("MidnightCask", new Dictionary<string, Animation>()
                 {
@@ -379,7 +379,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                 {
                     {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
-                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null),.75));
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), .75));
 
             this.addItem(new AdvancedPreservesJar(new BasicItemInformation("", FarmingObjectIds.AncientPreservesJar, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("AncientPreservesJar", new Dictionary<string, Animation>()
                 {
@@ -399,6 +399,34 @@ namespace Omegasis.Revitalize.Framework.World.Objects
                     {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) },
                     {Machine.WORKING_ANIMATION_KEY,  new Animation(new Rectangle(0,0,16,32)) }
                 }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), .5));
+
+
+            int frameSize = 16;
+
+            this.addItem(new AutomaticTreeFarm(new BasicItemInformation("", FarmingObjectIds.AutomaticTreeFarm, "", CategoryNames.Farming, CategoryColors.Farming, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Farming.createAnimationManager("AutomaticTreeFarm", new Dictionary<string, Animation>()
+                {
+                    {Machine.DEFAULT_ANINMATION_KEY,  new Animation(new Rectangle(0,frameSize*2,frameSize,frameSize*2)) },
+                    {AutomaticTreeFarm.OAK_0_ANIMATION_KEY,  new Animation(0,frameSize*4,16,32) },
+                    {AutomaticTreeFarm.OAK_1_ANIMATION_KEY,  new Animation(frameSize,frameSize*4,16,32) },
+                    {AutomaticTreeFarm.OAK_2_ANIMATION_KEY,  new Animation(frameSize*2,frameSize*4,16,32) },
+                    {AutomaticTreeFarm.OAK_3_ANIMATION_KEY,  new Animation(frameSize*3,frameSize*4,16,32) },
+
+                    {AutomaticTreeFarm.MAPLE_0_ANIMATION_KEY,  new Animation(0,frameSize*6,16,32) },
+                    {AutomaticTreeFarm.MAPLE_1_ANIMATION_KEY,  new Animation(frameSize,frameSize*6,16,32) },
+                    {AutomaticTreeFarm.MAPLE_2_ANIMATION_KEY,  new Animation(frameSize*2,frameSize*6,16,32) },
+                    {AutomaticTreeFarm.MAPLE_3_ANIMATION_KEY,  new Animation(frameSize*3,frameSize*6,16,32) },
+
+                    {AutomaticTreeFarm.PINE_0_ANIMATION_KEY,  new Animation(0,frameSize*8,16,32) },
+                    {AutomaticTreeFarm.PINE_1_ANIMATION_KEY,  new Animation(frameSize,frameSize*8,16,32) },
+                    {AutomaticTreeFarm.PINE_2_ANIMATION_KEY,  new Animation(frameSize*2,frameSize*8,16,32) },
+                    {AutomaticTreeFarm.PINE_3_ANIMATION_KEY,  new Animation(frameSize*3,frameSize*8,16,32) },
+
+                    {AutomaticTreeFarm.MAHOGANY_0_ANIMATION_KEY,  new Animation(0,frameSize*8,16,32) },
+                    {AutomaticTreeFarm.MAHOGANY_1_ANIMATION_KEY,  new Animation(frameSize,frameSize*8,16,32) },
+                    {AutomaticTreeFarm.MAHOGANY_2_ANIMATION_KEY,  new Animation(frameSize*2,frameSize*8,16,32) },
+                    {AutomaticTreeFarm.MAHOGANY_3_ANIMATION_KEY,  new Animation(frameSize*3,frameSize*8,16,32) },
+
+                }, Machine.DEFAULT_ANINMATION_KEY, Machine.DEFAULT_ANINMATION_KEY), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null)));
 
 
         }
@@ -517,7 +545,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
             this.addItem(new ItemVault(new BasicItemInformation("", StorageIds.ItemVault, "", CategoryNames.Storage, CategoryColors.Misc, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Storage.createAnimationManager("ItemVault", new Dictionary<string, Animation>()
                 {
                     {"Default",  new Animation(new Rectangle(0,0,16,32)) },
-                }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null),chestCapacity*2));
+                }, "Default", "Default"), Color.White, false, new Vector2(1, 1), new Vector2(0, -1), null, null), chestCapacity * 2));
 
 
             this.addItem(new ItemVault(new BasicItemInformation("", StorageIds.BigItemVault, "", CategoryNames.Storage, CategoryColors.Misc, -300, -300, 0, false, 0, true, true, TextureManagers.Objects_Storage.createAnimationManager("BigItemVault", new Dictionary<string, Animation>()
@@ -603,9 +631,9 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <param name="Key"></param>
         /// <param name="Stack"></param>
         /// <returns></returns>
-        public virtual Item getItem(string Key, int Stack = 1, int Quality=0)
+        public virtual Item getItem(string Key, int Stack = 1, int Quality = 0)
         {
-            return this.getItem<Item>(Key, Stack,Quality);
+            return this.getItem<Item>(Key, Stack, Quality);
         }
 
         /// <summary>
@@ -615,16 +643,16 @@ namespace Omegasis.Revitalize.Framework.World.Objects
         /// <param name="Key"></param>
         /// <param name="Stack"></param>
         /// <returns></returns>
-        public virtual T getItem<T>(string Key, int Stack = 1, int Quality=0) where T : Item
+        public virtual T getItem<T>(string Key, int Stack = 1, int Quality = 0) where T : Item
         {
 
             if (this.itemsById.ContainsKey(Key))
             {
                 Item I = this.itemsById[Key].getOne();
                 I.Stack = Stack;
-                if(I is StardewValley.Object)
+                if (I is StardewValley.Object)
                 {
-                    (I as StardewValley.Object).Quality= Quality;
+                    (I as StardewValley.Object).Quality = Quality;
                 }
                 return (T)I;
             }
@@ -702,7 +730,7 @@ namespace Omegasis.Revitalize.Framework.World.Objects
 
             int position = ObjectId.IndexOf(")");
             if (position == -1) return -1;
-            string converted = ObjectId.Remove(0, ObjectId.IndexOf(")")+1);
+            string converted = ObjectId.Remove(0, ObjectId.IndexOf(")") + 1);
             return Convert.ToInt32(converted);
         }
 

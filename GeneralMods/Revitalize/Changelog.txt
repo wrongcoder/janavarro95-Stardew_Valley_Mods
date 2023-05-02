@@ -4,6 +4,10 @@ Key:
 - Removed Content/Feature.
 ! Broken/Alert
 
+~~~~~~~~~~~~0.0.1 Revitalize 5-1-2023 xx.xx P.M~~~~~~~~~~~~~~
++Finished Automatic Tree Farms.
+~Changed machines to be able to give their entire held object queue at once instead of just one item at a time.
+
 ~~~~~~~~~~~~0.0.1 Revitalize 4-19-2023 xx.xx P.M~~~~~~~~~~~~~~
 +Started work on Automatic Tree Farms.
 
