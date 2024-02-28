@@ -7,49 +7,45 @@ using Microsoft.Xna.Framework;
 using Omegasis.HappyBirthday.Framework.Menus;
 using Omegasis.StardustCore.Events;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace Omegasis.HappyBirthday.Framework.Events
 {
     public class BirthdayEventCommands
     {
-
-        public static void showTranslatedMessage(EventManager EventManager, string EventData)
-        {
-            string[] splits = EventData.Split(' ');
-            showTranslatedMessage(Game1.CurrentEvent, splits);
-        }
-
-        public static void showTranslatedMessage(Event Event, GameLocation gameLocation, GameTime Time, string[] EventData)
-        {
-            showTranslatedMessage(Event, EventData);
-        }
-
-        public static void showTranslatedMessage(Event Event, string[] EventData)
+        public static void showTranslatedMessage(Event Event, string[] EventData, StardewValley.EventContext eventContext=null)
         {
             string[] splits = EventData;
+
+            StringBuilder stringBuilder= new StringBuilder();
+            foreach(string s in splits)
+            {
+                stringBuilder.AppendLine(s);
+            }
+
+           // HappyBirthdayModCore.Instance.Monitor.Log("Data: " + stringBuilder.ToString());
 
             string translationKey = splits[1];
             List<string> eventCommands = Game1.CurrentEvent.eventCommands.ToList();
             EventHelper helper = new EventHelper();
-            helper.showMessage(BirthdayEventUtilities.GetEventString(translationKey));
-            eventCommands.Insert(Game1.CurrentEvent.CurrentCommand + 1, helper.EventData);
-            Event.eventCommands = eventCommands.ToArray();
-            Event.CurrentCommand++;
+
+           // HappyBirthdayModCore.Instance.Monitor.Log("Translation Key: " + translationKey);
+
+            string translatedString = BirthdayEventUtilities.GetEventString(translationKey);
+            // HappyBirthdayModCore.Instance.Monitor.Log("Event Message: " + translatedString);
+
+            //helper.showMessage(translatedString);
+            //eventCommands.Insert(Game1.CurrentEvent.CurrentCommand + 1, "message "+translatedString);
+
+            if (Game1.activeClickableMenu == null)
+            {
+                Game1.drawObjectDialogue(translatedString);
+            }
+            //Event.eventCommands = eventCommands.ToArray();
+            //Event.CurrentCommand++;
         }
 
-
-        public static void speakWithBirthdayIncluded(EventManager EventManager, string EventData)
-        {
-            string[] splits = EventData.Split(' ');
-            speakWithBirthdayIncluded(Game1.CurrentEvent, splits);
-        }
-
-        public static void speakWithBirthdayIncluded(Event Event, GameLocation gameLocation, GameTime Time, string[] EventData)
-        {
-            speakWithBirthdayIncluded(Event, EventData);
-        }
-
-        public static void speakWithBirthdayIncluded(Event Event, string[] EventData)
+        public static void speakWithBirthdayIncluded(Event Event, string[] EventData, StardewValley.EventContext eventContext = null)
         {
             string speakerName = EventData[1];
             //final message should be changed to string.format(GetEventString(),BirthdaySeason,BirthdayDay);
@@ -65,18 +61,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         }
 
 
-        public static void speakWithTranslatedMessage(EventManager EventManager, string EventData)
-        {
-            string[] splits = EventData.Split(' ');
-            speakWithTranslatedMessage(Game1.CurrentEvent, splits);
-        }
-
-        public static void speakWithTranslatedMessage(Event Event, GameLocation gameLocation, GameTime Time, string[] EventData)
-        {
-            speakWithTranslatedMessage(Event, EventData);
-        }
-
-        public static void speakWithTranslatedMessage(Event Event, string[] EventData)
+        public static void speakWithTranslatedMessage(Event Event, string[] EventData, StardewValley.EventContext eventContext = null)
         {
             string speakerName = EventData[1];
             string finalMessage = BirthdayEventUtilities.GetEventString(EventData[2]);
@@ -94,7 +79,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// </summary>
         /// <param name="Event"></param>
         /// <param name="EventData"></param>
-        public static void speakWithTranslatedMessageFromFile(Event Event, string[] EventData)
+        public static void speakWithTranslatedMessageFromFile(Event Event, string[] EventData, StardewValley.EventContext eventContext = null)
         {
             string fileName = EventData[1];
             string speakerName = EventData[2];
@@ -110,20 +95,14 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         }
 
-        public static void setShouldShowChooseBirthdayMenu(EventManager EventManager, string EventData)
-        {
-            BirthdayEventUtilities.ShouldAskPlayerForBirthday = true;
-            OpenBirthdaySelectionMenu();
-        }
-
-        public static void setShouldShowChooseBirthdayMenu(Event Event, GameLocation gameLocation, GameTime Time, string[] EventData)
+        public static void setShouldShowChooseBirthdayMenu(Event gameEvent = null, string[] EventData = null, EventContext eventContext = null)
         {
             BirthdayEventUtilities.ShouldAskPlayerForBirthday = true;
 
             OpenBirthdaySelectionMenu();
         }
 
-        public static void OpenBirthdaySelectionMenu()
+        public static void OpenBirthdaySelectionMenu(Event gameEvent = null, string[] EventData = null, EventContext eventContext = null)
         {
 
             if (!HappyBirthdayModCore.Instance.birthdayManager.hasChosenBirthday() && Game1.activeClickableMenu == null && BirthdayEventUtilities.ShouldAskPlayerForBirthday)
@@ -151,64 +130,22 @@ namespace Omegasis.HappyBirthday.Framework.Events
         }
 
 
-
-        public static void setShouldShowChooseFavoriteGiftMenu(EventManager EventManager, string EventData)
+        public static void setShouldShowChooseFavoriteGiftMenu(Event gameEvent = null, string[] EventData = null, EventContext eventContext = null)
         {
             BirthdayEventUtilities.ShouldAskPlayerForFavoriteGift = true;
             OpenGiftSelectionMenu();
-        }
-
-        public static void setShouldShowChooseFavoriteGiftMenu(Event Event, GameLocation gameLocation, GameTime Time, string[] EventData)
-        {
-            BirthdayEventUtilities.ShouldAskPlayerForFavoriteGift = true;
-            OpenGiftSelectionMenu();
-        }
-
-
-        public static void speakIfTodayIsPlayersBirthday(EventManager EventManager, string EventData)
-        {
-
-            speakIfTodayIsPlayersBirthday(Game1.CurrentEvent);
-        }
-
-        public static void speakIfTodayIsPlayersBirthday(Event Event, GameLocation gameLocation, GameTime Time, string[] EventData)
-        {
-            speakIfTodayIsPlayersBirthday(Event);
         }
 
         /// <summary>
         /// Speak a given dialogue if it is the player's birthday or not.
         /// </summary>
         /// <param name="CurrentEvent"></param>
-        public static void speakIfTodayIsPlayersBirthday(Event CurrentEvent)
+        public static void speakIfTodayIsPlayersBirthday(Event CurrentEvent, string[] args, StardewValley.EventContext eventContext=null)
         {
             if (HappyBirthdayModCore.Instance.birthdayManager.isBirthday())
                 CurrentEvent.CurrentCommand++;
             else
                 CurrentEvent.CurrentCommand += 3;
-        }
-
-        /// <summary>
-        /// Progresses the game's current event command by 1
-        /// </summary>
-        /// <param name="EventManager"></param>
-        /// <param name="data"></param>
-        public static void nextCommand(EventManager EventManager, string data)
-        {
-
-            nextCommand(Game1.CurrentEvent);
-        }
-
-        /// <summary>
-        /// Progresses the game's current event command by 1
-        /// </summary>
-        /// <param name="Event"></param>
-        /// <param name="gameLocation"></param>
-        /// <param name="Time"></param>
-        /// <param name="EventData"></param>
-        public static void nextCommand(Event Event, GameLocation gameLocation, GameTime Time, string[] EventData)
-        {
-            nextCommand(Event);
         }
 
         /// <summary>
@@ -220,91 +157,23 @@ namespace Omegasis.HappyBirthday.Framework.Events
             Event.CurrentCommand++;
         }
 
-
-        /// <summary>
-        /// Skips the next event command for the game. Necessary for branching.
-        /// </summary>
-        /// <param name="EventManager"></param>
-        /// <param name="data"></param>
-        public static void skipNextCommand(EventManager EventManager, string data)
-        {
-
-            skipNextCommand(Game1.CurrentEvent);
-        }
-
         /// <summary>
         /// Skips the next event command for the game. Necessary for branching.
         /// </summary>
         /// <param name="Event"></param>
-        /// <param name="gameLocation"></param>
-        /// <param name="Time"></param>
-        /// <param name="EventData"></param>
-        public static void skipNextCommand(Event Event, GameLocation gameLocation, GameTime Time, string[] EventData)
+        public static void skipNextCommand(Event CurrentEvent, string[] args=null, StardewValley.EventContext eventContext = null)
         {
-            skipNextCommand(Event);
+            CurrentEvent.CurrentCommand += 2;
         }
 
-        /// <summary>
-        /// Skips the next event command for the game. Necessary for branching.
-        /// </summary>
-        /// <param name="Event"></param>
-        public static void skipNextCommand(Event Event)
+        public static void givePlayerFavoriteGift(Event gameEvent = null, string[] EventData = null, EventContext eventContext = null)
         {
-            Event.CurrentCommand += 2;
-        }
-
-
-
-        /// <summary>
-        /// Skips the next event command for the game. Necessary for branching.
-        /// </summary>
-        /// <param name="EventManager"></param>
-        /// <param name="data"></param>
-        public static void givePlayerFavoriteGift(EventManager EventManager, string data)
-        {
-
-            givePlayerFavoriteGift(Game1.CurrentEvent);
-        }
-
-        /// <summary>
-        /// Skips the next event command for the game. Necessary for branching.
-        /// </summary>
-        /// <param name="Event"></param>
-        /// <param name="gameLocation"></param>
-        /// <param name="Time"></param>
-        /// <param name="EventData"></param>
-        public static void givePlayerFavoriteGift(Event Event, GameLocation gameLocation, GameTime Time, string[] EventData)
-        {
-            givePlayerFavoriteGift(Event);
-        }
-
-        /// <summary>
-        /// Skips the next event command for the game. Necessary for branching.
-        /// </summary>
-        /// <param name="Event"></param>
-        public static void givePlayerFavoriteGift(Event Event)
-        {
-
             Item gift = HappyBirthdayModCore.Instance.giftManager.getSpouseBirthdayGift(Game1.player.spouse);
             Game1.player.addItemByMenuIfNecessary(gift);
-            Event.CurrentCommand++;
-
+            gameEvent.CurrentCommand++;
         }
 
-        public static void makeObjectsTemporarilyInvisible(EventManager EventManager, string data)
-        {
-
-            string[] splits = data.Split(" ");
-
-            makeObjectsTemporarilyInvisible(Game1.CurrentEvent,splits);
-        }
-
-        public static void makeObjectsTemporarilyInvisible(Event Event, GameLocation gameLocation, GameTime Time, string[] EventData)
-        {
-            makeObjectsTemporarilyInvisible(Event,EventData);
-        }
-
-        public static void makeObjectsTemporarilyInvisible(Event Event, string[] data)
+        public static void makeObjectsTemporarilyInvisible(Event Event, string[] data, EventContext eventContext = null)
         {
 
             List<Vector2> tilePositions = new List<Vector2>();

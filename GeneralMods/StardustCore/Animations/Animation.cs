@@ -23,7 +23,7 @@ namespace Omegasis.StardustCore.Animations
         public int currentAnimationFrameIndex;
 
         [XmlIgnore]
-        public NetFields NetFields { get; } = new NetFields();
+        public NetFields NetFields { get; } = new NetFields("Omegasis.StardustCore.Animations.Animation");
 
         public Animation()
         {

@@ -24,6 +24,11 @@ namespace Omegasis.HappyBirthday
     /// <summary>The mod entry point.</summary>
     public class HappyBirthdayModCore : Mod
     {
+        //TODO: Add in a console command to set the player's birthday while the game is running.
+        //TODO: Possibly set it where the player can select mroe than one favorite birthday gift?
+        //TODO: Set the event preconditions through the new StardewValley.Event.RegisterPrecondition function.
+
+
         /*********
         ** Fields
         *********/
@@ -133,8 +138,6 @@ namespace Omegasis.HappyBirthday
 
         private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
         {
-            BirthdayEventUtilities.BirthdayEventManager = new EventManager();
-
             this.birthdayMessages = new BirthdayMessages();
             this.giftManager = new GiftManager();
             MenuUtilities.IsDailyQuestBoard = false;
@@ -200,7 +203,7 @@ namespace Omegasis.HappyBirthday
             {
                 this.happyBirthdayContentPackManager.registerNewContentPack(contentPack);
             }
-            this.giftManager.addInGiftsFromLoadedContentPacks();
+            this.giftManager.addInPotentialGiftsFromNPCsFromContentPacks();
             MailUtilities.RemoveAllBirthdayMail();
 
             BirthdayEventUtilities.InitializeBirthdayEvents();

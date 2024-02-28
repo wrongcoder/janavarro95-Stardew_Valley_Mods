@@ -110,6 +110,9 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         /// <summary>Regenerate the UI.</summary>
         private void setUpPositions()
         {
+
+            HappyBirthdayModCore.Instance.Monitor.Log("Current translation code is: " + Game1.content.GetCurrentLanguage());
+
             this.Labels.Clear();
             this.DayButtons.Clear();
             this.SeasonButtons.Clear();
@@ -499,7 +502,8 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 {
                     if(message is BirthdayHudMessage)
                     {
-                        message.draw(b, position);
+                        int height = 1;
+                        message.draw(b, position, ref height);
                     }
                     position++;
                 }

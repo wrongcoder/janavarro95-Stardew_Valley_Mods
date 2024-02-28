@@ -28,7 +28,7 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
             else
             {
                 NPC spouse = Game1.player.getSpouse();
-                if (spouse.isBirthday(Game1.currentSeason, Game1.dayOfMonth)){
+                if (spouse.isBirthday()){
                     return true;
                 }
                 else

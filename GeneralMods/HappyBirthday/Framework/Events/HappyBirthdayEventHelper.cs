@@ -23,12 +23,12 @@ namespace Omegasis.HappyBirthday.Framework.Events
             this.eventPreconditions = new List<EventPrecondition>();
         }
 
-        public HappyBirthdayEventHelper(string EventName, int ID, int version, GameLocationPrecondition Location, TimeOfDayPrecondition Time, DayOfWeekPrecondition NotTheseDays, EventStartData StartData)
+        public HappyBirthdayEventHelper(string EventName, string ID, int version, GameLocationPrecondition Location, TimeOfDayPrecondition Time, DayOfWeekPrecondition NotTheseDays, EventStartData StartData)
         {
             this.eventStringId = EventName;
             this.eventData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
-            this.stardewEventID = ID;
+            this.stardewEventId = ID;
             this.version = version;
             this.addEventPrecondition(Location);
             this.addEventPrecondition(Time);
@@ -36,10 +36,10 @@ namespace Omegasis.HappyBirthday.Framework.Events
             this.addEventData(StartData.ToString());
         }
 
-        public HappyBirthdayEventHelper(string EventName, int ID, int version, List<EventPrecondition> Conditions, EventStartData StartData)
+        public HappyBirthdayEventHelper(string EventName, string ID, int version, List<EventPrecondition> Conditions, EventStartData StartData)
         {
             this.eventStringId = EventName;
-            this.stardewEventID = ID;
+            this.stardewEventId = ID;
             this.eventData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
             this.version = version;

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Omegasis.StardustCore.Events;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -25,7 +26,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             switch (e.NewMenu)
             {
                 case null:
-                    OnActiveMenuChangedToNull();
+                    OnActiveMenuChangedToNull(e);
 
                     return;
 
@@ -46,7 +47,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         /// <summary>
         /// Occurs when 
         /// </summary>
-        public static void OnActiveMenuChangedToNull()
+        public static void OnActiveMenuChangedToNull(MenuChangedEventArgs e)
         {
             IsDailyQuestBoard = false;
             //Validate the gift and give it to the player.
@@ -93,7 +94,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                             }
                         }
 
-                        Game1.activeClickableMenu = new DialogueBox(new Dialogue(HappyBirthdayModCore.Instance.birthdayMessages.getBirthdayMessage(Game1.currentSpeaker.Name), Game1.currentSpeaker));
+                        Game1.activeClickableMenu = new DialogueBox(new Dialogue(Game1.currentSpeaker,"", HappyBirthdayModCore.Instance.birthdayMessages.getBirthdayMessage(Game1.currentSpeaker.Name)));
                         HappyBirthdayModCore.Instance.birthdayManager.villagerQueue[Game1.currentSpeaker.Name].hasGivenBirthdayWish = true;
 
                         // Set birthday gift for the player to recieve from the npc they are currently talking with.

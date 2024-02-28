@@ -25,15 +25,6 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
         }
 
-        public GiftInformation(GiftIDS.SDVObject ObjectID, int RequiredHearts, int MinAmount, int MaxAmount)
-        {
-            this.objectID = "StardewValley.Object." + Enum.GetName(typeof(GiftIDS.SDVObject), (int)ObjectID);
-            this.minRequiredHearts = RequiredHearts;
-            this.maxRequiredHearts = 20;
-            this.minAmount = MinAmount;
-            this.maxAmount = MaxAmount;
-        }
-
         public GiftInformation(string ObjectID, int RequiredHearts, int MinAmount, int MaxAmount)
         {
             this.objectID = ObjectID;
@@ -55,7 +46,7 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 
         public Item getOne()
         {
-            Item I = HappyBirthdayModCore.Instance.giftManager.registeredGifts[this.objectID].getOne();
+            Item I = HappyBirthdayModCore.Instance.giftManager.getItemFromId(this.objectID);
             if (this.minAmount != this.maxAmount)
             {
                 I.Stack = StardewValley.Game1.random.Next(this.minAmount, this.maxAmount);

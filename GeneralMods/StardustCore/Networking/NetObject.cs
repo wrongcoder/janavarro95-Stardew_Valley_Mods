@@ -16,7 +16,7 @@ namespace Omegasis.StardustCore.Networking
     {
         [XmlIgnore]
         [JsonIgnore]
-        public NetFields NetFields { get; } = new NetFields();
+        public NetFields NetFields { get; } = new NetFields("Omegasis.StardustCore.Networking.NetObject");
 
         protected virtual void initializeNetFields()
         {

@@ -79,7 +79,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                         string hoverText = HappyBirthdayModCore.Instance.Helper.Reflection.GetField<string>((Game1.activeClickableMenu as Billboard), "hoverText", true).GetValue();
                         if (hoverText.Length > 0)
                         {
-                            IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);
+                            IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, null, -1, -1, -1, 1f, (CraftingRecipe)null);
                         }
                     }
                 }
@@ -95,7 +95,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                     string hoverText = HappyBirthdayModCore.Instance.Helper.Reflection.GetField<string>((Game1.activeClickableMenu as Billboard), "hoverText", true).GetValue();
                     if (hoverText.Length > 0)
                     {
-                        IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);
+                        IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, null, -1, -1, -1, 1f, (CraftingRecipe)null);
                     }
                 }
                 (Game1.activeClickableMenu).drawMouse(e.SpriteBatch);

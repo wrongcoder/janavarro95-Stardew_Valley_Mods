@@ -14,6 +14,7 @@ namespace Omegasis.StardustCore.Events
 {
     public class EventManager
     {
+        public static EventManager Instance =  new EventManager();
         /// <summary>
         /// The list of events that this event manager is holding.
         /// </summary>
@@ -39,24 +40,15 @@ namespace Omegasis.StardustCore.Events
             this.seenEvents = new Dictionary<Farmer, HashSet<EventHelper>>();
             this.eventPreconditionParsingMethods = new Dictionary<string, Func<string[], EventPrecondition>>();
 
-            //ToDO Add a way to register event precondition parsing methods and return the preconditions back to the passed in event helpers.
+            Event.RegisterCommand("Omegasis.EventFramework.AddObjectToPlayersInventory", new StardewValley.Delegates.EventCommandDelegate(ExtraEventActions.addObjectToPlayerInventory));
+            Event.RegisterCommand("Omegasis.EventFramework.AddInJunimoActor", new StardewValley.Delegates.EventCommandDelegate(ExtraEventActions.AddInJumimoActorForEvent));
+            Event.RegisterCommand("Omegasis.EventFramework.FlipJunimoActor", ExtraEventActions.FlipJunimoActor);
+            Event.RegisterCommand("Omegasis.EventFramework.SetUpAdvanceJunimoMovement", ExtraEventActions.SetUpAdvanceJunimoMovement);
+            Event.RegisterCommand("Omegasis.EventFramework.FinishAdvanceJunimoMovement", ExtraEventActions.FinishAdvanceJunimoMovement);
+            Event.RegisterCommand("Omegasis.EventFramework.AddInJunimoAdvanceMove", ExtraEventActions.AddInJunimoAdvanceMove);
+            Event.RegisterCommand("Omegasis.EventFramework.RemoveJunimoAdvanceMove", ExtraEventActions.RemoveAdvanceJunimoMovement);
 
-            this.customEventLogic.Add("Omegasis.EventFramework.AddObjectToPlayersInventory", ExtraEventActions.addObjectToPlayerInventory);
-            this.customEventLogic.Add("Omegasis.EventFramework.AddInJunimoActor", ExtraEventActions.AddInJumimoActorForEvent);
-            this.customEventLogic.Add("Omegasis.EventFramework.FlipJunimoActor", ExtraEventActions.FlipJunimoActor);
-            this.customEventLogic.Add("Omegasis.EventFramework.SetUpAdvanceJunimoMovement", ExtraEventActions.SetUpAdvanceJunimoMovement);
-            this.customEventLogic.Add("Omegasis.EventFramework.FinishAdvanceJunimoMovement", ExtraEventActions.FinishAdvanceJunimoMovement);
-            this.customEventLogic.Add("Omegasis.EventFramework.AddInJunimoAdvanceMove", ExtraEventActions.AddInJunimoAdvanceMove);
-            this.customEventLogic.Add("Omegasis.EventFramework.RemoveJunimoAdvanceMove", ExtraEventActions.RemoveAdvanceJunimoMovement);
-
-            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.AddObjectToPlayersInventory", ExtraEventActions.addObjectToPlayerInventory);
-            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.AddInJunimoActor", ExtraEventActions.AddInJumimoActorForEvent);
-            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.FlipJunimoActor", ExtraEventActions.FlipJunimoActor);
-            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.SetUpAdvanceJunimoMovement", ExtraEventActions.SetUpAdvanceJunimoMovement);
-            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.FinishAdvanceJunimoMovement", ExtraEventActions.FinishAdvanceJunimoMovement);
-            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.AddInJunimoAdvanceMove", ExtraEventActions.AddInJunimoAdvanceMove);
-            SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.EventFramework.RemoveJunimoAdvanceMove", ExtraEventActions.RemoveAdvanceJunimoMovement);
-
+            //TODO: Register event preconditions using StardewValley.Event
             this.eventPreconditionParsingMethods.Add(DatingNPCEventPrecondition.EventPreconditionId, PreconditionParsingMethods.ParseDatingNpcEventPrecondition);
             this.eventPreconditionParsingMethods.Add(CanReadJunimoEventPrecondition.EventPreconditionId, PreconditionParsingMethods.ParseCanReadJunimoEventPrecondition);
             this.eventPreconditionParsingMethods.Add(CommunityCenterCompletedEventPreconditon.EventPreconditionId, PreconditionParsingMethods.ParseCommunityCenterCompletedPrecondition);
@@ -167,7 +159,7 @@ namespace Omegasis.StardustCore.Events
                 }
                 if (Game1.eventUp == true)
                 {
-                    if (this.events[EventName].getEventID() == Game1.CurrentEvent.id)
+                    if (this.events[EventName].stardewEventId.Equals(Game1.CurrentEvent.id))
                     {
                         this.concurrentEventActions.Clear(); //Clean all old parallel actions before starting a new event.
                         bool started2=this.events[EventName].startEventAtLocationifPossible();

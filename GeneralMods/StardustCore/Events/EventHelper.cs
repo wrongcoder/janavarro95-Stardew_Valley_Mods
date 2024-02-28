@@ -93,7 +93,7 @@ namespace Omegasis.StardustCore.Events
         }
 
         protected List<EventPrecondition> eventPreconditions;
-        public int stardewEventID;
+        public string stardewEventId;
         public string eventStringId;
 
         public int version;
@@ -104,12 +104,12 @@ namespace Omegasis.StardustCore.Events
             this.eventPreconditions = new List<EventPrecondition>();
         }
 
-        public EventHelper(string EventName, int ID, int version ,GameLocationPrecondition Location, TimeOfDayPrecondition Time, DayOfWeekPrecondition NotTheseDays, EventStartData StartData)
+        public EventHelper(string EventName, string EventId, int version, GameLocationPrecondition Location, TimeOfDayPrecondition Time, DayOfWeekPrecondition NotTheseDays, EventStartData StartData)
         {
             this.eventStringId = EventName;
             this.eventData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
-            this.stardewEventID = ID;
+            this.stardewEventId = EventId;
             this.version = version;
             this.addEventPrecondition(Location);
             this.addEventPrecondition(Time);
@@ -117,10 +117,10 @@ namespace Omegasis.StardustCore.Events
             this.addEventData(StartData.ToString());
         }
 
-        public EventHelper(string EventName, int ID, int version ,List<EventPrecondition> Conditions, EventStartData StartData)
+        public EventHelper(string EventName, string EventId, int version, List<EventPrecondition> Conditions, EventStartData StartData)
         {
             this.eventStringId = EventName;
-            this.stardewEventID = ID;
+            this.stardewEventId = EventId;
             this.eventData = new StringBuilder();
             this.eventPreconditions = new List<EventPrecondition>();
             this.version = version;
@@ -239,14 +239,6 @@ namespace Omegasis.StardustCore.Events
             string s = this.nexusUserId.ToString();
             return s.Substring(0, 4);
         }
-        /// <summary>
-        /// Gets the id for the event.
-        /// </summary>
-        /// <returns></returns>
-        public virtual int getEventID()
-        {
-            return Convert.ToInt32(this.getUniqueEventStartID() + this.stardewEventID.ToString());
-        }
 
         /// <summary>
         /// Checks to ensure I don't create a id value that is too big for nexus.
@@ -284,7 +276,7 @@ namespace Omegasis.StardustCore.Events
         /// <returns></returns>
         public virtual StardewValley.Event getEvent(Farmer PlayerActor = null)
         {
-            return new StardewValley.Event(this.getEventString(), Convert.ToInt32(this.getEventID()), PlayerActor);
+            return new StardewValley.Event(this.getEventString(), null, this.stardewEventId, PlayerActor);
         }
 
         /// <summary>
@@ -299,11 +291,6 @@ namespace Omegasis.StardustCore.Events
                 return true;
             }
             return false;
-        }
-
-        public static int GetOmegasisEventId(int eventId)
-        {
-          return Convert.ToInt32(3217.ToString() + eventId.ToString());
         }
 
 
@@ -321,7 +308,7 @@ namespace Omegasis.StardustCore.Events
             {
                 if (eve.meetsCondition() == false)
                 {
-                    ModCore.log("Failed event precondition for precondition type: " + eve.GetType());
+                    //ModCore.log("Failed event precondition for precondition type: " + eve.GetType());
                     return false;
                 }
             }
@@ -1472,9 +1459,12 @@ namespace Omegasis.StardustCore.Events
         {
             StringBuilder b = new StringBuilder();
             b.Append("message ");
-            b.Append("\\\"");
+           // b.Append("\\\"");
             b.Append(Message);
-            b.Append("\"");
+           // b.Append("\\\"");
+
+            StardustCore.ModCore.ModMonitor.Log(b.ToString());
+
             this.addEventData(b);
         }
 

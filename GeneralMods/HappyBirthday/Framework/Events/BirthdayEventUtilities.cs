@@ -23,7 +23,13 @@ namespace Omegasis.HappyBirthday.Framework.Events
         /// </summary>
         public static bool NEED_TO_WRITE_DEFAULT_BIRTHDAY_EVENTS_TO_JSON;
 
-        public static EventManager BirthdayEventManager;
+        public static EventManager BirthdayEventManager
+        {
+            get
+            {
+                return EventManager.Instance;
+            }
+        }
         public static bool ShouldAskPlayerForBirthday;
         public static bool ShouldAskPlayerForFavoriteGift;
 
@@ -50,33 +56,23 @@ namespace Omegasis.HappyBirthday.Framework.Events
 
         public static void InitializeBirthdayEventCommands()
         {
-            //Dialogue commands.
-            BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.ShowTranslatedMessage", BirthdayEventCommands.showTranslatedMessage);
-            StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.ShowTranslatedMessage", BirthdayEventCommands.showTranslatedMessage);
-            BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.SpeakWithBirthdayMessageIncluded", BirthdayEventCommands.speakWithBirthdayIncluded);
-            StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.SpeakWithBirthdayMessageIncluded", BirthdayEventCommands.speakWithBirthdayIncluded);
-            BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.SpeakWithTranslatedMessage", BirthdayEventCommands.speakWithTranslatedMessage);
-            StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.SpeakWithTranslatedMessage", BirthdayEventCommands.speakWithTranslatedMessage);
-            BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.SpeakIfTodayIsPlayersBirthday", BirthdayEventCommands.speakIfTodayIsPlayersBirthday);
-            StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.SpeakIfTodayIsPlayersBirthday", BirthdayEventCommands.speakIfTodayIsPlayersBirthday);
+            Event.RegisterCommand("Omegasis.HappyBirthday.Events.ShowTranslatedMessage", new StardewValley.Delegates.EventCommandDelegate(BirthdayEventCommands.showTranslatedMessage));
+            Event.RegisterCommand("Omegasis.HappyBirthday.Events.SpeakWithBirthdayMessageIncluded", new StardewValley.Delegates.EventCommandDelegate(BirthdayEventCommands.speakWithBirthdayIncluded));
+            Event.RegisterCommand("Omegasis.HappyBirthday.Events.SpeakWithTranslatedMessage", new StardewValley.Delegates.EventCommandDelegate(BirthdayEventCommands.speakWithTranslatedMessage));
+            Event.RegisterCommand("Omegasis.HappyBirthday.Events.SpeakWithTranslatedMessageFromFile", new StardewValley.Delegates.EventCommandDelegate(BirthdayEventCommands.speakWithTranslatedMessageFromFile));
+            Event.RegisterCommand("Omegasis.HappyBirthday.Events.SpeakIfTodayIsPlayersBirthday", new StardewValley.Delegates.EventCommandDelegate(BirthdayEventCommands.speakIfTodayIsPlayersBirthday));
+
 
             //Menu commands.
-            BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.ShowBirthdaySelectionMenu", BirthdayEventCommands.setShouldShowChooseBirthdayMenu);
-            StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.ShowBirthdaySelectionMenu", BirthdayEventCommands.setShouldShowChooseBirthdayMenu);
-            BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.ShowFavoriteGiftSelectionMenu", BirthdayEventCommands.setShouldShowChooseFavoriteGiftMenu);
-            StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.ShowFavoriteGiftSelectionMenu", BirthdayEventCommands.setShouldShowChooseFavoriteGiftMenu);
+            Event.RegisterCommand("Omegasis.HappyBirthday.Events.ShowBirthdaySelectionMenu", new StardewValley.Delegates.EventCommandDelegate(BirthdayEventCommands.setShouldShowChooseBirthdayMenu));
+            Event.RegisterCommand("Omegasis.HappyBirthday.Events.ShowFavoriteGiftSelectionMenu", new StardewValley.Delegates.EventCommandDelegate(BirthdayEventCommands.setShouldShowChooseFavoriteGiftMenu));
 
             //Utility Commands
-            BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.SkipNextCommand", BirthdayEventCommands.skipNextCommand);
-            StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.SkipNextCommand", BirthdayEventCommands.skipNextCommand);
+            Event.RegisterCommand("Omegasis.HappyBirthday.Events.SkipNextCommand", new StardewValley.Delegates.EventCommandDelegate(BirthdayEventCommands.skipNextCommand));
+            Event.RegisterCommand("Omegasis.HappyBirthday.Events.GivePlayerFavoriteGift", new StardewValley.Delegates.EventCommandDelegate(BirthdayEventCommands.givePlayerFavoriteGift));
+            Event.RegisterCommand("Omegasis.HappyBirthday.Events.MakeObjectsTemporarilyInvisible", new StardewValley.Delegates.EventCommandDelegate(BirthdayEventCommands.makeObjectsTemporarilyInvisible));
 
-            BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.GivePlayerFavoriteGift", BirthdayEventCommands.givePlayerFavoriteGift);
-            StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.GivePlayerFavoriteGift", BirthdayEventCommands.givePlayerFavoriteGift);
-
-            BirthdayEventManager.addCustomEventLogic("Omegasis.HappyBirthday.Events.MakeObjectsTemporarilyInvisible", BirthdayEventCommands.makeObjectsTemporarilyInvisible);
-            StardustCore.Compatibility.SpaceCore.SpaceCoreAPIUtil.RegisterCustomEventCommand("Omegasis.HappyBirthday.Events.MakeObjectsTemporarilyInvisible", BirthdayEventCommands.makeObjectsTemporarilyInvisible);
-
-
+            //TODO: Maybe make preconditions registered properly using  Event.RegisterPrecondition
             //Additional Preconditions
             BirthdayEventManager.eventPreconditionParsingMethods.Add(FarmerBirthdayPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseFarmerBirthdayPrecondition);
             BirthdayEventManager.eventPreconditionParsingMethods.Add(SpouseBirthdayPrecondition.EventPreconditionId, HappyBirthdayPreconditionParsingMethods.ParseSpouseBirthdayPrecondition);

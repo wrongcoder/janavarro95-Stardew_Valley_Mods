@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Omegasis.HappyBirthday.Framework.Gifts;
 using Omegasis.HappyBirthday.Framework.Utilities;
 using StardewValley;
+using StardewValley.GameData.Objects;
 using StardewValley.Menus;
 
 namespace Omegasis.HappyBirthday.Framework.Menus
@@ -171,7 +172,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     break;
 
                 case "RightButton":
-                    List<Item> ids = HappyBirthdayModCore.Instance.giftManager.registeredGifts.Values.ToList();
+                    List<string> ids = HappyBirthdayModCore.Instance.giftManager.listOfFavoriteBirthdayGiftsToSelectFrom;
                     int value = (this.currentPageNumber + 1) * this._maxRowsToDisplay * this._maxColumnsToDisplay;
                     if (value >= ids.Count) break;
                     else
@@ -338,16 +339,18 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         private void populateGiftsToDisplay()
         {
             this.itemButtons.Clear();
-            Dictionary<string, Item> validItems = new Dictionary<string, Item>();
+            List<string> validItems = new List<string>();
             if (string.IsNullOrEmpty(this.searchBox.Text) == false)
-                foreach (KeyValuePair<string, Item> pair in HappyBirthdayModCore.Instance.giftManager.registeredGifts)
+                foreach (string id in HappyBirthdayModCore.Instance.giftManager.listOfFavoriteBirthdayGiftsToSelectFrom)
                 {
-                    Item item = pair.Value;
+                    //TODO: I know this isn't efficient, so I need to figure out how to optimize not creating the item twice.
+                    Item item = HappyBirthdayModCore.Instance.giftManager.getItemFromId(id);
                     if (item.DisplayName.ToLowerInvariant().Contains(this.searchBox.Text.ToLowerInvariant()))
-                        validItems.Add(pair.Key, pair.Value);
+                        validItems.Add(id);
+
                 }
             else
-                validItems = HappyBirthdayModCore.Instance.giftManager.registeredGifts;
+                validItems = HappyBirthdayModCore.Instance.giftManager.listOfFavoriteBirthdayGiftsToSelectFrom;
 
 
             for (int row = 0; row < this._maxRowsToDisplay; row++)
@@ -357,13 +360,13 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     if (value >= validItems.Count) continue;
 
 
-                    GiftInformation info = new GiftInformation(validItems.ElementAt(value).Key, 0, 1, 1);
+                    GiftInformation info = new GiftInformation(validItems.ElementAt(value), 0, 1, 1);
                     Rectangle textureBounds = GameLocation.getSourceRectForObject(info.getOne().ParentSheetIndex);
                     float itemScale = 4f;
                     Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + column * 16 * itemScale), (int)(this.yPositionOnScreen + 256 + row * 16 * itemScale), 64, 64);
                     ClickableTextureComponent item = new ClickableTextureComponent(info.objectID, placementBounds, "", info.objectID, Game1.objectSpriteSheet, textureBounds, 4f, true);
                     item.item = info.getOne();
-                    item.name = HappyBirthdayModCore.Instance.giftManager.registeredGifts.ElementAt(value).Key;
+                    item.name = item.item.DisplayName;
                     this.itemButtons.Add(item);
                 }
         }

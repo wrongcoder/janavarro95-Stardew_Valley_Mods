@@ -276,6 +276,7 @@ namespace Omegasis.Revitalize
                 ModContentManager.objectManager.getItem(StorageIds.LargeItemVault),
                                 ModContentManager.objectManager.getItem(MachineIds.Windmill),
                                 ModContentManager.objectManager.getItem(FarmingObjectIds.AutomaticTreeFarm),
+                                ModContentManager.objectManager.getItem(FarmingObjectIds.IrrigatedGardenPot,1)
               /*
 
 
