@@ -351,13 +351,12 @@ namespace Omegasis.HappyBirthday
         /// <param name="name"></param>
         public Item getSpouseBirthdayGift(string name)
         {
-            if (string.IsNullOrEmpty(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift) == false)
+            if (HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.potentialFavoriteGifts.Count > 0)
             {
-                if (ItemRegistry.Exists(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift))
-                {
-                    GiftInformation info = new GiftInformation(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift, 0, 1, 1);
-                    return info.getOne();
-                }
+                int giftValue =  Game1.random.Next(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.potentialFavoriteGifts.Count);
+                string selectedBirthdayGift = HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.potentialFavoriteGifts.ElementAt(giftValue);
+
+                return this.getItemFromId(selectedBirthdayGift);
             }
 
             int heartLevel = Game1.player.getFriendshipHeartLevelForNPC(name);

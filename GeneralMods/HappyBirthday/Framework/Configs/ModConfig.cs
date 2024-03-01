@@ -21,6 +21,11 @@ namespace Omegasis.HappyBirthday.Framework.Configs
         /// Attempts to use the English content pack when a properly localized one does not exist.
         /// </summary>
         public bool fallbackToEnglishTranslationWhenPossible=false;
+
+        /// <summary>
+        /// Makes it so that the default gift selection list provided by the mod doesn't populate the list of potential gifts you can receive from your birthday from your spouse.
+        /// </summary>
+        public bool useOnlyFavoriteGiftsListToSelectFrom = false;
         
 
         /// <summary>Construct an instance.</summary>

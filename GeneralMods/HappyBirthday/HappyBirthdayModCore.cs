@@ -25,9 +25,10 @@ namespace Omegasis.HappyBirthday
     /// <summary>The mod entry point.</summary>
     public class HappyBirthdayModCore : Mod
     {
-        //TODO: Add in a console command to set the player's birthday while the game is running.
-        //TODO: Possibly set it where the player can select mroe than one favorite birthday gift?
-        //TODO: Set the event preconditions through the new StardewValley.Event.RegisterPrecondition function.
+        //TODO: Include changelog documentation for new command, ability to select multiple birthday gifts, and support for modded items.
+
+        //TODO: Make an official StardewValleyExpanded ContentPack.
+        //TODO: Add support for content packs to override event ids that are registered. Aka allow StardewValleyExpanded Content Pack events to override their vanilla counterparts.
 
 
         /*********
@@ -109,6 +110,8 @@ namespace Omegasis.HappyBirthday
 
             LocalizedContentManager.OnLanguageChange += this.LocalizedContentManager_OnLanguageChange;
 
+            this.Helper.ConsoleCommands.Add("Omegasis.Happy_Birthday.reset_birthday", "Resets the player's birthday and allows for them to choose it again.", this.birthdayManager.resetPlayersBirthday);
+
         }
 
         private void Content_AssetRequested(object sender, AssetRequestedEventArgs e)
@@ -147,7 +150,7 @@ namespace Omegasis.HappyBirthday
 
             BirthdayEventUtilities.InitializeBirthdayEventCommands();
 
-            screenreader = Helper.ModRegistry.GetApi<IStardewAccessApi>("shoaib.stardewaccess");
+            this.screenreader = this.Helper.ModRegistry.GetApi<IStardewAccessApi>("shoaib.stardewaccess");
 
         }
 
@@ -257,5 +260,7 @@ namespace Omegasis.HappyBirthday
             if (this.screenreader != null)
                 this.screenreader.SayWithMenuChecker(text, interrupt);
         }
+
+
     }
 }

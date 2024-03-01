@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Omegasis.HappyBirthday.Framework
 {
     /// <summary>The data for the current player.</summary>
@@ -13,6 +16,6 @@ namespace Omegasis.HappyBirthday.Framework
         /// <summary>The player's current birthday season.</summary>
         public string BirthdaySeason;
 
-        public string favoriteBirthdayGift;
+        public HashSet<string> potentialFavoriteGifts  = new HashSet<string>();
     }
 }
