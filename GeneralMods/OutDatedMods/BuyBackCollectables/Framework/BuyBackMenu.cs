@@ -108,7 +108,7 @@ namespace Omegasis.BuyBackCollectables.Framework
                 if (fields.Contains("Arch"))
                 {
                     selectedTab = BuyBackMenu.ArchaeologyTab;
-                    if (Game1.player.archaeologyFound.ContainsKey(entry.Key))
+                    if (Game1.player.archaeologyFound.ContainsKey(entry.Key.ToString()))
                         drawShadow = true;
                 }
                 else if (fields.Contains("Fish"))
@@ -116,29 +116,29 @@ namespace Omegasis.BuyBackCollectables.Framework
                     if (entry.Key >= 167 && entry.Key < 173)
                         continue;
                     selectedTab = BuyBackMenu.FishTab;
-                    if (Game1.player.fishCaught.ContainsKey(entry.Key))
+                    if (Game1.player.fishCaught.ContainsKey(entry.Key.ToString()))
                         drawShadow = true;
                 }
                 else if (fields.Contains("Mineral") || fields.Substring(fields.Length - 3).Equals("-2"))
                 {
                     selectedTab = BuyBackMenu.MineralsTab;
-                    if (Game1.player.mineralsFound.ContainsKey(entry.Key))
+                    if (Game1.player.mineralsFound.ContainsKey(entry.Key.ToString()))
                         drawShadow = true;
                 }
                 else if (fields.Contains("Cooking") || fields.Substring(fields.Length - 3).Equals("-7"))
                 {
                     selectedTab = BuyBackMenu.CookingTab;
-                    if (Game1.player.recipesCooked.ContainsKey(entry.Key))
+                    if (Game1.player.recipesCooked.ContainsKey(entry.Key.ToString()))
                         drawShadow = true;
                     if (entry.Key == 217 || entry.Key == 772 || entry.Key == 773)
                         continue;
                 }
                 else
                 {
-                    if (!Object.isPotentialBasicShippedCategory(entry.Key, fields.Substring(fields.Length - 3)))
+                    if (!Object.isPotentialBasicShipped(entry.Key.ToString(), fields.Substring(fields.Length - 3)))
                         continue;
                     selectedTab = BuyBackMenu.OrganicsTab;
-                    if (Game1.player.basicShipped.ContainsKey(entry.Key))
+                    if (Game1.player.basicShipped.ContainsKey(entry.Key.ToString()))
                         drawShadow = true;
                 }
                 int x2 = num + array[selectedTab] % num3 * (Game1.tileSize + 4);
@@ -307,7 +307,7 @@ namespace Omegasis.BuyBackCollectables.Framework
                 text = string.Concat(text, array2[0], Environment.NewLine, Environment.NewLine, Game1.parseText(array2[4], Game1.smallFont, Game1.tileSize * 4), Environment.NewLine, Environment.NewLine);
                 if (array2[3].Contains("Arch"))
                 {
-                    text += (Game1.player.archaeologyFound.ContainsKey(index) ? Game1.content.LoadString("Strings\\UI:Collections_Description_ArtifactsFound", Game1.player.archaeologyFound[index][0]) : "");
+                    text += Game1.player.archaeologyFound.ContainsKey(index) ? Game1.content.LoadString("Strings\\UI:Collections_Description_ArtifactsFound", Game1.player.archaeologyFound[index][0]) : "";
                 }
                 else if (array2[3].Contains("Cooking"))
                 {
