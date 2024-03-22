@@ -4,6 +4,8 @@ using Omegasis.AutoSpeed.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Buffs;
+using StardewValley.GameData.Buffs;
 
 namespace Omegasis.AutoSpeed
 {
@@ -16,7 +18,7 @@ namespace Omegasis.AutoSpeed
         /// <summary>
         /// All of the speed that is added together for auto speed. This is used for mod authors to hook in their speed boosts before auto speed applies the default speed boost.
         /// </summary>
-        public Dictionary<string, int> combinedAddedSpeed;
+        public Dictionary<string, float> combinedAddedSpeed;
 
         /*********
         ** Fields
@@ -38,7 +40,7 @@ namespace Omegasis.AutoSpeed
         {
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             this.Config = helper.ReadConfig<ModConfig>();
-            this.combinedAddedSpeed = new Dictionary<string, int>();
+            this.combinedAddedSpeed = new Dictionary<string, float>();
             Instance = this;
         }
 
@@ -62,8 +64,10 @@ namespace Omegasis.AutoSpeed
         {
             if (Context.IsPlayerFree)
             {
-                int addedSpeed = this.combinedAddedSpeed.Values.Sum();
-                Game1.player.addedSpeed = this.Config.Speed+addedSpeed;
+                float addedSpeed = this.combinedAddedSpeed.Values.Sum() + this.Config.Speed;
+                BuffAttributesData buffAttributesData = new StardewValley.GameData.Buffs.BuffAttributesData();
+                buffAttributesData.Speed = addedSpeed;
+                Game1.player.applyBuff(new Buff("Omegasis.AutoSpeed.Buff", "Omegasis.AutoSpeed.Buff", "Omegasis.AutoSpeed.Buff", Buff.ENDLESS, null, -1, new BuffEffects(buffAttributesData), false, "Omegasis: Auto Speed Buff", "Going fast with the power of mods."));
             }
         }
     }

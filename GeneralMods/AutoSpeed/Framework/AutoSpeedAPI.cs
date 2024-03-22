@@ -17,7 +17,7 @@ namespace Omegasis.AutoSpeed.Framework
         /// </summary>
         /// <param name="ID"></param>
         /// <param name="Amount"></param>
-        public void addSpeedBoost(string ID, int Amount)
+        public void addSpeedBoost(string ID, float Amount)
         {
             AutoSpeed.Instance.combinedAddedSpeed.Add(ID, Amount);
         }
@@ -26,7 +26,7 @@ namespace Omegasis.AutoSpeed.Framework
         /// </summary>
         /// <param name="ID"></param>
         /// <param name="Amount"></param>
-        public void remvoveSpeedBoost(string ID, int Amount)
+        public void remvoveSpeedBoost(string ID, float Amount)
         {
             AutoSpeed.Instance.combinedAddedSpeed.Remove(ID);
         }

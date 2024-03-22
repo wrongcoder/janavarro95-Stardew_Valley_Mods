@@ -14,7 +14,7 @@ namespace Omegasis.NightOwl.Framework
         public static void TryToEditFishDataAsset(object sender, AssetRequestedEventArgs assetRequestedEventArgs)
         {
 
-            if (assetRequestedEventArgs.NameWithoutLocale.IsEquivalentTo("Data/FIsh"))
+            if (assetRequestedEventArgs.NameWithoutLocale.IsEquivalentTo("Data/Fish"))
             {
                 assetRequestedEventArgs.Edit(EditFishDataAsset);
             }

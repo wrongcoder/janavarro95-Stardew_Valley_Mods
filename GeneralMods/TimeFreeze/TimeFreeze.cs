@@ -179,6 +179,11 @@ namespace Omegasis.TimeFreeze
                 return this.Config.freezeTimeInThisLocation["SkullCave"];
             }
 
+            if (location.Name.Equals("Volcano") || location.Name.StartsWith("Volcano") || location.Name.Contains("Caldera"))
+            {
+                return this.Config.freezeTimeInThisLocation["Caldera"];
+            }
+
 
             //this.Monitor.Log(Game1.player.currentLocation.NameOrUniqueName, LogLevel.Info);
 

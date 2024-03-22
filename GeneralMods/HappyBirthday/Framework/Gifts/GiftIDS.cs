@@ -1240,8 +1240,8 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
             CookoutKit = 926,
             CampingStove = 927,
             //GoldenEgg = 928,
-            Hedge = 929,
-            UnknownItem = 930
+            //Hedge = 929,
+            //UnknownItem = 930
         }
     }
 }

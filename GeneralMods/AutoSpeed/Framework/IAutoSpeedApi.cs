@@ -11,12 +11,12 @@ namespace Omegasis.AutoSpeed.Framework
     /// </summary>
     public interface IAutoSpeedAPI
     {
-        void addSpeedBoost(string ID, int Amount);
+        void addSpeedBoost(string ID, float Amount);
         /// <summary>
         /// Removes an added speed boost by passing in the unique key.
         /// </summary>
         /// <param name="ID"></param>
         /// <param name="Amount"></param>
-        void remvoveSpeedBoost(string ID, int Amount);
+        void remvoveSpeedBoost(string ID, float Amount);
     }
 }
