@@ -107,6 +107,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
 
         public static void OnMenuChangedToBillboard(Billboard billboard)
         {
+            
             IsDailyQuestBoard = HappyBirthdayModCore.Instance.Helper.Reflection.GetField<bool>((Game1.activeClickableMenu as Billboard), "dailyQuestBoard", true).GetValue();
             if (IsDailyQuestBoard)
                 return;
@@ -125,20 +126,24 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
 
                     string bdayDisplay = Game1.content.LoadString("Strings\\UI:Billboard_Birthday");
                     Rectangle birthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
-                    billboard.calendarDays.Add(new ClickableTextureComponent("", birthdayRect, "", string.Format(bdayDisplay, Game1.player.Name), text, new Rectangle(0, 0, 124, 124), 1f, false));
+                    billboard.calendarDays.Add(new ClickableTextureComponent(string.Format(bdayDisplay, Game1.player.Name), birthdayRect, string.Format(bdayDisplay, Game1.player.Name), string.Format(bdayDisplay, Game1.player.Name), text, new Rectangle(0, 0, 124, 124), 1f, false));
                     //billboard.calendarDays.Add(new ClickableTextureComponent("", birthdayRect, "", $"{Game1.player.Name}'s Birthday", text, new Rectangle(0, 0, 124, 124), 1f, false));
                 }
             }
 
             foreach (var pair in HappyBirthdayModCore.Instance.birthdayManager.othersBirthdays)
             {
+
+
+
                 if (pair.Value.BirthdaySeason != Game1.currentSeason.ToLower()) continue;
                 int index = pair.Value.BirthdayDay;
 
                 string bdayDisplay = Game1.content.LoadString("Strings\\UI:Billboard_Birthday");
                 Rectangle otherBirthdayRect = new Rectangle(Game1.activeClickableMenu.xPositionOnScreen + 152 + (index - 1) % 7 * 32 * 4, Game1.activeClickableMenu.yPositionOnScreen + 200 + (index - 1) / 7 * 32 * 4, 124, 124);
-                billboard.calendarDays.Add(new ClickableTextureComponent("", otherBirthdayRect, "", string.Format(bdayDisplay, Game1.getFarmer(pair.Key).Name), text, new Rectangle(0, 0, 124, 124), 1f, false));
+                billboard.calendarDays.Add(new ClickableTextureComponent(string.Format(bdayDisplay, Game1.getFarmer(pair.Key).Name), otherBirthdayRect, string.Format(bdayDisplay, Game1.getFarmer(pair.Key).Name), string.Format(bdayDisplay, Game1.getFarmer(pair.Key).Name), text, new Rectangle(0, 0, 124, 124), 1f, false));
             }
+            
         }
     }
 }
