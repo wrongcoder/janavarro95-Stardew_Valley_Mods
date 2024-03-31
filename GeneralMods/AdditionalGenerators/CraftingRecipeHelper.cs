@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 
-namespace FishHatchery
+namespace AdditionalGenerators
 {
     /// <summary>
     /// A helper class to help create recipe formats for Stardew Valley.

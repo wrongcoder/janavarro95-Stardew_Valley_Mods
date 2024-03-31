@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FishHatchery
+namespace AdditionalGenerators
 {
     /// <summary>
     /// Helper class for keeping track of an item id with an amount.

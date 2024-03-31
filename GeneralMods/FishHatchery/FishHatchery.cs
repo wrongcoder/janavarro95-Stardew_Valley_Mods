@@ -5,7 +5,6 @@ using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Machines;
 using StardewValley.GameData.Shops;
 using StardewValley.GameData;
-using CrystalRefiner;
 using StardewValley;
 
 namespace FishHatchery
@@ -15,13 +14,6 @@ namespace FishHatchery
         public override void Entry(IModHelper helper)
         {
             this.Helper.Events.Content.AssetRequested += this.checkIfAssetCanBeEdited;
-
-            //this.Helper.Events.GameLoop.SaveLoaded += this.GameLoop_SaveLoaded;
-        }
-
-        private void GameLoop_SaveLoaded(object? sender, SaveLoadedEventArgs e)
-        {
-            Game1.player.addItemByMenuIfNecessary(ItemRegistry.Create(ModConstants.FishHatcheryQualifiedObjectId));
         }
 
         /// <summary>

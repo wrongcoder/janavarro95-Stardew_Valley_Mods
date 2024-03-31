@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CrystalRefiner
+namespace FishHatchery
 {
     public static class ModConstants
     {
@@ -14,7 +14,7 @@ namespace CrystalRefiner
         /// </summary>
         public static string FishHatcheryObjectId = "Omegasis.FishHatchery.ObjectId";
         /// <summary>
-        /// The fully qualified object id for the crystal refiner.
+        /// The fully qualified object id for the fish hatchery.
         /// </summary>
         public static string FishHatcheryQualifiedObjectId = "(BC)"+FishHatcheryObjectId;
 
