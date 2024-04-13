@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Omegasis.HappyBirthday.Framework.Utilities;
 using Omegasis.StardustCore.Events.Preconditions;
 using StardewValley;
 
@@ -12,19 +13,7 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
     {
         public const string EventPreconditionId = "Omegasis.HappyBirthday.Framework.EventPreconditions.YearPrecondition";
 
-        /// <summary>
-        /// Determines how the <see cref="Game1.year"/> value should be in terms of <see cref="yearValue"/>'s value.
-        /// </summary>
-        public enum YearPreconditionType
-        {
-            LessThan,
-            LessThanOrEqualTo,
-            EqualTo,
-            GreaterTo,
-            GreaterThanOrEqualTo
-        }
-
-        public YearPreconditionType yearPreconditionType;
+        public Enums.ComparisonType yearPreconditionType;
 
         public int yearValue;
 
@@ -33,7 +22,7 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
 
         }
 
-        public YearPrecondition(int year, YearPreconditionType yearPreconditionType)
+        public YearPrecondition(int year, Enums.ComparisonType yearPreconditionType)
         {
             this.yearValue = year;
             this.yearPreconditionType = yearPreconditionType;
@@ -41,22 +30,22 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
 
         public override string ToString()
         {
-            return EventPreconditionId + " " + this.yearValue.ToString() + " " +this.yearPreconditionType.ToString();
+            return string.Format("{0} {1} {2}", EventPreconditionId, this.yearValue.ToString(), this.yearPreconditionType);
         }
 
         public override bool meetsCondition()
         {
             switch (this.yearPreconditionType)
             {
-                case YearPreconditionType.LessThan:
+                case Enums.ComparisonType.LessThan:
                     return Game1.year < this.yearValue;
-                case YearPreconditionType.LessThanOrEqualTo:
+                case Enums.ComparisonType.LessThanOrEqualTo:
                     return Game1.year <= this.yearValue;
-                case YearPreconditionType.EqualTo:
+                case Enums.ComparisonType.EqualTo:
                     return Game1.year == this.yearValue;
-                case YearPreconditionType.GreaterTo:
+                case Enums.ComparisonType.GreaterTo:
                     return Game1.year > this.yearValue;
-                case YearPreconditionType.GreaterThanOrEqualTo:
+                case Enums.ComparisonType.GreaterThanOrEqualTo:
                     return Game1.year >= this.yearValue;
                 default:
                     return false;

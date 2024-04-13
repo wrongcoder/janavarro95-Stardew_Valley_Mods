@@ -12,7 +12,6 @@ using StardewValley.Locations;
 namespace AdditionalGenerators
 {
     //TODO: Make sure this works in shops/crafting.
-    //TODO: Verify this works in volcano dungeon entrance.
     public class AdditionalGenerators : Mod
     {
         public override void Entry(IModHelper helper)
@@ -345,7 +344,7 @@ namespace AdditionalGenerators
                 IsBigCraftable = true,
 
             };
-            objectDictionary.Add(ModConstants.GeothermalGeneratorObjectId, craftingRecipeHelper.toCraftingRecipeFormat());
+            objectDictionary.Add(ModConstants.GeothermalGeneratorObjectId, geothermalRecipeHelper.toCraftingRecipeFormat());
         }
 
 

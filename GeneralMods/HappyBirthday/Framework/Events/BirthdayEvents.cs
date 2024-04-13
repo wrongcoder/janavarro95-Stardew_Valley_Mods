@@ -15,6 +15,7 @@ using Omegasis.StardustCore.Events;
 using Omegasis.StardustCore.IlluminateFramework;
 using Omegasis.StardustCore.Utilities;
 using Omegasis.HappyBirthday.Framework.Events.Compatibility;
+using Omegasis.HappyBirthday.Framework.Utilities;
 
 namespace Omegasis.HappyBirthday.Framework.Events
 {
@@ -814,7 +815,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
             });
             e.stardewEventId = "Omegasis.HappyBirthday.SaloonYear2CommunityBirthdayParty";
             e.eventStringId = EventIds.SaloonBirthdayParty_Year2;
-            e.addEventPrecondition(new YearPrecondition(2, YearPrecondition.YearPreconditionType.GreaterThanOrEqualTo));
+            e.addEventPrecondition(new YearPrecondition(2, Enums.ComparisonType.GreaterThanOrEqualTo));
 
             return e;
         }
@@ -826,7 +827,7 @@ namespace Omegasis.HappyBirthday.Framework.Events
         public static HappyBirthdayEventHelper SaloonBirthday_Year1()
         {
             HappyBirthdayEventHelper e = SaloonBirthday(new List<EventStartData.NPCData>());
-            e.addEventPrecondition(new YearPrecondition(1, YearPrecondition.YearPreconditionType.EqualTo));
+            e.addEventPrecondition(new YearPrecondition(1, Enums.ComparisonType.EqualTo));
 
             return e;
         }

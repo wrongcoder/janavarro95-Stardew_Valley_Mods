@@ -31,6 +31,9 @@
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_AskPlayerForFavoriteGift_Farmhouse_2.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_AskPlayerForFavoriteGift_Farmhouse_3.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Abigail_Mines.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -67,10 +70,16 @@
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Penny_House.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Penny_House_Stardew_Valley_Expanded.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Penny_Stardew_Valley_Expanded.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Penny_Trailer.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Penny_Trailer_Stardew_Valley_Expanded.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_BirthdayParty_Dating_Sam.json">
@@ -88,7 +97,13 @@
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_JunimoCommunityCenterBirthday.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_Married_BirthdayParty_Farmhouse_1.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_Married_BirthdayParty_Farmhouse_2.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_Married_BirthdayParty_Farmhouse_3.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="ContentPacks\HappyBirthdayContentPack en-US\ModAssets\Data\Events\HappyBirthday_Events_SaloonBirthdayParty_Year1.json">

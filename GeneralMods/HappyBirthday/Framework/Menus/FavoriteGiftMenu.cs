@@ -206,14 +206,11 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         /// <param name="i"></param>
         public virtual void addFavoriteGift(Item i)
         {
-            if (this.potentialFavoriteGiftIds.Contains(i.QualifiedItemId))
-            {
-                return;
-            }
             if (i == null)
             {
                 return;
             }
+            this.potentialFavoriteGiftIds.Add(i.QualifiedItemId);
             HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Added {0} as a potential favorited gift.", i.QualifiedItemId));
             Rectangle textureBounds = GameLocation.getSourceRectForObject(i.ParentSheetIndex);
             float itemScale = 4f;
@@ -262,7 +259,6 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     this.handleButtonClick(button.name);
                     button.scale -= 0.5f;
                     button.scale = Math.Max(3.5f, button.scale);
-                    this.potentialFavoriteGiftIds.Add(button.name);
                     this.addFavoriteGift(button.item);
                     break;
                 }

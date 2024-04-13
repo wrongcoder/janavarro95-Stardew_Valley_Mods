@@ -53,8 +53,9 @@ namespace Omegasis.HappyBirthday
             foreach (var v in GiftIDS.getLegacyGiftIds())
             {
                 string legacyId = "StardewValley.Object." + Enum.GetName(typeof(GiftIDS.LegacyGiftIds), (int)v);
-                HappyBirthdayModCore.Instance.Monitor.Log("Building legacy gift id: " + legacyId);
-                this.legacyGiftIdResolverMap.Add(legacyId,"(O)"+(int)v);
+                string remappedId = "(O)"+(int)v;
+                HappyBirthdayModCore.Instance.Monitor.Log("Building legacy gift id: " + legacyId + " "+ remappedId);
+                this.legacyGiftIdResolverMap.Add(legacyId, remappedId);
             }
         }
 
@@ -353,7 +354,7 @@ namespace Omegasis.HappyBirthday
         {
             if (HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.potentialFavoriteGifts.Count > 0)
             {
-                int giftValue =  Game1.random.Next(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.potentialFavoriteGifts.Count);
+                int giftValue = Game1.random.Next(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.potentialFavoriteGifts.Count);
                 string selectedBirthdayGift = HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.potentialFavoriteGifts.ElementAt(giftValue);
 
                 return this.getItemFromId(selectedBirthdayGift);
@@ -461,9 +462,11 @@ namespace Omegasis.HappyBirthday
             this.setNextBirthdayGift(gift);
         }
 
-        public Item getItemFromId(string itemId,int amount=1, int quality=0, bool allowNull=false)
+        public Item getItemFromId(string itemId, int amount = 1, int quality = 0, bool allowNull = false)
         {
-           return ItemRegistry.Create<Item>(this.resolveLegacyGiftId(itemId), amount, quality, allowNull);
+            string newId = this.resolveLegacyGiftId(itemId);
+            HappyBirthdayModCore.Instance.Monitor.Log("Requesting gift with id:" + newId);
+            return ItemRegistry.Create<Item>(newId, amount, quality, allowNull);
         }
 
         public string resolveLegacyGiftId(string id)
