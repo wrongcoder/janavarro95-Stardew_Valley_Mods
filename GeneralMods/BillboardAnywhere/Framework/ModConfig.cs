@@ -16,13 +16,13 @@ namespace Omegasis.BillboardAnywhere.Framework
         public SButton QiBoardKeyBinding { get; set;} = SButton.J;
 
         /// <summary>The offset for the calendar button from the active menu</summary>
-        public Vector2 CalendarOffsetFromMenu { get; set; } = new Vector2(-100, 0);
+        public Vector2 CalendarOffsetFromMenu { get; set; } = new Vector2(-100, 100);
         /// <summary>The offset for the quest button from the active menu</summary>
-        public Vector2 QuestOffsetFromMenu { get; set; } = new Vector2(-200, 0);
+        public Vector2 QuestOffsetFromMenu { get; set; } = new Vector2(-200, 100);
         /// <summary>The offset for the special order button from the active menu</summary>
-        public Vector2 SpecialOrderOffsetFromMenu { get; set; } = new Vector2(-100, 100);
+        public Vector2 SpecialOrderOffsetFromMenu { get; set; } = new Vector2(-200, 200);
         /// <summary>The offset for the qi menu button from the active menu</summary>
-        public Vector2 QiOffsetFromMenu { get; set; } = new Vector2(-200, 100);
+        public Vector2 QiOffsetFromMenu { get; set; } = new Vector2(-100, 200);
 
         /// <summary>
         /// If true the calendar button is enabled for the in-game menu.
