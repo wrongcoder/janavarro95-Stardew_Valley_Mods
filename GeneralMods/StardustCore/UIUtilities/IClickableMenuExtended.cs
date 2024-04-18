@@ -8,6 +8,7 @@ using StardewValley;
 
 namespace Omegasis.StardustCore.UIUtilities
 {
+    /*
     public class IClickableMenuExtended : StardewValley.Menus.IClickableMenu
     {
         /// <summary>
@@ -460,6 +461,7 @@ namespace Omegasis.StardustCore.UIUtilities
         /// <summary>Work around drawing function instead of using Game1.drawItemSelectDialogue.</summary>
         public virtual void drawItemSelectDialogue(int x, int y, int dialogueX, int dialogueY, int screenHeight, int addedTileHeightForQuestions, string text)
         {
+            /*
             string selectedItemsType = Game1.selectedItemsType;
             string text1;
             if (selectedItemsType != "flutePitch" && selectedItemsType != "drumTome")
@@ -473,7 +475,8 @@ namespace Omegasis.StardustCore.UIUtilities
                 text1 = "@ " + Game1.numberOfSelectedItems + " >  ";
             if (Game1.currentLocation.Name.Equals("Club"))
                 text1 = "@ " + Game1.numberOfSelectedItems + " >  ";
-            Game1.spriteBatch.DrawString(Game1.dialogueFont, text1, new Vector2(dialogueX + x + Game1.tileSize, screenHeight - (5 + addedTileHeightForQuestions + 1) * Game1.tileSize + Game1.dialogueFont.MeasureString(text).Y + (Game1.tileSize * 3 / 2 + Game1.tileSize / 8) + dialogueY), Game1.textColor);
+            
+            //Game1.spriteBatch.DrawString(Game1.dialogueFont, text1, new Vector2(dialogueX + x + Game1.tileSize, screenHeight - (5 + addedTileHeightForQuestions + 1) * Game1.tileSize + Game1.dialogueFont.MeasureString(text).Y + (Game1.tileSize * 3 / 2 + Game1.tileSize / 8) + dialogueY), Game1.textColor);
         }
 
         public override void update(GameTime time) {
@@ -527,4 +530,5 @@ namespace Omegasis.StardustCore.UIUtilities
             Game1.exitActiveMenu();
         }
     }
+*/
 }

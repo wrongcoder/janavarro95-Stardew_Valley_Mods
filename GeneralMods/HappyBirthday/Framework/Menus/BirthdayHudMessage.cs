@@ -18,8 +18,8 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         public BirthdayHudMessage(string message):base(message)
         {
             this.message = message;
-            this.color = Color.SeaGreen;
             this.timeLeft = 3500f;
+            this.type = "Omegasis.HappyBirthday.BirthdayHUDMessage";
         }
     }
 

@@ -123,7 +123,7 @@ namespace Omegasis.BuildEndurance
             // reset if needed
             if (this.PlayerData.ClearModEffects)
             {
-                Game1.player.MaxStamina = this.PlayerData.OriginalMaxStamina;
+                Game1.player.maxStamina.Value = this.PlayerData.OriginalMaxStamina;
                 this.PlayerData.ExpToNextLevel = this.Config.ExpToNextLevel;
                 this.PlayerData.CurrentExp = this.Config.CurrentExp;
                 this.PlayerData.CurrentLevelStaminaBonus = 0;
@@ -136,7 +136,7 @@ namespace Omegasis.BuildEndurance
             // else apply stamina
             else
             {
-                Game1.player.MaxStamina = this.PlayerData.NightlyStamina <= 0
+                Game1.player.maxStamina.Value = this.PlayerData.NightlyStamina <= 0
                     ? this.PlayerData.BaseStaminaBonus + this.PlayerData.CurrentLevelStaminaBonus + this.PlayerData.OriginalMaxStamina
                     : this.PlayerData.NightlyStamina;
             }
@@ -163,7 +163,7 @@ namespace Omegasis.BuildEndurance
                     this.PlayerData.CurrentLevel += 1;
                     this.PlayerData.CurrentExp = this.PlayerData.CurrentExp - this.PlayerData.ExpToNextLevel;
                     this.PlayerData.ExpToNextLevel = (this.Config.ExpCurve * this.PlayerData.ExpToNextLevel);
-                    Game1.player.MaxStamina += this.Config.StaminaIncreasePerLevel;
+                    Game1.player.maxStamina.Value += this.Config.StaminaIncreasePerLevel;
                     this.PlayerData.CurrentLevelStaminaBonus += this.Config.StaminaIncreasePerLevel;
                 }
             }

@@ -26,20 +26,20 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         private readonly List<ClickableComponent> Labels = new List<ClickableComponent>();
 
         /// <summary>The season buttons to draw.</summary>
-        private readonly List<ClickableTextureComponent> SeasonButtons = new List<ClickableTextureComponent>();
+        private readonly List<ClickableTextureComponent> seasonButtons = new List<ClickableTextureComponent>();
 
         /// <summary>The day buttons to draw.</summary>
-        private readonly List<ClickableTextureComponent> DayButtons = new List<ClickableTextureComponent>();
+        private readonly List<ClickableTextureComponent> dayButtons = new List<ClickableTextureComponent>();
 
         /// <summary>The OK button to draw.</summary>
-        private ClickableTextureComponent OkButton;
+        private ClickableTextureComponent okButton;
 
         /// <summary>The player's current birthday season.</summary>
         private string BirthdaySeason;
         private string seasonName;
 
         /// <summary>The player's current birthday day.</summary>
-        private int BirthdayDay;
+        private int birthdayDay;
 
         /// <summary>The callback to invoke when the birthday value changes.</summary>
         private Action<string, int> OnChanged;
@@ -88,7 +88,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             string toSpeak = "";
             this.BirthdaySeason = HappyBirthdayModCore.Instance.translationInfo.getTranslatedBaseGameString(Season);
             this.seasonName = Season;
-            this.BirthdayDay = Day;
+            this.birthdayDay = Day;
             this.OnChanged = OnChanged;
             this.setUpPositions();
             toSpeak = $"{this.BirthdaySeason}";
@@ -116,10 +116,13 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         /// <summary>Regenerate the UI.</summary>
         private void setUpPositions()
         {
+
+            HappyBirthdayModCore.Instance.Monitor.Log("Current translation code is: " + Game1.content.GetCurrentLanguage());
+
             this.Labels.Clear();
-            this.DayButtons.Clear();
-            this.SeasonButtons.Clear();
-            this.OkButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), "", null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f)
+            this.dayButtons.Clear();
+            this.seasonButtons.Clear();
+            this.okButton = new ClickableTextureComponent("OK", new Rectangle(this.xPositionOnScreen + this.width - borderWidth - spaceToClearSideBorder - Game1.tileSize, this.yPositionOnScreen + this.height - borderWidth - spaceToClearTopBorder + Game1.tileSize / 4, Game1.tileSize, Game1.tileSize), "", null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f)
             {
                 myID = 200,
                 leftNeighborID = -7777,
@@ -129,13 +132,13 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             string bdaySeason = HappyBirthdayModCore.Instance.translationInfo.getTranslatedBaseGameString("Birthday") + " " + HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("Season");
             string bdayDay = HappyBirthdayModCore.Instance.translationInfo.getTranslatedBaseGameString("Birthday") + " " + HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("Date");
             this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + spaceToClearSideBorder + borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder - Game1.tileSize / 8, 1, 1), bdaySeason + ": " + this.BirthdaySeason));
-            this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + spaceToClearSideBorder + borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize, Game1.tileSize * 2, Game1.tileSize), bdayDay + ": " + this.BirthdayDay));
-            this.SeasonButtons.Add(new ClickableTextureComponent("Spring", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getSpringButton(), Game1.pixelZoom) {
+            this.Labels.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + Game1.tileSize / 4 + spaceToClearSideBorder + borderWidth + Game1.tileSize * 3 + 8, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize, Game1.tileSize * 2, Game1.tileSize), bdayDay + ": " + this.birthdayDay));
+            this.seasonButtons.Add(new ClickableTextureComponent("Spring", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getSpringButton(), Game1.pixelZoom) {
                 myID=springButtonId,
                 downNeighborID = -7777,
                 rightNeighborID=summerButtonId
             });
-            this.SeasonButtons.Add(new ClickableTextureComponent("Summer", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 3 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getSummerButton(), Game1.pixelZoom)
+            this.seasonButtons.Add(new ClickableTextureComponent("Summer", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 3 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + (int)(Game1.tileSize * 3.10) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getSummerButton(), Game1.pixelZoom)
             {
                 myID = summerButtonId,
                 downNeighborID = -7777,
@@ -143,14 +146,14 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID=fallButtonId
 
             });
-            this.SeasonButtons.Add(new ClickableTextureComponent("Fall", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 5 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + (int)(Game1.tileSize * 3.1) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getFallButton(), Game1.pixelZoom)
+            this.seasonButtons.Add(new ClickableTextureComponent("Fall", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 5 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + (int)(Game1.tileSize * 3.1) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getFallButton(), Game1.pixelZoom)
             {
                 myID=fallButtonId,
                 downNeighborID = -7777,
                 leftNeighborID=summerButtonId,
                 rightNeighborID=winterButtonId
             });
-            this.SeasonButtons.Add(new ClickableTextureComponent("Winter", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 7 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + (int)(Game1.tileSize * 3.1) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getWinterButton(), Game1.pixelZoom)
+            this.seasonButtons.Add(new ClickableTextureComponent("Winter", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 7 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + (int)(Game1.tileSize * 3.1) - Game1.tileSize / 4, Game1.tileSize * 2, Game1.tileSize), "", "", Game1.mouseCursors, this.getWinterButton(), Game1.pixelZoom)
             {
                 myID=winterButtonId,
                 downNeighborID = -7777,
@@ -158,14 +161,14 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = -7777
             });
 
-            this.DayButtons.Add(new ClickableTextureComponent("1", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("1", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 1,
                 downNeighborID = 8,
                 rightNeighborID = 2,
                 upNeighborID = -7777
             });
-            this.DayButtons.Add(new ClickableTextureComponent("2", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 2 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("2", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 2 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 2,
                 downNeighborID = 9,
@@ -173,7 +176,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 3,
                 upNeighborID = -7777
             });
-            this.DayButtons.Add(new ClickableTextureComponent("3", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 3 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(24, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("3", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 3 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(24, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 3,
                 downNeighborID = 10,
@@ -181,7 +184,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 4,
                 upNeighborID = -7777
             });
-            this.DayButtons.Add(new ClickableTextureComponent("4", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 4 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(32, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("4", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 4 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(32, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 4,
                 downNeighborID = 11,
@@ -189,7 +192,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 5,
                 upNeighborID = -7777
             });
-            this.DayButtons.Add(new ClickableTextureComponent("5", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 5 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(40, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("5", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 5 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(40, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 5,
                 downNeighborID = 12,
@@ -197,7 +200,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 6,
                 upNeighborID = -7777
             });
-            this.DayButtons.Add(new ClickableTextureComponent("6", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 6 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(48, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("6", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 6 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(48, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 6,
                 downNeighborID = 13,
@@ -205,7 +208,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 7,
                 upNeighborID = -7777
             });
-            this.DayButtons.Add(new ClickableTextureComponent("7", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 7 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(56, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("7", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 7 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 4 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(56, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 7,
                 downNeighborID = 14,
@@ -213,7 +216,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 8,
                 upNeighborID = -7777
             });
-            this.DayButtons.Add(new ClickableTextureComponent("8", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(64, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("8", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 1 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(64, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 8,
                 downNeighborID = 15,
@@ -221,7 +224,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 9,
                 upNeighborID = 1
             });
-            this.DayButtons.Add(new ClickableTextureComponent("9", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 2 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(72, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("9", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + Game1.tileSize * 2 - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize * 1, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(72, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 9,
                 downNeighborID = 16,
@@ -229,7 +232,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 10,
                 upNeighborID = 2
             });
-            this.DayButtons.Add(new ClickableTextureComponent("10", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 2.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("10", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 2.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 10,
                 downNeighborID = 17,
@@ -237,7 +240,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 11,
                 upNeighborID = 3
             });
-            this.DayButtons.Add(new ClickableTextureComponent("10", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 3.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(0, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("10", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 3.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(0, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 10,
                 downNeighborID = 17,
@@ -245,7 +248,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 11,
                 upNeighborID = 3
             });
-            this.DayButtons.Add(new ClickableTextureComponent("11", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 3.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("11", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 3.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 11,
                 downNeighborID = 18,
@@ -253,7 +256,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 12,
                 upNeighborID = 4
             });
-            this.DayButtons.Add(new ClickableTextureComponent("11", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 4.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("11", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 4.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 11,
                 downNeighborID = 18,
@@ -261,7 +264,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 12,
                 upNeighborID = 4
             });
-            this.DayButtons.Add(new ClickableTextureComponent("12", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 4.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("12", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 4.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 12,
                 downNeighborID = 19,
@@ -269,7 +272,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 13,
                 upNeighborID = 5
             });
-            this.DayButtons.Add(new ClickableTextureComponent("12", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 5.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("12", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 5.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 12,
                 downNeighborID = 19,
@@ -277,7 +280,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 13,
                 upNeighborID = 5
             });
-            this.DayButtons.Add(new ClickableTextureComponent("13", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 5.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("13", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 5.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 13,
                 downNeighborID = 20,
@@ -285,7 +288,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 14,
                 upNeighborID = 6
             });
-            this.DayButtons.Add(new ClickableTextureComponent("13", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 6.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(24, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("13", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 6.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(24, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 13,
                 downNeighborID = 20,
@@ -293,7 +296,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 14,
                 upNeighborID = 6
             });
-            this.DayButtons.Add(new ClickableTextureComponent("14", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 6.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("14", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 6.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 14,
                 downNeighborID = 21,
@@ -301,7 +304,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 15,
                 upNeighborID = 7
             });
-            this.DayButtons.Add(new ClickableTextureComponent("14", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 7.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(32, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("14", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 7.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 5 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(32, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 14,
                 downNeighborID = 21,
@@ -309,7 +312,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 15,
                 upNeighborID = 7
             });
-            this.DayButtons.Add(new ClickableTextureComponent("15", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 0.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("15", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 0.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 15,
                 downNeighborID = 22,
@@ -317,7 +320,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 16,
                 upNeighborID = 8
             });
-            this.DayButtons.Add(new ClickableTextureComponent("15", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 1.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(40, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("15", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 1.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(40, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 15,
                 downNeighborID = 22,
@@ -325,7 +328,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 16,
                 upNeighborID = 8
             });
-            this.DayButtons.Add(new ClickableTextureComponent("16", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 1.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("16", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 1.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 16,
                 downNeighborID = 23,
@@ -333,7 +336,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 17,
                 upNeighborID = 9
             });
-            this.DayButtons.Add(new ClickableTextureComponent("16", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 2.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(48, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("16", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 2.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(48, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 16,
                 downNeighborID = 23,
@@ -341,7 +344,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 17,
                 upNeighborID = 9
             });
-            this.DayButtons.Add(new ClickableTextureComponent("17", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 2.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("17", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 2.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 17,
                 downNeighborID = 24,
@@ -349,7 +352,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 18,
                 upNeighborID = 10
             });
-            this.DayButtons.Add(new ClickableTextureComponent("17", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 3.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(56, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("17", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 3.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(56, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 17,
                 downNeighborID = 24,
@@ -357,7 +360,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 18,
                 upNeighborID = 10
             });
-            this.DayButtons.Add(new ClickableTextureComponent("18", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 3.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("18", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 3.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 18,
                 downNeighborID = 25,
@@ -365,7 +368,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 19,
                 upNeighborID = 11
             });
-            this.DayButtons.Add(new ClickableTextureComponent("18", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 4.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(64, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("18", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 4.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(64, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 18,
                 downNeighborID = 25,
@@ -373,7 +376,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 19,
                 upNeighborID = 11
             });
-            this.DayButtons.Add(new ClickableTextureComponent("19", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 4.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("19", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 4.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 19,
                 downNeighborID = 26,
@@ -381,7 +384,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 20,
                 upNeighborID = 12
             });
-            this.DayButtons.Add(new ClickableTextureComponent("19", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 5.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(72, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("19", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 5.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(72, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 19,
                 downNeighborID = 26,
@@ -389,7 +392,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 20,
                 upNeighborID = 12
             });
-            this.DayButtons.Add(new ClickableTextureComponent("20", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 5.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("20", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 5.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 20,
                 downNeighborID = 27,
@@ -397,7 +400,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 21,
                 upNeighborID = 13
             });
-            this.DayButtons.Add(new ClickableTextureComponent("20", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 6.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(0, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("20", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 6.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(0, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 20,
                 downNeighborID = 27,
@@ -405,7 +408,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 21,
                 upNeighborID = 13
             });
-            this.DayButtons.Add(new ClickableTextureComponent("21", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 6.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("21", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 6.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 21,
                 downNeighborID = 28,
@@ -413,7 +416,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 22,
                 upNeighborID = 14
             });
-            this.DayButtons.Add(new ClickableTextureComponent("21", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 7.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("21", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 7.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 6 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(8, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 21,
                 downNeighborID = 28,
@@ -421,7 +424,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 22,
                 upNeighborID = 14
             });
-            this.DayButtons.Add(new ClickableTextureComponent("22", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 0.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("22", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 0.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 22,
                 downNeighborID = -7777,
@@ -429,7 +432,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 23,
                 upNeighborID = 15
             });
-            this.DayButtons.Add(new ClickableTextureComponent("22", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 1.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("22", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 1.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 22,
                 downNeighborID = -7777,
@@ -437,7 +440,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 23,
                 upNeighborID = 15
             });
-            this.DayButtons.Add(new ClickableTextureComponent("23", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 1.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("23", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 1.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 23,
                 downNeighborID = -7777,
@@ -445,7 +448,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 24,
                 upNeighborID = 16
              });
-            this.DayButtons.Add(new ClickableTextureComponent("23", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 2.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(24, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("23", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 2.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(24, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 23,
                 downNeighborID = -7777,
@@ -453,7 +456,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 24,
                 upNeighborID = 16
              });
-            this.DayButtons.Add(new ClickableTextureComponent("24", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 2.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("24", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 2.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 24,
                 downNeighborID = -7777,
@@ -461,7 +464,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 25,
                 upNeighborID = 17
              });
-            this.DayButtons.Add(new ClickableTextureComponent("24", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 3.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(32, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("24", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 3.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(32, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 24,
                 downNeighborID = -7777,
@@ -469,7 +472,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 25,
                 upNeighborID = 17
              });
-            this.DayButtons.Add(new ClickableTextureComponent("25", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 3.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("25", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 3.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 25,
                 downNeighborID = -7777,
@@ -477,7 +480,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 26,
                 upNeighborID = 18
              });
-            this.DayButtons.Add(new ClickableTextureComponent("25", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 4.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(40, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("25", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 4.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(40, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 25,
                 downNeighborID = -7777,
@@ -485,7 +488,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 26,
                 upNeighborID = 18
              });
-            this.DayButtons.Add(new ClickableTextureComponent("26", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 4.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("26", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 4.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 26,
                 downNeighborID = -7777,
@@ -493,7 +496,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 27,
                 upNeighborID = 19
              });
-            this.DayButtons.Add(new ClickableTextureComponent("26", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 5.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(48, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("26", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 5.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(48, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 26,
                 downNeighborID = -7777,
@@ -501,7 +504,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 27,
                 upNeighborID = 19
              });
-            this.DayButtons.Add(new ClickableTextureComponent("27", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 5.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("27", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 5.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 27,
                 downNeighborID = -7777,
@@ -509,7 +512,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 28,
                 upNeighborID = 20
              });
-            this.DayButtons.Add(new ClickableTextureComponent("27", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 6.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(56, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("27", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 6.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(56, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 27,
                 downNeighborID = -7777,
@@ -517,7 +520,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = 28,
                 upNeighborID = 20
              });
-            this.DayButtons.Add(new ClickableTextureComponent("28", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 6.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("28", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 6.75) - Game1.tileSize / 4, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(16, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 28,
                 downNeighborID = -7777,
@@ -525,7 +528,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 rightNeighborID = -7777,
                 upNeighborID = 21
              });
-            this.DayButtons.Add(new ClickableTextureComponent("28", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 7.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(64, 16, 8, 12), Game1.pixelZoom)
+            this.dayButtons.Add(new ClickableTextureComponent("28", new Rectangle(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth + (int)(Game1.tileSize * 7.25) - Game1.tileSize / 3, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + Game1.tileSize * 7 - Game1.tileSize / 4, Game1.tileSize / 2, Game1.tileSize), "", "", Game1.content.Load<Texture2D>("LooseSprites\\font_bold"), new Rectangle(64, 16, 8, 12), Game1.pixelZoom)
             {
                 myID = 28,
                 downNeighborID = -7777,
@@ -548,38 +551,38 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 {
                     default: // if days were selected this shouldn't be blank; but let's be safe and select Spring.
                     case "Spring":
-                        setCurrentlySnappedComponentTo(springButtonId);
+                        this.setCurrentlySnappedComponentTo(springButtonId);
                         break;
                     case "Summer":
-                        setCurrentlySnappedComponentTo(summerButtonId);
+                        this.setCurrentlySnappedComponentTo(summerButtonId);
                         break;
                     case "Fall":
-                        setCurrentlySnappedComponentTo(fallButtonId);
+                        this.setCurrentlySnappedComponentTo(fallButtonId);
                         break;
                     case "Winter":
-                        setCurrentlySnappedComponentTo(winterButtonId);
+                        this.setCurrentlySnappedComponentTo(winterButtonId);
                         break;
                 }
                 break;
             case 1: // right
                 // all custom right movements go to OKButton if available
-                if (this.BirthdayDay != 0 && string.IsNullOrEmpty(this.seasonName) == false && this.isFestivalDay() == false)
-                    setCurrentlySnappedComponentTo(200);
+                if (this.birthdayDay != 0 && string.IsNullOrEmpty(this.seasonName) == false && this.isFestivalDay() == false)
+                    this.setCurrentlySnappedComponentTo(200);
                 break;
             case 2: // down
                 // custom down movement can either be from seasons to days
                 // or bottom row of days to OkButton if available
                 if (oldID >= springButtonId && oldID <= winterButtonId && (string.IsNullOrEmpty(this.seasonName) == false))
                 {
-                    if (this.BirthdayDay >= 1 && this.BirthdayDay <= 28)
+                    if (this.birthdayDay >= 1 && this.birthdayDay <= 28)
                     {
-                        setCurrentlySnappedComponentTo(this.BirthdayDay);
+                        this.setCurrentlySnappedComponentTo(this.birthdayDay);
                     } else {
-                        setCurrentlySnappedComponentTo(1);
+                        this.setCurrentlySnappedComponentTo(1);
                     }
                 } else if (oldID >= 21 && oldID <= 28) {
-                    if (this.BirthdayDay != 0 && string.IsNullOrEmpty(this.seasonName) == false && this.isFestivalDay() == false)
-                        setCurrentlySnappedComponentTo(200);
+                    if (this.birthdayDay != 0 && string.IsNullOrEmpty(this.seasonName) == false && this.isFestivalDay() == false)
+                        this.setCurrentlySnappedComponentTo(200);
                 } else {
                     // Nothing should reach here,but to be safe snap to default.
                     this.snapToDefaultClickableComponent();
@@ -590,14 +593,14 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 if (oldID == 200 && (string.IsNullOrEmpty(this.seasonName) == false))
                 {
                     // move to selected day if already selected; otherwise just go to 28
-                    if (this.BirthdayDay >=1 || this.BirthdayDay <= 28)
+                    if (this.birthdayDay >=1 || this.birthdayDay <= 28)
                     {
-                        setCurrentlySnappedComponentTo(BirthdayDay);
+                        this.setCurrentlySnappedComponentTo(this.birthdayDay);
                     } else {
-                        setCurrentlySnappedComponentTo(28);
+                        this.setCurrentlySnappedComponentTo(28);
                     }
                 } else {
-                    snapToDefaultClickableComponent();
+                    this.snapToDefaultClickableComponent();
                 }
                 break;
             }
@@ -619,8 +622,8 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 case "Winter":
                     this.BirthdaySeason = HappyBirthdayModCore.Instance.translationInfo.getTranslatedBaseGameString(name);
                     this.seasonName = name;
-                    this.OnChanged(this.seasonName, this.BirthdayDay);
-                    this.updateMenu(this.seasonName, this.BirthdayDay, this.OnChanged);
+                    this.OnChanged(this.seasonName, this.birthdayDay);
+                    this.updateMenu(this.seasonName, this.birthdayDay, this.OnChanged);
                     break;
 
                 // OK button
@@ -642,9 +645,9 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     break;
 
                 default:
-                    this.BirthdayDay = Convert.ToInt32(name);
-                    this.OnChanged(this.seasonName, this.BirthdayDay);
-                    this.updateMenu(this.seasonName, this.BirthdayDay, this.OnChanged);
+                    this.birthdayDay = Convert.ToInt32(name);
+                    this.OnChanged(this.seasonName, this.birthdayDay);
+                    this.updateMenu(this.seasonName, this.birthdayDay, this.OnChanged);
                     break;
             }
             Game1.playSound("coin");
@@ -658,7 +661,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         {
             //If the season is not selected then the day buttons can't be clicked. Thanks to @Potato#5266 on the SDV discord for this tip.
             if (string.IsNullOrEmpty(this.seasonName) == false)
-                foreach (ClickableTextureComponent button in this.DayButtons.ToList())
+                foreach (ClickableTextureComponent button in this.dayButtons.ToList())
                     if (button.containsPoint(x, y))
                     {
                         this.handleButtonClick(button.name);
@@ -666,7 +669,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                         button.scale = Math.Max(3.5f, button.scale);
                     }
 
-            foreach (ClickableTextureComponent button in this.SeasonButtons.ToList())
+            foreach (ClickableTextureComponent button in this.seasonButtons.ToList())
                 if (button.containsPoint(x, y))
                 {
                     this.handleButtonClick(button.name);
@@ -674,7 +677,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     button.scale = Math.Max(3.5f, button.scale);
                 }
 
-            if (this.OkButton.containsPoint(x, y))
+            if (this.okButton.containsPoint(x, y))
             {
                 if (this.isFestivalDay())
                 {
@@ -684,10 +687,10 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                         Game1.addHUDMessage(new BirthdayHudMessage("You can't have a birthday on this day. Sorry!"));
                     return;
                 }
-                if (this.seasonName == "" || this.BirthdayDay == 0) return;
-                this.handleButtonClick(this.OkButton.name);
-                this.OkButton.scale -= 0.25f;
-                this.OkButton.scale = Math.Max(0.75f, this.OkButton.scale);
+                if (this.seasonName == "" || this.birthdayDay == 0) return;
+                this.handleButtonClick(this.okButton.name);
+                this.okButton.scale -= 0.25f;
+                this.okButton.scale = Math.Max(0.75f, this.okButton.scale);
             }
         }
 
@@ -702,31 +705,31 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         /// <param name="y">The Y-position of the cursor.</param>
         public override void performHoverAction(int x, int y)
         {
-            foreach (ClickableTextureComponent button in this.DayButtons)
+            foreach (ClickableTextureComponent button in this.dayButtons)
                 button.scale = button.containsPoint(x, y)
                     ? Math.Min(button.scale + 0.02f, button.baseScale + 0.1f)
                     : Math.Max(button.scale - 0.02f, button.baseScale);
 
-            foreach (ClickableTextureComponent button in this.SeasonButtons)
+            foreach (ClickableTextureComponent button in this.seasonButtons)
                 button.scale = button.containsPoint(x, y)
                     ? Math.Min(button.scale + 0.02f, button.baseScale + 0.1f)
                     : Math.Max(button.scale - 0.02f, button.baseScale);
 
-            this.OkButton.scale = this.OkButton.containsPoint(x, y)
-                ? Math.Min(this.OkButton.scale + 0.02f, this.OkButton.baseScale + 0.1f)
-                : Math.Max(this.OkButton.scale - 0.02f, this.OkButton.baseScale);
+            this.okButton.scale = this.okButton.containsPoint(x, y)
+                ? Math.Min(this.okButton.scale + 0.02f, this.okButton.baseScale + 0.1f)
+                : Math.Max(this.okButton.scale - 0.02f, this.okButton.baseScale);
 
         }
 
         public new void populateClickableComponentList()
         {
             ///
-            if (SeasonButtons != null && DayButtons != null && OkButton != null)
+            if (this.seasonButtons != null && this.dayButtons != null && this.okButton != null)
             {
-                allClickableComponents = new List<ClickableComponent>(SeasonButtons.Count + DayButtons.Count + 1);
-                this.allClickableComponents.AddRange(this.SeasonButtons);
-                this.allClickableComponents.AddRange(this.DayButtons);
-                this.allClickableComponents.Add(this.OkButton);
+                this.allClickableComponents = new List<ClickableComponent>(this.seasonButtons.Count + this.dayButtons.Count + 1);
+                this.allClickableComponents.AddRange(this.seasonButtons);
+                this.allClickableComponents.AddRange(this.dayButtons);
+                this.allClickableComponents.Add(this.okButton);
             }
         }
 
@@ -736,10 +739,10 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         {
             if (HappyBirthdayModCore.Instance.screenreader != null)
             {
-                if (allClickableComponents == null || allClickableComponents.Count == 0)
-                    populateClickableComponentList();
-                if (currentlySnappedComponent == null)
-                    snapToDefaultClickableComponent();
+                if (this.allClickableComponents == null || this.allClickableComponents.Count == 0)
+                    this.populateClickableComponentList();
+                if (this.currentlySnappedComponent == null)
+                    this.snapToDefaultClickableComponent();
                 if (key != 0)
                     this.applyMovementKey(key);
             }
@@ -756,11 +759,11 @@ namespace Omegasis.HappyBirthday.Framework.Menus
 
             // draw day buttons
             if (string.IsNullOrEmpty(this.seasonName) == false)
-                foreach (ClickableTextureComponent button in this.DayButtons)
+                foreach (ClickableTextureComponent button in this.dayButtons)
                     button.draw(b);
 
             // draw season buttons
-            foreach (ClickableTextureComponent button in this.SeasonButtons)
+            foreach (ClickableTextureComponent button in this.seasonButtons)
                 button.draw(b);
 
             // draw labels
@@ -779,12 +782,12 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             }
 
             // draw OK button
-            if (this.BirthdayDay != 0 && string.IsNullOrEmpty(this.seasonName) == false && this.isFestivalDay() == false)
-                this.OkButton.draw(b);
+            if (this.birthdayDay != 0 && string.IsNullOrEmpty(this.seasonName) == false && this.isFestivalDay() == false)
+                this.okButton.draw(b);
             else
             {
-                this.OkButton.draw(b);
-                this.OkButton.draw(b, Color.Black * 0.5f, 0.97f);
+                this.okButton.draw(b);
+                this.okButton.draw(b, Color.Black * 0.5f, 0.97f);
             }
 
             if (Game1.hudMessages.Count > 0)
@@ -794,7 +797,8 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                 {
                     if(message is BirthdayHudMessage)
                     {
-                        message.draw(b, position);
+                        int height = 1;
+                        message.draw(b, position, ref height);
                     }
                     position++;
                 }
@@ -806,20 +810,20 @@ namespace Omegasis.HappyBirthday.Framework.Menus
 
         public bool isFestivalDay()
         {
-            if (this.BirthdayDay == 0 || string.IsNullOrEmpty(this.BirthdaySeason)) return false;
+            if (this.birthdayDay == 0 || string.IsNullOrEmpty(this.BirthdaySeason)) return false;
             if (this.BirthdaySeason.ToLowerInvariant() == "spring")
             {
-                if (this.BirthdayDay == 13) return true;
-                if (this.BirthdayDay == 24) return true;
+                if (this.birthdayDay == 13) return true;
+                if (this.birthdayDay == 24) return true;
             }
             if (this.BirthdaySeason.ToLowerInvariant() == "summer")
-                if (this.BirthdayDay == 11) return true; //The lua
+                if (this.birthdayDay == 11) return true; //The lua
             if (this.BirthdaySeason.ToLowerInvariant() == "fall")
-                if (this.BirthdayDay == 16) return true;
+                if (this.birthdayDay == 16) return true;
             if (this.BirthdaySeason.ToLowerInvariant() == "winter")
             {
-                if (this.BirthdayDay == 8) return true;
-                if (this.BirthdayDay == 25) return true;
+                if (this.birthdayDay == 8) return true;
+                if (this.birthdayDay == 25) return true;
             }
             return false;
         }
@@ -885,30 +889,30 @@ namespace Omegasis.HappyBirthday.Framework.Menus
 
         public override void applyMovementKey(int direction)
         {
-            if (allClickableComponents == null || allClickableComponents.Count == 0)
-                populateClickableComponentList();
+            if (this.allClickableComponents == null || this.allClickableComponents.Count == 0)
+                this.populateClickableComponentList();
             //HappyBirthdayModCore.Instance.SayWithMenuChecker($"Direction: {direction}", true);
-            ClickableComponent old = currentlySnappedComponent;
+            ClickableComponent old = this.currentlySnappedComponent;
             base.applyMovementKey(direction);
-            if (currentlySnappedComponent != null && currentlySnappedComponent != old)
+            if (this.currentlySnappedComponent != null && this.currentlySnappedComponent != old)
             {
-                currentlySnappedComponent.snapMouseCursorToCenter();
+                this.currentlySnappedComponent.snapMouseCursorToCenter();
                 this.speakCurrentlySnappedComponent();
             }
         }
 
         public void speakCurrentlySnappedComponent()
         {
-            if ( HappyBirthdayModCore.Instance.screenreader != null && currentlySnappedComponent != null)
+            if ( HappyBirthdayModCore.Instance.screenreader != null && this.currentlySnappedComponent != null)
             {
                 string toSpeak = "";
-                if (string.IsNullOrEmpty(currentlySnappedComponent.name))
+                if (string.IsNullOrEmpty(this.currentlySnappedComponent.name))
                 {
-                    toSpeak = $"{currentlySnappedComponent.myID}";
+                    toSpeak = $"{this.currentlySnappedComponent.myID}";
                 } else {
-                    toSpeak = currentlySnappedComponent.name;
+                    toSpeak = this.currentlySnappedComponent.name;
                 }
-                if ((currentlySnappedComponent.name == this.seasonName) || (currentlySnappedComponent.myID == this.BirthdayDay))
+                if ((this.currentlySnappedComponent.name == this.seasonName) || (this.currentlySnappedComponent.myID == this.birthdayDay))
                 {
                     string selected = HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("Selected");
                     toSpeak = $"{selected} {toSpeak}";
@@ -923,7 +927,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         public override void setCurrentlySnappedComponentTo(int id)
         {
             base.setCurrentlySnappedComponentTo(id);
-            if (currentlySnappedComponent != null)
+            if (this.currentlySnappedComponent != null)
             {
                 this.currentlySnappedComponent.snapMouseCursorToCenter();
                 this.speakCurrentlySnappedComponent();
@@ -932,7 +936,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
 
         public override void snapToDefaultClickableComponent()
         {
-            setCurrentlySnappedComponentTo(springButtonId);
+            this.setCurrentlySnappedComponentTo(springButtonId);
         }
     }
 }

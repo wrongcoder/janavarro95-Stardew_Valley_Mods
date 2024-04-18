@@ -10,21 +10,6 @@ namespace Omegasis.HappyBirthday.Framework.API
     public class HappyBirthdayAPI
     {
 
-        /// <summary>
-        /// Event hooks for when a birthday gift is registered.
-        /// </summary>
-        public event EventHandler<string> OnBirthdayGiftRegistered
-        {
-            add
-            {
-                HappyBirthdayModCore.Instance.giftManager.OnBirthdayGiftRegistered += value;
-            }
-            remove
-            {
-                HappyBirthdayModCore.Instance.giftManager.OnBirthdayGiftRegistered -= value;
-            }
-        }
-
         public event EventHandler PostAllBirthdayGiftsRegistered
         {
             add
@@ -39,49 +24,6 @@ namespace Omegasis.HappyBirthday.Framework.API
 
         public HappyBirthdayAPI()
         {
-        }
-
-        /// <summary>
-        /// Registers a specific item under a unique gift id to be used when adding items to npc gift pools.
-        /// </summary>
-        /// <param name="UniqueGiftId">The unique gift id for a given item.</param>
-        /// <param name="item">The actual item to be referenced when given as a gift.</param>
-        /// <returns>A boolean representing if registration was successful or not.</returns>
-        public bool RegisterBirthdayGift(string UniqueGiftId, StardewValley.Item item)
-        {
-           return HappyBirthdayModCore.Instance.giftManager.registerGift(UniqueGiftId, item);
-        }
-
-
-        /// <summary>
-        /// Checks to see if a given gift was registered or not.
-        /// </summary>
-        /// <param name="UniqueGiftId">The unique gift id for a given item.</param>
-        /// <returns>A boolean representing if a gift was registered under a given id or not.</returns>
-        public bool IsGiftRegistered(string UniqueGiftId)
-        {
-            return HappyBirthdayModCore.Instance.giftManager.isGiftRegistered(UniqueGiftId);
-        }
-
-        /// <summary>
-        /// Unregisters a gift with a given id.
-        /// </summary>
-        /// <param name="UnqiueGiftId">The unique gift id for a given item.</param>
-        /// <returns>A boolean representing if a gift under a given id was removed or not.</returns>
-        public bool UnRegisterGift(string UnqiueGiftId)
-        {
-            return HappyBirthdayModCore.Instance.giftManager.removeGift(UnqiueGiftId);
-        }
-
-        /// <summary>
-        /// Replaces a gift with the given unique gift id with a different one.
-        /// </summary>
-        /// <param name="UnqiueGiftId">The unique gift id to be replaced.</param>
-        /// <param name="ReplacementGift">The replacement gift.</param>
-        /// <returns></returns>
-        public bool ModifyGift(string UnqiueGiftId, StardewValley.Item ReplacementGift)
-        {
-            return HappyBirthdayModCore.Instance.giftManager.modifyGift(UnqiueGiftId, ReplacementGift);
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
+using Omegasis.StardustCore.Networking;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -65,7 +66,7 @@ namespace Omegasis.StardustCore.UIUtilities
         }
 
         [XmlIgnore]
-        public NetFields NetFields { get; } = new NetFields();
+        public NetFields NetFields { get; } = new NetFields("Omegasis.StardustCore.UIUtilities.Texture2DExtended");
 
         /// <summary>Empty/null constructor.</summary>
         public Texture2DExtended()

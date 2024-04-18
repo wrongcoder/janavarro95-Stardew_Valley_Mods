@@ -9,10 +9,13 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
 {
     public class GiftIDS
     {
+        public static List<LegacyGiftIds> getLegacyGiftIds()
+        {
+            LegacyGiftIds[] objIDS = (LegacyGiftIds[])Enum.GetValues(typeof(LegacyGiftIds));
+            return objIDS.ToList();
+        }
 
-
-
-        public enum SDVObject
+        public enum LegacyGiftIds
         {
             //Weeds = 0,
 
@@ -1237,12 +1240,8 @@ namespace Omegasis.HappyBirthday.Framework.Gifts
             CookoutKit = 926,
             CampingStove = 927,
             //GoldenEgg = 928,
-            Hedge = 929,
-            UnknownItem = 930
+            //Hedge = 929,
+            //UnknownItem = 930
         }
-
-
-
-
     }
 }

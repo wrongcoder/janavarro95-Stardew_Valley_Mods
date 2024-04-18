@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using Omegasis.HappyBirthday.Framework;
 using Omegasis.HappyBirthday.Framework.Configs;
 using Omegasis.HappyBirthday.Framework.ContentPack;
 using Omegasis.HappyBirthday.Framework.Gifts;
 using Omegasis.HappyBirthday.Framework.Utilities;
+using StardewModdingAPI;
 using StardewValley;
 using static System.String;
 using static Omegasis.HappyBirthday.Framework.Gifts.GiftIDS;
@@ -17,16 +19,18 @@ namespace Omegasis.HappyBirthday
     public class GiftManager
     {
 
+        public Dictionary<string, string> legacyGiftIdResolverMap;
+        //TODO: Make this the source of truth for what gifts can be selected from the favorite gift menu.
+        public List<string> listOfFavoriteBirthdayGiftsToSelectFrom;
+
         /// <summary>The next birthday gift the player will receive.</summary>
         public Item BirthdayGiftToReceive;
+
 
         public Dictionary<string, List<GiftInformation>> npcBirthdayGifts;
         public Dictionary<string, List<GiftInformation>> spouseBirthdayGifts;
         public List<GiftInformation> defaultBirthdayGifts;
 
-        public Dictionary<string, Item> registeredGifts = new Dictionary<string, Item>();
-
-        public event EventHandler<string> OnBirthdayGiftRegistered;
         public event EventHandler PostAllBirthdayGiftsRegistered;
 
         /// <summary>Construct an instance.</summary>
@@ -38,9 +42,21 @@ namespace Omegasis.HappyBirthday
             this.npcBirthdayGifts = new Dictionary<string, List<GiftInformation>>();
             this.spouseBirthdayGifts = new Dictionary<string, List<GiftInformation>>();
             this.defaultBirthdayGifts = new List<GiftInformation>();
-            this.registeredGifts = new Dictionary<string, Item>();
+            this.legacyGiftIdResolverMap = new Dictionary<string, string>();
+            this.listOfFavoriteBirthdayGiftsToSelectFrom = new List<string>();
+            this.rebuildLegacyGiftIdCache();
+        }
 
-            this.registerGiftIDS();
+        public virtual void rebuildLegacyGiftIdCache()
+        {
+            this.legacyGiftIdResolverMap.Clear();
+            foreach (var v in GiftIDS.getLegacyGiftIds())
+            {
+                string legacyId = "StardewValley.Object." + Enum.GetName(typeof(GiftIDS.LegacyGiftIds), (int)v);
+                string remappedId = "(O)"+(int)v;
+                HappyBirthdayModCore.Instance.Monitor.Log("Building legacy gift id: " + legacyId + " "+ remappedId);
+                this.legacyGiftIdResolverMap.Add(legacyId, remappedId);
+            }
         }
 
         /// <summary>
@@ -52,51 +68,35 @@ namespace Omegasis.HappyBirthday
             this.npcBirthdayGifts.Clear();
             this.spouseBirthdayGifts.Clear();
             this.defaultBirthdayGifts.Clear();
+            this.listOfFavoriteBirthdayGiftsToSelectFrom.Clear();
 
-            this.addInGiftsFromLoadedContentPacks();
+            this.addInPotentialGiftsFromNPCsFromContentPacks();
+            this.rebuildLegacyGiftIdCache();
         }
 
-
-        protected virtual void registerGiftIDS()
+        public virtual void populatePotentialFavoriteGiftForPlayer()
         {
-            foreach (var v in this.getSDVObjects())
-            {
-                Item i = new StardewValley.Object((int)v, 1);
-                string uniqueID = "StardewValley.Object." + Enum.GetName(typeof(GiftIDS.SDVObject), (int)v);
-                HappyBirthdayModCore.Instance.Monitor.Log("Added gift with id: " + uniqueID);
-
-                if (this.registeredGifts.ContainsKey(uniqueID)) continue;
-
-                this.registeredGifts.Add(uniqueID, i);
-
-
-                if (OnBirthdayGiftRegistered != null)
-                {
-                    OnBirthdayGiftRegistered.Invoke(this,uniqueID);
-                }
-
-            }
-            List<string> registeredGiftKeys = this.registeredGifts.Keys.ToList();
-            registeredGiftKeys.Sort();
-            HappyBirthdayModCore.Instance.Helper.Data.WriteJsonFile<List<string>>(Path.Combine("ModAssets", "Gifts", "RegisteredGifts" + ".json"), this.registeredGifts.Keys.ToList());
+            //TODO: Fill this out for spouse gift selection menu.
         }
 
 
         /// <summary>
         /// Called after all content packs have been loaded. It then combines the gifts from all of the content packs into this singular gift pool.
         /// </summary>
-        public virtual void addInGiftsFromLoadedContentPacks()
+        public virtual void addInPotentialGiftsFromNPCsFromContentPacks()
         {
 
+
+
             //Loads in all gifts across all content packs across all translations.
-            foreach (HappyBirthdayContentPack contentPack in HappyBirthdayModCore.Instance.happyBirthdayContentPackManager.contentPacks.Values.SelectMany(contentPackList=>contentPackList))
+            foreach (HappyBirthdayContentPack contentPack in HappyBirthdayModCore.Instance.happyBirthdayContentPackManager.contentPacks.Values.SelectMany(contentPackList => contentPackList))
             {
                 HappyBirthdayModCore.Instance.Monitor.Log("Adding default gifts for content pack: " + contentPack.baseContentPack.Manifest.UniqueID);
                 foreach (GiftInformation giftInfo in contentPack.getDefaultBirthdayGifts())
                 {
                     this.defaultBirthdayGifts.Add(giftInfo);
                 }
-                foreach (KeyValuePair<string,List<GiftInformation>> giftInfo in contentPack.npcBirthdayGifts)
+                foreach (KeyValuePair<string, List<GiftInformation>> giftInfo in contentPack.npcBirthdayGifts)
                 {
                     if (this.npcBirthdayGifts.ContainsKey(giftInfo.Key))
                     {
@@ -124,9 +124,6 @@ namespace Omegasis.HappyBirthday
                 }
             }
 
-            List<string> registeredGiftKeys = this.registeredGifts.Keys.ToList();
-            registeredGiftKeys.Sort();
-            HappyBirthdayModCore.Instance.Helper.Data.WriteJsonFile<List<string>>(Path.Combine("ModAssets", "Gifts", "RegisteredGifts" + ".json"),registeredGiftKeys );
             if (PostAllBirthdayGiftsRegistered != null)
             {
                 PostAllBirthdayGiftsRegistered.Invoke(this, new EventArgs());
@@ -154,26 +151,26 @@ namespace Omegasis.HappyBirthday
         public virtual bool unregisterDefaultBirthdayGift(GiftInformation giftInformation)
         {
             List<GiftInformation> removalList = new();
-            for(int i = 0; i < this.defaultBirthdayGifts.Count; i++)
+            for (int i = 0; i < this.defaultBirthdayGifts.Count; i++)
             {
                 if (giftInformation.Equals(this.defaultBirthdayGifts[i]))
                 {
                     removalList.Add(this.defaultBirthdayGifts[i]);
                 }
             }
-            foreach(GiftInformation info in removalList)
+            foreach (GiftInformation info in removalList)
             {
                 this.defaultBirthdayGifts.Remove(info);
             }
             return removalList.Count > 0;
         }
 
-        public virtual bool registerNpcBirthdayGift(string NPC,string UniqueGiftId, int MinHeartsRequiredForGift, int MaxHeartsRequiredForGift, int MinStackAmount, int MaxStackAmount)
+        public virtual bool registerNpcBirthdayGift(string NPC, string UniqueGiftId, int MinHeartsRequiredForGift, int MaxHeartsRequiredForGift, int MinStackAmount, int MaxStackAmount)
         {
-            return this.registerNpcBirthdayGift(NPC,new GiftInformation(UniqueGiftId, MinHeartsRequiredForGift, MaxHeartsRequiredForGift, MinStackAmount, MaxStackAmount));
+            return this.registerNpcBirthdayGift(NPC, new GiftInformation(UniqueGiftId, MinHeartsRequiredForGift, MaxHeartsRequiredForGift, MinStackAmount, MaxStackAmount));
         }
 
-        public virtual bool registerNpcBirthdayGift(string NPC,GiftInformation giftInformation)
+        public virtual bool registerNpcBirthdayGift(string NPC, GiftInformation giftInformation)
         {
             if (this.npcBirthdayGifts.ContainsKey(giftInformation.objectID))
             {
@@ -186,9 +183,9 @@ namespace Omegasis.HappyBirthday
             return true;
         }
 
-        public virtual bool unregisterNPCBirthdayGift(string NPC,string UniqueGiftId, int MinHeartsRequiredForGift, int MaxHeartsRequiredForGift, int MinStackAmount, int MaxStackAmount)
+        public virtual bool unregisterNPCBirthdayGift(string NPC, string UniqueGiftId, int MinHeartsRequiredForGift, int MaxHeartsRequiredForGift, int MinStackAmount, int MaxStackAmount)
         {
-            return this.unregisterNPCBirthdayGift(NPC,new GiftInformation(UniqueGiftId, MinHeartsRequiredForGift, MaxHeartsRequiredForGift, MinStackAmount, MaxStackAmount));
+            return this.unregisterNPCBirthdayGift(NPC, new GiftInformation(UniqueGiftId, MinHeartsRequiredForGift, MaxHeartsRequiredForGift, MinStackAmount, MaxStackAmount));
         }
 
         public virtual bool unregisterNPCBirthdayGift(string NPC, GiftInformation giftInformation)
@@ -209,7 +206,7 @@ namespace Omegasis.HappyBirthday
             return removalList.Count > 0;
         }
 
-        public virtual bool registerSpouseBirthdayGift(string SpouseName,string UniqueGiftId, int MinHeartsRequiredForGift, int MaxHeartsRequiredForGift, int MinStackAmount, int MaxStackAmount)
+        public virtual bool registerSpouseBirthdayGift(string SpouseName, string UniqueGiftId, int MinHeartsRequiredForGift, int MaxHeartsRequiredForGift, int MinStackAmount, int MaxStackAmount)
         {
             return this.registerSpouseBirthdayGift(SpouseName, new GiftInformation(UniqueGiftId, MinHeartsRequiredForGift, MaxHeartsRequiredForGift, MinStackAmount, MaxStackAmount));
         }
@@ -355,13 +352,12 @@ namespace Omegasis.HappyBirthday
         /// <param name="name"></param>
         public Item getSpouseBirthdayGift(string name)
         {
-            if (string.IsNullOrEmpty(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift) == false)
+            if (HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.potentialFavoriteGifts.Count > 0)
             {
-                if (this.registeredGifts.ContainsKey(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift))
-                {
-                    GiftInformation info = new GiftInformation(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift, 0, 1, 1);
-                    return info.getOne();
-                }
+                int giftValue = Game1.random.Next(HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.potentialFavoriteGifts.Count);
+                string selectedBirthdayGift = HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.potentialFavoriteGifts.ElementAt(giftValue);
+
+                return this.getItemFromId(selectedBirthdayGift);
             }
 
             int heartLevel = Game1.player.getFriendshipHeartLevelForNPC(name);
@@ -403,16 +399,11 @@ namespace Omegasis.HappyBirthday
 
             List<GiftInformation> npcPossibleGifts = this.defaultBirthdayGifts;
 
-            //If no gifts are registered and there are 0 default gifts, we should throw an error.
-            if (this.registeredGifts.Count == 0 && this.defaultBirthdayGifts.Count==0)
-            {
-                throw new InvalidDataException("There are zero registered gifts and zero default birthday gifts for the game's gift manager as well as  {0} installed HappyBirthdayContentPacks." + HappyBirthdayModCore.Instance.Helper.ContentPacks.GetOwned().Count());
-            }
             //Just give the player a random item if there are no default registered gifts.
             if (this.defaultBirthdayGifts.Count == 0)
             {
-                int randomItemIndex = Game1.random.Next(this.registeredGifts.Count);
-                Item randomItem = this.registeredGifts.ElementAt(randomItemIndex).Value.getOne();
+                int randomItemIndex = Game1.random.Next(this.legacyGiftIdResolverMap.Count);
+                Item randomItem = this.getItemFromId(this.legacyGiftIdResolverMap.ElementAt(randomItemIndex).Value);
                 return randomItem;
             }
 
@@ -442,9 +433,9 @@ namespace Omegasis.HappyBirthday
                 gift = possibleItems[index].getOne();
                 return gift;
             }
-            catch(Exception err)
+            catch (Exception err)
             {
-                throw new ArgumentOutOfRangeException(string.Format("There were no possible items in the list of possible items for this npc's birthday gift list. The Npcs name is {0} and the original error message is this {1}",name,err.ToString()));
+                throw new ArgumentOutOfRangeException(string.Format("There were no possible items in the list of possible items for this npc's birthday gift list. The Npcs name is {0} and the original error message is this {1}", name, err.ToString()));
             }
 
 
@@ -471,51 +462,20 @@ namespace Omegasis.HappyBirthday
             this.setNextBirthdayGift(gift);
         }
 
-
-        public List<SDVObject> getSDVObjects()
+        public Item getItemFromId(string itemId, int amount = 1, int quality = 0, bool allowNull = false)
         {
-            SDVObject[] objIDS = (SDVObject[])Enum.GetValues(typeof(SDVObject));
-            return objIDS.ToList();
+            string newId = this.resolveLegacyGiftId(itemId);
+            HappyBirthdayModCore.Instance.Monitor.Log("Requesting gift with id:" + newId);
+            return ItemRegistry.Create<Item>(newId, amount, quality, allowNull);
         }
-        public bool registerGift(string UnqiueGiftId, Item item)
+
+        public string resolveLegacyGiftId(string id)
         {
-            if (this.isGiftRegistered(UnqiueGiftId))
+            if (this.legacyGiftIdResolverMap.ContainsKey(id))
             {
-                return false;
+                return this.legacyGiftIdResolverMap[id];
             }
-            this.registeredGifts.Add(UnqiueGiftId, item);
-
-            if (OnBirthdayGiftRegistered != null)
-            {
-                OnBirthdayGiftRegistered.Invoke(HappyBirthdayModCore.Instance, UnqiueGiftId);
-            }
-
-            return true;
-        }
-
-        public bool removeGift(string UniqueGiftId)
-        {
-            return this.registeredGifts.Remove(UniqueGiftId);
-        }
-
-        public bool modifyGift(string UniqueGiftId, Item ReplacementGift)
-        {
-            if (this.isGiftRegistered(UniqueGiftId))
-            {
-                this.registeredGifts[UniqueGiftId] = ReplacementGift;
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Is there a gift registered with the given unique id?
-        /// </summary>
-        /// <param name="UnqiueGiftId"></param>
-        /// <returns></returns>
-        public bool isGiftRegistered(string UnqiueGiftId)
-        {
-            return this.registeredGifts.ContainsKey(UnqiueGiftId);
+            return id;
         }
     }
 

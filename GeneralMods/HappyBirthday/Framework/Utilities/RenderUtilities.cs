@@ -17,6 +17,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         /// <param name="e">The event arguments.</param>
         public static void OnRenderedHud(object sender, RenderedHudEventArgs e)
         {
+            
             if (Game1.activeClickableMenu == null || HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData?.BirthdaySeason?.ToLower() != Game1.currentSeason.ToLower())
                 return;
 
@@ -33,9 +34,9 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                     if (clicky.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
                     {
                         if (!string.IsNullOrEmpty(clicky.hoverText))
-                            texts.Add(clicky.hoverText); //catches npc birhday names.
-                        else if (!string.IsNullOrEmpty(clicky.name))
-                            texts.Add(clicky.name); //catches festival dates.
+                            texts.Add(clicky.hoverText); //catches npc birthday names.
+                        else if (!string.IsNullOrEmpty(clicky.label))
+                            texts.Add(clicky.label); //catches festival dates.
                     }
                 }
 
@@ -52,6 +53,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                     oldText.SetValue(hoverText);
                 }
             }
+            
         }
 
         /// <summary>When a menu is open (<see cref="Game1.activeClickableMenu"/> isn't null), raised after that menu is drawn to the sprite batch but before it's rendered to the screen.</summary>
@@ -59,6 +61,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         /// <param name="e">The event arguments.</param>
         public static void OnRenderedActiveMenu(object sender, RenderedActiveMenuEventArgs e)
         {
+            
             if (Game1.activeClickableMenu == null || MenuUtilities.IsDailyQuestBoard)
                 return;
 
@@ -79,7 +82,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                         string hoverText = HappyBirthdayModCore.Instance.Helper.Reflection.GetField<string>((Game1.activeClickableMenu as Billboard), "hoverText", true).GetValue();
                         if (hoverText.Length > 0)
                         {
-                            IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);
+                            IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, null, -1, -1, -1, 1f, (CraftingRecipe)null);
                         }
                     }
                 }
@@ -93,14 +96,16 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
                     (Game1.activeClickableMenu as Billboard).drawMouse(e.SpriteBatch);
 
                     string hoverText = HappyBirthdayModCore.Instance.Helper.Reflection.GetField<string>((Game1.activeClickableMenu as Billboard), "hoverText", true).GetValue();
+
                     if (hoverText.Length > 0)
                     {
-                        IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, -1, -1, -1, -1, 1f, (CraftingRecipe)null);
+                        IClickableMenu.drawHoverText(Game1.spriteBatch, hoverText, Game1.dialogueFont, 0, 0, -1, (string)null, -1, (string[])null, (Item)null, 0, null, -1, -1, -1, 1f, (CraftingRecipe)null);
                     }
                 }
                 (Game1.activeClickableMenu).drawMouse(e.SpriteBatch);
 
             }
+            
         }
 
     }

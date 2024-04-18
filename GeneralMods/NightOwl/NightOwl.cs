@@ -33,6 +33,9 @@ namespace Omegasis.NightOwl
         /// </summary>
         public static Dictionary<string, Func<bool>> OnPlayerStayingUpLate = new Dictionary<string, Func<bool>>();
 
+
+        public static NightOwl Instance;
+
         /*********
         ** Fields
         *********/
@@ -87,8 +90,7 @@ namespace Omegasis.NightOwl
         /// <summary>Event in the night that simulates the earthquake event that should happen.</summary>
         StardewValley.Events.SoundInTheNightEvent eve;
 
-        private List<NetByte> oldAnimalHappiness;
-
+        private List<NetInt> oldAnimalHappiness;
 
 
         /*********
@@ -98,11 +100,12 @@ namespace Omegasis.NightOwl
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            this.oldAnimalHappiness = new List<NetByte>();
+            Instance = this;
+            this.oldAnimalHappiness = new List<NetInt>();
             this.Config = helper.ReadConfig<ModConfig>();
 
             if (this.Config.UseInternalNightFishAssetEditor)
-                this.Helper.Content.AssetEditors.Add(new NightFishing());
+                this.Helper.Events.Content.AssetRequested += NightFishing.TryToEditFishDataAsset;
 
             helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
@@ -110,6 +113,7 @@ namespace Omegasis.NightOwl
             helper.Events.GameLoop.Saving += this.OnSaving;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             this.shouldWarpHorse = false;
+            
         }
 
         public override object GetApi()
@@ -218,7 +222,7 @@ namespace Omegasis.NightOwl
 
                     if (this.horse != null && this.shouldWarpHorse)
                     {
-                        Game1.warpCharacter(this.horse, Game1.player.currentLocation, Game1.player.position);
+                        Game1.warpCharacter(this.horse, Game1.player.currentLocation.Name, Game1.player.position.Value);
                         this.shouldWarpHorse = false;
                     }
                     if (this.isInSwimSuit)
@@ -330,7 +334,7 @@ namespace Omegasis.NightOwl
                     this.JustCollapsed = true;
 
                     this.ShouldResetPlayerAfterCollapseNow = true;
-                    this.PreCollapseTile = new Point(Game1.player.getTileX(), Game1.player.getTileY());
+                    this.PreCollapseTile = Game1.player.TilePoint;
                     this.PreCollapseMap = Game1.player.currentLocation.Name;
                     this.PreCollapseStamina = Game1.player.stamina;
                     this.PreCollapseHealth = Game1.player.health;

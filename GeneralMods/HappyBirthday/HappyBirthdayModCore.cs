@@ -18,12 +18,19 @@ using Omegasis.HappyBirthday.Framework.Menus;
 using Omegasis.HappyBirthday.Framework.Events;
 using Omegasis.HappyBirthday.Framework.Gifts;
 using Omegasis.StardustCore.Events;
+using Omegasis.HappyBirthday.Framework.Compatibility;
 
 namespace Omegasis.HappyBirthday
 {
     /// <summary>The mod entry point.</summary>
     public class HappyBirthdayModCore : Mod
     {
+        //TODO: Include changelog documentation for new command, ability to select multiple birthday gifts, and support for modded items.
+
+        //TODO: Make an official StardewValleyExpanded ContentPack.
+        //TODO: Add support for content packs to override event ids that are registered. Aka allow StardewValleyExpanded Content Pack events to override their vanilla counterparts.
+
+
         /*********
         ** Fields
         *********/
@@ -103,6 +110,8 @@ namespace Omegasis.HappyBirthday
 
             LocalizedContentManager.OnLanguageChange += this.LocalizedContentManager_OnLanguageChange;
 
+            this.Helper.ConsoleCommands.Add("Omegasis.Happy_Birthday.reset_birthday", "Resets the player's birthday and allows for them to choose it again.", this.birthdayManager.resetPlayersBirthday);
+
         }
 
         private void Content_AssetRequested(object sender, AssetRequestedEventArgs e)
@@ -135,15 +144,13 @@ namespace Omegasis.HappyBirthday
 
         private void GameLoop_GameLaunched(object sender, GameLaunchedEventArgs e)
         {
-            BirthdayEventUtilities.BirthdayEventManager = new EventManager();
-
             this.birthdayMessages = new BirthdayMessages();
             this.giftManager = new GiftManager();
             MenuUtilities.IsDailyQuestBoard = false;
 
             BirthdayEventUtilities.InitializeBirthdayEventCommands();
 
-            screenreader = Helper.ModRegistry.GetApi<IStardewAccessApi>("shoaib.stardewaccess");
+            this.screenreader = this.Helper.ModRegistry.GetApi<IStardewAccessApi>("shoaib.stardewaccess");
 
         }
 
@@ -204,7 +211,7 @@ namespace Omegasis.HappyBirthday
             {
                 this.happyBirthdayContentPackManager.registerNewContentPack(contentPack);
             }
-            this.giftManager.addInGiftsFromLoadedContentPacks();
+            this.giftManager.addInPotentialGiftsFromNPCsFromContentPacks();
             MailUtilities.RemoveAllBirthdayMail();
 
             BirthdayEventUtilities.InitializeBirthdayEvents();
@@ -253,5 +260,7 @@ namespace Omegasis.HappyBirthday
             if (this.screenreader != null)
                 this.screenreader.SayWithMenuChecker(text, interrupt);
         }
+
+
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Omegasis.HappyBirthday.Framework.Events.Compatibility;
+using Omegasis.HappyBirthday.Framework.Utilities;
 
 namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
 {
@@ -46,12 +47,17 @@ namespace Omegasis.HappyBirthday.Framework.Events.EventPreconditions
 
         public static FarmHouseLevelPrecondition ParseFarmHouseLevelPrecondition(string[] preconditionData)
         {
+            //Since some legacy data does not use the full length, I need to check for the condition here that there is a second variable or not for the comparison of the farmhouse levels.
+            if (preconditionData.Length == 3)
+            {
+                return new FarmHouseLevelPrecondition(Convert.ToInt32(preconditionData[1]), Enum.Parse<Enums.ComparisonType>(preconditionData[2]));
+            }
             return new FarmHouseLevelPrecondition(Convert.ToInt32(preconditionData[1]));
         }
 
         public static YearPrecondition ParseYearGreaterThanOrEqualToPrecondition(string[] preconditionData)
         {
-            return new YearPrecondition(Convert.ToInt32(preconditionData[1]), Enum.Parse<YearPrecondition.YearPreconditionType>(preconditionData[2]));
+            return new YearPrecondition(Convert.ToInt32(preconditionData[1]), Enum.Parse<Enums.ComparisonType>(preconditionData[2]));
         }
 
         public static VillagersHaveEnoughFriendshipBirthdayPrecondition ParseVillagersHaveEnoughFriendshipBirthdayPrecondition(string[] preconditionData)

@@ -1,0 +1,10 @@
+{
+  "Name": "Fish Hatchery",
+  "Author": "Alpha_Omegasis",
+  "Version": "1.0.0",
+  "Description": "Adds a new machine that hatches roe into their respective fish.",
+  "UniqueID": "Omegasis.FishHatchery",
+  "EntryDll": "FishHatchery.dll",
+  "MinimumApiVersion": "4.0.0",
+  //"UpdateKeys": [ "Nexus:20779" ]
+}

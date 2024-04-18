@@ -9,7 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Omegasis.HappyBirthday.Framework.Gifts;
 using Omegasis.HappyBirthday.Framework.Utilities;
+using Omegasis.StardustCore.UIUtilities.MenuComponents.ComponentsV1;
 using StardewValley;
+using StardewValley.GameData.Objects;
 using StardewValley.Menus;
 
 namespace Omegasis.HappyBirthday.Framework.Menus
@@ -37,8 +39,8 @@ namespace Omegasis.HappyBirthday.Framework.Menus
 
         private int currentPageNumber;
 
-        private string selectedGift;
-        private ClickableTextureComponent favoriteGiftButton;
+        private HashSet<string> potentialFavoriteGiftIds = new HashSet<string>();
+        private List<ClickableTextureComponent> potentialFavoriteGifts = new List<ClickableTextureComponent>();
 
         private ClickableTextureComponent _leftButton;
         private ClickableTextureComponent _rightButton;
@@ -53,6 +55,8 @@ namespace Omegasis.HappyBirthday.Framework.Menus
 
         public static int menuWidth = 632 + borderWidth * 2;
         public static int menuHeight = 600 + borderWidth * 2 + Game1.tileSize;
+
+        public HashSet<string> validItems = new HashSet<string>();
 
         /*********
         ** Public methods
@@ -69,6 +73,8 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             this.searchBox.Selected = false;
             this.searchBox.onTextReceived += this.SearchBox_onTextReceived;
             this.searchBox.OnBackspacePressed += this.SearchBox_OnBackspacePressed;
+
+            this.validItems = this.getListOfValidItemIds();
 
             this.setUpPositions();
         }
@@ -95,13 +101,19 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         {
             Game1.playSound("Cowboy_gunshot");
             this.searchBox.backSpacePressed();
+            this.validItems.Clear();
+            this.validItems = this.getListOfValidItemIds();
             this.populateGiftsToDisplay();
+            this.currentPageNumber = 0;
         }
 
         private void SearchBox_onTextReceived(object sender, string e)
         {
             Game1.playSound("Cowboy_gunshot");
+            this.validItems.Clear();
+            this.validItems = this.getListOfValidItemIds();
             this.populateGiftsToDisplay();
+            this.currentPageNumber = 0;
         }
 
         /// <summary>The method called when the game window changes size.</summary>
@@ -151,7 +163,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             {
                 // OK button
                 case "OK":
-                    HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.favoriteBirthdayGift = this.selectedGift;
+                    HappyBirthdayModCore.Instance.birthdayManager.playerBirthdayData.potentialFavoriteGifts = this.potentialFavoriteGiftIds;
                     MultiplayerUtilities.SendBirthdayInfoToOtherPlayers();
                     this.allFinished = true;
                     if (Game1.CurrentEvent != null)
@@ -171,7 +183,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     break;
 
                 case "RightButton":
-                    List<Item> ids = HappyBirthdayModCore.Instance.giftManager.registeredGifts.Values.ToList();
+                    HashSet<string> ids = this.validItems;
                     int value = (this.currentPageNumber + 1) * this._maxRowsToDisplay * this._maxColumnsToDisplay;
                     if (value >= ids.Count) break;
                     else
@@ -188,6 +200,51 @@ namespace Omegasis.HappyBirthday.Framework.Menus
             Game1.playSound("coin");
         }
 
+        /// <summary>
+        /// Adds a favorite gidt to be selected for a potential birthday gift for the player.
+        /// </summary>
+        /// <param name="i"></param>
+        public virtual void addFavoriteGift(Item i)
+        {
+            if (i == null)
+            {
+                return;
+            }
+            this.potentialFavoriteGiftIds.Add(i.QualifiedItemId);
+            HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Added {0} as a potential favorited gift.", i.QualifiedItemId));
+            Rectangle textureBounds = GameLocation.getSourceRectForObject(i.ParentSheetIndex);
+            float itemScale = 4f;
+            Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + 16 * itemScale + Game1.tinyFont.MeasureString(HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("FavoriteGift")).X) + (this.potentialFavoriteGifts.Count * 64), (int)(this.yPositionOnScreen + 64 + 16 * itemScale), 64, 64);
+            ClickableTextureComponent favoriteGiftButton = new ClickableTextureComponent(i.DisplayName, placementBounds, "", i.getHoverBoxText(i), Game1.objectSpriteSheet, textureBounds, 4f, true);
+            favoriteGiftButton.item = i;
+            this.potentialFavoriteGifts.Add(favoriteGiftButton);
+            this.potentialFavoriteGiftIds.Add(i.QualifiedItemId);
+        }
+
+        public virtual void removeFavoriteGift(ClickableTextureComponent favoriteGift)
+        {
+            if (favoriteGift == null)
+            {
+                return;
+            }
+            if (favoriteGift.item == null)
+            {
+                return;
+            }
+
+            this.potentialFavoriteGifts.Remove(favoriteGift);
+            this.potentialFavoriteGiftIds.Remove(favoriteGift.item.QualifiedItemId);
+            for (int i = 0; i < this.potentialFavoriteGifts.Count; i++)
+            {
+
+                ClickableTextureComponent favoriteGiftButton = this.potentialFavoriteGifts[i];
+                float itemScale = 4f;
+                Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + 16 * itemScale + Game1.tinyFont.MeasureString(HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("FavoriteGift")).X) + (i * 64), (int)(this.yPositionOnScreen + 64 + 16 * itemScale), 64, 64);
+                favoriteGiftButton.setPosition(placementBounds.X, placementBounds.Y);
+
+            }
+        }
+
         /// <summary>The method invoked when the player left-clicks on the menu.</summary>
         /// <param name="x">The X-position of the cursor.</param>
         /// <param name="y">The Y-position of the cursor.</param>
@@ -196,21 +253,34 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         {
 
             foreach (ClickableTextureComponent button in this.itemButtons)
+            {
                 if (button.containsPoint(x, y))
                 {
                     this.handleButtonClick(button.name);
                     button.scale -= 0.5f;
                     button.scale = Math.Max(3.5f, button.scale);
-                    this.selectedGift = button.name;
-                    HappyBirthdayModCore.Instance.Monitor.Log(string.Format("Selected {0} as the favorited gift.", this.selectedGift));
-
-                    Item i = button.item;
-                    Rectangle textureBounds = GameLocation.getSourceRectForObject(i.ParentSheetIndex);
-                    float itemScale = 4f;
-                    Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + 16 * itemScale + Game1.tinyFont.MeasureString(HappyBirthdayModCore.Instance.translationInfo.getTranslatedContentPackString("FavoriteGift")).X), (int)(this.yPositionOnScreen + 64 + 16 * itemScale), 64, 64);
-                    this.favoriteGiftButton = new ClickableTextureComponent(this.selectedGift, placementBounds, "", this.selectedGift, Game1.objectSpriteSheet, textureBounds, 4f, true);
-                    this.favoriteGiftButton.item = i;
+                    this.addFavoriteGift(button.item);
+                    break;
                 }
+            }
+            ClickableTextureComponent possiblyClickedFavoriteGiftButton = null;
+            foreach (ClickableTextureComponent favoriteGiftButton in this.potentialFavoriteGifts)
+            {
+                if (favoriteGiftButton.containsPoint(x, y))
+                {
+                    possiblyClickedFavoriteGiftButton = favoriteGiftButton;
+                    break;
+                }
+
+            }
+            if (possiblyClickedFavoriteGiftButton != null)
+            {
+                this.removeFavoriteGift(possiblyClickedFavoriteGiftButton);
+                this.handleButtonClick(possiblyClickedFavoriteGiftButton.name);
+                return;
+            }
+
+
 
             if (this.OkButton.containsPoint(x, y))
             {
@@ -255,10 +325,13 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     hoverOverItemButtonThisFrame = true;
                 }
 
-            if (this.favoriteGiftButton != null && this.favoriteGiftButton.containsPoint(x, y))
+            foreach (ClickableTextureComponent favoriteGiftButton in this.potentialFavoriteGifts)
             {
-                this.currentHoverTextureItem = this.favoriteGiftButton;
-                hoverOverItemButtonThisFrame = true;
+                if (favoriteGiftButton != null && favoriteGiftButton.containsPoint(x, y))
+                {
+                    this.currentHoverTextureItem = favoriteGiftButton;
+                    hoverOverItemButtonThisFrame = true;
+                }
             }
 
             if (hoverOverItemButtonThisFrame == false)
@@ -270,58 +343,6 @@ namespace Omegasis.HappyBirthday.Framework.Menus
 
 
 
-        }
-
-        /// <summary>Draw the menu to the screen.</summary>
-        /// <param name="b">The sprite batch.</param>
-        public override void draw(SpriteBatch b)
-        {
-            // draw menu box
-            Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true);
-            //b.Draw(Game1.daybg, new Vector2((this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)), Color.White);
-            //Game1.player.FarmerSprite.draw(b, new Vector2((this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)),1f);
-
-            this.searchBox.Draw(b, true);
-
-            // draw season buttons
-            foreach (ClickableTextureComponent button in this.itemButtons)
-                button.draw(b);
-
-            if (string.IsNullOrEmpty(this.selectedGift) == false)
-                this.favoriteGiftButton.draw(b);
-
-            // draw labels
-            foreach (ClickableComponent label in this.Labels)
-            {
-                Color color = Color.Violet;
-                Utility.drawTextWithShadow(b, label.name, Game1.smallFont, new Vector2(label.bounds.X, label.bounds.Y), color);
-            }
-            foreach (ClickableComponent label in this.Labels)
-            {
-                string text = "";
-                Color color = Game1.textColor;
-                Utility.drawTextWithShadow(b, label.name, Game1.smallFont, new Vector2(label.bounds.X, label.bounds.Y), color);
-                if (text.Length > 0)
-                    Utility.drawTextWithShadow(b, text, Game1.smallFont, new Vector2(label.bounds.X + Game1.tileSize / 3 - Game1.smallFont.MeasureString(text).X / 2f, label.bounds.Y + Game1.tileSize / 2), color);
-            }
-
-            // draw OK button
-            if (string.IsNullOrEmpty(this.selectedGift) == false)
-                this.OkButton.draw(b);
-            else
-            {
-                this.OkButton.draw(b);
-                this.OkButton.draw(b, Color.Black * 0.5f, 0.97f);
-            }
-            this._leftButton.draw(b);
-            this._rightButton.draw(b);
-
-            if (this.currentHoverTextureItem != null)
-                //Draws the item tooltip in the menu.
-                drawToolTip(b, this.currentHoverTextureItem.item.getDescription(), this.currentHoverTextureItem.item.DisplayName, this.currentHoverTextureItem.item);
-
-            // draw cursor
-            this.drawMouse(b);
         }
 
 
@@ -338,17 +359,7 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         private void populateGiftsToDisplay()
         {
             this.itemButtons.Clear();
-            Dictionary<string, Item> validItems = new Dictionary<string, Item>();
-            if (string.IsNullOrEmpty(this.searchBox.Text) == false)
-                foreach (KeyValuePair<string, Item> pair in HappyBirthdayModCore.Instance.giftManager.registeredGifts)
-                {
-                    Item item = pair.Value;
-                    if (item.DisplayName.ToLowerInvariant().Contains(this.searchBox.Text.ToLowerInvariant()))
-                        validItems.Add(pair.Key, pair.Value);
-                }
-            else
-                validItems = HappyBirthdayModCore.Instance.giftManager.registeredGifts;
-
+            HashSet<string> validItems = this.getListOfValidItemIds();
 
             for (int row = 0; row < this._maxRowsToDisplay; row++)
                 for (int column = 0; column < this._maxColumnsToDisplay; column++)
@@ -356,16 +367,67 @@ namespace Omegasis.HappyBirthday.Framework.Menus
                     int value = this.currentPageNumber * this._maxRowsToDisplay * this._maxColumnsToDisplay + row * this._maxColumnsToDisplay + column;
                     if (value >= validItems.Count) continue;
 
+                    string id = validItems.ElementAt(value);
 
-                    GiftInformation info = new GiftInformation(validItems.ElementAt(value).Key, 0, 1, 1);
-                    Rectangle textureBounds = GameLocation.getSourceRectForObject(info.getOne().ParentSheetIndex);
+                    Item item = HappyBirthdayModCore.Instance.giftManager.getItemFromId(id);
+                    Rectangle textureBounds = GameLocation.getSourceRectForObject(item.ParentSheetIndex);
                     float itemScale = 4f;
                     Rectangle placementBounds = new Rectangle((int)(this.xPositionOnScreen + 64 + column * 16 * itemScale), (int)(this.yPositionOnScreen + 256 + row * 16 * itemScale), 64, 64);
-                    ClickableTextureComponent item = new ClickableTextureComponent(info.objectID, placementBounds, "", info.objectID, Game1.objectSpriteSheet, textureBounds, 4f, true);
-                    item.item = info.getOne();
-                    item.name = HappyBirthdayModCore.Instance.giftManager.registeredGifts.ElementAt(value).Key;
-                    this.itemButtons.Add(item);
+                    ClickableTextureComponent menuItemDisplayComponent = new ClickableTextureComponent(id, placementBounds, "", id, Game1.objectSpriteSheet, textureBounds, 4f, true);
+                    menuItemDisplayComponent.item = item;
+                    menuItemDisplayComponent.name = menuItemDisplayComponent.item.DisplayName;
+                    this.itemButtons.Add(menuItemDisplayComponent);
                 }
+        }
+
+        /// <summary>
+        /// Gets a complete list of items that can be selected for birthday gifts, allowing for new ones from content packs and current legacy ones.
+        /// </summary>
+        /// <returns></returns>
+        public virtual HashSet<string> getListOfValidItemIds()
+        {
+            HashSet<string> itemIds = new HashSet<string>();
+            HashSet<string> validItems = new HashSet<string>();
+            foreach (string id in HappyBirthdayModCore.Instance.giftManager.listOfFavoriteBirthdayGiftsToSelectFrom)
+            {
+                if (itemIds.Contains(id) == false)
+                {
+                    itemIds.Add(id);
+                }
+            }
+
+            if (HappyBirthdayModCore.Configs.modConfig.useOnlyFavoriteGiftsListToSelectFrom == false)
+            {
+
+                foreach (string id in HappyBirthdayModCore.Instance.giftManager.legacyGiftIdResolverMap.Values)
+                {
+                    if (itemIds.Contains(id) == false)
+                    {
+                        //HappyBirthdayModCore.Instance.Monitor.Log("Adding favorite birthday gift: " + id);
+                        itemIds.Add(id);
+                    }
+                }
+            }
+
+
+            if (string.IsNullOrEmpty(this.searchBox.Text) == false)
+            {
+                foreach (string id in itemIds)
+                {
+                    //TODO: I know this isn't efficient, so I need to figure out how to optimize not creating the item twice.
+                    Item item = HappyBirthdayModCore.Instance.giftManager.getItemFromId(id);
+                    if (item.DisplayName.ToLowerInvariant().Contains(this.searchBox.Text.ToLowerInvariant()))
+                        validItems.Add(id);
+
+                }
+            }
+            else
+            {
+                validItems = itemIds;
+            }
+
+
+            return validItems;
         }
 
         public override void receiveGamePadButton(Buttons b)
@@ -388,6 +450,59 @@ namespace Omegasis.HappyBirthday.Framework.Menus
         public override bool overrideSnappyMenuCursorMovementBan()
         {
             return true;
+        }
+
+
+        /// <summary>Draw the menu to the screen.</summary>
+        /// <param name="b">The sprite batch.</param>
+        public override void draw(SpriteBatch b)
+        {
+            // draw menu box
+            Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true);
+            //b.Draw(Game1.daybg, new Vector2((this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)), Color.White);
+            //Game1.player.FarmerSprite.draw(b, new Vector2((this.xPositionOnScreen + Game1.tileSize + Game1.tileSize * 2 / 3 - 2), (this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder - Game1.tileSize / 4)),1f);
+
+            this.searchBox.Draw(b, true);
+
+            // draw season buttons
+            foreach (ClickableTextureComponent button in this.itemButtons)
+                button.draw(b);
+
+            foreach (ClickableTextureComponent button in this.potentialFavoriteGifts)
+                button.draw(b);
+
+            // draw labels
+            foreach (ClickableComponent label in this.Labels)
+            {
+                Color color = Color.Violet;
+                Utility.drawTextWithShadow(b, label.name, Game1.smallFont, new Vector2(label.bounds.X, label.bounds.Y), color);
+            }
+            foreach (ClickableComponent label in this.Labels)
+            {
+                string text = "";
+                Color color = Game1.textColor;
+                Utility.drawTextWithShadow(b, label.name, Game1.smallFont, new Vector2(label.bounds.X, label.bounds.Y), color);
+                if (text.Length > 0)
+                    Utility.drawTextWithShadow(b, text, Game1.smallFont, new Vector2(label.bounds.X + Game1.tileSize / 3 - Game1.smallFont.MeasureString(text).X / 2f, label.bounds.Y + Game1.tileSize / 2), color);
+            }
+
+            // draw OK button
+            if (this.potentialFavoriteGifts.Count > 0)
+                this.OkButton.draw(b);
+            else
+            {
+                this.OkButton.draw(b);
+                this.OkButton.draw(b, Color.Black * 0.5f, 0.97f);
+            }
+            this._leftButton.draw(b);
+            this._rightButton.draw(b);
+
+            if (this.currentHoverTextureItem != null)
+                //Draws the item tooltip in the menu.
+                drawToolTip(b, this.currentHoverTextureItem.item.getDescription(), this.currentHoverTextureItem.item.DisplayName, this.currentHoverTextureItem.item);
+
+            // draw cursor
+            this.drawMouse(b);
         }
 
     }

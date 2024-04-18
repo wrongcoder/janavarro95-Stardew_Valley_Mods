@@ -1,3 +1,4 @@
+/*
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -180,7 +181,7 @@ namespace Omegasis.StardustCore.Menus
             if (this.junimoNoteIcon == null || this.currentTab >= this.pages.Count || this.pages[this.currentTab].allClickableComponents.Contains((ClickableComponent)this.junimoNoteIcon))
                 return;
             this.pages[this.currentTab].allClickableComponents.Add((ClickableComponent)this.junimoNoteIcon);
-            */
+            
             this.currentMenu.snapToDefaultClickableComponent();
         }
 
@@ -216,7 +217,7 @@ namespace Omegasis.StardustCore.Menus
                     this.changeTab(this.currentTab - 1);
                     break;
             }
-            */
+            
             this.currentMenu.receiveGamePadButton(b);
         }
 
@@ -408,3 +409,4 @@ namespace Omegasis.StardustCore.Menus
         }
     }
 }
+*/

@@ -32,7 +32,7 @@ namespace Omegasis.HappyBirthday.Framework.Events.Compatibility
             conditions.Add(new DatingNPCEventPrecondition(leah));
             conditions.Add(new IsStardewValleyExpandedInstalledPrecondition(true));
 
-            HappyBirthdayEventHelper e = new HappyBirthdayEventHelper(EventIds.BirthdayDatingLeah, 19954, 2, conditions, new EventStartData("playful", 12, 7, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            HappyBirthdayEventHelper e = new HappyBirthdayEventHelper(EventIds.BirthdayDatingLeah, "Omegasis.HappyBirthday.Compatibility.StardewValleyExpanded.DatingLeahBirthdayParty", 2, conditions, new EventStartData("playful", 12, 7, new EventStartData.FarmerData(7, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(leah,11,14, EventHelper.FacingDirection.Up),
             }));
             e.addObject(11, 12, 220);
@@ -82,7 +82,7 @@ namespace Omegasis.HappyBirthday.Framework.Events.Compatibility
             conditions.Add(new IsStardewValleyExpandedInstalledPrecondition(true));
 
             //conditions.Add(new StardustCore.Events.Preconditions.NPCSpecific.DatingNPC(Game1.getCharacterFromName("Penny"));
-            HappyBirthdayEventHelper e = new HappyBirthdayEventHelper(EventIds.BirthdayDatingPennyTrailer, 19951, 2, conditions, new EventStartData("playful", 12, 8, new EventStartData.FarmerData(12, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
+            HappyBirthdayEventHelper e = new HappyBirthdayEventHelper(EventIds.BirthdayDatingPennyTrailer, "Omegasis.HappyBirthday.Compatibility.StardewValleyExpanded.DatingPennyBirthdayParty", 2, conditions, new EventStartData("playful", 12, 8, new EventStartData.FarmerData(12, 9, EventHelper.FacingDirection.Up), new List<EventStartData.NPCData>() {
                 new EventStartData.NPCData(penny,12,7, EventHelper.FacingDirection.Up),
                 new EventStartData.NPCData(pam,15,4, EventHelper.FacingDirection.Down)
             }));

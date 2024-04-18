@@ -4,6 +4,6 @@ namespace Omegasis.AutoSpeed.Framework
     internal class ModConfig
     {
         /// <summary>The added speed.</summary>
-        public int Speed { get; set; } = 5;
+        public float Speed { get; set; } = 5.0f;
     }
 }

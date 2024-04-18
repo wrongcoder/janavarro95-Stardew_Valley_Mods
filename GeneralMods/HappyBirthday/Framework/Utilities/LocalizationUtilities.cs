@@ -22,7 +22,23 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         {
             if (languageCode == LanguageCode.en)
                 return GetEnglishLanguageCode();
-            return Game1.content.LanguageCodeString(languageCode);
+            return languageCode switch
+            {
+                LanguageCode.ja => "ja-JP",
+                LanguageCode.ru => "ru-RU",
+                LanguageCode.zh => "zh-CN",
+                LanguageCode.pt => "pt-BR",
+                LanguageCode.es => "es-ES",
+                LanguageCode.de => "de-DE",
+                LanguageCode.th => "th-TH",
+                LanguageCode.fr => "fr-FR",
+                LanguageCode.ko => "ko-KR",
+                LanguageCode.it => "it-IT",
+                LanguageCode.tr => "tr-TR",
+                LanguageCode.hu => "hu-HU",
+                LanguageCode.mod => (LocalizedContentManager.CurrentModLanguage ?? throw new InvalidOperationException("The game language is set to a custom one, but the language info is no longer available.")).LanguageCode,
+                _ => "",
+            };
         }
         /// <summary>
         /// Gets the language code string for the current <see cref="LanguageCode"/> the player is using. 
@@ -31,7 +47,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
         /// <returns></returns>
         public static string GetCurrentLanguageCodeString()
         {
-            return GetLanguageCodeString(CurrentLanguageCode);
+            return GetLanguageCodeString(Game1.content.GetCurrentLanguage());
         }
 
         public static string GetEnglishLanguageCode()

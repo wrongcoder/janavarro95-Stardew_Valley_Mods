@@ -18,7 +18,7 @@ namespace Omegasis.HappyBirthday.Framework.Utilities
             List<NPC> npcs = new List<NPC>();
             foreach (GameLocation location in Game1.locations)
             {
-                foreach (NPC npc in location.getCharacters())
+                foreach (NPC npc in location.characters)
                 {
                     npcs.Add(npc);
                 }

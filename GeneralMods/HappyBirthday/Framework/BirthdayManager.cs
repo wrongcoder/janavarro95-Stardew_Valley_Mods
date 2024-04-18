@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input;
 using Omegasis.HappyBirthday.Framework.Constants;
+using Omegasis.HappyBirthday.Framework.Menus;
 using Omegasis.HappyBirthday.Framework.Utilities;
 using StardewValley;
 using StardewValley.Characters;
@@ -134,7 +136,7 @@ namespace Omegasis.HappyBirthday.Framework
             }
             else
             {
-                if (string.IsNullOrEmpty(this.playerBirthdayData.favoriteBirthdayGift))
+                if (this.playerBirthdayData.potentialFavoriteGifts.Count==0)
                 {
                     return false;
                 }
@@ -203,11 +205,15 @@ namespace Omegasis.HappyBirthday.Framework
                 MailUtilities.AddBirthdayMailToMailbox();
 
                 foreach (NPC npc in NPCUtilities.GetAllHumanNpcs())
-                {   
-                    string message = HappyBirthdayModCore.Instance.birthdayMessages.getBirthdayMessage(npc.Name);
-                    Dialogue d = new Dialogue(message, npc);
-                    npc.CurrentDialogue.Push(d);
-                    if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(message);
+                {
+                    if (Game1.player.getFriendshipHeartLevelForNPC(npc.Name) >= HappyBirthdayModCore.Configs.modConfig.minimumFriendshipLevelForBirthdayWish)
+                    {
+                        HappyBirthdayModCore.Instance.Monitor.Log("Adding dialogue for npc: " + npc.Name);
+                        string message = HappyBirthdayModCore.Instance.birthdayMessages.getBirthdayMessage(npc.Name);
+                        Dialogue d = new Dialogue(npc, "", message);
+                        npc.CurrentDialogue.Push(d);
+                        if (npc.CurrentDialogue.ElementAt(0) != d) npc.setNewDialogue(message);
+                    }
                 }
             }
         }
@@ -271,6 +277,32 @@ namespace Omegasis.HappyBirthday.Framework
             this.resetVillagerQueue();
             this.playerBirthdayData = null;
             this.othersBirthdays.Clear();
+        }
+
+        public void resetPlayersBirthday(string name, string[] args)
+        {
+            if (Game1.player == null)
+            {
+                HappyBirthdayModCore.Instance.Monitor.Log("Error: Can only reset the player's birthday while actively playing a character.");
+                return;
+            }
+
+            if (Game1.activeClickableMenu != null)
+            {
+                HappyBirthdayModCore.Instance.Monitor.Log("Error: Can only reset the player's birthday while there are no menus open. Please close all menus and try again.");
+                return;
+            }
+
+            if (Game1.player != null && Game1.activeClickableMenu==null)
+            {
+                if (this.playerBirthdayData != null)
+                {
+                    this.playerBirthdayData.BirthdayDay = 0;
+                    this.playerBirthdayData.BirthdaySeason = "";
+                    this.checkedForBirthday = false;
+                }
+                Game1.activeClickableMenu = new BirthdayMenu("spring", 1, this.setBirthday);
+            }
         }
     }
 }
